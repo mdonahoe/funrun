@@ -28,7 +28,6 @@
 		C99084C412553E0500FC492A /* ASIInputStream.m in Sources */ = {isa = PBXBuildFile; fileRef = C99084B112553E0500FC492A /* ASIInputStream.m */; };
 		C99084C512553E0500FC492A /* ASINetworkQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = C99084B312553E0500FC492A /* ASINetworkQueue.m */; };
 		C99084C612553E0500FC492A /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = C99084B612553E0500FC492A /* Reachability.m */; };
-		C99084C712553E0500FC492A /* voicetestAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = C99084B812553E0500FC492A /* voicetestAppDelegate.m */; };
 		C99084D312553EF900FC492A /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C99084D212553EF900FC492A /* CFNetwork.framework */; };
 		C99084D512553EF900FC492A /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C99084D412553EF900FC492A /* CoreLocation.framework */; };
 		C99084D712553EF900FC492A /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C99084D612553EF900FC492A /* MobileCoreServices.framework */; };
@@ -81,8 +80,6 @@
 		C99084B412553E0500FC492A /* ASIProgressDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ASIProgressDelegate.h; sourceTree = "<group>"; };
 		C99084B512553E0500FC492A /* Reachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Reachability.h; sourceTree = "<group>"; };
 		C99084B612553E0500FC492A /* Reachability.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Reachability.m; sourceTree = "<group>"; };
-		C99084B712553E0500FC492A /* voicetestAppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = voicetestAppDelegate.h; sourceTree = "<group>"; };
-		C99084B812553E0500FC492A /* voicetestAppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = voicetestAppDelegate.m; sourceTree = "<group>"; };
 		C99084D212553EF900FC492A /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
 		C99084D412553EF900FC492A /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		C99084D612553EF900FC492A /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
@@ -116,8 +113,6 @@
 			children = (
 				C990849812553E0500FC492A /* json */,
 				C99084A412553E0500FC492A /* request */,
-				C99084B712553E0500FC492A /* voicetestAppDelegate.h */,
-				C99084B812553E0500FC492A /* voicetestAppDelegate.m */,
 				28216C950DB411BC00E5133A /* FirstViewController.h */,
 				28216C960DB411BC00E5133A /* FirstViewController.m */,
 				1D3623240D0F684500981E51 /* funrunAppDelegate.h */,
@@ -302,7 +297,6 @@
 				C99084C412553E0500FC492A /* ASIInputStream.m in Sources */,
 				C99084C512553E0500FC492A /* ASINetworkQueue.m in Sources */,
 				C99084C612553E0500FC492A /* Reachability.m in Sources */,
-				C99084C712553E0500FC492A /* voicetestAppDelegate.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

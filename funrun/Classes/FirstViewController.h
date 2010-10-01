@@ -12,11 +12,9 @@
 @interface FirstViewController : UIViewController <CLLocationManagerDelegate,UIAccelerometerDelegate>{
 	NSObject * bot;
 	CLLocationManager * locationManager;
-	CLLocation * spot;
-	CLLocation * currentPos;
-	NSMutableArray * pedometer;
-	NSMutableArray * locations;
+	CLLocation * goal;
+	CLLocation * current;
+	NSDate * deadline;
 	int toqbotrev;
 }
-- (float) distanceBetweenLocation:(CLLocation *)pos1 AndLocation:(CLLocation *)pos2;
 @end

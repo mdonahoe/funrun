@@ -33,10 +33,15 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
 	bot = [[NSClassFromString(@"VSSpeechSynthesizer") alloc] init];
-	[bot startSpeakingString:@"HELLO WORLD. I love you"];
-	//[self startStandardUpdates];
+	[bot startSpeakingString:@"Fun run activated."];
+	
 	toqbotrev=-1;
+	goal = nil;
+	current = nil;
+	deadline = nil;
+	[self startStandardUpdates];
 	[self gettoqbot];
+	[self status];
 }
 - (void)gettoqbot {
 	NSString * url = [NSString stringWithFormat:@"http://toqbot.com/db/?voicetest=%i",toqbotrev];
@@ -47,7 +52,7 @@
 - (void) requestFinished:(ASIHTTPRequest *) request {
 	NSDictionary * data = [[[request responseString] JSONValue] objectAtIndex:0];
 	toqbotrev = [(NSInteger)[data valueForKey:@"rev"] intValue]+1;
-	[bot startSpeakingString:[data valueForKey:@"data"]];
+	[self speak:[data valueForKey:@"data"]];
 	[self gettoqbot];
 	//NSLog(@"request success %@",[[request responseString] JSONValue]);
 	
@@ -78,28 +83,45 @@ didUpdateToLocation:(CLLocation *)newLocation
 fromLocation:(CLLocation *)oldLocation
 {
 	if (newLocation.horizontalAccuracy>100) return;
-	int meters = (int)[self distanceBetweenLocation:newLocation AndLocation:oldLocation];
-	[bot startSpeakingString:[NSString stringWithFormat:@"You went %i meters",meters]];
+	[newLocation retain];
+	[current release];
+	current = newLocation;
+}
+- (void) newGoal {
+	[goal release];
+	[deadline release];
+	float x = (arc4random()%1000-500)/1000.0;
+	float y = (arc4random()%1000-500)/1000.0;
+	float m = sqrt(x*x+y*y+.0001);
+	goal = [[CLLocation alloc] initWithLatitude:(current.coordinate.latitude+.001*x/m) longitude:(current.coordinate.longitude+.001*y/m)];
+	deadline = [[NSDate alloc] initWithTimeIntervalSinceNow:60];
 }
 - (void)locationManager:(CLLocationManager *)manager didFailWithError:(NSError *)error{
 	//error!
 }
-- (float) distanceBetweenLocation:(CLLocation *)pos1 AndLocation:(CLLocation *)pos2{
-	const float toRad = 3.14159265/180.0;
-	const float R = 6371; //earth radius (km)
+-(void) speak:(NSString*)message {
+	[bot startSpeakingString:message];
+}
+-(void) status {
+	if (current!=nil){
+		if (goal==nil) [self newGoal];
+		NSTimeInterval timeleft = [deadline timeIntervalSinceDate:[NSDate date]];
+		CLLocationDistance dist = [current distanceFromLocation:goal];
+		NSLog(@"distance: %@ and %@",goal,current);
+		if (dist<10){
+			[self speak:@"Success."];
+			[self newGoal];
+		} else if (timeleft<=0) {
+			[self speak:@"Failure"];
+			[self newGoal];
+		} else {
+			[self speak:[NSString stringWithFormat:@"%i seconds. %i meters.",(int)timeleft,(int)dist]];
+		}
 	
-	float lat1 = pos1.coordinate.latitude*toRad;
-	float lat2 = pos2.coordinate.latitude*toRad;
-	float lon1 = pos1.coordinate.longitude*toRad;
-	float lon2 = pos2.coordinate.longitude*toRad;
-	
-	float dlat = lat2-lat1;
-	float dlon = lon2-lon1;
-	
-	float a = sin(dlat/2)*sin(dlat/2)+cos(lat1)*cos(lat2)*sin(dlon/2)*sin(dlon/2);
-	float c = 2 * atan2(sqrt(a),sqrt(1-a));
-	
-	return R * c;
+	} else {
+		[self speak:@"Acquiring your location."];
+	}
+	[self performSelector:@selector(status) withObject:nil afterDelay:5];
 }
 
 // Override to allow orientations other than the default portrait orientation.
