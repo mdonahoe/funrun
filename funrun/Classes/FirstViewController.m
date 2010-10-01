@@ -149,6 +149,9 @@ fromLocation:(CLLocation *)oldLocation
 		} else if (timeleft<=0) {
 			[self speak:@"Failure"];
 			[self newGoal];
+		} else if (dist>100) {
+			[self speak:@"Out of range"];
+			[self newGoal];
 		} else {
 			[self speak:[NSString stringWithFormat:@"%i seconds. %i meters %@",(int)timeleft,(int)dist,direction]];
 		}
