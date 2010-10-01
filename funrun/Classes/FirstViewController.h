@@ -17,4 +17,8 @@
 	NSDate * deadline;
 	int toqbotrev;
 }
+-(void) status;
+-(void) speak:(NSString *)message;
+-(void) startStandardUpdates;
+-(void) gettoqbot;
 @end

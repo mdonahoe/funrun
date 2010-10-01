@@ -9,7 +9,7 @@
 #import "FirstViewController.h"
 #import "ASIFormDataRequest.h"
 #import "JSON.h"
-
+#define ARC4RANDOM_MAX      0x100000000
 @implementation FirstViewController
 
 
@@ -33,13 +33,14 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
 	bot = [[NSClassFromString(@"VSSpeechSynthesizer") alloc] init];
-	[bot startSpeakingString:@"Fun run activated."];
+	[self speak:@"Fun run activated."];
 	
 	toqbotrev=-1;
 	goal = nil;
 	current = nil;
 	deadline = nil;
 	[self startStandardUpdates];
+	[ASIHTTPRequest setDefaultTimeOutSeconds:50];
 	[self gettoqbot];
 	[self status];
 }
@@ -58,7 +59,7 @@
 	
 }
 -(void) requestFailed:(ASIHTTPRequest *) request {
-	NSLog(@"request error %@",[request error]);
+	//NSLog(@"request error %@",[request error]);
 	[self gettoqbot];
 }
 - (void)startStandardUpdates
@@ -90,9 +91,9 @@ fromLocation:(CLLocation *)oldLocation
 - (void) newGoal {
 	[goal release];
 	[deadline release];
-	float x = (arc4random()%1000-500)/1000.0;
-	float y = (arc4random()%1000-500)/1000.0;
-	float m = sqrt(x*x+y*y+.0001);
+	double x = (double)arc4random() / ARC4RANDOM_MAX - 0.5;
+	double y = (double)arc4random() / ARC4RANDOM_MAX - 0.5;
+	double m = sqrt(x*x+y*y+.000001);
 	goal = [[CLLocation alloc] initWithLatitude:(current.coordinate.latitude+.001*x/m) longitude:(current.coordinate.longitude+.001*y/m)];
 	deadline = [[NSDate alloc] initWithTimeIntervalSinceNow:60];
 }
@@ -106,8 +107,42 @@ fromLocation:(CLLocation *)oldLocation
 	if (current!=nil){
 		if (goal==nil) [self newGoal];
 		NSTimeInterval timeleft = [deadline timeIntervalSinceDate:[NSDate date]];
+		float dx = goal.coordinate.longitude - current.coordinate.longitude;
+		float dy = goal.coordinate.latitude - current.coordinate.latitude;
+		float m = sqrt(dx*dx+dy*dy);
+		NSString * direction = @"";
+		if (fabs(dx)+fabs(dy)>1.25*m) {
+			if (dy>0){
+				if (dx>0){
+					direction = @"North-east";
+				} else {
+					direction = @"North-west";
+				}
+			} else {
+				if (dx>0){
+					direction = @"South-east";
+				} else {
+					direction = @"South-west";
+					
+				}				
+			}
+		} else {
+			if (fabs(dx)>fabs(dy)){
+				if (dx>0){
+					direction = @"East";
+				} else {
+					direction = @"West";
+				}
+			} else {
+				if (dy>0){
+					direction = @"North";
+				} else {
+					direction = @"South";
+				}
+			}	
+		}
 		CLLocationDistance dist = [current distanceFromLocation:goal];
-		NSLog(@"distance: %@ and %@",goal,current);
+		//NSLog(@"distance: %@ and %@",goal,current);
 		if (dist<10){
 			[self speak:@"Success."];
 			[self newGoal];
@@ -115,7 +150,7 @@ fromLocation:(CLLocation *)oldLocation
 			[self speak:@"Failure"];
 			[self newGoal];
 		} else {
-			[self speak:[NSString stringWithFormat:@"%i seconds. %i meters.",(int)timeleft,(int)dist]];
+			[self speak:[NSString stringWithFormat:@"%i seconds. %i meters %@",(int)timeleft,(int)dist,direction]];
 		}
 	
 	} else {
