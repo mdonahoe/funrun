@@ -35,17 +35,18 @@
 	bot = [[NSClassFromString(@"VSSpeechSynthesizer") alloc] init];
 	[self speak:@"Fun run activated."];
 	
-	toqbotrev=-1;
+	toqbotrev=0;
 	goal = nil;
 	current = nil;
 	deadline = nil;
 	[self startStandardUpdates];
 	[ASIHTTPRequest setDefaultTimeOutSeconds:50];
 	[self gettoqbot];
-	[self status];
+	
 }
 - (void)gettoqbot {
-	NSString * url = [NSString stringWithFormat:@"http://toqbot.com/db/?voicetest=%i",toqbotrev];
+	//get the path we are going to run
+	NSString * url = [NSString stringWithFormat:@"http://toqbot.com/db/?runtest1=%i",toqbotrev];
 	ASIHTTPRequest * request = [ASIHTTPRequest requestWithURL:[NSURL URLWithString:url]];
 	[request setDelegate:self];
 	[request startAsynchronous];
@@ -53,9 +54,8 @@
 - (void) requestFinished:(ASIHTTPRequest *) request {
 	NSDictionary * data = [[[request responseString] JSONValue] objectAtIndex:0];
 	toqbotrev = [(NSInteger)[data valueForKey:@"rev"] intValue]+1;
-	[self speak:[data valueForKey:@"data"]];
-	[self gettoqbot];
-	//NSLog(@"request success %@",[[request responseString] JSONValue]);
+	points = [[NSMutableArray alloc] initWithArray:[[data valueForKey:@"data"] JSONValue]];
+	[self status];
 	
 }
 -(void) requestFailed:(ASIHTTPRequest *) request {
@@ -91,11 +91,11 @@ fromLocation:(CLLocation *)oldLocation
 - (void) newGoal {
 	[goal release];
 	[deadline release];
-	double x = (double)arc4random() / ARC4RANDOM_MAX - 0.5;
-	double y = (double)arc4random() / ARC4RANDOM_MAX - 0.5;
-	double m = sqrt(x*x+y*y+.000001);
-	goal = [[CLLocation alloc] initWithLatitude:(current.coordinate.latitude+.001*x/m) longitude:(current.coordinate.longitude+.001*y/m)];
-	deadline = [[NSDate alloc] initWithTimeIntervalSinceNow:60];
+	NSDictionary * pt = [points objectAtIndex:0];
+	goal = [[CLLocation alloc] initWithLatitude:[[pt objectForKey:@"lat"] floatValue] longitude:[[pt objectForKey:@"lon"] floatValue]];
+	deadline = [[NSDate alloc] initWithTimeIntervalSinceNow:[[pt objectForKey:@"time"] intValue]];
+	if ([points count]>1) [points removeObjectAtIndex:0];
+	//[self speak:[NSString stringWithFormat:@"%i points left",[points count]]];
 }
 - (void)locationManager:(CLLocationManager *)manager didFailWithError:(NSError *)error{
 	//error!
@@ -142,16 +142,15 @@ fromLocation:(CLLocation *)oldLocation
 			}	
 		}
 		CLLocationDistance dist = [current distanceFromLocation:goal];
-		//NSLog(@"distance: %@ and %@",goal,current);
 		if (dist<10){
 			[self speak:@"Success."];
 			[self newGoal];
 		} else if (timeleft<=0) {
 			[self speak:@"Failure"];
 			[self newGoal];
-		} else if (dist>100) {
-			[self speak:@"Out of range"];
-			[self newGoal];
+		//} else if (dist>100) {
+		//	[self speak:@"Out of range"];
+		//	[self newGoal];
 		} else {
 			[self speak:[NSString stringWithFormat:@"%i seconds. %i meters %@",(int)timeleft,(int)dist,direction]];
 		}

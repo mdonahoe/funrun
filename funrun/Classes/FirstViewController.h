@@ -14,7 +14,7 @@
 	CLLocationManager * locationManager;
 	CLLocation * goal;
 	CLLocation * current;
-	//NSMutableArray * history;
+	NSMutableArray * points;
 	NSDate * deadline;
 	int toqbotrev;
 }

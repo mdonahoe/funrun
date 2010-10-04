@@ -317,6 +317,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = funrun_Prefix.pch;
 				INFOPLIST_FILE = "funrun-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 4.0;
 				PRODUCT_NAME = funrun;
 			};
 			name = Debug;
