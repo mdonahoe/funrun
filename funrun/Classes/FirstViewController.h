@@ -16,7 +16,8 @@
 	CLLocation * current;
 	NSMutableArray * points;
 	NSDate * deadline;
-	int toqbotrev;
+	NSMutableDictionary * toqbotkeys;
+	NSMutableDictionary * sounds;
 }
 -(void) status;
 -(void) speak:(NSString *)message;

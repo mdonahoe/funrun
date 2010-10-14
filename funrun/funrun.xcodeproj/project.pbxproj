@@ -34,6 +34,8 @@
 		C99084D912553EF900FC492A /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C99084D812553EF900FC492A /* SystemConfiguration.framework */; };
 		C99084DB12553EF900FC492A /* libz.1.2.3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = C99084DA12553EF900FC492A /* libz.1.2.3.dylib */; };
 		C990859212553F5000FC492A /* VoiceServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C990859112553F5000FC492A /* VoiceServices.framework */; };
+		C9AC8A5D12668BD200A19A96 /* SoundEffect.m in Sources */ = {isa = PBXBuildFile; fileRef = C9AC8A5C12668BD200A19A96 /* SoundEffect.m */; };
+		C9AC8A8912669A2D00A19A96 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C9AC8A8812669A2D00A19A96 /* AudioToolbox.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -86,6 +88,9 @@
 		C99084D812553EF900FC492A /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		C99084DA12553EF900FC492A /* libz.1.2.3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.1.2.3.dylib; path = usr/lib/libz.1.2.3.dylib; sourceTree = SDKROOT; };
 		C990859112553F5000FC492A /* VoiceServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = VoiceServices.framework; path = System/Library/PrivateFrameworks/VoiceServices.framework; sourceTree = SDKROOT; };
+		C9AC8A5B12668BD200A19A96 /* SoundEffect.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SoundEffect.h; sourceTree = "<group>"; };
+		C9AC8A5C12668BD200A19A96 /* SoundEffect.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SoundEffect.m; sourceTree = "<group>"; };
+		C9AC8A8812669A2D00A19A96 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -102,6 +107,7 @@
 				C99084D912553EF900FC492A /* SystemConfiguration.framework in Frameworks */,
 				C99084DB12553EF900FC492A /* libz.1.2.3.dylib in Frameworks */,
 				C990859212553F5000FC492A /* VoiceServices.framework in Frameworks */,
+				C9AC8A8912669A2D00A19A96 /* AudioToolbox.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -111,6 +117,7 @@
 		080E96DDFE201D6D7F000001 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				C9AC8A5A12668BD200A19A96 /* sound */,
 				C990849812553E0500FC492A /* json */,
 				C99084A412553E0500FC492A /* request */,
 				28216C950DB411BC00E5133A /* FirstViewController.h */,
@@ -173,6 +180,7 @@
 				C99084D812553EF900FC492A /* SystemConfiguration.framework */,
 				C99084DA12553EF900FC492A /* libz.1.2.3.dylib */,
 				C990859112553F5000FC492A /* VoiceServices.framework */,
+				C9AC8A8812669A2D00A19A96 /* AudioToolbox.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -218,6 +226,15 @@
 				C99084B612553E0500FC492A /* Reachability.m */,
 			);
 			path = request;
+			sourceTree = "<group>";
+		};
+		C9AC8A5A12668BD200A19A96 /* sound */ = {
+			isa = PBXGroup;
+			children = (
+				C9AC8A5B12668BD200A19A96 /* SoundEffect.h */,
+				C9AC8A5C12668BD200A19A96 /* SoundEffect.m */,
+			);
+			path = sound;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -297,6 +314,7 @@
 				C99084C412553E0500FC492A /* ASIInputStream.m in Sources */,
 				C99084C512553E0500FC492A /* ASINetworkQueue.m in Sources */,
 				C99084C612553E0500FC492A /* Reachability.m in Sources */,
+				C9AC8A5D12668BD200A19A96 /* SoundEffect.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

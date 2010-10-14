@@ -9,54 +9,74 @@
 #import "FirstViewController.h"
 #import "ASIFormDataRequest.h"
 #import "JSON.h"
+#import "SoundEffect.h"
 #define ARC4RANDOM_MAX      0x100000000
 @implementation FirstViewController
 
-
-/*
-// The designated initializer. Override to perform setup that is required before the view is loaded.
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
-    if ((self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil])) {
-        // Custom initialization
-    }
-    return self;
-}
-*/
-
-/*
-// Implement loadView to create a view hierarchy programmatically, without using a nib.
-- (void)loadView {
-}
-*/
 
 // Implement viewDidLoad to do additional setup after loading the view, typically from a nib.
 - (void)viewDidLoad {
     [super viewDidLoad];
 	bot = [[NSClassFromString(@"VSSpeechSynthesizer") alloc] init];
 	[self speak:@"Fun run activated."];
-	
-	toqbotrev=0;
+	toqbotkeys = [[NSMutableDictionary alloc] init];
+	[toqbotkeys setObject:[NSNumber numberWithInt:-1] forKey:@"voicetest"];
 	goal = nil;
 	current = nil;
 	deadline = nil;
-	[self startStandardUpdates];
+	//[self startStandardUpdates];
 	[ASIHTTPRequest setDefaultTimeOutSeconds:50];
 	[self gettoqbot];
 	
 }
+-(void) loadsounds {
+	NSString * sound_names[] = {
+		@"clink",
+		@"clonk",
+		@"clunk",
+		@"round transition",
+		@"memix",
+	};
+	
+	SoundEffect * loaded_sound;
+	sounds = [[NSMutableDictionary alloc] initWithCapacity:10];
+	for (int i=0;i<5;i++){
+		loaded_sound = [[SoundEffect alloc] initWithContentsOfFile:[[NSBundle mainBundle] pathForResource:sound_names[i] ofType:@"wav"]];
+		[sounds setObject:loaded_sound forKey:sound_names[i]];
+		[loaded_sound release];
+	}
+}
 - (void)gettoqbot {
 	//get the path we are going to run
-	NSString * url = [NSString stringWithFormat:@"http://toqbot.com/db/?runtest1=%i",toqbotrev];
+	NSMutableString *resultString = [NSMutableString string];
+	for (NSString* key in [toqbotkeys allKeys]){
+		if ([resultString length]>0)
+			[resultString appendString:@"&"];
+		[resultString appendFormat:@"%@=%@", key, [toqbotkeys objectForKey:key]];
+	}
+	NSString * url = [NSString stringWithFormat:@"http://toqbot.com/db/?%@",resultString];
 	ASIHTTPRequest * request = [ASIHTTPRequest requestWithURL:[NSURL URLWithString:url]];
 	[request setDelegate:self];
 	[request startAsynchronous];
 }
 - (void) requestFinished:(ASIHTTPRequest *) request {
-	NSDictionary * data = [[[request responseString] JSONValue] objectAtIndex:0];
-	toqbotrev = [(NSInteger)[data valueForKey:@"rev"] intValue]+1;
-	points = [[NSMutableArray alloc] initWithArray:[[data valueForKey:@"data"] JSONValue]];
-	[self status];
-	
+	NSArray * docs = [[request responseString] JSONValue];
+	for (NSDictionary * data in docs){
+		int rev = [[data valueForKey:@"rev"] intValue]+1;
+		NSString * key = [data valueForKey:@"key"];
+		[toqbotkeys
+		 setObject:[NSNumber numberWithInt:rev]
+		 forKey:key];
+		
+		if ([data objectForKey:@"data"]==nil) continue;
+		
+		if ([key isEqualToString:@"voicetest"]) {
+			[self speak:[data objectForKey:@"data"]];
+		} else if ([key isEqualToString:@"soundfileurl"]) {
+			[[sounds objectForKey:[data objectForKey:@"data"]] play];
+		}
+	}
+	[self gettoqbot];
 }
 -(void) requestFailed:(ASIHTTPRequest *) request {
 	//NSLog(@"request error %@",[request error]);
@@ -160,7 +180,6 @@ fromLocation:(CLLocation *)oldLocation
 	}
 	[self performSelector:@selector(status) withObject:nil afterDelay:5];
 }
-
 // Override to allow orientations other than the default portrait orientation.
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
     return YES;
