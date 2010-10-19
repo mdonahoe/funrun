@@ -18,9 +18,15 @@
 	NSDate * deadline;
 	NSMutableDictionary * toqbotkeys;
 	NSMutableDictionary * sounds;
+	bool mute;
+	bool sending;
 }
 -(void) status;
 -(void) speak:(NSString *)message;
 -(void) startStandardUpdates;
 -(void) gettoqbot;
+-(IBAction) clickmute:(id)sender;
+-(void) sendGPSCoordToServer:(CLLocation*)coord;
+-(void) sentGPS:request;
+-(void) loadsounds;
 @end
