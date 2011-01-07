@@ -108,6 +108,7 @@ fromLocation:(CLLocation *)oldLocation
 	[current release];
 	current = newLocation;
 }
+
 - (void) newGoal {
 	[goal release];
 	[deadline release];
@@ -117,9 +118,11 @@ fromLocation:(CLLocation *)oldLocation
 	if ([points count]>1) [points removeObjectAtIndex:0];
 	//[self speak:[NSString stringWithFormat:@"%i points left",[points count]]];
 }
+
 - (void)locationManager:(CLLocationManager *)manager didFailWithError:(NSError *)error{
 	//error!
 }
+
 -(void) speak:(NSString*)message {
 	[bot startSpeakingString:message];
 }
