@@ -20,27 +20,56 @@
 	bot = [[NSClassFromString(@"VSSpeechSynthesizer") alloc] init];
 	[self speak:@"Fun run activated."];
 	toqbotkeys = [[NSMutableDictionary alloc] init];
-	[toqbotkeys setObject:[NSNumber numberWithInt:-1] forKey:@"voicetest"];
+	NSNumber * latest = [NSNumber numberWithInt:-1];
+	[toqbotkeys setObject:latest forKey:@"voicetest"];
+	[toqbotkeys setObject:latest forKey:@"soundfileurl"];
 	goal = nil;
 	current = nil;
 	deadline = nil;
-	//[self startStandardUpdates];
+	mute = NO;
+	sending = NO;
+	[self startStandardUpdates];
+	[self loadsounds];
 	[ASIHTTPRequest setDefaultTimeOutSeconds:50];
 	[self gettoqbot];
 	
 }
+-(void) sendGPSCoordToServer:(CLLocation*)coord {
+	//extract and prepare the data
+	NSMutableDictionary * dict = [[NSMutableDictionary alloc] initWithCapacity:4];
+	[dict setObject:[NSNumber numberWithFloat:coord.coordinate.latitude] forKey:@"lat"];
+	[dict setObject:[NSNumber numberWithFloat:coord.coordinate.longitude] forKey:@"lon"];
+	[dict setObject:[NSNumber numberWithFloat:coord.horizontalAccuracy] forKey:@"acc"];
+	[dict setObject:[NSNumber numberWithDouble:[coord.timestamp timeIntervalSinceReferenceDate]] forKey:@"time"];
+	
+	NSString * data = [dict JSONRepresentation];
+	[dict release];
+	
+	//create the POST request
+	NSURL * url = [NSURL URLWithString:@"http://toqbot.com/db/"];
+	ASIFormDataRequest *request = [ASIFormDataRequest requestWithURL:url];
+	[request setPostValue:data forKey:@"GPStest2"];
+	
+	//set the correct callback and send to server
+	[request setDidFinishSelector:@selector(sentGPS:)];
+	[request setDidFailSelector:@selector(sentGPS:)];
+	[request setDelegate:self];
+	[request startAsynchronous];
+	
+}
+-(void) sentGPS:request {
+	sending = NO;
+}
 -(void) loadsounds {
 	NSString * sound_names[] = {
-		@"clink",
-		@"clonk",
-		@"clunk",
-		@"round transition",
-		@"memix",
+		@"DingLing",
+		@"lion1",
+		@"panther3",
 	};
 	
 	SoundEffect * loaded_sound;
 	sounds = [[NSMutableDictionary alloc] initWithCapacity:10];
-	for (int i=0;i<5;i++){
+	for (int i=0;i<3;i++){
 		loaded_sound = [[SoundEffect alloc] initWithContentsOfFile:[[NSBundle mainBundle] pathForResource:sound_names[i] ofType:@"wav"]];
 		[sounds setObject:loaded_sound forKey:sound_names[i]];
 		[loaded_sound release];
@@ -67,7 +96,7 @@
 		[toqbotkeys
 		 setObject:[NSNumber numberWithInt:rev]
 		 forKey:key];
-		
+		if (mute) continue;
 		if ([data objectForKey:@"data"]==nil) continue;
 		
 		if ([key isEqualToString:@"voicetest"]) {
@@ -107,6 +136,8 @@ fromLocation:(CLLocation *)oldLocation
 	[newLocation retain];
 	[current release];
 	current = newLocation;
+	if (sending==NO) [self sendGPSCoordToServer:current];
+	
 }
 
 - (void) newGoal {
@@ -204,5 +235,12 @@ fromLocation:(CLLocation *)oldLocation
 - (void)dealloc {
     [super dealloc];
 }
-
+-(IBAction)clickmute:(id)sender{
+	NSLog(@"clickmute!");
+	if(mute){
+		mute = NO;
+	} else {
+		mute = YES;
+	}
+}
 @end
