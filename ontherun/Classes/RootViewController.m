@@ -18,7 +18,13 @@
 #pragma mark -
 #pragma mark View lifecycle
 
-
+-(void) ticktock {
+	for (FRTrigger * trig in triggers){
+		[trig ticktock];
+	}
+	[self performSelector:@selector(ticktock) withObject:nil afterDelay:1.0];
+	[self.tableView reloadData];
+};
 - (void)viewDidLoad {
     [super viewDidLoad];
 
@@ -27,22 +33,79 @@
 	
 	triggers = nil;
 	points = nil;
-	
 	user = [[FRPoint alloc] initWithDict:[NSDictionary dictionaryWithObject:@"user" forKey:@"name"]];
 	
-	NSLog(@"my table view %@",self.view);
+	NSURL *url = [NSURL URLWithString:@"http://toqbot.com/funrun/mission.js"];
+	ASIHTTPRequest *request = [ASIHTTPRequest requestWithURL:url];
+	[request startSynchronous];
+	NSError *error = [request error];
+	if (!error) {
+		NSString *response = [request responseString];
+		
+		NSDictionary * data = [response JSONValue];
+		
+		//create trigger list
+		NSMutableArray * temp = [NSMutableArray arrayWithCapacity:10];
+		for (NSDictionary * dict in [data valueForKey:@"triggers"]){
+			FRTrigger * trig = [[FRTrigger alloc] initWithDict:dict];
+			[temp addObject:trig];
+		}
+		triggers = [[NSArray alloc] initWithArray:temp];
+		
+		[temp removeAllObjects];
+		[temp addObject:user];
+		for (NSDictionary * dict in [data valueForKey:@"points"]){
+			FRPoint * pt = [[FRPoint alloc] initWithDict:dict];
+			[temp addObject:pt];
+		}
+		points = [[NSArray alloc] initWithArray:temp];
+		
+		//linkup triggers and points
+		for (FRTrigger * trig in triggers){
+			[trig finishByUsingTriggerList:triggers andPointList:points];
+			[trig setDelegate:self];
+		}
+		[self.tableView reloadData];
+		
+	}
+	
 	toqbotkeys = [[NSMutableDictionary alloc] init];
-	[toqbotkeys setObject:[NSNumber numberWithInt:-1] forKey:@"triggers"];
-	[toqbotkeys setObject:[NSNumber numberWithInt:-1] forKey:@"points"];
 	[toqbotkeys setObject:[NSNumber numberWithInt:-1] forKey:@"userpos"];
 	[ASIHTTPRequest setDefaultTimeOutSeconds:50];
+	[self startStandardUpdates];
 	[self gettoqbot];
+	[self ticktock];
+}
+- (void)startStandardUpdates
+{
+    // Create the location manager if this object does not
+    // already have one.
+    if (nil == locationManager)
+        locationManager = [[CLLocationManager alloc] init];
+	
+	locationManager.delegate = self;
+	locationManager.desiredAccuracy = kCLLocationAccuracyBest;
+	
+	// Set a movement threshold for new events.
+	locationManager.distanceFilter = 1.0;
+	
+	[locationManager startUpdatingLocation];
 }
 
-- (void) checkTriggers:(NSTimer *)theTimer {
-	for (NSDictionary * trig in triggers){
-		if ([[trig objectForKey:@"active"] boolValue]==NO) continue;
-		
+// Delegate method from the CLLocationManagerDelegate protocol.
+- (void)locationManager:(CLLocationManager *)manager
+	didUpdateToLocation:(CLLocation *)newLocation
+		   fromLocation:(CLLocation *)oldLocation
+{
+	if (newLocation.horizontalAccuracy>100) return;
+	NSLog(@"new gps location %@",newLocation);
+	[self newUserLocation:newLocation];
+	
+}
+- (void) newUserLocation:(CLLocation *)location {
+	user.pos = location;
+	for (FRTrigger * trig in triggers){
+		[trig checkdistancefrom:location];
 	}
 }
 /*
@@ -90,7 +153,6 @@
 	[request startAsynchronous];
 }
 - (void) requestFinished:(ASIHTTPRequest *) request {
-	BOOL dirty = NO;
 	NSArray * docs = [[request responseString] JSONValue];
 	for (NSDictionary * doc in docs){
 		int rev = [[doc valueForKey:@"rev"] intValue]+1;
@@ -100,49 +162,14 @@
 		 forKey:key];
 		id data = [[doc objectForKey:@"data"] JSONValue];
 		if (data==nil) continue;
-		if ([data respondsToSelector:@selector(objectAtIndex:)]){
-			if ([key isEqualToString:@"triggers"]){
-				[triggers release];
-				NSMutableArray * temp = [NSMutableArray arrayWithCapacity:10];
-				for (NSDictionary * dict in data){
-					FRTrigger * trig = [[FRTrigger alloc] initWithDict:dict];
-					[temp addObject:trig];
-				}
-				triggers = [[NSArray alloc] initWithArray:temp];
-				dirty = YES;
-			} else if ([key isEqualToString:@"points"]) {
-				[points release];
-				NSMutableArray * temp = [NSMutableArray arrayWithCapacity:10];
-				[temp addObject:user];
-				for (NSDictionary * dict in data){
-					FRPoint * pt = [[FRPoint alloc] initWithDict:dict];
-					[temp addObject:pt];
-				}
-				points = [[NSArray alloc] initWithArray:temp];
-				dirty = YES;
-			} else {
-				NSLog(@"key = %@",key);
-			}
-		}  else if ([key isEqualToString:@"userpos"]) {
+		if ([key isEqualToString:@"userpos"]) {
 			float lat = [[data objectForKey:@"lat"] floatValue];
 			float lon = [[data objectForKey:@"lon"] floatValue];
+			if (user.pos!=nil) [user.pos release];
 			user.pos = [[CLLocation alloc] initWithLatitude:lat longitude:lon];
-			NSLog(@"new pos");
-			for (FRTrigger * trig in triggers){
-				NSLog(@" trig %@ is %f meters away",trig.name,[trig checkdistancefrom:user.pos]);
-			}
+			[self newUserLocation:user.pos];
 		}
 	}
-	if (dirty){
-		//recreate triggers and points
-		for (FRTrigger * trig in triggers){
-			[trig finishByUsingTriggerList:triggers andPointList:points];
-			[trig setDelegate:self];
-		}
-		[self.tableView reloadData];
-	}
-	
-	
 	[self gettoqbot];
 }
 - (void) requestFailed:(ASIHTTPRequest *) request {
@@ -190,7 +217,7 @@
 		FRTrigger * trig = [triggers objectAtIndex:[indexPath row]];
 		if (trig.active) cell.textLabel.textColor = [UIColor redColor];
 		else cell.textLabel.textColor = [UIColor blackColor];
-		cell.textLabel.text = trig.name;
+		cell.textLabel.text = [trig displayname];
 	} else {
 		FRPoint * pt = [points objectAtIndex:[indexPath row]];
 		cell.textLabel.text = [NSString stringWithFormat:@"%@:%@",pt.name,pt.pos];

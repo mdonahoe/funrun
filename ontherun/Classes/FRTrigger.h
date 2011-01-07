@@ -9,10 +9,11 @@
 #import <Foundation/Foundation.h>
 #import "FRPoint.h"
 
-@interface FRTrigger : NSObject {
+@interface FRTrigger : NSObject <UIAlertViewDelegate>{
 	BOOL active;
 	NSString * name;
 	float countdown;
+	float lastdistance;
 	float lessthan;
 	float greaterthan; //ugh hack town
 	FRPoint * point;
@@ -32,4 +33,5 @@
 - (id) initWithDict:(NSDictionary*)dict;
 - (void) finishByUsingTriggerList:(NSArray *)triggers andPointList:(NSArray *)points;
 - (float) checkdistancefrom:(CLLocation *)user;
+- (NSString *)displayname;
 @end

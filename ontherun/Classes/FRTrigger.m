@@ -37,23 +37,33 @@
 		} else {
 			greaterthan = 10000000000000; //big number
 		}
-		
+		lastdistance = -1.0;
 		dictme = dict;
 		[dictme retain];
 	}
 	
 	return self;
 }
+- (void) ticktock {
+	if (countdown>0) countdown--;
+	if (countdown==0) {
+		[self execute];
+		countdown = -1;
+	}
+}
+- (NSString *)displayname {
+	return [NSString stringWithFormat:@"%@:%1.1f %1.1f",name,countdown,lastdistance];
+}
 - (void) setDelegate:(id)x {
 	delegate = x;
 }
 - (void) activate {
 	active = YES;
-	if (countdown<0) return;
-	[self performSelector:@selector(execute) withObject:self afterDelay:countdown];
+	//if (countdown<0) return;
+	//[self performSelector:@selector(execute) withObject:self afterDelay:countdown];
 }
 - (void) deactivate {
-	[NSObject cancelPreviousPerformRequestsWithTarget:self];
+	//[NSObject cancelPreviousPerformRequestsWithTarget:self];
 	active = NO;
 }
 - (void) execute {
@@ -69,6 +79,10 @@
 	//for (pair in swaptargets){
 		
 	//}
+	UIAlertView *alert = [[[UIAlertView alloc] initWithTitle:name message:@"trigger succeeded" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:nil] autorelease];
+    // optional - add more buttons:
+    [alert addButtonWithTitle:@"cool"];
+    [alert show];
 	if (delegate) [delegate triggered];
 }
 - (float) checkdistancefrom:(CLLocation *)user {
@@ -77,6 +91,7 @@
 	if (d < lessthan || d > greaterthan) {
 		[self execute];
 	}
+	lastdistance = d;
 	return d;
 }
 - (void) finishByUsingTriggerList:(NSArray *)triggers andPointList:(NSArray*)points {
@@ -97,6 +112,7 @@
 	}
 	offs = [[NSArray alloc] initWithArray:_offs];
 	
+	NSString * pname = [dictme objectForKey:@"point"];
 	if (pname!=nil){
 		NSLog(pname);
 		for (FRPoint * pt in points){
@@ -112,5 +128,14 @@
 	[dictme release];
 	dictme = nil;
 	
+}
+- (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex {
+    if (buttonIndex == 1) {
+		NSString * temp = name;
+        name = [NSString stringWithFormat:@"good - %@",temp];
+		[name retain];
+		[temp release];
+    }
+	[delegate triggered];
 }
 @end

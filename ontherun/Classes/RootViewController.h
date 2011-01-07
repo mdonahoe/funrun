@@ -8,11 +8,12 @@
 
 #import <UIKit/UIKit.h>
 #import "FRPoint.h"
-@interface RootViewController : UITableViewController {
+@interface RootViewController : UITableViewController <CLLocationManagerDelegate> {
 	NSMutableDictionary * toqbotkeys;
 	NSArray * triggers;
 	NSArray * points;
 	FRPoint * user;
+	CLLocationManager * locationManager;
 }
 
 @end
