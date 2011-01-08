@@ -7,6 +7,7 @@
 //
 
 #import "FRTrigger.h"
+#import "ASIHTTPRequest.h"
 
 @implementation FRTrigger
 
@@ -40,6 +41,8 @@
 		lastdistance = -1.0;
 		dictme = dict;
 		[dictme retain];
+		
+		[self loadSoundFile:[dictme objectForKey:@"sound"]];
 	}
 	
 	return self;
@@ -50,6 +53,57 @@
 		[self execute];
 		countdown = -1;
 	}
+}
+- (void) loadSoundFile:(NSString *) filename {
+	if (filename==nil) return;
+	
+	// Point to Document directory
+	NSString * documentsDirectory = [NSHomeDirectory() 
+									stringByAppendingPathComponent:@"Documents"];
+	// File we want to create in the documents directory 
+	NSString *filePath = [documentsDirectory 
+						  stringByAppendingPathComponent:filename];
+	
+	
+	if ([[NSFileManager defaultManager] fileExistsAtPath:filePath]==NO){
+		
+		//download
+		NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"http://toqbot.com/funrun/sounds/%@",filename]];
+		ASIHTTPRequest *request = [ASIHTTPRequest requestWithURL:url];
+		[request startSynchronous];
+		NSError *error = [request error];
+		
+		BOOL success=YES;
+		NSString * statusstring;
+		if (!error) {
+			NSData *data = [request responseData];
+			if ([[NSFileManager defaultManager] createFileAtPath:filePath contents:data attributes:nil]){
+				statusstring = [NSString stringWithFormat:@"%@ saved.",filename];
+			} else {
+				statusstring = [NSString stringWithFormat:@"%@ could not be saved.",filename];
+				success = NO;
+			}
+		} else {
+			success = NO;
+			statusstring = [NSString stringWithFormat:@"%@ download error: %@",filename,error];
+		}
+		UIAlertView * messageAlert = [[UIAlertView alloc] initWithTitle:@"Download & Save" message:statusstring delegate:self cancelButtonTitle:@"Close" otherButtonTitles:nil];
+		[messageAlert show];
+		[messageAlert release];
+		if (!success) return; //no more!
+	}
+ 
+	// Write the file
+	//[str writeToFile:filePath atomically:YES 
+	//		encoding:NSUTF8StringEncoding error:&error];
+	
+	// Show contents of Documents directory
+	//NSLog(@"Documents directory: %@",
+	//	  [fileMgr contentsOfDirectoryAtPath:documentsDirectory error:&error]);
+	
+	NSLog(@"file path = %@",filePath);
+	sound = [[SoundEffect alloc] initWithContentsOfFile:filePath];
+
 }
 - (NSString *)displayname {
 	return [NSString stringWithFormat:@"%@:%1.1f %1.1f",name,countdown,lastdistance];
@@ -70,6 +124,8 @@
 	//speak or play sound
 	NSLog(@"trig %@ has succeeded!",name);
 	[self deactivate];
+	[sound play];
+	
 	for (FRTrigger * trig in ons){
 		[trig activate];
 	}
@@ -79,10 +135,6 @@
 	//for (pair in swaptargets){
 		
 	//}
-	UIAlertView *alert = [[[UIAlertView alloc] initWithTitle:name message:@"trigger succeeded" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:nil] autorelease];
-    // optional - add more buttons:
-    [alert addButtonWithTitle:@"cool"];
-    [alert show];
 	if (delegate) [delegate triggered];
 }
 - (float) checkdistancefrom:(CLLocation *)user {

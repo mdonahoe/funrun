@@ -21,5 +21,4 @@
 @property(nonatomic,retain) FRPoint * target;
 
 - (id) initWithDict:(NSDictionary*)dict;
-
 @end

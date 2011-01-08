@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import "FRPoint.h"
+#import "SoundEffect.h"
 
 @interface FRTrigger : NSObject <UIAlertViewDelegate>{
 	BOOL active;
@@ -21,6 +22,7 @@
 	NSArray * offs;
 	NSArray * swaptargets;
 	NSDictionary * dictme;
+	SoundEffect * sound;
 	id delegate;
 }
 @property(nonatomic) BOOL active;
@@ -34,4 +36,9 @@
 - (void) finishByUsingTriggerList:(NSArray *)triggers andPointList:(NSArray *)points;
 - (float) checkdistancefrom:(CLLocation *)user;
 - (NSString *)displayname;
+- (void)loadSoundFile:(NSString *)filename;
+- (void)execute;
+- (void)setDelegate:(id)x;
+- (void)ticktock;
+
 @end

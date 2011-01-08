@@ -15,5 +15,8 @@
 	FRPoint * user;
 	CLLocationManager * locationManager;
 }
+- (void) triggered;
+- (void) startStandardUpdates;
+- (void) gettoqbot;
 
 @end

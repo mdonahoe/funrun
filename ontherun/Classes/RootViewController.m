@@ -14,7 +14,6 @@
 #define ARC4RANDOM_MAX      0x100000000
 @implementation RootViewController
 
-
 #pragma mark -
 #pragma mark View lifecycle
 
@@ -25,6 +24,7 @@
 	[self performSelector:@selector(ticktock) withObject:nil afterDelay:1.0];
 	[self.tableView reloadData];
 };
+
 - (void)viewDidLoad {
     [super viewDidLoad];
 
@@ -220,7 +220,7 @@
 		cell.textLabel.text = [trig displayname];
 	} else {
 		FRPoint * pt = [points objectAtIndex:[indexPath row]];
-		cell.textLabel.text = [NSString stringWithFormat:@"%@:%@",pt.name,pt.pos];
+		cell.textLabel.text = [NSString stringWithFormat:@"%@",pt.name];
 	}
 	return cell;
 	
