@@ -219,6 +219,7 @@
 		else cell.textLabel.textColor = [UIColor blackColor];
 		cell.textLabel.text = [trig displayname];
 	} else {
+		cell.textLabel.textColor = [UIColor blackColor];
 		FRPoint * pt = [points objectAtIndex:[indexPath row]];
 		cell.textLabel.text = [NSString stringWithFormat:@"%@",pt.name];
 	}
