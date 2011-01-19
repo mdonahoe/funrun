@@ -27,7 +27,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-
+	
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
 	
@@ -41,7 +41,6 @@
 	NSError *error = [request error];
 	if (!error) {
 		NSString *response = [request responseString];
-		
 		NSDictionary * data = [response JSONValue];
 		
 		//create trigger list
@@ -66,9 +65,17 @@
 			[trig setDelegate:self];
 		}
 		[self.tableView reloadData];
-		
 	}
 	
+	url = [NSURL URLWithString:@"http://toqbot.com/otr/mapdata.json"];
+	request = [ASIHTTPRequest requestWithURL:url];
+	[request startSynchronous];
+	error = [request error];
+	if (!error) {
+		NSString * response = [request responseString];
+		NSDictionary * data = [response JSONValue];
+		themap = [[FRMap alloc] initWithNodes:[data objectForKey:@"nodes"] andRoads:[data objectForKey:@"roads"]];
+	}
 	toqbotkeys = [[NSMutableDictionary alloc] init];
 	[toqbotkeys setObject:[NSNumber numberWithInt:-1] forKey:@"userpos"];
 	[ASIHTTPRequest setDefaultTimeOutSeconds:50];
@@ -80,8 +87,8 @@
 {
     // Create the location manager if this object does not
     // already have one.
-    if (nil == locationManager)
-        locationManager = [[CLLocationManager alloc] init];
+    if (nil == locationManager) 
+		locationManager = [[CLLocationManager alloc] init];
 	
 	locationManager.delegate = self;
 	locationManager.desiredAccuracy = kCLLocationAccuracyBest;
@@ -165,9 +172,11 @@
 		if ([key isEqualToString:@"userpos"]) {
 			float lat = [[data objectForKey:@"lat"] floatValue];
 			float lon = [[data objectForKey:@"lon"] floatValue];
-			if (user.pos!=nil) [user.pos release];
-			user.pos = [[CLLocation alloc] initWithLatitude:lat longitude:lon];
-			[self newUserLocation:user.pos];
+			if (target.pos!=nil) [target.pos release];
+			target.pos = [[CLLocation alloc] initWithLatitude:lat longitude:lon];
+			NSArray * path = [themap shortestPathBetweenA:user.pos andB:target.pos];
+			
+			//[self newUserLocation:user.pos];
 		}
 	}
 	[self gettoqbot];

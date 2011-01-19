@@ -8,15 +8,19 @@
 
 #import <UIKit/UIKit.h>
 #import "FRPoint.h"
+#import "FRMap.h"
 @interface RootViewController : UITableViewController <CLLocationManagerDelegate> {
 	NSMutableDictionary * toqbotkeys;
 	NSArray * triggers;
 	NSArray * points;
 	FRPoint * user;
+	FRPoint * target;
+	FRMap * themap;
 	CLLocationManager * locationManager;
 }
 - (void) triggered;
 - (void) startStandardUpdates;
 - (void) gettoqbot;
+- (void) newUserLocation:(CLLocation *)location;
 
 @end

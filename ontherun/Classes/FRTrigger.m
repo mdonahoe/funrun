@@ -181,7 +181,7 @@
 	dictme = nil;
 	
 }
-- (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex {
+- (void) alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex {
     if (buttonIndex == 1) {
 		NSString * temp = name;
         name = [NSString stringWithFormat:@"good - %@",temp];

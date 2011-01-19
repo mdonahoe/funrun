@@ -36,6 +36,7 @@
 		C906C28612D4EA4000C14388 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C906C27C12D4EA4000C14388 /* AudioToolbox.framework */; };
 		C906C38A12D508AE00C14388 /* FRTrigger.m in Sources */ = {isa = PBXBuildFile; fileRef = C906C38912D508AE00C14388 /* FRTrigger.m */; };
 		C906C38D12D508BA00C14388 /* FRPoint.m in Sources */ = {isa = PBXBuildFile; fileRef = C906C38C12D508BA00C14388 /* FRPoint.m */; };
+		C9C5378812E39A7A005C0BF0 /* FRMap.m in Sources */ = {isa = PBXBuildFile; fileRef = C9C5378712E39A7A005C0BF0 /* FRMap.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -93,6 +94,8 @@
 		C906C38912D508AE00C14388 /* FRTrigger.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRTrigger.m; sourceTree = "<group>"; };
 		C906C38B12D508BA00C14388 /* FRPoint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRPoint.h; sourceTree = "<group>"; };
 		C906C38C12D508BA00C14388 /* FRPoint.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRPoint.m; sourceTree = "<group>"; };
+		C9C5378612E39A7A005C0BF0 /* FRMap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRMap.h; sourceTree = "<group>"; };
+		C9C5378712E39A7A005C0BF0 /* FRMap.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRMap.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -129,6 +132,8 @@
 				C906C38912D508AE00C14388 /* FRTrigger.m */,
 				C906C38B12D508BA00C14388 /* FRPoint.h */,
 				C906C38C12D508BA00C14388 /* FRPoint.m */,
+				C9C5378612E39A7A005C0BF0 /* FRMap.h */,
+				C9C5378712E39A7A005C0BF0 /* FRMap.m */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -320,6 +325,7 @@
 				C906C16912D4EA2F00C14388 /* Reachability.m in Sources */,
 				C906C38A12D508AE00C14388 /* FRTrigger.m in Sources */,
 				C906C38D12D508BA00C14388 /* FRPoint.m in Sources */,
+				C9C5378812E39A7A005C0BF0 /* FRMap.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
