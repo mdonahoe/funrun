@@ -17,4 +17,8 @@
 - (id) initWithNodes:(NSMutableDictionary*)_nodes andRoads:(NSMutableArray *)roads;
 - (NSArray *) shortestPathBetweenA:(CLLocation *)a andB:(CLLocation *)b;
 - (NSArray *) closestEdgeToPoint:(CLLocation *)p;
+- (NSString *) textDirectionFromA:(CLLocation *)a toB:(CLLocation *)b;
+- (NSString *) directionFromEdge:(NSArray *)e1 toEdge:(NSArray *)e2;
+- (NSString *) compassDirectionOfEdge:(NSArray *)e;
+
 @end

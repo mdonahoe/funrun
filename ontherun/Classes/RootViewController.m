@@ -34,6 +34,8 @@
 	triggers = nil;
 	points = nil;
 	user = [[FRPoint alloc] initWithDict:[NSDictionary dictionaryWithObject:@"user" forKey:@"name"]];
+	user.pos = [[CLLocation alloc] initWithLatitude:42.367179 longitude:-71.097939];
+	target = [[FRPoint alloc] initWithDict:[NSDictionary dictionaryWithObject:@"the_target" forKey:@"name"]];
 	
 	NSURL *url = [NSURL URLWithString:@"http://toqbot.com/funrun/mission.js"];
 	ASIHTTPRequest *request = [ASIHTTPRequest requestWithURL:url];
@@ -172,8 +174,12 @@
 		if ([key isEqualToString:@"userpos"]) {
 			float lat = [[data objectForKey:@"lat"] floatValue];
 			float lon = [[data objectForKey:@"lon"] floatValue];
+			NSLog(@"lat = %f, lon = %f",lat,lon);
 			if (target.pos!=nil) [target.pos release];
+			CLLocation * test = [[CLLocation alloc] initWithLatitude:lat longitude:lon];
+			NSLog(@"what the fuck is going on? %@",test);
 			target.pos = [[CLLocation alloc] initWithLatitude:lat longitude:lon];
+			NSLog(@"new target %@ for user %@",target.pos,user.pos);
 			NSArray * path = [themap shortestPathBetweenA:user.pos andB:target.pos];
 			
 			//[self newUserLocation:user.pos];
