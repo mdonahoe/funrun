@@ -18,6 +18,7 @@
 	NSString * myroad;
 	FRMap * themap;
 	CLLocationManager * locationManager;
+	NSObject * voicebot;
 }
 - (void) triggered;
 - (void) startStandardUpdates;

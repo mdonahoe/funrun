@@ -31,11 +31,14 @@
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
 	
+	//link to /Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.2.sdk/System/Library/PrivateFrameworks/VoiceServices.framework
+	voicebot = [[NSClassFromString(@"VSSpeechSynthesizer") alloc] init];
+	[voicebot startSpeakingString:@"I have loaded"];
 	triggers = nil;
 	points = nil;
 	user = [[FRPoint alloc] initWithDict:[NSDictionary dictionaryWithObject:@"user" forKey:@"name"]];
 	target = [[FRPoint alloc] initWithDict:[NSDictionary dictionaryWithObject:@"the_target" forKey:@"name"]];
-	target.pos = [[CLLocation alloc] initWithLatitude:42.367179 longitude:-71.097939];
+	target.pos = nil;
 	
 	NSURL * url = [NSURL URLWithString:@"http://toqbot.com/funrun/mission.js"];
 	ASIHTTPRequest *request = [ASIHTTPRequest requestWithURL:url];
@@ -81,7 +84,7 @@
 	toqbotkeys = [[NSMutableDictionary alloc] init];
 	[toqbotkeys setObject:[NSNumber numberWithInt:-1] forKey:@"userpos"];
 	[ASIHTTPRequest setDefaultTimeOutSeconds:50];
-	//[self startStandardUpdates];
+	[self startStandardUpdates];
 	[self gettoqbot];
 	[self ticktock];
 }
@@ -112,6 +115,13 @@
 }
 - (void) newUserLocation:(CLLocation *)location {
 	user.pos = location;
+	if (target.pos==nil) return;
+	NSString * newroad = [themap closestRoad:user.pos];
+	if (myroad==nil || [myroad isEqualToString:newroad]==NO){
+		NSString * direct = [themap textDirectionFromA:user.pos toB:target.pos];
+		[voicebot startSpeakingString:direct];
+	}
+	myroad = newroad;
 	for (FRTrigger * trig in triggers){
 		[trig checkdistancefrom:location];
 	}
@@ -173,16 +183,8 @@
 		if ([key isEqualToString:@"userpos"]) {
 			float lat = [[data objectForKey:@"lat"] floatValue];
 			float lon = [[data objectForKey:@"lon"] floatValue];
-			if (user.pos!=nil) [user.pos release];
-			user.pos = [[CLLocation alloc] initWithLatitude:lat longitude:lon];
-			NSString * newroad = [themap closestRoad:user.pos];
-			if (myroad==nil || [myroad isEqualToString:newroad]==NO){
-				NSString * direct = [themap textDirectionFromA:user.pos toB:target.pos];
-				NSLog(@"I suggest that you %@",direct);
-			}
-			myroad = newroad;
-			
-
+			if (target.pos!=nil) [target.pos release];
+			target.pos = [[CLLocation alloc] initWithLatitude:lat longitude:lon];
 		}
 	}
 	[self gettoqbot];

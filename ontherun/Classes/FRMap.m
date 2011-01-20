@@ -149,15 +149,15 @@
 	}
 	
 	NSString * message;
-	float distance;
+	int distance;
 	//if there isnt a turn, just get the distance to the end. (perhaps use b instead?)	 
 	if (intersection==nil) {
-		distance = [a distanceFromLocation:b];
-		message = [NSString stringWithFormat:@"Go %f meters down %@",distance,currentRoad];
+		distance = (int)[a distanceFromLocation:b];
+		message = [NSString stringWithFormat:@"Go %i meters down %@",distance,currentRoad];
 	} else {
 		//get distance from a to intersection
-		distance = [a distanceFromLocation:[nodes objectForKey:intersection]];
-		message = [NSString stringWithFormat:@"Go %f meters down %@ and then turn %@ on %@",distance,currentRoad,turn,nextRoad];
+		distance = (int)[a distanceFromLocation:[nodes objectForKey:intersection]];
+		message = [NSString stringWithFormat:@"Go %i meters down %@ and then turn %@ on %@",distance,currentRoad,turn,nextRoad];
 	}
 	return message;
 	
