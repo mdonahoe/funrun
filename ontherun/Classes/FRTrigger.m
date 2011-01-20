@@ -170,7 +170,6 @@
 		for (FRPoint * pt in points){
 			if ([pname isEqualToString:pt.name]) {
 				point = pt;
-				NSLog(@"trig %@ points to %@",name,point.name);
 			}
 		}
 		[point retain];

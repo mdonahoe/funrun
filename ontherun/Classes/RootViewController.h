@@ -15,6 +15,7 @@
 	NSArray * points;
 	FRPoint * user;
 	FRPoint * target;
+	NSString * myroad;
 	FRMap * themap;
 	CLLocationManager * locationManager;
 }

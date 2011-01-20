@@ -34,10 +34,10 @@
 	triggers = nil;
 	points = nil;
 	user = [[FRPoint alloc] initWithDict:[NSDictionary dictionaryWithObject:@"user" forKey:@"name"]];
-	user.pos = [[CLLocation alloc] initWithLatitude:42.367179 longitude:-71.097939];
 	target = [[FRPoint alloc] initWithDict:[NSDictionary dictionaryWithObject:@"the_target" forKey:@"name"]];
+	target.pos = [[CLLocation alloc] initWithLatitude:42.367179 longitude:-71.097939];
 	
-	NSURL *url = [NSURL URLWithString:@"http://toqbot.com/funrun/mission.js"];
+	NSURL * url = [NSURL URLWithString:@"http://toqbot.com/funrun/mission.js"];
 	ASIHTTPRequest *request = [ASIHTTPRequest requestWithURL:url];
 	[request startSynchronous];
 	NSError *error = [request error];
@@ -81,7 +81,7 @@
 	toqbotkeys = [[NSMutableDictionary alloc] init];
 	[toqbotkeys setObject:[NSNumber numberWithInt:-1] forKey:@"userpos"];
 	[ASIHTTPRequest setDefaultTimeOutSeconds:50];
-	[self startStandardUpdates];
+	//[self startStandardUpdates];
 	[self gettoqbot];
 	[self ticktock];
 }
@@ -107,7 +107,6 @@
 		   fromLocation:(CLLocation *)oldLocation
 {
 	if (newLocation.horizontalAccuracy>100) return;
-	NSLog(@"new gps location %@",newLocation);
 	[self newUserLocation:newLocation];
 	
 }
@@ -174,15 +173,16 @@
 		if ([key isEqualToString:@"userpos"]) {
 			float lat = [[data objectForKey:@"lat"] floatValue];
 			float lon = [[data objectForKey:@"lon"] floatValue];
-			NSLog(@"lat = %f, lon = %f",lat,lon);
-			if (target.pos!=nil) [target.pos release];
-			CLLocation * test = [[CLLocation alloc] initWithLatitude:lat longitude:lon];
-			NSLog(@"what the fuck is going on? %@",test);
-			target.pos = [[CLLocation alloc] initWithLatitude:lat longitude:lon];
-			NSLog(@"new target %@ for user %@",target.pos,user.pos);
-			NSArray * path = [themap shortestPathBetweenA:user.pos andB:target.pos];
+			if (user.pos!=nil) [user.pos release];
+			user.pos = [[CLLocation alloc] initWithLatitude:lat longitude:lon];
+			NSString * newroad = [themap closestRoad:user.pos];
+			if (myroad==nil || [myroad isEqualToString:newroad]==NO){
+				NSString * direct = [themap textDirectionFromA:user.pos toB:target.pos];
+				NSLog(@"I suggest that you %@",direct);
+			}
+			myroad = newroad;
 			
-			//[self newUserLocation:user.pos];
+
 		}
 	}
 	[self gettoqbot];
@@ -209,7 +209,6 @@
 		return [points count];
 	}
 }
-
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
 	
 	if(section == 0)

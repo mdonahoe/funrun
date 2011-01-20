@@ -67,11 +67,8 @@
 	NSMutableDictionary * previous = [NSMutableDictionary dictionaryWithCapacity:3];
 	NSMutableDictionary * distance = [NSMutableDictionary dictionaryWithCapacity:3];
 	
-	
-	
 	//find the closest edge to a
 	NSArray * closest_edge = [self closestEdgeToPoint:a];
-	NSLog(@"this be the edge %@",closest_edge);
 	//add the nodes on that edge to the queue
 	for (NSNumber * node in closest_edge){
 		[queue addObject:node];
@@ -113,36 +110,63 @@
 	while ([previous objectForKey:end]!=nil){
 		end = [previous objectForKey:end];
 		[path addObject:[nodes objectForKey:end]];
-		[path2 addObject:end];
+		[path2 insertObject:end atIndex:0];
 	}
-	NSLog(@"data time! %@",path2);
-	return path;
+	//NSLog(@"data time! %@",path2);
+	return path2;
 }
 - (NSString *) textDirectionFromA:(CLLocation *)a toB:(CLLocation *)b {
 	//get the shortest path;
 	NSArray * path = [self shortestPathBetweenA:a andB:b];
-	
+	NSLog(@"path length = %i",[path count]);
 	//get the name of the street you are on
-	NSString * currentRoad = [[graph objectForKey:[path objectAtIndex:0] objectForKey:[path objectAtIndex:1]] objectForKey:@"name"];
+	NSArray * closestEdge = [self closestEdgeToPoint:a];
+	NSString * currentRoad = [[[graph objectForKey:[closestEdge objectAtIndex:0]] objectForKey:[closestEdge objectAtIndex:1]] objectForKey:@"name"];
+	NSMutableArray * newpath = [NSMutableArray arrayWithArray:path];
+	NSNumber * other;
+	if ([[path objectAtIndex:0] isEqualToNumber:[closestEdge objectAtIndex:0]]){
+		other = [closestEdge objectAtIndex:1];
+	} else {
+		other = [closestEdge objectAtIndex:0];
+	}
+	[newpath insertObject:other atIndex:0];
 	
 	//walk down the path until a turn
 	//(assumes path is longer than 2)
-	NSString * nextRoad;
-	NSNumber * intersection;
-	for (float i=2;i<[path count];i++){
-		NSArray * e1;
-		NSArray * e2; //slice path?
-		[self directionFromEdge:e1 toEdge:e2];
-		//if direction != straight, set nextRoad=e2.name and intersection=path[i-1];
+	NSString * nextRoad = nil;
+	NSNumber * intersection = nil;
+	NSString * turn = nil;
+	for (float i=2;i<[newpath count];i++){
+		NSArray * e1 = [newpath subarrayWithRange:NSMakeRange(i-2,2)];
+		NSArray * e2 = [newpath subarrayWithRange:NSMakeRange(i-1,2)];
+		turn = [self directionFromEdge:e1 toEdge:e2];
+		if ([turn isEqualToString:@"straight"]==NO){
+			//get the name of the street you turn on
+			nextRoad = [[[graph objectForKey:[e2 objectAtIndex:0]] objectForKey:[e2 objectAtIndex:1]] objectForKey:@"name"];
+			intersection = [newpath objectAtIndex:i-1];
+			break;
+		}
 	}
-		 //get the name of the street you turn on
 	
-	//get distance from a to intersection
-	float distance = [a distanceFromLocation:intersection];
-	return [NSString stringWithFormat:@"Go %f meters down %@ and then turn %@ on %@"distance,currentRoad,turn,nextRoad];
+	NSString * message;
+	float distance;
+	//if there isnt a turn, just get the distance to the end. (perhaps use b instead?)	 
+	if (intersection==nil) {
+		distance = [a distanceFromLocation:b];
+		message = [NSString stringWithFormat:@"Go %f meters down %@",distance,currentRoad];
+	} else {
+		//get distance from a to intersection
+		distance = [a distanceFromLocation:[nodes objectForKey:intersection]];
+		message = [NSString stringWithFormat:@"Go %f meters down %@ and then turn %@ on %@",distance,currentRoad,turn,nextRoad];
+	}
+	return message;
 	
 	
 	//support paths that are short and have no turns
+}
+- (NSString *) closestRoad:(CLLocation *)p{
+	NSArray * edge = [self closestEdgeToPoint:p];
+	return [[[graph objectForKey:[edge objectAtIndex:0]] objectForKey:[edge objectAtIndex:1]] objectForKey:@"name"];
 }
 - (NSArray *) closestEdgeToPoint:(CLLocation *)p {
 	float mindist = 10000000000000; //big number
