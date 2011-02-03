@@ -17,22 +17,39 @@
 @implementation RootViewController
 
 #pragma mark -
-#pragma mark View lifecycle
-
--(void) ticktock {
+#pragma mark stuff that shouldnt be here
+- (void) ticktock {
 	if (latestsearch==nil) NSLog(@"nilnil");
+	
+	NSMutableDictionary * positions = [NSMutableDictionary dictionary];
+	
 	for (FRPoint * pt in points){
-		if ([pt.name isEqualToString:@"subshop"]==NO) continue;
-		//move the points
-		NSLog(@"node = %@",pt.name);
-		if (latestsearch!=nil) pt.pos = [latestsearch move:pt.pos towardRootWithDelta:20.0];
+		
+		NSString * status = @"chillin";
+		
+		if ([pt.name isEqualToString:@"user"]==nil){
+			if (latestsearch!=nil && [latestsearch containsPoint:pt.pos] && [latestsearch distanceFromRoot:pt.pos]<300) {
+				pt.pos = [latestsearch move:pt.pos towardRootWithDelta:20.0];
+				status = @"following";
+			} else {
+				pt.pos = [themap move:pt.pos forwardRandomly:10.0];
+				status = @"random";				
+			}
+		}
 		NSArray * ep = [NSArray arrayWithObjects:
 						[NSNumber numberWithInt:pt.pos.start],
 						[NSNumber numberWithInt:pt.pos.end],
 						[NSNumber numberWithFloat:pt.pos.position],
+						status,
 						nil];
-		[m2 sendObject:ep forKey:@"edgepos"];
+		
+		[positions setObject:ep forKey:[NSString stringWithFormat:@"%@_pos",pt.name]];
+		
 	}
+	
+	//send the current position of each item to the server
+	[m2 sendDictionary:positions];
+	
 	for (FRTrigger * trig in triggers){
 		//[trig ticktock];
 	}
@@ -40,22 +57,83 @@
 	[self performSelector:@selector(ticktock) withObject:nil afterDelay:1.0];
 	[self.tableView reloadData];
 };
+- (void)updatePosition:(id)obj {
+	
+	float lat = [[obj objectForKey:@"lat"] floatValue];
+	float lon = [[obj objectForKey:@"lon"] floatValue];
+	
+	CLLocation * ll = [[CLLocation alloc] initWithLatitude:lat longitude:lon];
+	[self newUserLocation:ll];
+	[ll release];
+	
+}
+- (void)startStandardUpdates
+{
+    // Create the location manager if this object does not
+    // already have one.
+    if (nil == locationManager) 
+		locationManager = [[CLLocationManager alloc] init];
+	
+	locationManager.delegate = self;
+	locationManager.desiredAccuracy = kCLLocationAccuracyBest;
+	
+	// Set a movement threshold for new events.
+	locationManager.distanceFilter = 1.0;
+	
+	[locationManager startUpdatingLocation];
+}
+
+// Delegate method from the CLLocationManagerDelegate protocol.
+- (void)locationManager:(CLLocationManager *)manager
+	didUpdateToLocation:(CLLocation *)newLocation
+		   fromLocation:(CLLocation *)oldLocation
+{
+	if (newLocation.horizontalAccuracy>100) return;
+	[self newUserLocation:newLocation];
+	
+}
+- (void) newUserLocation:(CLLocation *)location {
+	NSLog(@"newUserLocation: %@",location);
+	user.pos = [themap edgePosFromPoint:location];
+	latestsearch = [themap createPathSearchAt:user.pos];
+	
+	for (FRPoint * pt in points){
+		//pt.pos = [latestsearch move:pt.pos toward]
+	}
+	
+	for (FRTrigger * trig in triggers){
+		//[trig checkdistancefrom:location];
+	}
+}
+- (void) triggered {
+	[self.tableView reloadData];
+}
+
+#pragma mark -
+#pragma mark View lifecycle
+
+
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-	self.title = @"HAHA!!";
+	self.title = @"On The Run";
+	healthbar = 100;
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
+	
 	//link to /Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.2.sdk/System/Library/PrivateFrameworks/VoiceServices.framework
 	//voicebot = [[NSClassFromString(@"VSSpeechSynthesizer") alloc] init];
 	//[voicebot startSpeakingString:@"I have loaded"];
+	
+	
+	//communication with server
 	m2 = [[toqbot alloc] init];
 	
 	triggers = nil;
 	points = nil;
 	user = [[FRPoint alloc] initWithDict:[NSDictionary dictionaryWithObject:@"user" forKey:@"name"]];
 	
-	NSURL * url = [NSURL URLWithString:@"http://toqbot.com/funrun/mission.js"];
+	NSURL * url = [NSURL URLWithString:@"http://toqbot.com/otr/pacman/mission.js"];
 	ASIHTTPRequest *request = [ASIHTTPRequest requestWithURL:url];
 	[request startSynchronous];
 	NSError *error = [request error];
@@ -69,6 +147,7 @@
 			FRTrigger * trig = [[FRTrigger alloc] initWithDict:dict];
 			[temp addObject:trig];
 		}
+		
 		triggers = [[NSArray alloc] initWithArray:temp];
 		
 		[temp removeAllObjects];
@@ -108,52 +187,12 @@
 		NSLog(@"%@ %@, %i, %i, %f",latlon,[themap closestEdgeToPoint:p],pt.pos.start,pt.pos.end,pt.pos.position);
 		[p release];
 	}
-	//latestsearch = [themap createPathSearchAt:user.pos];
-	//[ASIHTTPRequest setDefaultTimeOutSeconds:50];
+	
+	
 	[self startStandardUpdates];
-	//[self gettoqbot];
 	[self ticktock];
-	[m2 loadObjectForKey:@"userpos" toDelegate:self withSelector:@selector(updatePosition:)];
-}
-- (void)updatePosition:(id)obj {
-	NSLog(@"hello object %@",obj);
-}
-- (void)startStandardUpdates
-{
-    // Create the location manager if this object does not
-    // already have one.
-    if (nil == locationManager) 
-		locationManager = [[CLLocationManager alloc] init];
-	
-	locationManager.delegate = self;
-	locationManager.desiredAccuracy = kCLLocationAccuracyBest;
-	
-	// Set a movement threshold for new events.
-	locationManager.distanceFilter = 1.0;
-	
-	[locationManager startUpdatingLocation];
-}
+	[m2 loadObjectForKey:@"userpos" toDelegate:self usingSelector:@selector(updatePosition:)];
 
-// Delegate method from the CLLocationManagerDelegate protocol.
-- (void)locationManager:(CLLocationManager *)manager
-	didUpdateToLocation:(CLLocation *)newLocation
-		   fromLocation:(CLLocation *)oldLocation
-{
-	if (newLocation.horizontalAccuracy>100) return;
-	[self newUserLocation:newLocation];
-	
-}
-- (void) newUserLocation:(CLLocation *)location {
-	user.pos = [themap edgePosFromPoint:location];
-	latestsearch = [themap createPathSearchAt:user.pos];
-	
-	for (FRPoint * pt in points){
-		//pt.pos = [latestsearch move:pt.pos toward]
-	}
-	
-	for (FRTrigger * trig in triggers){
-		//[trig checkdistancefrom:location];
-	}
 }
 /*
 - (void)viewWillAppear:(BOOL)animated {
@@ -307,9 +346,7 @@
     [super dealloc];
 }
 
-- (void) triggered {
-	[self.tableView reloadData];
-}
+
 
 
 @end

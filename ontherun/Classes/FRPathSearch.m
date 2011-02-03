@@ -30,7 +30,16 @@
 - (EdgePos) move:(EdgePos)ep awayFromRootWithDelta:(float)dx {
 	return ep;
 }
-
+- (BOOL) containsPoint:(EdgePos)ep {
+	
+	//check to see if the the given position is on the path.
+	//(for example, if we did a BFS with a maxdist, it might not be)
+	//or if the graph is not fully connected.
+	
+	return ([distance objectForKey:[NSNumber numberWithInt:ep.start]]!=nil ||
+			[distance objectForKey:[NSNumber numberWithInt:ep.end]]!=nil);
+	
+}
 - (EdgePos) move:(EdgePos)ep towardRootWithDelta:(float)dx {
 	//moves a distance dx along an edge pointing toward the root
 	//or to the edge start, whichever is shorter.
@@ -43,22 +52,21 @@
 	NSNumber * end = [NSNumber numberWithInt:ep.end];
 	
 	float position = ep.position;
-	NSLog(@"start %@, end %@, pos %f",start,end,position);
+	//NSLog(@"start %@, end %@, pos %f",start,end,position);
 	
 	float dstart = [[distance objectForKey:start] floatValue];
 	float dend = [[distance objectForKey:end] floatValue];
 	float length = [map edgeLengthFromStart:start toFinish:end];
 	
-	NSLog(@"ds=%f,de=%f,length = %f",dstart,dend,length);
+	//NSLog(@"ds=%f,de=%f,length = %f",dstart,dend,length);
 	
-	if ([[distance objectForKey:start] floatValue] + position > 
-		[[distance objectForKey:end] floatValue] - position + length) {
+	if (dstart + position > dend - position + length) {
 		//b is closer
 		NSNumber * temp = start;
 		start = end;
 		end = temp;
 		position = length-position;
-		NSLog(@"switch direction: start %@, end %@, pos: %f",start,end,position);
+		//NSLog(@"switch direction: start %@, end %@, pos: %f",start,end,position);
 	}
 	
 	position = MAX(0,position - dx);
@@ -67,7 +75,7 @@
 		end = start;
 		start = [previous objectForKey:start];
 		position = [map edgeLengthFromStart:start toFinish:end];
-		NSLog(@"moved nodes: start %@, end %@, pos: %f",start,end,position);
+		//NSLog(@"moved nodes: start %@, end %@, pos: %f",start,end,position);
 	}
 	
 	EdgePos x;
@@ -80,6 +88,9 @@
 	NSNumber * start = [NSNumber numberWithInt:ep.start];
 	NSNumber * end = [NSNumber numberWithInt:ep.end];
 	float position = ep.position;
+	
+	//does not check for nil values, like it the point is not on path
+	
 	float dstart = [[distance objectForKey:start] floatValue];
 	float dend = [[distance objectForKey:end] floatValue];
 	float length = [map edgeLengthFromStart:start toFinish:end];

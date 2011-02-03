@@ -42,4 +42,6 @@ typedef struct _edgepos {
 - (FRPathSearch *) createPathSearchAt:(EdgePos)ep;
 - (EdgePos) randompos;
 - (NSArray *) getEdges;
+- (EdgePos) move:(EdgePos)ep forwardRandomly:(float)dx;
+- (NSNumber *) randomNeighbor:(NSNumber *)node;
 @end

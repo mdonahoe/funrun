@@ -62,7 +62,7 @@
 	
 	[inrequest cancel];
 	[inrequest release];
-	inrequest = [ASIHTTPRequest requestWithURL:[NSURL URLWithString:url]];
+	inrequest = [[ASIHTTPRequest alloc] initWithURL:[NSURL URLWithString:url]];
 	[inrequest setTimeOutSeconds:50];
 	[inrequest setDelegate:self];
 	[inrequest startAsynchronous];
@@ -87,5 +87,24 @@
 - (void) requestFailed:(ASIHTTPRequest *) request {
 	//NSLog(@"request error %@",[request error]);
 	[self loadKeys];
+}
+- (void) sendDictionary:(NSDictionary *)keyvals {
+	//create the POST request
+	NSURL * url = [NSURL URLWithString:@"http://toqbot.com/db/"];
+	
+	//there can be many outrequests at once.
+	ASIFormDataRequest * outrequest = [ASIFormDataRequest requestWithURL:url];
+	
+	//extract and prepare the data
+	for (NSString * key in keyvals){
+		NSString * data = [[keyvals objectForKey:key] JSONRepresentation];
+		[outrequest setPostValue:data forKey:key];
+	}
+	
+	//set the correct callback and send to server
+	[outrequest setDidFinishSelector:@selector(sentObject:)];
+	[outrequest setDidFailSelector:@selector(sentObject:)];
+	[outrequest setDelegate:self];
+	[outrequest startAsynchronous];
 }
 @end

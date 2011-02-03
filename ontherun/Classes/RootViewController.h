@@ -22,10 +22,10 @@
 	CLLocationManager * locationManager;
 	NSObject * voicebot;
 	toqbot * m2;
+	int healthbar;
 }
 - (void) triggered;
 - (void) startStandardUpdates;
-- (void) gettoqbot;
 - (void) newUserLocation:(CLLocation *)location;
 
 @end

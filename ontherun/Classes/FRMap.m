@@ -326,7 +326,7 @@
 		if (arc4random()%(++i) == 0) start = node;
 	}
 	
-	//choose a random neighbor
+	//choose a random neighbor (replace with @selector(randomNeighbor:))
 	i=0;
 	NSDictionary * neighbors = [graph objectForKey:start];
 	n = [neighbors count];
@@ -345,6 +345,45 @@
 	x.end = [end intValue];
 	x.position = position;
 	return x;
+}
+- (NSNumber *) randomNeighbor:(NSNumber *)node {
+	int i=0;
+	NSDictionary * neighbors = [graph objectForKey:node];
+	NSNumber * rnode;
+	for (NSNumber * neighbor in neighbors){
+		if (arc4random()%(++i)==0) rnode = neighbor;
+	}
+	return rnode;
+}
+- (EdgePos) move:(EdgePos)ep forwardRandomly:(float)dx {
+	NSNumber * start = [NSNumber numberWithInt:ep.start];
+	NSNumber * end = [NSNumber numberWithInt:ep.end];	
+	float position = ep.position;
+	
+	//NSLog(@"start %@, end %@, pos %f",start,end,position);
+	
+	position = MAX(0,position - dx);
+	
+	if (position<=0) {
+		int old = [end intValue];
+		int i = 0;
+		end = start;
+		
+		//avoid going backward
+		do {
+			start = [self randomNeighbor:end];
+		} while ([start intValue]==old && i++ < 10);
+		
+		position = [self edgeLengthFromStart:start toFinish:end];
+		//NSLog(@"moved nodes: start %@, end %@, pos: %f",start,end,position);
+	}
+	
+	EdgePos x;
+	x.start = [start intValue];
+	x.end = [end intValue];
+	x.position = position;
+	return x;
+	
 }
 - (void) dealloc {
 	[super dealloc];
