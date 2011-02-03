@@ -9,16 +9,19 @@
 #import <UIKit/UIKit.h>
 #import "FRPoint.h"
 #import "FRMap.h"
+#import "FRPathSearch.h"
+#import "toqbot.h"
+
 @interface RootViewController : UITableViewController <CLLocationManagerDelegate> {
-	NSMutableDictionary * toqbotkeys;
 	NSArray * triggers;
 	NSArray * points;
 	FRPoint * user;
-	FRPoint * target;
+	FRPathSearch * latestsearch;
 	NSString * myroad;
 	FRMap * themap;
 	CLLocationManager * locationManager;
 	NSObject * voicebot;
+	toqbot * m2;
 }
 - (void) triggered;
 - (void) startStandardUpdates;

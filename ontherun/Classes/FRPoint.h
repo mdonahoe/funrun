@@ -8,17 +8,19 @@
 
 #import <Foundation/Foundation.h>
 #import <CoreLocation/CoreLocation.h>
+#import "FRMap.h"
 
 @interface FRPoint : NSObject {
 	NSString * name;
-	CLLocation * pos;
+	EdgePos pos;
 	FRPoint * target;
 	float speed;
 	NSDictionary * dictme;
 }
 @property(nonatomic,retain) NSString * name;
-@property(nonatomic,retain) CLLocation * pos;
+@property(assign) EdgePos pos;
 @property(nonatomic,retain) FRPoint * target;
+@property(readonly) NSDictionary * dictme;
 
 - (id) initWithDict:(NSDictionary*)dict;
 @end

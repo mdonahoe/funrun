@@ -137,15 +137,6 @@
 	//}
 	if (delegate) [delegate triggered];
 }
-- (float) checkdistancefrom:(CLLocation *)user {
-	if (point==nil || active==NO) return -1.0;
-	float d = [point.pos distanceFromLocation:user];
-	if (d < lessthan || d > greaterthan) {
-		[self execute];
-	}
-	lastdistance = d;
-	return d;
-}
 - (void) finishByUsingTriggerList:(NSArray *)triggers andPointList:(NSArray*)points {
 
 	NSMutableArray * _ons = [NSMutableArray arrayWithCapacity:3];
@@ -166,7 +157,7 @@
 	
 	NSString * pname = [dictme objectForKey:@"point"];
 	if (pname!=nil){
-		NSLog(pname);
+		NSLog(@"name = %@",pname);
 		for (FRPoint * pt in points){
 			if ([pname isEqualToString:pt.name]) {
 				point = pt;

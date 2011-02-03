@@ -9,6 +9,14 @@
 #import <Foundation/Foundation.h>
 #import <CoreLocation/CoreLocation.h>
 
+typedef struct _edgepos {
+	int start;
+	int end;
+	float position;
+} EdgePos;
+
+@class FRPathSearch;
+
 @interface FRMap : NSObject {
 	NSMutableDictionary * graph;
 	NSMutableArray * edges;
@@ -22,4 +30,16 @@
 - (NSString *) directionFromEdge:(NSArray *)e1 toEdge:(NSArray *)e2;
 - (NSString *) compassDirectionOfEdge:(NSArray *)e;
 
+//convert from latlon to EdgePos, using the map
+- (EdgePos) edgePosFromPoint:(CLLocation *)p;
+
+//convienence getter for edge length
+- (float) edgeLengthFromStart:(NSNumber *)a toFinish:(NSNumber *)b;
+
+//what is the max position for a given edge position
+- (float) maxPosition:(EdgePos)ep;
+
+- (FRPathSearch *) createPathSearchAt:(EdgePos)ep;
+- (EdgePos) randompos;
+- (NSArray *) getEdges;
 @end

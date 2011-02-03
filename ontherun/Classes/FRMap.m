@@ -5,9 +5,9 @@
 //  Created by Matt Donahoe on 1/16/11.
 //  Copyright 2011 MIT Media Lab. All rights reserved.
 //
-
+//
 #import "FRMap.h"
-
+#import "FRPathSearch.h"
 
 @implementation FRMap
 - (id) initWithNodes:(NSMutableDictionary*)_nodes andRoads:(NSMutableArray *)roads {
@@ -164,7 +164,7 @@
 	
 	//support paths that are short and have no turns
 }
-- (NSString *) closestRoad:(CLLocation *)p{
+- (NSString *) closestRoad:(CLLocation *)p {
 	NSArray * edge = [self closestEdgeToPoint:p];
 	return [[[graph objectForKey:[edge objectAtIndex:0]] objectForKey:[edge objectAtIndex:1]] objectForKey:@"name"];
 }
@@ -176,7 +176,7 @@
 		NSNumber * i = [edge objectAtIndex:0];
 		NSNumber * j = [edge objectAtIndex:1];
 		float a = [p distanceFromLocation:[nodes objectForKey:i]];
-		float b = [[[[graph objectForKey:i] objectForKey:j] objectForKey:@"length"] floatValue];
+		float b = [self edgeLengthFromStart:i toFinish:j];
 		float c = [p distanceFromLocation:[nodes objectForKey:j]];
 		//NSLog(@"a=%f, b=%f, c=%f",a,b,c);
 		
@@ -222,7 +222,129 @@
 	}
 	if (dy>0) return @"north";
 	return @"south";
+}
+- (EdgePos) edgePosFromPoint:(CLLocation *)p {
+	
+	EdgePos ep;
+	
+	NSArray * edge = [self closestEdgeToPoint:p];
+	NSNumber * i = [edge objectAtIndex:0];
+	NSNumber * j = [edge objectAtIndex:1];
+	
+	ep.start = [i intValue];
+	ep.end = [j intValue];
+	
+	float a = [p distanceFromLocation:[nodes objectForKey:i]];
+	float b = [self edgeLengthFromStart:i toFinish:j];
+	float c = [p distanceFromLocation:[nodes objectForKey:j]];
 
+	
+	float a2 = a*a;
+	float b2 = b*b;
+	float c2 = c*c;
+	if (c2>a2+b2) {
+		ep.position = 0;
+	} else if (a2>b2+c2) {
+		ep.position = b;
+	} else {
+		float s = (a+b+c)/2.0;
+		float area = sqrtf(s*(s-a)*(s-b)*(s-c));
+		float h = 2*area/b;
+		ep.position = sqrtf(a2-h*h); //hopefully never -1
+	}
+	return ep;
+}
+- (float) edgeLengthFromStart:(NSNumber *)a toFinish:(NSNumber *)b {
+	return [[[[graph objectForKey:a] objectForKey:b] objectForKey:@"length"] floatValue];
+}
+- (float) maxPosition:(EdgePos)ep {
+	return [self edgeLengthFromStart:[NSNumber numberWithInt:ep.start] toFinish:[NSNumber numberWithInt:ep.end]];
+}
+- (FRPathSearch *) createPathSearchAt:(EdgePos)ep {
+	NSMutableArray * queue = [NSMutableArray arrayWithCapacity:3];
+	NSMutableDictionary * previous = [NSMutableDictionary dictionary];
+	NSMutableDictionary * distance = [NSMutableDictionary dictionary];
+	
+	
+	//edgePos is a struct with ints. convert to objects for use as keys
+	NSNumber * a = [NSNumber numberWithInt:ep.start];
+	NSNumber * b = [NSNumber numberWithInt:ep.end];
+	
+	//add edge nodes to queue
+	[queue addObject:a];
+	[queue addObject:b];
+	
+
+	//set their distances appropriately
+	[distance setObject:[NSNumber numberWithFloat:ep.position] forKey:a];
+	[distance setObject:[NSNumber numberWithFloat:[self edgeLengthFromStart:a toFinish:b] - ep.position] forKey:b];
+	
+	//travel the tree
+	while ([queue count]>0){
+		NSNumber * node = [queue objectAtIndex:0];
+		[queue removeObjectAtIndex:0];
+		float nodedist = [[distance objectForKey:node] floatValue];
+		for (NSNumber * neighbor in [graph objectForKey:node]){
+			float dist = [self edgeLengthFromStart:node toFinish:neighbor] + nodedist;
+			if ([distance objectForKey:neighbor]==nil || dist < [[distance objectForKey:neighbor] floatValue]){
+				[distance setObject:[NSNumber numberWithFloat:dist] forKey:neighbor];
+				[previous setObject:node forKey:neighbor];
+				[queue addObject:neighbor];
+			}
+		}
+	}
+	
+	
+	FRPathSearch * ps = [[FRPathSearch alloc] initWithRoot:ep previous:previous distance:distance map:self];
+	return ps;
+}
+- (NSArray *) getEdges {
+	NSMutableArray * es = [NSMutableArray arrayWithCapacity:[edges count]];
+	for (NSArray * edge in edges){
+		CLLocation * pt1 = [nodes objectForKey:[edge objectAtIndex:0]];
+		CGPoint p1 = CGPointMake(pt1.coordinate.longitude*100000,pt1.coordinate.latitude*100000);
+		
+		
+		CLLocation * pt2 = [nodes objectForKey:[edge objectAtIndex:1]];
+		CGPoint p2 = CGPointMake(pt2.coordinate.longitude*100000,pt2.coordinate.latitude*100000);
+		
+		NSArray * newedge = [NSArray arrayWithObjects:
+							 [NSValue valueWithCGPoint:p1],
+							 [NSValue valueWithCGPoint:p2],
+							 nil];
+		[es addObject:newedge];
+	}
+	return [[NSArray alloc] initWithArray:es];
+}
+- (EdgePos) randompos {
+	
+	//choose a random starting node
+	int i=0;
+	int n=[nodes count];
+	NSNumber * start;
+	for (NSNumber * node in nodes){
+		if (arc4random()%(++i) == 0) start = node;
+	}
+	
+	//choose a random neighbor
+	i=0;
+	NSDictionary * neighbors = [graph objectForKey:start];
+	n = [neighbors count];
+	NSNumber * end;
+	for (NSNumber * node in neighbors){
+		if (arc4random()%(++i)==0) end = node;
+	}
+	
+	//move a random distance along that edge
+	float length = [self edgeLengthFromStart:start toFinish:end];
+	float position = length * (arc4random()%1000000)/1000000.0;
+	
+	//return the EdgePos
+	EdgePos x;
+	x.start = [start intValue];
+	x.end = [end intValue];
+	x.position = position;
+	return x;
 }
 - (void) dealloc {
 	[super dealloc];

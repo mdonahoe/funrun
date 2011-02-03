@@ -11,6 +11,8 @@
 #import "JSON.h"
 #import "SoundEffect.h"
 #import "FRTrigger.h"
+#import "MapViewController.h"
+
 #define ARC4RANDOM_MAX      0x100000000
 @implementation RootViewController
 
@@ -18,34 +20,47 @@
 #pragma mark View lifecycle
 
 -(void) ticktock {
-	for (FRTrigger * trig in triggers){
-		[trig ticktock];
+	if (latestsearch==nil) NSLog(@"nilnil");
+	for (FRPoint * pt in points){
+		if ([pt.name isEqualToString:@"subshop"]==NO) continue;
+		//move the points
+		NSLog(@"node = %@",pt.name);
+		if (latestsearch!=nil) pt.pos = [latestsearch move:pt.pos towardRootWithDelta:20.0];
+		NSArray * ep = [NSArray arrayWithObjects:
+						[NSNumber numberWithInt:pt.pos.start],
+						[NSNumber numberWithInt:pt.pos.end],
+						[NSNumber numberWithFloat:pt.pos.position],
+						nil];
+		[m2 sendObject:ep forKey:@"edgepos"];
 	}
+	for (FRTrigger * trig in triggers){
+		//[trig ticktock];
+	}
+	
 	[self performSelector:@selector(ticktock) withObject:nil afterDelay:1.0];
 	[self.tableView reloadData];
 };
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-	
+	self.title = @"HAHA!!";
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
-	
 	//link to /Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.2.sdk/System/Library/PrivateFrameworks/VoiceServices.framework
-	voicebot = [[NSClassFromString(@"VSSpeechSynthesizer") alloc] init];
-	[voicebot startSpeakingString:@"I have loaded"];
+	//voicebot = [[NSClassFromString(@"VSSpeechSynthesizer") alloc] init];
+	//[voicebot startSpeakingString:@"I have loaded"];
+	m2 = [[toqbot alloc] init];
+	
 	triggers = nil;
 	points = nil;
 	user = [[FRPoint alloc] initWithDict:[NSDictionary dictionaryWithObject:@"user" forKey:@"name"]];
-	target = [[FRPoint alloc] initWithDict:[NSDictionary dictionaryWithObject:@"the_target" forKey:@"name"]];
-	target.pos = nil;
 	
 	NSURL * url = [NSURL URLWithString:@"http://toqbot.com/funrun/mission.js"];
 	ASIHTTPRequest *request = [ASIHTTPRequest requestWithURL:url];
 	[request startSynchronous];
 	NSError *error = [request error];
 	if (!error) {
-		NSString *response = [request responseString];
+		NSString * response = [request responseString];
 		NSDictionary * data = [response JSONValue];
 		
 		//create trigger list
@@ -81,12 +96,27 @@
 		NSDictionary * data = [response JSONValue];
 		themap = [[FRMap alloc] initWithNodes:[data objectForKey:@"nodes"] andRoads:[data objectForKey:@"roads"]];
 	}
-	toqbotkeys = [[NSMutableDictionary alloc] init];
-	[toqbotkeys setObject:[NSNumber numberWithInt:-1] forKey:@"userpos"];
-	[ASIHTTPRequest setDefaultTimeOutSeconds:50];
+	
+	
+	//set the EdgePos for every point (given its latlon)
+	for (FRPoint * pt in points){
+		NSArray * latlon = [pt.dictme objectForKey:@"pos"];
+		if (latlon==nil) continue;
+		CLLocation * p = [[CLLocation alloc] initWithLatitude:[[latlon objectAtIndex:0] floatValue]
+													longitude:[[latlon objectAtIndex:1] floatValue]];
+		pt.pos = [themap edgePosFromPoint:p];
+		NSLog(@"%@ %@, %i, %i, %f",latlon,[themap closestEdgeToPoint:p],pt.pos.start,pt.pos.end,pt.pos.position);
+		[p release];
+	}
+	//latestsearch = [themap createPathSearchAt:user.pos];
+	//[ASIHTTPRequest setDefaultTimeOutSeconds:50];
 	[self startStandardUpdates];
-	[self gettoqbot];
+	//[self gettoqbot];
 	[self ticktock];
+	[m2 loadObjectForKey:@"userpos" toDelegate:self withSelector:@selector(updatePosition:)];
+}
+- (void)updatePosition:(id)obj {
+	NSLog(@"hello object %@",obj);
 }
 - (void)startStandardUpdates
 {
@@ -114,16 +144,15 @@
 	
 }
 - (void) newUserLocation:(CLLocation *)location {
-	user.pos = location;
-	if (target.pos==nil) return;
-	NSString * newroad = [themap closestRoad:user.pos];
-	if (myroad==nil || [myroad isEqualToString:newroad]==NO){
-		NSString * direct = [themap textDirectionFromA:user.pos toB:target.pos];
-		[voicebot startSpeakingString:direct];
+	user.pos = [themap edgePosFromPoint:location];
+	latestsearch = [themap createPathSearchAt:user.pos];
+	
+	for (FRPoint * pt in points){
+		//pt.pos = [latestsearch move:pt.pos toward]
 	}
-	myroad = newroad;
+	
 	for (FRTrigger * trig in triggers){
-		[trig checkdistancefrom:location];
+		//[trig checkdistancefrom:location];
 	}
 }
 /*
@@ -154,45 +183,6 @@
 	return (interfaceOrientation == UIInterfaceOrientationPortrait);
 }
  */
-#pragma mark -
-#pragma mark toqbot
-
-- (void) gettoqbot {
-	//get the path we are going to run
-	NSMutableString *resultString = [NSMutableString string];
-	for (NSString* key in [toqbotkeys allKeys]){
-		if ([resultString length]>0)
-			[resultString appendString:@"&"];
-		[resultString appendFormat:@"%@=%@", key, [toqbotkeys objectForKey:key]];
-	}
-	NSString * url = [NSString stringWithFormat:@"http://toqbot.com/db/?%@",resultString];
-	ASIHTTPRequest * request = [ASIHTTPRequest requestWithURL:[NSURL URLWithString:url]];
-	[request setDelegate:self];
-	[request startAsynchronous];
-}
-- (void) requestFinished:(ASIHTTPRequest *) request {
-	NSArray * docs = [[request responseString] JSONValue];
-	for (NSDictionary * doc in docs){
-		int rev = [[doc valueForKey:@"rev"] intValue]+1;
-		NSString * key = [doc valueForKey:@"key"];
-		[toqbotkeys
-		 setObject:[NSNumber numberWithInt:rev]
-		 forKey:key];
-		id data = [[doc objectForKey:@"data"] JSONValue];
-		if (data==nil) continue;
-		if ([key isEqualToString:@"userpos"]) {
-			float lat = [[data objectForKey:@"lat"] floatValue];
-			float lon = [[data objectForKey:@"lon"] floatValue];
-			if (target.pos!=nil) [target.pos release];
-			target.pos = [[CLLocation alloc] initWithLatitude:lat longitude:lon];
-		}
-	}
-	[self gettoqbot];
-}
-- (void) requestFailed:(ASIHTTPRequest *) request {
-	//NSLog(@"request error %@",[request error]);
-	[self gettoqbot];
-}
 
 #pragma mark -
 #pragma mark Table view data source
@@ -201,8 +191,6 @@
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
 	return 2;
 }
-
-
 // Customize the number of rows in the table view.
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
 	if (section==0){
@@ -228,8 +216,7 @@
     if (cell == nil) {
         cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
     }
-    if ([indexPath section]==0){
-	// Configure the cell.
+    if ([indexPath section]==0) {
 		FRTrigger * trig = [triggers objectAtIndex:[indexPath row]];
 		if (trig.active) cell.textLabel.textColor = [UIColor redColor];
 		else cell.textLabel.textColor = [UIColor blackColor];
@@ -288,14 +275,15 @@
 #pragma mark Table view delegate
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    
-	/*
-	 <#DetailViewController#> *detailViewController = [[<#DetailViewController#> alloc] initWithNibName:@"<#Nib name#>" bundle:nil];
-     // ...
-     // Pass the selected object to the new view controller.
-	 [self.navigationController pushViewController:detailViewController animated:YES];
-	 [detailViewController release];
-	 */
+	
+	
+	MapViewController * detailViewController = [[MapViewController alloc] initWithNibName:nil bundle:nil];
+	[detailViewController.view setEdges:[themap getEdges]];
+
+	[self.navigationController pushViewController:detailViewController animated:YES];
+	[detailViewController release];
+	
+	//[self.navigationController setNavigationBarHidden:NO];
 }
 
 

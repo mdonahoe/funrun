@@ -10,19 +10,14 @@
 
 
 @implementation FRPoint
-@synthesize name,pos,target;
+@synthesize name,pos,target,dictme;
 
 - (id) initWithDict:(NSDictionary*)dict {
 	self = [super init];
 	
 	if (self) {
-		NSArray * latlon = [dict objectForKey:@"pos"];
-		if (latlon!=nil){
-			pos = [[CLLocation alloc] initWithLatitude:[[latlon objectAtIndex:0] floatValue] longitude:[[latlon objectAtIndex:1] floatValue]];
-		}
 		
 		name = [dict objectForKey:@"name"];
-		
 		NSNumber * s = [dict objectForKey:@"speed"];
 		if (s!=nil) {
 			speed = [s floatValue];
