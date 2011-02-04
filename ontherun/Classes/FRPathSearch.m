@@ -28,7 +28,51 @@
 }
 
 - (EdgePos) move:(EdgePos)ep awayFromRootWithDelta:(float)dx {
-	return ep;
+	//first we need to orient the vector, making sure it is point away from
+	// the root.
+	
+	
+	if (ep.start == root.start && ep.end == root.end) {
+		NSLog(@"facing the same direction on the same edge");
+		if (ep.position < root.position) {
+			NSLog(@"the root is behind ep");
+		} else {
+			NSLog(@"the root is infront of ep");
+			//switch
+			ep = [map flipEdgePos:ep];
+		}
+		
+	} else if(ep.start == root.end && ep.end ==root.start) {
+		NSLog(@"facing opposite directions on the same edge");
+		if (ep.position + root.position < [map maxPosition:ep]){
+			NSLog(@"root is behind ep");
+			
+		} else {
+			NSLog(@"root is infront of ep");
+			//switch
+			ep = [map flipEdgePos:ep];
+		}
+	} else {
+		NSLog(@"on different edges, which of ep's nodes is closer to the root?");
+		
+		NSNumber * start = [NSNumber numberWithInt:ep.start];
+		NSNumber * end = [NSNumber numberWithInt:ep.end];
+		
+		float position = ep.position;
+		
+		float dstart = [[distance objectForKey:start] floatValue];
+		float dend = [[distance objectForKey:end] floatValue];
+		float length = [map edgeLengthFromStart:start toFinish:end];
+		
+		if (dstart + position < dend - position + length) {
+			NSLog(@"end is farther away. swap");
+			ep.start = [end intValue];
+			ep.end = [start intValue];
+			ep.position = length-position;
+		}
+	}
+	[map isValidEdgePos:ep];
+	return [map move:ep forwardRandomly:dx];
 }
 - (BOOL) containsPoint:(EdgePos)ep {
 	
@@ -96,5 +140,39 @@
 	float length = [map edgeLengthFromStart:start toFinish:end];
 	
 	return MIN(dstart+position,dend+length-position);
+}
+- (NSString *) directionFromRoot:(EdgePos)ep {
+	NSString * direction;
+	if (ep.start == root.start && ep.end==root.end) {
+		NSLog(@"same edge, same direction");
+		if (ep.position > root.position) {
+			direction = @"behind";
+		} else {
+			direction = @"infront";
+		}	
+	} else if (ep.start == root.end && ep.end == root.start) {
+		NSLog(@"same edge, opposite directions");
+		float p = [map maxPosition:ep] - ep.position;
+		if (p > root.position) {
+			direction = @"behind";
+		} else {
+			direction = @"infront";
+		}
+	} else {
+		NSLog(@"//different edges");
+		NSNumber * node = [NSNumber numberWithInt:ep.start];
+		while ([previous objectForKey:node]!=nil) node = [previous objectForKey:node];
+		if ([node intValue]==root.start){
+			//infront
+			direction = @"infront";
+		} else if ([node intValue]==root.end) {
+			//behind
+			direction = @"behind";
+		} else {
+			//neither infront nor behind. node is not in search space, or bug
+			direction = @"out of view";
+		}
+	}
+	return direction;
 }
 @end

@@ -10,7 +10,7 @@
 
 
 @implementation FRPoint
-@synthesize name,pos,target,dictme;
+@synthesize name,pos,target,dictme,status;
 
 - (id) initWithDict:(NSDictionary*)dict {
 	self = [super init];
@@ -26,6 +26,7 @@
 		}
 		dictme = dict;
 		[dictme retain];
+		status = @"init";
 	}
 	
 	return self;

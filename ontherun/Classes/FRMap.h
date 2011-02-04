@@ -44,4 +44,6 @@ typedef struct _edgepos {
 - (NSArray *) getEdges;
 - (EdgePos) move:(EdgePos)ep forwardRandomly:(float)dx;
 - (NSNumber *) randomNeighbor:(NSNumber *)node;
+- (EdgePos) flipEdgePos:(EdgePos)ep;
+- (BOOL) isValidEdgePos:(EdgePos)ep;
 @end

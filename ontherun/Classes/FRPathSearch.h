@@ -24,4 +24,5 @@
 - (EdgePos) move:(EdgePos)ep awayFromRootWithDelta:(float)dx;
 - (BOOL) containsPoint:(EdgePos)ep;
 - (float) distanceFromRoot:(EdgePos)ep;
+- (NSString *) directionFromRoot:(EdgePos)ep;
 @end

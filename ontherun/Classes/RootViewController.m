@@ -18,6 +18,11 @@
 
 #pragma mark -
 #pragma mark stuff that shouldnt be here
+- (void) speakString:(NSString *)text {
+	//[voicebot startSpeakingString:text];
+	NSLog(@"%@",text);
+	//[m2 sendObject:text forKey:@"voicebot"];
+}
 - (void) ticktock {
 	if (latestsearch==nil) NSLog(@"nilnil");
 	
@@ -25,22 +30,41 @@
 	
 	for (FRPoint * pt in points){
 		
-		NSString * status = @"chillin";
-		
-		if ([pt.name isEqualToString:@"user"]==nil){
-			if (latestsearch!=nil && [latestsearch containsPoint:pt.pos] && [latestsearch distanceFromRoot:pt.pos]<300) {
-				pt.pos = [latestsearch move:pt.pos towardRootWithDelta:20.0];
-				status = @"following";
+		if ([pt.name isEqualToString:@"user"]==NO){
+			
+			
+			if (latestsearch && [latestsearch containsPoint:pt.pos]) {
+				float dist = [latestsearch distanceFromRoot:pt.pos];
+				if (dist < 300) {
+					pt.pos = [latestsearch move:pt.pos towardRootWithDelta:20.0];
+					if ([pt.status isEqualToString:@"following"]==NO) 
+						[messages insertObject:[NSString stringWithFormat:@"%@ is following",pt.name] atIndex:0];
+					pt.status = @"following";
+					NSString * direction = [latestsearch directionFromRoot:pt.pos];
+					[self speakString:[NSString stringWithFormat:@"%@ is %i meters %@ of you",pt.name,(int)dist,direction]];
+					
+					
+				} else {
+					pt.pos = [themap move:pt.pos forwardRandomly:10.0];
+					if ([pt.status isEqualToString:@"following"])
+						[messages insertObject:[NSString stringWithFormat:@"You lost %@",pt.name] atIndex:0];
+					pt.status = @"random";
+				}
 			} else {
 				pt.pos = [themap move:pt.pos forwardRandomly:10.0];
-				status = @"random";				
+				if ([pt.status isEqualToString:@"following"])
+					[messages insertObject:[NSString stringWithFormat:@"You lost %@",pt.name] atIndex:0];
+				pt.status = @"random";
 			}
+
 		}
+		
+		
 		NSArray * ep = [NSArray arrayWithObjects:
 						[NSNumber numberWithInt:pt.pos.start],
 						[NSNumber numberWithInt:pt.pos.end],
 						[NSNumber numberWithFloat:pt.pos.position],
-						status,
+						pt.status,
 						nil];
 		
 		[positions setObject:ep forKey:[NSString stringWithFormat:@"%@_pos",pt.name]];
@@ -53,8 +77,8 @@
 	for (FRTrigger * trig in triggers){
 		//[trig ticktock];
 	}
-	
-	[self performSelector:@selector(ticktock) withObject:nil afterDelay:1.0];
+	//NSLog(@"messages = %@",messages);
+	[self performSelector:@selector(ticktock) withObject:nil afterDelay:5.0];
 	[self.tableView reloadData];
 };
 - (void)updatePosition:(id)obj {
@@ -94,7 +118,16 @@
 }
 - (void) newUserLocation:(CLLocation *)location {
 	NSLog(@"newUserLocation: %@",location);
-	user.pos = [themap edgePosFromPoint:location];
+	EdgePos ep = [themap edgePosFromPoint:location];
+	
+	if (latestsearch) {
+		//we already have a position
+		//ensure that the direction of our new point is facing away from the old one.
+		user.pos = [latestsearch move:ep awayFromRootWithDelta:0];
+	} else {
+		user.pos = ep;
+	}
+	
 	latestsearch = [themap createPathSearchAt:user.pos];
 	
 	for (FRPoint * pt in points){
@@ -117,8 +150,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
 	self.title = @"On The Run";
-	healthbar = 100;
-    // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
+	// Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
 	
 	//link to /Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.2.sdk/System/Library/PrivateFrameworks/VoiceServices.framework
@@ -184,7 +216,7 @@
 		CLLocation * p = [[CLLocation alloc] initWithLatitude:[[latlon objectAtIndex:0] floatValue]
 													longitude:[[latlon objectAtIndex:1] floatValue]];
 		pt.pos = [themap edgePosFromPoint:p];
-		NSLog(@"%@ %@, %i, %i, %f",latlon,[themap closestEdgeToPoint:p],pt.pos.start,pt.pos.end,pt.pos.position);
+		//NSLog(@"%@ %@, %i, %i, %f",latlon,[themap closestEdgeToPoint:p],pt.pos.start,pt.pos.end,pt.pos.position);
 		[p release];
 	}
 	
@@ -193,6 +225,14 @@
 	[self ticktock];
 	[m2 loadObjectForKey:@"userpos" toDelegate:self usingSelector:@selector(updatePosition:)];
 
+	
+	//game stuff
+	
+	messages = [[NSMutableArray alloc] initWithCapacity:3];
+	[messages addObject:@"first post"];
+	
+	healthbar = 100;
+	
 }
 /*
 - (void)viewWillAppear:(BOOL)animated {
@@ -228,22 +268,29 @@
 
 // Customize the number of sections in the table view.
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-	return 2;
+	return 3;
 }
 // Customize the number of rows in the table view.
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-	if (section==0){
-		return [triggers count];
-	} else {
-		return [points count];
+	switch (section) {
+		case 0:
+			return [triggers count];
+		case 1:
+			return [points count];
+		case 2:
+			return [messages count];
 	}
 }
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
 	
-	if(section == 0)
-		return @"Triggers";
-	else
-		return @"Points";
+	switch (section) {
+		case 0:
+			return @"Triggers";
+		case 1:
+			return @"Points";
+		case 2:
+			return @"Messages";
+	}
 }
 
 
@@ -255,6 +302,27 @@
     if (cell == nil) {
         cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
     }
+	
+	FRTrigger * trig;
+	FRPoint * pt;
+	switch ([indexPath section]){
+		case 0:
+			trig = [triggers objectAtIndex:[indexPath row]];
+			if (trig.active) cell.textLabel.textColor = [UIColor redColor];
+			else cell.textLabel.textColor = [UIColor blackColor];
+			cell.textLabel.text = [trig displayname];
+			break;
+		case 1:
+			cell.textLabel.textColor = [UIColor blackColor];
+			pt = [points objectAtIndex:[indexPath row]];
+			cell.textLabel.text = [NSString stringWithFormat:@"%@",pt.name];
+			break;
+		case 2:
+			cell.textLabel.textColor = [UIColor blackColor];
+			cell.textLabel.text = [NSString stringWithFormat:@"%@",[messages objectAtIndex:[indexPath row]]];
+			break;
+	}
+	/*
     if ([indexPath section]==0) {
 		FRTrigger * trig = [triggers objectAtIndex:[indexPath row]];
 		if (trig.active) cell.textLabel.textColor = [UIColor redColor];
@@ -264,7 +332,7 @@
 		cell.textLabel.textColor = [UIColor blackColor];
 		FRPoint * pt = [points objectAtIndex:[indexPath row]];
 		cell.textLabel.text = [NSString stringWithFormat:@"%@",pt.name];
-	}
+	}*/
 	return cell;
 	
 }

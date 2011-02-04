@@ -23,6 +23,7 @@
 	NSObject * voicebot;
 	toqbot * m2;
 	int healthbar;
+	NSMutableArray * messages;
 }
 - (void) triggered;
 - (void) startStandardUpdates;

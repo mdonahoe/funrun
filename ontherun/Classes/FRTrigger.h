@@ -25,6 +25,20 @@
 	SoundEffect * sound;
 	id delegate;
 }
+
+/*
+ I am beginning to wonder if triggers have a place in my new architecture.
+ 
+ I really need to plan this out more.
+ 
+ Triggers are hard to setup.
+ 
+ If Points start getting intelligent, it will be tough to have generalized triggers introspect them.
+ 
+ 
+ 
+ */
+
 @property(nonatomic) BOOL active;
 @property(nonatomic,retain) NSString * name;
 @property(nonatomic,retain) FRPoint * point;

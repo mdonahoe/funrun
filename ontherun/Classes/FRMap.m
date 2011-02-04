@@ -355,6 +355,40 @@
 	}
 	return rnode;
 }
+- (EdgePos) flipEdgePos:(EdgePos)ep {
+	int temp = ep.start;
+	ep.start = ep.end;
+	ep.end = temp;
+	ep.position = [self maxPosition:ep] - ep.position;
+	
+	[self isValidEdgePos:ep];
+	NSLog(@"flip succeeded");
+	return ep;
+}
+- (BOOL) isValidEdgePos:(EdgePos)ep {
+	NSNumber * start = [NSNumber numberWithInt:ep.start];
+	NSNumber * end = [NSNumber numberWithInt:ep.end];
+	NSDictionary * neighbors = [graph objectForKey:start];
+	if (neighbors==nil) {
+		[NSException raise:@"Invalid start value" format:@"start of %i is invalid", ep.start];
+		return NO;
+	}
+	NSDictionary * data = [neighbors objectForKey:end];
+	if (data==nil) {
+		[NSException raise:@"Invalid end value" format:@"end of %i is invalid", ep.end];
+		return NO;
+	}
+	NSNumber * length = [data objectForKey:@"length"];
+	if (length==nil) {
+		[NSException raise:@"Edge has no length set" format:@"edge = %@", data];
+		return NO;
+	}
+	if ([length floatValue] < ep.position) {
+		[NSException raise:@"Position is longer than edge" format:@"position %f > %f length", ep.position, [length floatValue]];
+		return NO;
+	}
+	return YES;
+}
 - (EdgePos) move:(EdgePos)ep forwardRandomly:(float)dx {
 	NSNumber * start = [NSNumber numberWithInt:ep.start];
 	NSNumber * end = [NSNumber numberWithInt:ep.end];	
