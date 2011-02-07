@@ -31,4 +31,24 @@
 	
 	return self;
 }
+
+- (CLLocationCoordinate2D)coordinate;
+{
+    return mycoordinate;
+}
+- (void) setCoordinate:(CLLocationCoordinate2D)newCoordinate {
+	mycoordinate = newCoordinate;
+}
+// required if you set the MKPinAnnotationView's "canShowCallout" property to YES
+- (NSString *)title
+{
+    return name;
+}
+
+// optional
+- (NSString *)subtitle
+{
+    return status;
+}
+
 @end

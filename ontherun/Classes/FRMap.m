@@ -425,4 +425,35 @@
 	[edges release];
 	[graph release];
 }
+
+
+- (CLLocationCoordinate2D) coordinateFromEdgePosition:(EdgePos)ep {
+	/*
+	 use an interpolation formula to find a position between two points
+	 
+	 Eventually I should look at the midpoint formula from this website
+	 
+	 http://www.movable-type.co.uk/scripts/latlong.html
+	 var Bx = Math.cos(lat2) * Math.cos(dLon);
+	 var By = Math.cos(lat2) * Math.sin(dLon);
+	 var lat3 = Math.atan2(Math.sin(lat1)+Math.sin(lat2),
+						   Math.sqrt( (Math.cos(lat1)+Bx)*(Math.cos(lat1)+Bx) + By*By) ); 
+	var lon3 = lon1 + Math.atan2(By, Math.cos(lat1) + Bx);
+	 
+	 
+	 but currently im doing simple linear version, which will probably be fine for now, since the distances are closee
+	 and we arent crossing the date line.
+	 
+	 */
+	
+	CLLocation * start = [nodes objectForKey:[NSNumber numberWithInt:ep.start]];
+	CLLocation * end = [nodes objectForKey:[NSNumber numberWithInt:ep.end]];
+	
+	float fraction = ep.position / [self maxPosition:ep];
+	
+	CLLocationCoordinate2D theCoordinate;
+    theCoordinate.latitude = (1-fraction)*start.coordinate.latitude + fraction*end.coordinate.latitude;
+    theCoordinate.longitude = (1-fraction)*start.coordinate.longitude + fraction*end.coordinate.longitude;
+    return theCoordinate; 
+}
 @end

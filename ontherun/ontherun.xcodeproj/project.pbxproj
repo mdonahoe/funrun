@@ -12,6 +12,10 @@
 		28AD73600D9D9599002E5188 /* MainWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 28AD735F0D9D9599002E5188 /* MainWindow.xib */; };
 		28C286E10D94DF7D0034E888 /* RootViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 28C286E00D94DF7D0034E888 /* RootViewController.m */; };
 		28F335F11007B36200424DE2 /* RootViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 28F335F01007B36200424DE2 /* RootViewController.xib */; };
+		9BD50325130070320092D86A /* FRMapViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9BD50324130070320092D86A /* FRMapViewController.m */; };
+		9BD50337130075020092D86A /* FRMapViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9BD50336130075020092D86A /* FRMapViewController.xib */; };
+		9BD50343130075340092D86A /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9BD50342130075340092D86A /* MapKit.framework */; };
+		9BD5039E13007F760092D86A /* FRAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = 9BD5039D13007F760092D86A /* FRAnnotation.m */; };
 		C906C15D12D4EA2F00C14388 /* SoundEffect.m in Sources */ = {isa = PBXBuildFile; fileRef = C906C13D12D4EA2F00C14388 /* SoundEffect.m */; };
 		C906C15E12D4EA2F00C14388 /* NSObject+SBJSON.m in Sources */ = {isa = PBXBuildFile; fileRef = C906C14112D4EA2F00C14388 /* NSObject+SBJSON.m */; };
 		C906C15F12D4EA2F00C14388 /* NSString+SBJSON.m in Sources */ = {isa = PBXBuildFile; fileRef = C906C14312D4EA2F00C14388 /* NSString+SBJSON.m */; };
@@ -39,9 +43,6 @@
 		C9C5378812E39A7A005C0BF0 /* FRMap.m in Sources */ = {isa = PBXBuildFile; fileRef = C9C5378712E39A7A005C0BF0 /* FRMap.m */; };
 		C9E494C212F8D7390006AB7B /* FRPathSearch.m in Sources */ = {isa = PBXBuildFile; fileRef = C9E494C112F8D7390006AB7B /* FRPathSearch.m */; };
 		C9E494C512F8D9550006AB7B /* FRPath.m in Sources */ = {isa = PBXBuildFile; fileRef = C9E494C412F8D9550006AB7B /* FRPath.m */; };
-		C9FC21E312F9211500892CF6 /* MapViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C9FC21E112F9211500892CF6 /* MapViewController.m */; };
-		C9FC21E412F9211500892CF6 /* MapViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = C9FC21E212F9211500892CF6 /* MapViewController.xib */; };
-		C9FC225E12F9969600892CF6 /* MapView.m in Sources */ = {isa = PBXBuildFile; fileRef = C9FC225D12F9969600892CF6 /* MapView.m */; };
 		C9FC234912F9CCC700892CF6 /* toqbot.m in Sources */ = {isa = PBXBuildFile; fileRef = C9FC234812F9CCC700892CF6 /* toqbot.m */; };
 /* End PBXBuildFile section */
 
@@ -56,6 +57,12 @@
 		28F335F01007B36200424DE2 /* RootViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = RootViewController.xib; sourceTree = "<group>"; };
 		29B97316FDCFA39411CA2CEA /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		8D1107310486CEB800E47090 /* ontherun-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "ontherun-Info.plist"; plistStructureDefinitionIdentifier = "com.apple.xcode.plist.structure-definition.iphone.info-plist"; sourceTree = "<group>"; };
+		9BD50323130070320092D86A /* FRMapViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRMapViewController.h; sourceTree = "<group>"; };
+		9BD50324130070320092D86A /* FRMapViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRMapViewController.m; sourceTree = "<group>"; };
+		9BD50336130075020092D86A /* FRMapViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = FRMapViewController.xib; sourceTree = "<group>"; };
+		9BD50342130075340092D86A /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
+		9BD5039C13007F760092D86A /* FRAnnotation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRAnnotation.h; sourceTree = "<group>"; };
+		9BD5039D13007F760092D86A /* FRAnnotation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRAnnotation.m; sourceTree = "<group>"; };
 		C906C13C12D4EA2F00C14388 /* SoundEffect.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SoundEffect.h; sourceTree = "<group>"; };
 		C906C13D12D4EA2F00C14388 /* SoundEffect.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SoundEffect.m; sourceTree = "<group>"; };
 		C906C13F12D4EA2F00C14388 /* JSON.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSON.h; sourceTree = "<group>"; };
@@ -106,11 +113,6 @@
 		C9E494C112F8D7390006AB7B /* FRPathSearch.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRPathSearch.m; sourceTree = "<group>"; };
 		C9E494C312F8D9550006AB7B /* FRPath.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRPath.h; sourceTree = "<group>"; };
 		C9E494C412F8D9550006AB7B /* FRPath.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRPath.m; sourceTree = "<group>"; };
-		C9FC21E012F9211500892CF6 /* MapViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MapViewController.h; sourceTree = "<group>"; };
-		C9FC21E112F9211500892CF6 /* MapViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MapViewController.m; sourceTree = "<group>"; };
-		C9FC21E212F9211500892CF6 /* MapViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = MapViewController.xib; path = Classes/MapViewController.xib; sourceTree = "<group>"; };
-		C9FC225C12F9969600892CF6 /* MapView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MapView.h; sourceTree = "<group>"; };
-		C9FC225D12F9969600892CF6 /* MapView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MapView.m; sourceTree = "<group>"; };
 		C9FC234712F9CCC700892CF6 /* toqbot.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = toqbot.h; sourceTree = "<group>"; };
 		C9FC234812F9CCC700892CF6 /* toqbot.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = toqbot.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -129,6 +131,7 @@
 				C906C28312D4EA4000C14388 /* SystemConfiguration.framework in Frameworks */,
 				C906C28412D4EA4000C14388 /* libz.1.2.3.dylib in Frameworks */,
 				C906C28612D4EA4000C14388 /* AudioToolbox.framework in Frameworks */,
+				9BD50343130075340092D86A /* MapKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -138,6 +141,8 @@
 		080E96DDFE201D6D7F000001 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				9BD50323130070320092D86A /* FRMapViewController.h */,
+				9BD50324130070320092D86A /* FRMapViewController.m */,
 				C906C13B12D4EA2F00C14388 /* sound */,
 				C906C13E12D4EA2F00C14388 /* json */,
 				C906C14A12D4EA2F00C14388 /* request */,
@@ -155,12 +160,10 @@
 				C9E494C112F8D7390006AB7B /* FRPathSearch.m */,
 				C9E494C312F8D9550006AB7B /* FRPath.h */,
 				C9E494C412F8D9550006AB7B /* FRPath.m */,
-				C9FC21E012F9211500892CF6 /* MapViewController.h */,
-				C9FC21E112F9211500892CF6 /* MapViewController.m */,
-				C9FC225C12F9969600892CF6 /* MapView.h */,
-				C9FC225D12F9969600892CF6 /* MapView.m */,
 				C9FC234712F9CCC700892CF6 /* toqbot.h */,
 				C9FC234812F9CCC700892CF6 /* toqbot.m */,
+				9BD5039C13007F760092D86A /* FRAnnotation.h */,
+				9BD5039D13007F760092D86A /* FRAnnotation.m */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -197,7 +200,7 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				C9FC21E212F9211500892CF6 /* MapViewController.xib */,
+				9BD50336130075020092D86A /* FRMapViewController.xib */,
 				28F335F01007B36200424DE2 /* RootViewController.xib */,
 				28AD735F0D9D9599002E5188 /* MainWindow.xib */,
 				8D1107310486CEB800E47090 /* ontherun-Info.plist */,
@@ -217,6 +220,7 @@
 				C906C27912D4EA4000C14388 /* SystemConfiguration.framework */,
 				C906C27A12D4EA4000C14388 /* libz.1.2.3.dylib */,
 				C906C27C12D4EA4000C14388 /* AudioToolbox.framework */,
+				9BD50342130075340092D86A /* MapKit.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -325,7 +329,7 @@
 			files = (
 				28AD73600D9D9599002E5188 /* MainWindow.xib in Resources */,
 				28F335F11007B36200424DE2 /* RootViewController.xib in Resources */,
-				C9FC21E412F9211500892CF6 /* MapViewController.xib in Resources */,
+				9BD50337130075020092D86A /* FRMapViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -357,9 +361,9 @@
 				C9C5378812E39A7A005C0BF0 /* FRMap.m in Sources */,
 				C9E494C212F8D7390006AB7B /* FRPathSearch.m in Sources */,
 				C9E494C512F8D9550006AB7B /* FRPath.m in Sources */,
-				C9FC21E312F9211500892CF6 /* MapViewController.m in Sources */,
-				C9FC225E12F9969600892CF6 /* MapView.m in Sources */,
 				C9FC234912F9CCC700892CF6 /* toqbot.m in Sources */,
+				9BD50325130070320092D86A /* FRMapViewController.m in Sources */,
+				9BD5039E13007F760092D86A /* FRAnnotation.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

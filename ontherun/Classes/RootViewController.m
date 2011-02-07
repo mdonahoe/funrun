@@ -11,7 +11,7 @@
 #import "JSON.h"
 #import "SoundEffect.h"
 #import "FRTrigger.h"
-#import "MapViewController.h"
+#import "FRMapViewController.h"
 
 #define ARC4RANDOM_MAX      0x100000000
 @implementation RootViewController
@@ -26,7 +26,6 @@
 - (void) ticktock {
 	if (latestsearch==nil) NSLog(@"nilnil");
 	
-	NSMutableDictionary * positions = [NSMutableDictionary dictionary];
 	
 	for (FRPoint * pt in points){
 		
@@ -59,26 +58,17 @@
 
 		}
 		
-		
-		NSArray * ep = [NSArray arrayWithObjects:
-						[NSNumber numberWithInt:pt.pos.start],
-						[NSNumber numberWithInt:pt.pos.end],
-						[NSNumber numberWithFloat:pt.pos.position],
-						pt.status,
-						nil];
-		
-		[positions setObject:ep forKey:[NSString stringWithFormat:@"%@_pos",pt.name]];
+		//update 2d coordinate (so the map updates live)
+		[pt setCoordinate:[themap coordinateFromEdgePosition:pt.pos]];
 		
 	}
 	
-	//send the current position of each item to the server
-	[m2 sendDictionary:positions];
 	
 	for (FRTrigger * trig in triggers){
 		//[trig ticktock];
 	}
-	//NSLog(@"messages = %@",messages);
-	[self performSelector:@selector(ticktock) withObject:nil afterDelay:5.0];
+
+	[self performSelector:@selector(ticktock) withObject:nil afterDelay:0.5];
 	[self.tableView reloadData];
 };
 - (void)updatePosition:(id)obj {
@@ -280,6 +270,7 @@
 		case 2:
 			return [messages count];
 	}
+	return 0;
 }
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
 	
@@ -291,6 +282,8 @@
 		case 2:
 			return @"Messages";
 	}
+	
+	return @"default";
 }
 
 
@@ -384,10 +377,14 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 	
 	
-	MapViewController * detailViewController = [[MapViewController alloc] initWithNibName:nil bundle:nil];
-	[detailViewController.view setEdges:[themap getEdges]];
-
+	FRMapViewController * detailViewController = [[FRMapViewController alloc] initWithNibName:@"FRMapViewController" bundle:nil];
+	
+	//EdgePos ep = ((FRPoint*)[points objectAtIndex:indexPath.row]).pos;
+	//CLLocationCoordinate2D c = [themap coordinateFromEdgePosition:ep];
+	
 	[self.navigationController pushViewController:detailViewController animated:YES];
+	[detailViewController.mapView addAnnotations:points];
+	//[detailViewController addAnnotationAtCoordinate:c];
 	[detailViewController release];
 	
 	//[self.navigationController setNavigationBarHidden:NO];

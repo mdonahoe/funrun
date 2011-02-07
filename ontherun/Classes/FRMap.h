@@ -46,4 +46,5 @@ typedef struct _edgepos {
 - (NSNumber *) randomNeighbor:(NSNumber *)node;
 - (EdgePos) flipEdgePos:(EdgePos)ep;
 - (BOOL) isValidEdgePos:(EdgePos)ep;
+- (CLLocationCoordinate2D) coordinateFromEdgePosition:(EdgePos)ep;
 @end

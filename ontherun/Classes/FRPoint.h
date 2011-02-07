@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import <CoreLocation/CoreLocation.h>
+#import <MapKit/MapKit.h>
 #import "FRMap.h"
 
 
@@ -32,7 +33,7 @@
  */
 
 
-@interface FRPoint : NSObject {
+@interface FRPoint : NSObject <MKAnnotation>{
 	NSString * name;
 	EdgePos pos;
 	FRPoint * target;
@@ -40,6 +41,7 @@
 	NSDictionary * dictme;
 	FRMap * map;
 	NSString * status;
+	CLLocationCoordinate2D mycoordinate;
 }
 
 
