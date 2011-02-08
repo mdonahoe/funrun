@@ -51,4 +51,9 @@
     return status;
 }
 
+- (void) dealloc {
+	[dictme release];
+	[super dealloc];
+}
+
 @end

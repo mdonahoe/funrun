@@ -107,4 +107,11 @@
 	[outrequest setDelegate:self];
 	[outrequest startAsynchronous];
 }
+- (void) dealloc {
+	[inrequest release];
+	[delegates release];
+	[selectors release];
+	[keys release];
+	[super dealloc];
+}
 @end

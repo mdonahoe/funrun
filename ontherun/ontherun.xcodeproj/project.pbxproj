@@ -17,6 +17,7 @@
 		9BD50343130075340092D86A /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9BD50342130075340092D86A /* MapKit.framework */; };
 		9BD5039E13007F760092D86A /* FRAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = 9BD5039D13007F760092D86A /* FRAnnotation.m */; };
 		9BD504AE1300B2330092D86A /* VoiceServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9BD504AD1300B2330092D86A /* VoiceServices.framework */; };
+		9BD504F41301BCA80092D86A /* FRMission.m in Sources */ = {isa = PBXBuildFile; fileRef = 9BD504F31301BCA80092D86A /* FRMission.m */; };
 		C906C15D12D4EA2F00C14388 /* SoundEffect.m in Sources */ = {isa = PBXBuildFile; fileRef = C906C13D12D4EA2F00C14388 /* SoundEffect.m */; };
 		C906C15E12D4EA2F00C14388 /* NSObject+SBJSON.m in Sources */ = {isa = PBXBuildFile; fileRef = C906C14112D4EA2F00C14388 /* NSObject+SBJSON.m */; };
 		C906C15F12D4EA2F00C14388 /* NSString+SBJSON.m in Sources */ = {isa = PBXBuildFile; fileRef = C906C14312D4EA2F00C14388 /* NSString+SBJSON.m */; };
@@ -65,6 +66,8 @@
 		9BD5039C13007F760092D86A /* FRAnnotation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRAnnotation.h; sourceTree = "<group>"; };
 		9BD5039D13007F760092D86A /* FRAnnotation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRAnnotation.m; sourceTree = "<group>"; };
 		9BD504AD1300B2330092D86A /* VoiceServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = VoiceServices.framework; path = System/Library/PrivateFrameworks/VoiceServices.framework; sourceTree = SDKROOT; };
+		9BD504F21301BCA80092D86A /* FRMission.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRMission.h; sourceTree = "<group>"; };
+		9BD504F31301BCA80092D86A /* FRMission.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRMission.m; sourceTree = "<group>"; };
 		C906C13C12D4EA2F00C14388 /* SoundEffect.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SoundEffect.h; sourceTree = "<group>"; };
 		C906C13D12D4EA2F00C14388 /* SoundEffect.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SoundEffect.m; sourceTree = "<group>"; };
 		C906C13F12D4EA2F00C14388 /* JSON.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSON.h; sourceTree = "<group>"; };
@@ -167,6 +170,8 @@
 				C9FC234812F9CCC700892CF6 /* toqbot.m */,
 				9BD5039C13007F760092D86A /* FRAnnotation.h */,
 				9BD5039D13007F760092D86A /* FRAnnotation.m */,
+				9BD504F21301BCA80092D86A /* FRMission.h */,
+				9BD504F31301BCA80092D86A /* FRMission.m */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -368,6 +373,7 @@
 				C9FC234912F9CCC700892CF6 /* toqbot.m in Sources */,
 				9BD50325130070320092D86A /* FRMapViewController.m in Sources */,
 				9BD5039E13007F760092D86A /* FRAnnotation.m in Sources */,
+				9BD504F41301BCA80092D86A /* FRMission.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

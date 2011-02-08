@@ -15,7 +15,6 @@
 @synthesize window;
 @synthesize navigationController;
 
-
 #pragma mark -
 #pragma mark Application lifecycle
 
@@ -23,7 +22,10 @@
     
     // Override point for customization after application launch.
     
-    // Add the navigation controller's view to the window and display.
+    //create the game logic object here. (missions)
+	
+	
+	// Add the navigation controller's view to the window and display.
     [window addSubview:navigationController.view];
     [window makeKeyAndVisible];
 

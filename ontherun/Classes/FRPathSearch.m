@@ -165,7 +165,7 @@
 		if (ep.position > root.position) {
 			direction = @"behind";
 		} else {
-			direction = @"infront";
+			direction = @"infront of";
 		}	
 	} else if (ep.start == root.end && ep.end == root.start) {
 		NSLog(@"same edge, opposite directions");
@@ -173,21 +173,21 @@
 		if (p > root.position) {
 			direction = @"behind";
 		} else {
-			direction = @"infront";
+			direction = @"infront of";
 		}
 	} else {
-		NSLog(@"//different edges");
+		NSLog(@"different edges");
 		NSNumber * node = [NSNumber numberWithInt:ep.start];
 		while ([previous objectForKey:node]!=nil) node = [previous objectForKey:node];
 		if ([node intValue]==root.start){
 			//infront
-			direction = @"infront";
+			direction = @"infront of";
 		} else if ([node intValue]==root.end) {
 			//behind
 			direction = @"behind";
 		} else {
 			//neither infront nor behind. node is not in search space, or bug
-			direction = @"out of view";
+			direction = @"out of view of";
 		}
 	}
 	return direction;

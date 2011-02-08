@@ -421,10 +421,10 @@
 	
 }
 - (void) dealloc {
-	[super dealloc];
 	[nodes release];
 	[edges release];
 	[graph release];
+	[super dealloc];
 }
 - (CLLocationCoordinate2D) coordinateFromEdgePosition:(EdgePos)ep {
 	/*

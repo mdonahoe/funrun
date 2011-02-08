@@ -47,15 +47,6 @@
 	self.mapView.mapType = MKMapTypeStandard;
 	[self gotoLocation];
 }
-
-
-/*
-// Override to allow orientations other than the default portrait orientation.
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
-    // Return YES for supported orientations
-    return (interfaceOrientation == UIInterfaceOrientationPortrait);
-}
-*/
 - (MKAnnotationView *)mapView:(MKMapView *)theMapView viewForAnnotation:(id <MKAnnotation>)annotation{
 	static NSString* pinIdentifier = @"I love pins!";
 	NSLog(@"pin time");
@@ -77,16 +68,6 @@
     
     // Release any cached data, images, etc that aren't in use.
 }
-/*
-- (void)addAnnotationAtCoordinate:(CLLocationCoordinate2D)coord {
-	FRAnnotation * place = [[FRAnnotation alloc] init];
-	[place setCoordinate:coord];
-	[self.mapView addAnnotation:place];
-	NSLog(@"annotation added at coordinate %f %f",place.coordinate.latitude,place.coordinate.longitude);
-	[place release];
-	
-}
- */
 - (void)viewDidUnload {
     [super viewDidUnload];
     // Release any retained subviews of the main view.
