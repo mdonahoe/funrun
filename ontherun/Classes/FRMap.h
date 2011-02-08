@@ -39,7 +39,7 @@ typedef struct _edgepos {
 //what is the max position for a given edge position
 - (float) maxPosition:(EdgePos)ep;
 
-- (FRPathSearch *) createPathSearchAt:(EdgePos)ep;
+- (FRPathSearch *) createPathSearchAt:(EdgePos)ep withMaxDistance:(NSNumber *)maxdist;
 - (EdgePos) randompos;
 - (NSArray *) getEdges;
 - (EdgePos) move:(EdgePos)ep forwardRandomly:(float)dx;

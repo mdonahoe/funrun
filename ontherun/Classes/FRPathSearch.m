@@ -26,11 +26,14 @@
 	
 	return self;
 }
-
 - (EdgePos) move:(EdgePos)ep awayFromRootWithDelta:(float)dx {
-	//first we need to orient the vector, making sure it is point away from
-	// the root.
 	
+	//check to see if the point is inside the path
+	//if not, return it untouched.
+	if ([self containsPoint:ep]==NO) return ep;
+	
+	//we need to orient the vector, making sure it is point away from
+	// the root.
 	
 	if (ep.start == root.start && ep.end == root.end) {
 		NSLog(@"facing the same direction on the same edge");
@@ -92,6 +95,10 @@
 	//in future versions, we can always move dx, even it it means traversing multiple edges
 	// and reaching the root.
 	
+	//check to see if the point is inside the path
+	//if not, return it untouched.
+	if ([self containsPoint:ep]==NO) return ep;
+	
 	NSNumber * start = [NSNumber numberWithInt:ep.start];
 	NSNumber * end = [NSNumber numberWithInt:ep.end];
 	
@@ -129,6 +136,11 @@
 	return x;
 }
 - (float) distanceFromRoot:(EdgePos)ep {
+	
+	//check to see if the point is inside the path
+	//if not, return a large number
+	if ([self containsPoint:ep]==NO) return 10000000000.0;
+	
 	NSNumber * start = [NSNumber numberWithInt:ep.start];
 	NSNumber * end = [NSNumber numberWithInt:ep.end];
 	float position = ep.position;
@@ -142,6 +154,11 @@
 	return MIN(dstart+position,dend+length-position);
 }
 - (NSString *) directionFromRoot:(EdgePos)ep {
+	
+	//check to see if the point is inside the path
+	//if not, return it untouched.
+	if ([self containsPoint:ep]==NO) return @"unknown";
+	
 	NSString * direction;
 	if (ep.start == root.start && ep.end==root.end) {
 		NSLog(@"same edge, same direction");
@@ -175,4 +192,10 @@
 	}
 	return direction;
 }
+- (void) dealloc {
+	[previous release];
+	[distance release];
+	[super dealloc];
+}
+
 @end

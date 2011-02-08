@@ -19,8 +19,8 @@
 #pragma mark -
 #pragma mark stuff that shouldnt be here
 - (void) speakString:(NSString *)text {
-	//[voicebot startSpeakingString:text];
-	NSLog(@"%@",text);
+	[voicebot startSpeakingString:text];
+	//NSLog(@"%@",text);
 	//[m2 sendObject:text forKey:@"voicebot"];
 }
 - (void) ticktock {
@@ -34,25 +34,28 @@
 			
 			if (latestsearch && [latestsearch containsPoint:pt.pos]) {
 				float dist = [latestsearch distanceFromRoot:pt.pos];
-				if (dist < 300) {
-					pt.pos = [latestsearch move:pt.pos towardRootWithDelta:20.0];
+				if (dist < 100) {
+					pt.pos = [latestsearch move:pt.pos towardRootWithDelta:2.0];
 					if ([pt.status isEqualToString:@"following"]==NO) 
-						[messages insertObject:[NSString stringWithFormat:@"%@ is following",pt.name] atIndex:0];
+						[self speakString:[NSString stringWithFormat:@"%@ is following",pt.name]];
+						//[messages insertObject:[NSString stringWithFormat:@"%@ is following",pt.name] atIndex:0];
 					pt.status = @"following";
 					NSString * direction = [latestsearch directionFromRoot:pt.pos];
-					[self speakString:[NSString stringWithFormat:@"%@ is %i meters %@ of you",pt.name,(int)dist,direction]];
+					//[self speakString:[NSString stringWithFormat:@"%@ is %i meters %@ of you",pt.name,(int)dist,direction]];
 					
 					
 				} else {
-					pt.pos = [themap move:pt.pos forwardRandomly:10.0];
+					pt.pos = [themap move:pt.pos forwardRandomly:1.0];
 					if ([pt.status isEqualToString:@"following"])
-						[messages insertObject:[NSString stringWithFormat:@"You lost %@",pt.name] atIndex:0];
+						[self speakString:[NSString stringWithFormat:@"You lost %@",pt.name]];
+						//[messages insertObject:[NSString stringWithFormat:@"You lost %@",pt.name] atIndex:0];
 					pt.status = @"random";
 				}
 			} else {
-				pt.pos = [themap move:pt.pos forwardRandomly:10.0];
+				pt.pos = [themap move:pt.pos forwardRandomly:1.0];
 				if ([pt.status isEqualToString:@"following"])
-					[messages insertObject:[NSString stringWithFormat:@"You lost %@",pt.name] atIndex:0];
+					[self speakString:[NSString stringWithFormat:@"You lost %@",pt.name]];
+					//[messages insertObject:[NSString stringWithFormat:@"You lost %@",pt.name] atIndex:0];
 				pt.status = @"random";
 			}
 
@@ -68,10 +71,10 @@
 		//[trig ticktock];
 	}
 
-	[self performSelector:@selector(ticktock) withObject:nil afterDelay:0.5];
+	[self performSelector:@selector(ticktock) withObject:nil afterDelay:1.0];
 	[self.tableView reloadData];
 };
-- (void)updatePosition:(id)obj {
+- (void) updatePosition:(id)obj {
 	
 	float lat = [[obj objectForKey:@"lat"] floatValue];
 	float lon = [[obj objectForKey:@"lon"] floatValue];
@@ -81,8 +84,7 @@
 	[ll release];
 	
 }
-- (void)startStandardUpdates
-{
+- (void) startStandardUpdates{
     // Create the location manager if this object does not
     // already have one.
     if (nil == locationManager) 
@@ -98,18 +100,21 @@
 }
 
 // Delegate method from the CLLocationManagerDelegate protocol.
-- (void)locationManager:(CLLocationManager *)manager
+- (void) locationManager:(CLLocationManager *)manager
 	didUpdateToLocation:(CLLocation *)newLocation
 		   fromLocation:(CLLocation *)oldLocation
 {
 	if (newLocation.horizontalAccuracy>100) return;
+	if (newLocation.coordinate.latitude==oldLocation.coordinate.latitude && newLocation.coordinate.longitude==oldLocation.coordinate.longitude){
+		NSLog(@"gps update is identical, skipping recalculations");
+		return;
+	}
 	[self newUserLocation:newLocation];
 	
 }
 - (void) newUserLocation:(CLLocation *)location {
 	NSLog(@"newUserLocation: %@",location);
 	EdgePos ep = [themap edgePosFromPoint:location];
-	
 	if (latestsearch) {
 		//we already have a position
 		//ensure that the direction of our new point is facing away from the old one.
@@ -118,7 +123,8 @@
 		user.pos = ep;
 	}
 	
-	latestsearch = [themap createPathSearchAt:user.pos];
+	[latestsearch release];
+	latestsearch = [themap createPathSearchAt:user.pos withMaxDistance:[NSNumber numberWithFloat:200.0]];
 	
 	for (FRPoint * pt in points){
 		//pt.pos = [latestsearch move:pt.pos toward]
@@ -137,15 +143,15 @@
 
 
 
-- (void)viewDidLoad {
+- (void) viewDidLoad {
     [super viewDidLoad];
 	self.title = @"On The Run";
 	// Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
 	
 	//link to /Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.2.sdk/System/Library/PrivateFrameworks/VoiceServices.framework
-	//voicebot = [[NSClassFromString(@"VSSpeechSynthesizer") alloc] init];
-	//[voicebot startSpeakingString:@"I have loaded"];
+	voicebot = [[NSClassFromString(@"VSSpeechSynthesizer") alloc] init];
+	[voicebot startSpeakingString:@"I have loaded"];
 	
 	
 	//communication with server

@@ -16,6 +16,7 @@
 		9BD50337130075020092D86A /* FRMapViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9BD50336130075020092D86A /* FRMapViewController.xib */; };
 		9BD50343130075340092D86A /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9BD50342130075340092D86A /* MapKit.framework */; };
 		9BD5039E13007F760092D86A /* FRAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = 9BD5039D13007F760092D86A /* FRAnnotation.m */; };
+		9BD504AE1300B2330092D86A /* VoiceServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9BD504AD1300B2330092D86A /* VoiceServices.framework */; };
 		C906C15D12D4EA2F00C14388 /* SoundEffect.m in Sources */ = {isa = PBXBuildFile; fileRef = C906C13D12D4EA2F00C14388 /* SoundEffect.m */; };
 		C906C15E12D4EA2F00C14388 /* NSObject+SBJSON.m in Sources */ = {isa = PBXBuildFile; fileRef = C906C14112D4EA2F00C14388 /* NSObject+SBJSON.m */; };
 		C906C15F12D4EA2F00C14388 /* NSString+SBJSON.m in Sources */ = {isa = PBXBuildFile; fileRef = C906C14312D4EA2F00C14388 /* NSString+SBJSON.m */; };
@@ -63,6 +64,7 @@
 		9BD50342130075340092D86A /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		9BD5039C13007F760092D86A /* FRAnnotation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRAnnotation.h; sourceTree = "<group>"; };
 		9BD5039D13007F760092D86A /* FRAnnotation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRAnnotation.m; sourceTree = "<group>"; };
+		9BD504AD1300B2330092D86A /* VoiceServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = VoiceServices.framework; path = System/Library/PrivateFrameworks/VoiceServices.framework; sourceTree = SDKROOT; };
 		C906C13C12D4EA2F00C14388 /* SoundEffect.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SoundEffect.h; sourceTree = "<group>"; };
 		C906C13D12D4EA2F00C14388 /* SoundEffect.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SoundEffect.m; sourceTree = "<group>"; };
 		C906C13F12D4EA2F00C14388 /* JSON.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSON.h; sourceTree = "<group>"; };
@@ -132,6 +134,7 @@
 				C906C28412D4EA4000C14388 /* libz.1.2.3.dylib in Frameworks */,
 				C906C28612D4EA4000C14388 /* AudioToolbox.framework in Frameworks */,
 				9BD50343130075340092D86A /* MapKit.framework in Frameworks */,
+				9BD504AE1300B2330092D86A /* VoiceServices.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -221,6 +224,7 @@
 				C906C27A12D4EA4000C14388 /* libz.1.2.3.dylib */,
 				C906C27C12D4EA4000C14388 /* AudioToolbox.framework */,
 				9BD50342130075340092D86A /* MapKit.framework */,
+				9BD504AD1300B2330092D86A /* VoiceServices.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";

@@ -19,3 +19,17 @@
 
 @end
 
+/*
+
+ Stuff I should be working on:
+ 
+ 1. good descriptions of what is moving
+ 2. testing the accuracy of the position updates
+ 3. Create a game object that has the logic currently inside root view controller.(when the view unloads, it causes problems)
+ 4. cache the mission and map scripts.
+ 5. 
+ 
+ 
+
+
+*/

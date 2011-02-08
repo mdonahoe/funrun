@@ -260,7 +260,7 @@
 - (float) maxPosition:(EdgePos)ep {
 	return [self edgeLengthFromStart:[NSNumber numberWithInt:ep.start] toFinish:[NSNumber numberWithInt:ep.end]];
 }
-- (FRPathSearch *) createPathSearchAt:(EdgePos)ep {
+- (FRPathSearch *) createPathSearchAt:(EdgePos)ep withMaxDistance:(NSNumber *)maxdist{
 	NSMutableArray * queue = [NSMutableArray arrayWithCapacity:3];
 	NSMutableDictionary * previous = [NSMutableDictionary dictionary];
 	NSMutableDictionary * distance = [NSMutableDictionary dictionary];
@@ -286,6 +286,7 @@
 		float nodedist = [[distance objectForKey:node] floatValue];
 		for (NSNumber * neighbor in [graph objectForKey:node]){
 			float dist = [self edgeLengthFromStart:node toFinish:neighbor] + nodedist;
+			if (maxdist && [maxdist floatValue] < dist) continue; //dont add nodes that are too far from the root
 			if ([distance objectForKey:neighbor]==nil || dist < [[distance objectForKey:neighbor] floatValue]){
 				[distance setObject:[NSNumber numberWithFloat:dist] forKey:neighbor];
 				[previous setObject:node forKey:neighbor];
@@ -425,8 +426,6 @@
 	[edges release];
 	[graph release];
 }
-
-
 - (CLLocationCoordinate2D) coordinateFromEdgePosition:(EdgePos)ep {
 	/*
 	 use an interpolation formula to find a position between two points
