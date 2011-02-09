@@ -61,109 +61,7 @@
 	}
 	return self;
 }
-- (NSArray *) shortestPathBetweenA:(CLLocation *)a andB:(CLLocation *)b {
-	
-	NSMutableArray * queue = [NSMutableArray arrayWithCapacity:3];
-	NSMutableDictionary * previous = [NSMutableDictionary dictionaryWithCapacity:3];
-	NSMutableDictionary * distance = [NSMutableDictionary dictionaryWithCapacity:3];
-	
-	//find the closest edge to a
-	NSArray * closest_edge = [self closestEdgeToPoint:a];
-	//add the nodes on that edge to the queue
-	for (NSNumber * node in closest_edge){
-		[queue addObject:node];
-		float dist = [a distanceFromLocation:[nodes objectForKey:node]];
-		[distance setObject:[NSNumber numberWithFloat:dist] forKey:node];
-	}
-	
-	//travel the tree
-	while ([queue count]>0){
-		NSNumber * node = [queue objectAtIndex:0];
-		[queue removeObjectAtIndex:0];
-		for (NSNumber * neighbor in [graph objectForKey:node]){
-			float dist = [[[[graph objectForKey:node] objectForKey:neighbor] objectForKey:@"length"] floatValue] + [[distance objectForKey:neighbor] floatValue];
-			if ([distance objectForKey:neighbor]==nil || dist < [[distance objectForKey:neighbor] floatValue]){
-				[distance setObject:[NSNumber numberWithFloat:dist] forKey:neighbor];
-				[previous setObject:node forKey:neighbor];
-				[queue addObject:neighbor];
-			}
-		}
-	}
-	
-	//now find the closest edge to b
-	closest_edge = [self closestEdgeToPoint:b];
-	
-	//choose the node attached to this edge that has the shortest distance
-	NSNumber * end;
-	float mindist = 1000000000000; //big number
-	for (NSNumber * node in closest_edge){
-		float dist = [[distance objectForKey:node] floatValue] + [b distanceFromLocation:[nodes objectForKey:node]];
-		if (dist < mindist){
-			mindist = dist;
-			end = node;
-		}
-	}
-	
-	//create the path from the previous dict
-	NSMutableArray * path = [NSMutableArray arrayWithObject:[nodes objectForKey:end]];
-	NSMutableArray * path2 = [NSMutableArray arrayWithObject:end];
-	while ([previous objectForKey:end]!=nil){
-		end = [previous objectForKey:end];
-		[path addObject:[nodes objectForKey:end]];
-		[path2 insertObject:end atIndex:0];
-	}
-	//NSLog(@"data time! %@",path2);
-	return path2;
-}
-- (NSString *) textDirectionFromA:(CLLocation *)a toB:(CLLocation *)b {
-	//get the shortest path;
-	NSArray * path = [self shortestPathBetweenA:a andB:b];
-	NSLog(@"path length = %i",[path count]);
-	//get the name of the street you are on
-	NSArray * closestEdge = [self closestEdgeToPoint:a];
-	NSString * currentRoad = [[[graph objectForKey:[closestEdge objectAtIndex:0]] objectForKey:[closestEdge objectAtIndex:1]] objectForKey:@"name"];
-	NSMutableArray * newpath = [NSMutableArray arrayWithArray:path];
-	NSNumber * other;
-	if ([[path objectAtIndex:0] isEqualToNumber:[closestEdge objectAtIndex:0]]){
-		other = [closestEdge objectAtIndex:1];
-	} else {
-		other = [closestEdge objectAtIndex:0];
-	}
-	[newpath insertObject:other atIndex:0];
-	
-	//walk down the path until a turn
-	//(assumes path is longer than 2)
-	NSString * nextRoad = nil;
-	NSNumber * intersection = nil;
-	NSString * turn = nil;
-	for (float i=2;i<[newpath count];i++){
-		NSArray * e1 = [newpath subarrayWithRange:NSMakeRange(i-2,2)];
-		NSArray * e2 = [newpath subarrayWithRange:NSMakeRange(i-1,2)];
-		turn = [self directionFromEdge:e1 toEdge:e2];
-		if ([turn isEqualToString:@"straight"]==NO){
-			//get the name of the street you turn on
-			nextRoad = [[[graph objectForKey:[e2 objectAtIndex:0]] objectForKey:[e2 objectAtIndex:1]] objectForKey:@"name"];
-			intersection = [newpath objectAtIndex:i-1];
-			break;
-		}
-	}
-	
-	NSString * message;
-	int distance;
-	//if there isnt a turn, just get the distance to the end. (perhaps use b instead?)	 
-	if (intersection==nil) {
-		distance = (int)[a distanceFromLocation:b];
-		message = [NSString stringWithFormat:@"Go %i meters down %@",distance,currentRoad];
-	} else {
-		//get distance from a to intersection
-		distance = (int)[a distanceFromLocation:[nodes objectForKey:intersection]];
-		message = [NSString stringWithFormat:@"Go %i meters down %@ and then turn %@ on %@",distance,currentRoad,turn,nextRoad];
-	}
-	return message;
-	
-	
-	//support paths that are short and have no turns
-}
+
 - (NSString *) closestRoad:(CLLocation *)p {
 	NSArray * edge = [self closestEdgeToPoint:p];
 	return [[[graph objectForKey:[edge objectAtIndex:0]] objectForKey:[edge objectAtIndex:1]] objectForKey:@"name"];
@@ -202,26 +100,6 @@
 	}
 	if (closest_edge==nil) NSLog(@" NIL TOWN! bummer");
 	return closest_edge;
-}
-- (NSString *) directionFromEdge:(NSArray *)e1 toEdge:(NSArray *)e2{
-	float dx1 = [[nodes objectForKey:[e1 objectAtIndex:1]] coordinate].longitude - [[nodes objectForKey:[e1 objectAtIndex:0]] coordinate].longitude;
-	float dy1 = [[nodes objectForKey:[e1 objectAtIndex:1]] coordinate].latitude - [[nodes objectForKey:[e1 objectAtIndex:0]] coordinate].latitude;
-	float dx2 = [[nodes objectForKey:[e2 objectAtIndex:1]] coordinate].longitude - [[nodes objectForKey:[e2 objectAtIndex:0]] coordinate].longitude;
-	float dy2 = [[nodes objectForKey:[e2 objectAtIndex:1]] coordinate].latitude - [[nodes objectForKey:[e2 objectAtIndex:0]] coordinate].latitude;
-	float sinangle =  (dx1*dy2-dy1*dx2)/sqrtf(dx1*dx1+dy1*dy1)/sqrtf(dx2*dx2+dy2*dy2);
-	if (sinangle > .5) return @"left";
-	if (sinangle < -.5) return @"right";
-	return @"straight";
-}
-- (NSString *) compassDirectionOfEdge:(NSArray *)e {
-	float dx = [[nodes objectForKey:[e objectAtIndex:1]] coordinate].longitude - [[nodes objectForKey:[e objectAtIndex:0]] coordinate].longitude;
-	float dy = [[nodes objectForKey:[e objectAtIndex:1]] coordinate].latitude - [[nodes objectForKey:[e objectAtIndex:0]] coordinate].latitude;
-	if (abs(dx)>abs(dy)){
-		if (dx>0) return @"east";
-		return @"west";
-	}
-	if (dy>0) return @"north";
-	return @"south";
 }
 - (EdgePos) edgePosFromPoint:(CLLocation *)p {
 	
@@ -298,24 +176,6 @@
 	
 	FRPathSearch * ps = [[FRPathSearch alloc] initWithRoot:ep previous:previous distance:distance map:self];
 	return ps;
-}
-- (NSArray *) getEdges {
-	NSMutableArray * es = [NSMutableArray arrayWithCapacity:[edges count]];
-	for (NSArray * edge in edges){
-		CLLocation * pt1 = [nodes objectForKey:[edge objectAtIndex:0]];
-		CGPoint p1 = CGPointMake(pt1.coordinate.longitude*100000,pt1.coordinate.latitude*100000);
-		
-		
-		CLLocation * pt2 = [nodes objectForKey:[edge objectAtIndex:1]];
-		CGPoint p2 = CGPointMake(pt2.coordinate.longitude*100000,pt2.coordinate.latitude*100000);
-		
-		NSArray * newedge = [NSArray arrayWithObjects:
-							 [NSValue valueWithCGPoint:p1],
-							 [NSValue valueWithCGPoint:p2],
-							 nil];
-		[es addObject:newedge];
-	}
-	return [[NSArray alloc] initWithArray:es];
 }
 - (EdgePos) randompos {
 	

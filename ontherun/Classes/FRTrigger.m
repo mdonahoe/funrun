@@ -180,4 +180,13 @@
     }
 	[delegate triggered];
 }
+- (void) dealloc {
+	[name release];
+	[sound release];
+	[dictme release];
+	[ons release];
+	[offs release];
+	[point release];
+	[super dealloc];
+}
 @end

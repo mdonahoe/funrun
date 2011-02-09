@@ -55,6 +55,7 @@
 	if (!pinView){
 		MKPinAnnotationView * myPinView = [[[MKPinAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:pinIdentifier] autorelease];
 		myPinView.animatesDrop = YES;
+		myPinView.canShowCallout = YES;
 		myPinView.pinColor = MKPinAnnotationColorGreen;
 		return myPinView;
 	}

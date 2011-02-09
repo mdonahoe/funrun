@@ -25,9 +25,23 @@
  
  1. good descriptions of what is moving
  2. testing the accuracy of the position updates
- 3. Create a game object that has the logic currently inside root view controller.(when the view unloads, it causes problems)
  4. cache the mission and map scripts.
- 5. 
+ 5. record some gps data for offline playback.
+ 1. out of view of you error
+ 1. points dont get closer
+ 1. pins are not unique looking, cant tap them
+ 1. test isFacingRoot code to make sure it works
+ 1. have songs that play in the background, somehow. (perhaps by using the iPod?)
+ 1. the user can select songs that they want to play during the game.
+ 1. add hysteresis so they dont follow and lose you at the same time.
+ 1. add a speech messaging queue of some sort to make all the announcments without clobbering each other
+ Questions:
+ 
+ How do you describe a point to someone that is running?
+ 
+ If you arent sure of their location relative to the user, announce it generally (frank is following you)
+ 
+ Once they are in line with you, then give a better description. (He is 30 meters behind you)
  
  
 

@@ -70,9 +70,9 @@
 	}
 	
 	
-	[self startStandardUpdates];
+	//[self startStandardUpdates];
 	[self ticktock];
-	//[m2 loadObjectForKey:@"userpos" toDelegate:self usingSelector:@selector(updatePosition:)];
+	[m2 loadObjectForKey:@"userpos" toDelegate:self usingSelector:@selector(updatePosition:)];
 	return self;
 }
 
@@ -162,6 +162,7 @@
 		NSLog(@"gps update is identical, skipping recalculations");
 		return;
 	}
+
 	[self newUserLocation:newLocation];
 	
 }

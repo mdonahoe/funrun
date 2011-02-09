@@ -23,12 +23,12 @@ typedef struct _edgepos {
 	NSMutableDictionary * nodes;
 }
 - (id) initWithNodes:(NSMutableDictionary*)_nodes andRoads:(NSMutableArray *)roads;
-- (NSArray *) shortestPathBetweenA:(CLLocation *)a andB:(CLLocation *)b;
+
+//checks the distance to each edge segment, and returns to edge with the minimum distance
 - (NSArray *) closestEdgeToPoint:(CLLocation *)p;
+
+//returns the road name of the current edge
 - (NSString *) closestRoad:(CLLocation *)p;
-- (NSString *) textDirectionFromA:(CLLocation *)a toB:(CLLocation *)b;
-- (NSString *) directionFromEdge:(NSArray *)e1 toEdge:(NSArray *)e2;
-- (NSString *) compassDirectionOfEdge:(NSArray *)e;
 
 //convert from latlon to EdgePos, using the map
 - (EdgePos) edgePosFromPoint:(CLLocation *)p;
@@ -39,12 +39,24 @@ typedef struct _edgepos {
 //what is the max position for a given edge position
 - (float) maxPosition:(EdgePos)ep;
 
+//does a BFS on the graph starting at the two nodes on the give edge, returns the resulting pathsearch object
 - (FRPathSearch *) createPathSearchAt:(EdgePos)ep withMaxDistance:(NSNumber *)maxdist;
+
+//chooses a random edge, and a random position along that edge
 - (EdgePos) randompos;
-- (NSArray *) getEdges;
+
+//moves forward, and chooses a new edge if need be.
 - (EdgePos) move:(EdgePos)ep forwardRandomly:(float)dx;
+
+//returns a random node that is connected to the given node
 - (NSNumber *) randomNeighbor:(NSNumber *)node;
+
+//reverses the nodes and adjust the position accordingly
 - (EdgePos) flipEdgePos:(EdgePos)ep;
+
+//makes sure the edgepos is correct, raises and error otherwise (why bool?)
 - (BOOL) isValidEdgePos:(EdgePos)ep;
+
+//converts from edgepos back to lat-longs (for drawing purposes)
 - (CLLocationCoordinate2D) coordinateFromEdgePosition:(EdgePos)ep;
 @end

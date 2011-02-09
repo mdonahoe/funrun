@@ -26,57 +26,6 @@
 	
 	return self;
 }
-- (EdgePos) move:(EdgePos)ep awayFromRootWithDelta:(float)dx {
-	
-	//check to see if the point is inside the path
-	//if not, return it untouched.
-	if ([self containsPoint:ep]==NO) return ep;
-	
-	//we need to orient the vector, making sure it is point away from
-	// the root.
-	
-	if (ep.start == root.start && ep.end == root.end) {
-		NSLog(@"facing the same direction on the same edge");
-		if (ep.position < root.position) {
-			NSLog(@"the root is behind ep");
-		} else {
-			NSLog(@"the root is infront of ep");
-			//switch
-			ep = [map flipEdgePos:ep];
-		}
-		
-	} else if(ep.start == root.end && ep.end ==root.start) {
-		NSLog(@"facing opposite directions on the same edge");
-		if (ep.position + root.position < [map maxPosition:ep]){
-			NSLog(@"root is behind ep");
-			
-		} else {
-			NSLog(@"root is infront of ep");
-			//switch
-			ep = [map flipEdgePos:ep];
-		}
-	} else {
-		NSLog(@"on different edges, which of ep's nodes is closer to the root?");
-		
-		NSNumber * start = [NSNumber numberWithInt:ep.start];
-		NSNumber * end = [NSNumber numberWithInt:ep.end];
-		
-		float position = ep.position;
-		
-		float dstart = [[distance objectForKey:start] floatValue];
-		float dend = [[distance objectForKey:end] floatValue];
-		float length = [map edgeLengthFromStart:start toFinish:end];
-		
-		if (dstart + position < dend - position + length) {
-			NSLog(@"end is farther away. swap");
-			ep.start = [end intValue];
-			ep.end = [start intValue];
-			ep.position = length-position;
-		}
-	}
-	[map isValidEdgePos:ep];
-	return [map move:ep forwardRandomly:dx];
-}
 - (BOOL) containsPoint:(EdgePos)ep {
 	
 	//check to see if the the given position is on the path.
@@ -87,53 +36,85 @@
 			[distance objectForKey:[NSNumber numberWithInt:ep.end]]!=nil);
 	
 }
-- (EdgePos) move:(EdgePos)ep towardRootWithDelta:(float)dx {
-	//moves a distance dx along an edge pointing toward the root
-	//or to the edge start, whichever is shorter.
-	// if it reaches the edge start, a new edge is formed that is closer to the root.
+- (BOOL) isFacingRoot:(EdgePos)ep {
+	/* 
+	 helper function for several methods
+	 
+	 
+	 doesnt deal with point-not-contained errors
+	 */
 	
-	//in future versions, we can always move dx, even it it means traversing multiple edges
-	// and reaching the root.
+	if (ep.start == root.start && ep.end == root.end) {
+		NSLog(@"facing the same direction on the same edge");
+		if (ep.position < root.position) {
+			//NSLog(@"the root is behind ep");
+			return YES;
+		} else {
+			//NSLog(@"the root is infront of ep");
+			return NO;
+		}
+		
+	}
 	
-	//check to see if the point is inside the path
-	//if not, return it untouched.
-	if ([self containsPoint:ep]==NO) return ep;
+	if(ep.start == root.end && ep.end ==root.start) {
+		NSLog(@"facing opposite directions on the same edge");
+		if (ep.position + root.position < [map maxPosition:ep]){
+			//NSLog(@"points are back to back");
+			return NO;
+		} else {
+			//NSLog(@"points are face to face");
+			return YES;
+		}
+	}
+
+	//NSLog(@"on different edges, which of ep's nodes is closer to the root?");
 	
 	NSNumber * start = [NSNumber numberWithInt:ep.start];
 	NSNumber * end = [NSNumber numberWithInt:ep.end];
 	
 	float position = ep.position;
-	//NSLog(@"start %@, end %@, pos %f",start,end,position);
 	
 	float dstart = [[distance objectForKey:start] floatValue];
 	float dend = [[distance objectForKey:end] floatValue];
 	float length = [map edgeLengthFromStart:start toFinish:end];
 	
-	//NSLog(@"ds=%f,de=%f,length = %f",dstart,dend,length);
+	//if start is farther, we are facing root
+	return (dstart + position > dend - position + length);
+}
+- (EdgePos) move:(EdgePos)ep towardRootWithDelta:(float)dx {
+	/*
+	 moves a distance dx along an edge pointing toward the root
+	 or to the edge start, whichever is shorter.
+	 if it reaches the edge start, a new edge is formed that is closer to the root.
 	
-	if (dstart + position > dend - position + length) {
-		//b is closer
-		NSNumber * temp = start;
-		start = end;
-		end = temp;
-		position = length-position;
-		//NSLog(@"switch direction: start %@, end %@, pos: %f",start,end,position);
+	 in future versions, we can always move dx, even it it means traversing multiple edges
+	 and reaching the root.
+	 */
+	
+	if ([self isFacingRoot:ep]==NO) ep = [map flipEdgePos:ep];
+	
+	NSNumber * start = [NSNumber numberWithInt:ep.start];
+	ep.position = MAX(0,ep.position - dx);
+	//if root and ep are on the same edge, it is possible to overshoot.
+	
+	
+	
+	if (ep.position<=0 && [previous objectForKey:start]!=nil) {
+		//move to a closer edge
+		ep.end = ep.start;
+		ep.start = [[previous objectForKey:start] intValue];
+		ep.position = [map maxPosition:ep];
 	}
+		
+	return ep;
+}
+- (EdgePos) move:(EdgePos)ep awayFromRootWithDelta:(float)dx {
 	
-	position = MAX(0,position - dx);
+	//we need to orient the vector, making sure it is point away from
+	// the root.
 	
-	if (position<=0 && [previous objectForKey:start]!=nil) {
-		end = start;
-		start = [previous objectForKey:start];
-		position = [map edgeLengthFromStart:start toFinish:end];
-		//NSLog(@"moved nodes: start %@, end %@, pos: %f",start,end,position);
-	}
-	
-	EdgePos x;
-	x.start = [start intValue];
-	x.end = [end intValue];
-	x.position = position;
-	return x;
+	if ([self isFacingRoot:ep]) ep = [map flipEdgePos:ep];
+	return [map move:ep forwardRandomly:dx];
 }
 - (float) distanceFromRoot:(EdgePos)ep {
 	
