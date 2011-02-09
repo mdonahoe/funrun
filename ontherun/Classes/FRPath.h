@@ -8,6 +8,15 @@
 
 #import <Foundation/Foundation.h>
 
+/*
+ This class provides a way for characters to follow a path through the graph
+ 
+ It would be produced by a FRPathSearch object
+ 
+ 
+ */
+
+
 
 @interface FRPath : NSObject {
 	

@@ -157,6 +157,11 @@
 	[distance setObject:[NSNumber numberWithFloat:ep.position] forKey:a];
 	[distance setObject:[NSNumber numberWithFloat:[self edgeLengthFromStart:a toFinish:b] - ep.position] forKey:b];
 	
+	//set their previous nodes to each other
+	[previous setObject:a forKey:b];
+	[previous setObject:b forKey:a];
+	
+	
 	//travel the tree
 	while ([queue count]>0){
 		NSNumber * node = [queue objectAtIndex:0];

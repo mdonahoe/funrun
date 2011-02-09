@@ -18,8 +18,6 @@
 	EdgePos root;
 }
 - (id) initWithRoot:(EdgePos)r previous:(NSDictionary *)p distance:(NSDictionary *)d map:(FRMap *)m;
-- (FRPath *) pathTo:(EdgePos)ep;
-- (FRPath *) pathFrom:(EdgePos)ep;
 - (EdgePos) move:(EdgePos)ep towardRootWithDelta:(float)dx;
 - (EdgePos) move:(EdgePos)ep awayFromRootWithDelta:(float)dx;
 - (BOOL) isFacingRoot:(EdgePos)ep;

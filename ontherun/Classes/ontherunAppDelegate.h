@@ -35,6 +35,12 @@
  1. the user can select songs that they want to play during the game.
  1. add hysteresis so they dont follow and lose you at the same time.
  1. add a speech messaging queue of some sort to make all the announcments without clobbering each other
+ 1. save everything that happens during a run so that the player can watch it later.
+ 
+ 
+ 
+ 
+ 
  Questions:
  
  How do you describe a point to someone that is running?

@@ -95,27 +95,31 @@
 	
 	for (FRPoint * pt in points){
 		
-		if ([pt.name isEqualToString:@"user"]==NO){
+		if ([pt.title isEqualToString:@"user"]==NO){
 			
-			
+			NSLog(@"pt = %@",pt.title);
 			if (latestsearch && [latestsearch containsPoint:pt.pos]) {
+				NSLog(@"in path search");
 				float dist = [latestsearch distanceFromRoot:pt.pos];
 				if (dist < 100) {
-					pt.pos = [latestsearch move:pt.pos towardRootWithDelta:2.0];
-					if ([pt.status isEqualToString:@"following"]==NO)
-						[self speakString:[NSString stringWithFormat:@"%@ is following %i meters %@ you",pt.name,(int)dist,[latestsearch directionFromRoot:pt.pos]]];
-					pt.status = @"following";
+					NSLog(@"less than 100");
+					pt.pos = [latestsearch move:pt.pos towardRootWithDelta:10.0];
+					//if ([pt.subtitle isEqualToString:@"following"]==NO)
+						//[self speakString:[NSString stringWithFormat:@"%@ is following %i meters %@ you",pt.title,(int)dist,[latestsearch directionFromRoot:pt.pos]]];
+					pt.subtitle = [NSString stringWithFormat:@"%i m %@",(int)dist,[latestsearch directionFromRoot:pt.pos]];
 				} else {
-					pt.pos = [themap move:pt.pos forwardRandomly:1.0];
-					if ([pt.status isEqualToString:@"following"])
-						[self speakString:[NSString stringWithFormat:@"You lost %@",pt.name]];
-					pt.status = @"random";
+					NSLog(@" > 100");
+					pt.pos = [themap move:pt.pos forwardRandomly:5.0];
+					if ([pt.subtitle isEqualToString:@"following"])
+						[self speakString:[NSString stringWithFormat:@"You lost %@",pt.title]];
+					pt.subtitle = @"random";
 				}
 			} else {
-				pt.pos = [themap move:pt.pos forwardRandomly:1.0];
-				if ([pt.status isEqualToString:@"following"])
-					[self speakString:[NSString stringWithFormat:@"You lost %@",pt.name]];
-				pt.status = @"random";
+				NSLog(@"not in pathsearch");
+				pt.pos = [themap move:pt.pos forwardRandomly:3.0];
+				if ([pt.subtitle isEqualToString:@"following"])
+					[self speakString:[NSString stringWithFormat:@"You lost %@",pt.title]];
+				pt.subtitle = @"random";
 			}
 			
 		}
@@ -125,7 +129,7 @@
 		
 	}
 	
-	[self performSelector:@selector(ticktock) withObject:nil afterDelay:1.0];
+	[self performSelector:@selector(ticktock) withObject:nil afterDelay:0.5];
 };
 - (void) updatePosition:(id)obj {
 	

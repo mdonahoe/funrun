@@ -34,21 +34,21 @@
 
 
 @interface FRPoint : NSObject <MKAnnotation>{
-	NSString * name;
+	NSString * title;
 	EdgePos pos;
 	FRPoint * target;
 	float speed;
 	NSDictionary * dictme;
 	FRMap * map;
-	NSString * status;
+	NSString * subtitle;
 	CLLocationCoordinate2D mycoordinate;
 }
 
 
-@property(nonatomic,retain) NSString * name;
+@property(nonatomic,retain) NSString * title;
 @property(assign) EdgePos pos;
 @property(nonatomic,retain) FRPoint * target;
 @property(readonly) NSDictionary * dictme;
-@property(nonatomic,retain) NSString * status;
+@property(nonatomic,retain) NSString * subtitle;
 - (id) initWithDict:(NSDictionary*)dict;
 @end

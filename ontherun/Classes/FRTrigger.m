@@ -159,7 +159,7 @@
 	if (pname!=nil){
 		NSLog(@"name = %@",pname);
 		for (FRPoint * pt in points){
-			if ([pname isEqualToString:pt.name]) {
+			if ([pname isEqualToString:pt.title]) {
 				point = pt;
 			}
 		}

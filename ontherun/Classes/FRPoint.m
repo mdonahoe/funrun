@@ -10,14 +10,14 @@
 
 
 @implementation FRPoint
-@synthesize name,pos,target,dictme,status;
+@synthesize title,pos,target,dictme,subtitle;
 
 - (id) initWithDict:(NSDictionary*)dict {
 	self = [super init];
 	
 	if (self) {
 		
-		name = [dict objectForKey:@"name"];
+		self.title = [dict objectForKey:@"name"];
 		NSNumber * s = [dict objectForKey:@"speed"];
 		if (s!=nil) {
 			speed = [s floatValue];
@@ -26,7 +26,7 @@
 		}
 		dictme = dict;
 		[dictme retain];
-		status = @"init";
+		self.subtitle = @"init";
 	}
 	
 	return self;
@@ -38,17 +38,6 @@
 }
 - (void) setCoordinate:(CLLocationCoordinate2D)newCoordinate {
 	mycoordinate = newCoordinate;
-}
-// required if you set the MKPinAnnotationView's "canShowCallout" property to YES
-- (NSString *)title
-{
-    return name;
-}
-
-// optional
-- (NSString *)subtitle
-{
-    return status;
 }
 
 - (void) dealloc {

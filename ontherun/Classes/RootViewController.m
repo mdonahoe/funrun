@@ -85,7 +85,7 @@
 		case 1:
 			cell.textLabel.textColor = [UIColor blackColor];
 			pt = [themission.points objectAtIndex:[indexPath row]];
-			cell.textLabel.text = [NSString stringWithFormat:@"%@",pt.name];
+			cell.textLabel.text = [NSString stringWithFormat:@"%@",pt.title];
 			break;
 		case 2:
 			cell.textLabel.textColor = [UIColor blackColor];

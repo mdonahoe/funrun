@@ -36,6 +36,11 @@
 			[distance objectForKey:[NSNumber numberWithInt:ep.end]]!=nil);
 	
 }
+- (float) nodeDistance:(NSNumber *)node {
+	NSNumber * dist = [distance objectForKey:node];
+	if (dist) return [dist floatValue];
+	return 10000000000.0; // node not in pathsearch, return large number
+}
 - (BOOL) isFacingRoot:(EdgePos)ep {
 	/* 
 	 helper function for several methods
@@ -45,19 +50,19 @@
 	 */
 	
 	if (ep.start == root.start && ep.end == root.end) {
-		NSLog(@"facing the same direction on the same edge");
+		//NSLog(@"facing the same direction on the same edge");
 		if (ep.position < root.position) {
 			//NSLog(@"the root is behind ep");
-			return YES;
+			return NO;
 		} else {
 			//NSLog(@"the root is infront of ep");
-			return NO;
+			return YES;
 		}
 		
 	}
 	
 	if(ep.start == root.end && ep.end ==root.start) {
-		NSLog(@"facing opposite directions on the same edge");
+		//NSLog(@"facing opposite directions on the same edge");
 		if (ep.position + root.position < [map maxPosition:ep]){
 			//NSLog(@"points are back to back");
 			return NO;
@@ -72,14 +77,11 @@
 	NSNumber * start = [NSNumber numberWithInt:ep.start];
 	NSNumber * end = [NSNumber numberWithInt:ep.end];
 	
-	float position = ep.position;
+	float dstart = [self nodeDistance:start];
+	float dend = [self nodeDistance:end];
 	
-	float dstart = [[distance objectForKey:start] floatValue];
-	float dend = [[distance objectForKey:end] floatValue];
-	float length = [map edgeLengthFromStart:start toFinish:end];
-	
-	//if start is farther, we are facing root
-	return (dstart + position > dend - position + length);
+	//if start is closer, we are facing root
+	return (dstart < dend);
 }
 - (EdgePos) move:(EdgePos)ep towardRootWithDelta:(float)dx {
 	/*
@@ -91,7 +93,10 @@
 	 and reaching the root.
 	 */
 	
-	if ([self isFacingRoot:ep]==NO) ep = [map flipEdgePos:ep];
+	if ([self isFacingRoot:ep]==NO) {
+		NSLog(@"not facing, flip so we can move forward");
+		ep = [map flipEdgePos:ep];
+	}
 	
 	NSNumber * start = [NSNumber numberWithInt:ep.start];
 	ep.position = MAX(0,ep.position - dx);
@@ -100,12 +105,14 @@
 	
 	
 	if (ep.position<=0 && [previous objectForKey:start]!=nil) {
+		NSLog(@"next edge");
 		//move to a closer edge
 		ep.end = ep.start;
 		ep.start = [[previous objectForKey:start] intValue];
 		ep.position = [map maxPosition:ep];
 	}
-		
+	
+	
 	return ep;
 }
 - (EdgePos) move:(EdgePos)ep awayFromRootWithDelta:(float)dx {
@@ -120,58 +127,45 @@
 	
 	//check to see if the point is inside the path
 	//if not, return a large number
-	if ([self containsPoint:ep]==NO) return 10000000000.0;
+	if ([self containsPoint:ep]==NO) {
+		NSLog(@"uncontained. returning large number");
+		return 10000000000.0;
+	}
+	
+	if (ep.start==root.start && ep.end == root.end) {
+		NSLog(@"distanceFrom: same edge, same direction");
+		return ABS(ep.position - root.position);
+	}
+	
+	if (ep.start==root.end && ep.end==root.start) {
+		NSLog(@"distanceFrom: same edge, opposite directions");
+		return ABS(ep.position + root.position - [map maxPosition:ep]);
+	}
+	
+	NSLog(@"distanceFrom: different edges, rely on node distance + position");
+	
+	float position = ep.position;
 	
 	NSNumber * start = [NSNumber numberWithInt:ep.start];
 	NSNumber * end = [NSNumber numberWithInt:ep.end];
-	float position = ep.position;
 	
-	//does not check for nil values, like it the point is not on path
-	
-	float dstart = [[distance objectForKey:start] floatValue];
-	float dend = [[distance objectForKey:end] floatValue];
 	float length = [map edgeLengthFromStart:start toFinish:end];
+	
+	
+	float dstart = [self nodeDistance:start];
+	float dend = [self nodeDistance:end];
 	
 	return MIN(dstart+position,dend+length-position);
 }
 - (NSString *) directionFromRoot:(EdgePos)ep {
 	
-	//check to see if the point is inside the path
-	//if not, return it untouched.
-	if ([self containsPoint:ep]==NO) return @"unknown";
+	//should probably make this more complicated, but for now this will work.
+	//this is wrong. isRootFacing should be a different method. fuck.
 	
-	NSString * direction;
-	if (ep.start == root.start && ep.end==root.end) {
-		NSLog(@"same edge, same direction");
-		if (ep.position > root.position) {
-			direction = @"behind";
-		} else {
-			direction = @"infront of";
-		}	
-	} else if (ep.start == root.end && ep.end == root.start) {
-		NSLog(@"same edge, opposite directions");
-		float p = [map maxPosition:ep] - ep.position;
-		if (p > root.position) {
-			direction = @"behind";
-		} else {
-			direction = @"infront of";
-		}
-	} else {
-		NSLog(@"different edges");
-		NSNumber * node = [NSNumber numberWithInt:ep.start];
-		while ([previous objectForKey:node]!=nil) node = [previous objectForKey:node];
-		if ([node intValue]==root.start){
-			//infront
-			direction = @"infront of";
-		} else if ([node intValue]==root.end) {
-			//behind
-			direction = @"behind";
-		} else {
-			//neither infront nor behind. node is not in search space, or bug
-			direction = @"out of view of";
-		}
-	}
-	return direction;
+	
+	if ([self isFacingRoot:ep]) return @"infront of";
+	return @"behind";
+
 }
 - (void) dealloc {
 	[previous release];
