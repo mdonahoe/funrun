@@ -97,25 +97,25 @@
 		
 		if ([pt.title isEqualToString:@"user"]==NO){
 			
-			NSLog(@"pt = %@",pt.title);
+			//NSLog(@"pt = %@",pt.title);
 			if (latestsearch && [latestsearch containsPoint:pt.pos]) {
-				NSLog(@"in path search");
+				//NSLog(@"in path search");
 				float dist = [latestsearch distanceFromRoot:pt.pos];
 				if (dist < 100) {
-					NSLog(@"less than 100");
+					//NSLog(@"less than 100");
 					pt.pos = [latestsearch move:pt.pos towardRootWithDelta:10.0];
 					//if ([pt.subtitle isEqualToString:@"following"]==NO)
 						//[self speakString:[NSString stringWithFormat:@"%@ is following %i meters %@ you",pt.title,(int)dist,[latestsearch directionFromRoot:pt.pos]]];
-					pt.subtitle = [NSString stringWithFormat:@"%i m %@",(int)dist,[latestsearch directionFromRoot:pt.pos]];
+					pt.subtitle = [NSString stringWithFormat:@"%i m %@",(int)[latestsearch distanceFromRoot:pt.pos],[latestsearch directionFromRoot:pt.pos]];
 				} else {
-					NSLog(@" > 100");
+					//NSLog(@" > 100");
 					pt.pos = [themap move:pt.pos forwardRandomly:5.0];
 					if ([pt.subtitle isEqualToString:@"following"])
 						[self speakString:[NSString stringWithFormat:@"You lost %@",pt.title]];
 					pt.subtitle = @"random";
 				}
 			} else {
-				NSLog(@"not in pathsearch");
+				//NSLog(@"not in pathsearch");
 				pt.pos = [themap move:pt.pos forwardRandomly:3.0];
 				if ([pt.subtitle isEqualToString:@"following"])
 					[self speakString:[NSString stringWithFormat:@"You lost %@",pt.title]];

@@ -41,6 +41,60 @@
 	if (dist) return [dist floatValue];
 	return 10000000000.0; // node not in pathsearch, return large number
 }
+- (BOOL) rootIsFacing:(EdgePos)ep {
+	/* 
+	 useful for creating text descriptions of where things are relative to the root.
+	 */
+	
+	if (ep.start == root.start && ep.end == root.end) {
+		//NSLog(@"facing the same direction on the same edge");
+		if (ep.position < root.position) {
+			//NSLog(@"the root is behind ep");
+			return YES;
+		} else {
+			//NSLog(@"the root is infront of ep");
+			return NO;
+		}
+		
+	}
+	
+	if(ep.start == root.end && ep.end ==root.start) {
+		//NSLog(@"facing opposite directions on the same edge");
+		if (ep.position + root.position < [map maxPosition:ep]){
+			//NSLog(@"points are back to back");
+			return NO;
+		} else {
+			//NSLog(@"points are face to face");
+			return YES;
+		}
+	}
+	
+	//NSLog(@"on different edges, follow the previous path back to the root nodes. which is it?");
+	
+	
+	NSNumber * start = [NSNumber numberWithInt:ep.start];
+	NSNumber * end = [NSNumber numberWithInt:ep.end];
+	
+	//pick a starting node that is in the pathsearch
+	NSNumber * node;
+	if ([previous objectForKey:start]) {
+		node = start;
+	} else { //start is not in path. assume that end is.
+		node = end;
+	}
+	
+	int i=200; //limit the infinite loop.
+	while (node && 0<i--) {
+		//traverse the tree to the root nodes. careful, the two roots point to each other.
+		if ([node intValue]==root.start) return YES;
+		if ([node intValue]==root.end) return NO;
+		node = [previous objectForKey:node];
+	}
+	
+	[NSException raise:@"Traverse failed." format:@"node: %@, tries: %i", node,i];
+	
+	return NO;
+}
 - (BOOL) isFacingRoot:(EdgePos)ep {
 	/* 
 	 helper function for several methods
@@ -94,7 +148,7 @@
 	 */
 	
 	if ([self isFacingRoot:ep]==NO) {
-		NSLog(@"not facing, flip so we can move forward");
+		//NSLog(@"not facing, flip so we can move forward");
 		ep = [map flipEdgePos:ep];
 	}
 	
@@ -105,7 +159,7 @@
 	
 	
 	if (ep.position<=0 && [previous objectForKey:start]!=nil) {
-		NSLog(@"next edge");
+		//NSLog(@"next edge");
 		//move to a closer edge
 		ep.end = ep.start;
 		ep.start = [[previous objectForKey:start] intValue];
@@ -128,21 +182,21 @@
 	//check to see if the point is inside the path
 	//if not, return a large number
 	if ([self containsPoint:ep]==NO) {
-		NSLog(@"uncontained. returning large number");
+		//NSLog(@"uncontained. returning large number");
 		return 10000000000.0;
 	}
 	
 	if (ep.start==root.start && ep.end == root.end) {
-		NSLog(@"distanceFrom: same edge, same direction");
+		//NSLog(@"distanceFrom: same edge, same direction");
 		return ABS(ep.position - root.position);
 	}
 	
 	if (ep.start==root.end && ep.end==root.start) {
-		NSLog(@"distanceFrom: same edge, opposite directions");
+		//NSLog(@"distanceFrom: same edge, opposite directions");
 		return ABS(ep.position + root.position - [map maxPosition:ep]);
 	}
 	
-	NSLog(@"distanceFrom: different edges, rely on node distance + position");
+	//NSLog(@"distanceFrom: different edges, rely on node distance + position");
 	
 	float position = ep.position;
 	
@@ -163,7 +217,7 @@
 	//this is wrong. isRootFacing should be a different method. fuck.
 	
 	
-	if ([self isFacingRoot:ep]) return @"infront of";
+	if ([self rootIsFacing:ep]) return @"infront of";
 	return @"behind";
 
 }
