@@ -19,9 +19,11 @@
 	self = [super init];
 	if (!self) return nil;
 	
+	healthbar = 100;
+	toBeSpoken = [[NSMutableArray alloc] initWithObjects:@"Let's begin",nil];
 	//link to /Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.2.sdk/System/Library/PrivateFrameworks/VoiceServices.framework
 	voicebot = [[NSClassFromString(@"VSSpeechSynthesizer") alloc] init];
-	[voicebot startSpeakingString:@"boop boop beep"];
+	[voicebot startSpeakingString:@"Yippee Kaiyay Muthafuckers"];
 	[voicebot setDelegate:self];
 	
 	//communication with server
@@ -70,9 +72,9 @@
 	}
 	
 	
-	//[self startStandardUpdates];
+	[self startStandardUpdates];
 	[self ticktock];
-	[m2 loadObjectForKey:@"userpos" toDelegate:self usingSelector:@selector(updatePosition:)];
+	//[m2 loadObjectForKey:@"userpos" toDelegate:self usingSelector:@selector(updatePosition:)];
 	return self;
 }
 
@@ -84,10 +86,25 @@
 - (void) speechSynthesizer:(NSObject *) synth didFinishSpeaking:(BOOL)didFinish withError:(NSError *) error { 
 	// Handle the end of speech here 
 	NSLog(@"done speaking");
+	if ([toBeSpoken count]){
+		[self speakString:[toBeSpoken objectAtIndex:0]];
+		[toBeSpoken removeObjectAtIndex:0];
+	}
 	//[self performSelector:@selector(speakStatus) withObject:nil afterDelay:1.0];
 }
 - (void) speakStatus {
 	if ([voicebot isSpeaking]) return;
+}
+- (void)speakIfYouCan:(NSString*)s {
+	if ([voicebot isSpeaking]) return;
+	[self speakString:s];
+}
+- (void)speakEventually:(NSString *)s{
+	if ([voicebot isSpeaking]){
+		[toBeSpoken addObject:s];
+	} else {
+		[self speakString:s];
+	}
 }
 - (void) ticktock {
 	if (latestsearch==nil) NSLog(@"nilnil");
@@ -101,27 +118,59 @@
 			if (latestsearch && [latestsearch containsPoint:pt.pos]) {
 				//NSLog(@"in path search");
 				float dist = [latestsearch distanceFromRoot:pt.pos];
-				if (dist < 100) {
-					//NSLog(@"less than 100");
-					pt.pos = [latestsearch move:pt.pos towardRootWithDelta:10.0];
-					//if ([pt.subtitle isEqualToString:@"following"]==NO)
-						//[self speakString:[NSString stringWithFormat:@"%@ is following %i meters %@ you",pt.title,(int)dist,[latestsearch directionFromRoot:pt.pos]]];
-					pt.subtitle = [NSString stringWithFormat:@"%i m %@",(int)[latestsearch distanceFromRoot:pt.pos],[latestsearch directionFromRoot:pt.pos]];
-				} else {
-					//NSLog(@" > 100");
-					pt.pos = [themap move:pt.pos forwardRandomly:5.0];
-					if ([pt.subtitle isEqualToString:@"following"])
-						[self speakString:[NSString stringWithFormat:@"You lost %@",pt.title]];
-					pt.subtitle = @"random";
+				switch (pt.mystate){
+					case FRPointPatrolling:
+						pt.pos = [themap move:pt.pos forwardRandomly:0.5];
+						if (dist<100){
+							pt.mystate = FRPointFollowing;
+							//say something
+							[self speakEventually:[NSString stringWithFormat:@"%@ is following %i meters %@ you",
+												 pt.title,
+												 (int)[latestsearch distanceFromRoot:pt.pos],
+												 [latestsearch directionFromRoot:pt.pos]]];
+						}
+						break;
+					case FRPointFollowing:
+						pt.pos = [latestsearch move:pt.pos towardRootWithDelta:1.0];
+						if (dist>150){
+							pt.mystate = FRPointPatrolling;
+							//we lost them.
+							[self speakEventually:[NSString stringWithFormat:@"You lost %@",pt.title]];
+						} else if (dist<20) {
+							pt.mystate = FRPointClosing;
+							//closing in!
+							[self speakEventually:[NSString stringWithFormat:@"%@ is closing in on you!",pt.title]];
+						} else {
+							if (arc4random()%10==0) [self speakIfYouCan:[NSString stringWithFormat:@"%@ is %i meters %@ you",
+																		 pt.title,
+																		 (int)[latestsearch distanceFromRoot:pt.pos],
+																		 [latestsearch directionFromRoot:pt.pos]]];
+							//still following
+						}
+						break;
+					case FRPointClosing:
+						pt.pos = [latestsearch move:pt.pos towardRootWithDelta:1.0];
+						if (dist<10){
+							healthbar--;
+							[self speakIfYouCan:@"STAB"];
+							//losing health
+						} else if (dist>40){
+							pt.mystate = FRPointFollowing;
+							//starting to lose them.
+							[self speakEventually:[NSString stringWithFormat:@"You are outrunning %@",pt.title]];
+						} else {
+							//they are still about to get us.
+							[self speakIfYouCan:[NSString stringWithFormat:@"%i meters",(int)[latestsearch distanceFromRoot:pt.pos]]];
+						}
+					default:
+						break;
 				}
+				
 			} else {
-				//NSLog(@"not in pathsearch");
-				pt.pos = [themap move:pt.pos forwardRandomly:3.0];
-				if ([pt.subtitle isEqualToString:@"following"])
-					[self speakString:[NSString stringWithFormat:@"You lost %@",pt.title]];
-				pt.subtitle = @"random";
+				//point is not in the pathsearch, so we cant do anything.
+				pt.pos = [themap move:pt.pos forwardRandomly:0.5];
+				
 			}
-			
 		}
 		
 		//update 2d coordinate (so the map updates live)
@@ -173,6 +222,7 @@
 - (void) newUserLocation:(CLLocation *)location {
 	NSLog(@"newUserLocation: %@",location);
 	EdgePos ep = [themap edgePosFromPoint:location];
+	if (arc4random()%10==0) [self speakIfYouCan:@"click"];
 	if (latestsearch) {
 		//we already have a position
 		//ensure that the direction of our new point is facing away from the old one.

@@ -20,6 +20,8 @@
 	CLLocationManager * locationManager;
 	NSObject * voicebot;
 	toqbot * m2;
+	int healthbar;
+	NSMutableArray * toBeSpoken;
 }
 
 @property(nonatomic,retain) NSArray * points;

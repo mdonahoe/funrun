@@ -10,7 +10,11 @@
 
 
 @implementation FRPoint
-@synthesize title,pos,target,dictme,subtitle;
+@synthesize title,pos,target,dictme,subtitle,mystate;
+
+
+
+
 
 - (id) initWithDict:(NSDictionary*)dict {
 	self = [super init];
@@ -27,6 +31,7 @@
 		dictme = dict;
 		[dictme retain];
 		self.subtitle = @"init";
+		mystate = FRPointPatrolling;
 	}
 	
 	return self;

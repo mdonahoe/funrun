@@ -33,6 +33,13 @@
  */
 
 
+typedef enum {
+	FRPointPatrolling,
+	FRPointFollowing,
+	FRPointClosing,
+	FRPointReached
+} FRPointState;
+
 @interface FRPoint : NSObject <MKAnnotation>{
 	NSString * title;
 	EdgePos pos;
@@ -42,11 +49,13 @@
 	FRMap * map;
 	NSString * subtitle;
 	CLLocationCoordinate2D mycoordinate;
+	FRPointState mystate;
 }
 
 
 @property(nonatomic,retain) NSString * title;
 @property(assign) EdgePos pos;
+@property(assign) FRPointState mystate;
 @property(nonatomic,retain) FRPoint * target;
 @property(readonly) NSDictionary * dictme;
 @property(nonatomic,retain) NSString * subtitle;
