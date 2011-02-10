@@ -19,6 +19,41 @@
 	self = [super init];
 	if (!self) return nil;
 	
+	
+	//audio player stuff
+	/*
+	 
+	 http://blog.marcopeluso.com/2009/08/23/how-to-prevent-iphone-from-deep-sleeping/
+	 
+	 */
+	
+	// Activate audio session
+	AudioSessionSetActive(true);
+	// Set up audio session, to prevent iPhone from deep sleeping, while playing sounds
+	UInt32 sessionCategory = kAudioSessionCategory_MediaPlayback;
+	AudioSessionSetProperty (
+							 kAudioSessionProperty_AudioCategory,
+							 sizeof (sessionCategory),
+							 &sessionCategory
+							 );
+	
+	// Set up sound file
+	NSString *soundFilePath = [[NSBundle mainBundle] pathForResource:@"panther3"
+															  ofType:@"wav"];
+	NSURL *fileURL = [[NSURL alloc] initFileURLWithPath:soundFilePath];
+	NSError * audioerror = nil;
+	// Set up audio player with sound file
+	audioPlayer = [[AVAudioPlayer alloc] initWithContentsOfURL:fileURL error:audioerror];
+	NSLog(@"the error:%@",audioerror);
+	[audioPlayer prepareToPlay];
+	
+	// You may want to set this to 0.0 even if your sound file is silent.
+	[audioPlayer setVolume:0.0];
+	[audioPlayer play];
+		
+	ticks = 0;
+	
+	
 	healthbar = 100;
 	toBeSpoken = [[NSMutableArray alloc] initWithObjects:@"Let's begin",nil];
 	//link to /Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.2.sdk/System/Library/PrivateFrameworks/VoiceServices.framework
@@ -107,6 +142,13 @@
 	}
 }
 - (void) ticktock {
+	
+	if (ticks++>10){
+		ticks = 0;
+		NSLog(@"play the fucking sound");
+		[audioPlayer play];
+	}
+	
 	if (latestsearch==nil) NSLog(@"nilnil");
 	
 	

@@ -23,20 +23,15 @@
 
  Stuff I should be working on:
  
- 1. good descriptions of what is moving
- 2. testing the accuracy of the position updates
- 4. cache the mission and map scripts.
- 5. record some gps data for offline playback.
- 1. out of view of you error
- 1. points dont get closer
- 1. pins are not unique looking, cant tap them
- 1. test isFacingRoot code to make sure it works
+ 1. better descriptions of what is moving
+ 1. cache the mission and map scripts.
+ 1. record some gps data for offline playback.
+ 1. pins are not unique looking
  1. have songs that play in the background, somehow. (perhaps by using the iPod?)
  1. the user can select songs that they want to play during the game.
- 1. add hysteresis so they dont follow and lose you at the same time.
- 1. add a speech messaging queue of some sort to make all the announcments without clobbering each other
  1. save everything that happens during a run so that the player can watch it later.
- 
+ 1. gps that works while the screen is off.
+ 1. 
  
  
  
@@ -49,7 +44,29 @@
  
  Once they are in line with you, then give a better description. (He is 30 meters behind you)
  
+ punch the enemies if they are infront of you and you are going fast enough?
  
+ detect that you are off grid.
+ 
+ group enemies together and announce their distances together.
+ 
+ are meters important? all i gain from that is:
+ 
+ 1. am i losing them, or are they catching me?
+ 2. what state are they in
+ 3. is the gps still working.
 
 
+ 
+ 
+ what should i be doing now?
+ 
+ 
+ ugh i hate not knowing what the plan should be, or losing focus.
+ 
+ 
+ 
+ 
+ 
+ 
 */

@@ -7,6 +7,8 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <AudioToolbox/AudioToolbox.h>
+#import <AVFoundation/AVFoundation.h>
 #import "FRPoint.h"
 #import "FRMap.h"
 #import "FRPathSearch.h"
@@ -22,6 +24,9 @@
 	toqbot * m2;
 	int healthbar;
 	NSMutableArray * toBeSpoken;
+	AVAudioPlayer * audioPlayer;
+	int ticks;
+	
 }
 
 @property(nonatomic,retain) NSArray * points;
