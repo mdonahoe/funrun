@@ -226,5 +226,5 @@
 	[distance release];
 	[super dealloc];
 }
-
+- (FRMap *)getMap { return map;}
 @end

@@ -36,6 +36,8 @@
 - (void) startStandardUpdates;
 - (void) newUserLocation:(CLLocation *)location;
 - (void) speakString:(NSString *)text;
-
-
+- (FRPathSearch *) getPlayerView;
+- (FRMap *) getMap;
+- (void) speakIfYouCan:(NSString *)text;
+- (void) speakEventually:(NSString *)text;
 @end

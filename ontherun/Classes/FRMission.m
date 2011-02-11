@@ -38,12 +38,12 @@
 							 );
 	
 	// Set up sound file
-	NSString *soundFilePath = [[NSBundle mainBundle] pathForResource:@"panther3"
+	NSString *soundFilePath = [[NSBundle mainBundle] pathForResource:@"lion1"
 															  ofType:@"wav"];
 	NSURL *fileURL = [[NSURL alloc] initFileURLWithPath:soundFilePath];
 	NSError * audioerror = nil;
 	// Set up audio player with sound file
-	audioPlayer = [[AVAudioPlayer alloc] initWithContentsOfURL:fileURL error:audioerror];
+	audioPlayer = [[AVAudioPlayer alloc] initWithContentsOfURL:fileURL error:&audioerror];
 	NSLog(@"the error:%@",audioerror);
 	[audioPlayer prepareToPlay];
 	
@@ -130,17 +130,22 @@
 - (void) speakStatus {
 	if ([voicebot isSpeaking]) return;
 }
-- (void)speakIfYouCan:(NSString*)s {
+- (void)speakIfYouCan:(NSString*)text {
 	if ([voicebot isSpeaking]) return;
-	[self speakString:s];
+	[self speakString:text];
 }
-- (void)speakEventually:(NSString *)s{
+- (void)speakEventually:(NSString *)text{
 	if ([voicebot isSpeaking]){
-		[toBeSpoken addObject:s];
+		[toBeSpoken addObject:text];
 	} else {
-		[self speakString:s];
+		[self speakString:text];
 	}
 }
+
+//getters used by the FRPoint subclasses
+- (FRMap*) getMap { return themap;}
+- (FRPathSearch *) getPlayerView { return latestsearch;}
+
 - (void) ticktock {
 	
 	if (ticks++>10){
@@ -155,64 +160,7 @@
 	for (FRPoint * pt in points){
 		
 		if ([pt.title isEqualToString:@"user"]==NO){
-			
-			//NSLog(@"pt = %@",pt.title);
-			if (latestsearch && [latestsearch containsPoint:pt.pos]) {
-				//NSLog(@"in path search");
-				float dist = [latestsearch distanceFromRoot:pt.pos];
-				switch (pt.mystate){
-					case FRPointPatrolling:
-						pt.pos = [themap move:pt.pos forwardRandomly:0.5];
-						if (dist<100){
-							pt.mystate = FRPointFollowing;
-							//say something
-							[self speakEventually:[NSString stringWithFormat:@"%@ is following %i meters %@ you",
-												 pt.title,
-												 (int)[latestsearch distanceFromRoot:pt.pos],
-												 [latestsearch directionFromRoot:pt.pos]]];
-						}
-						break;
-					case FRPointFollowing:
-						pt.pos = [latestsearch move:pt.pos towardRootWithDelta:1.0];
-						if (dist>150){
-							pt.mystate = FRPointPatrolling;
-							//we lost them.
-							[self speakEventually:[NSString stringWithFormat:@"You lost %@",pt.title]];
-						} else if (dist<20) {
-							pt.mystate = FRPointClosing;
-							//closing in!
-							[self speakEventually:[NSString stringWithFormat:@"%@ is closing in on you!",pt.title]];
-						} else {
-							if (arc4random()%10==0) [self speakIfYouCan:[NSString stringWithFormat:@"%@ is %i meters %@ you",
-																		 pt.title,
-																		 (int)[latestsearch distanceFromRoot:pt.pos],
-																		 [latestsearch directionFromRoot:pt.pos]]];
-							//still following
-						}
-						break;
-					case FRPointClosing:
-						pt.pos = [latestsearch move:pt.pos towardRootWithDelta:1.0];
-						if (dist<10){
-							healthbar--;
-							[self speakIfYouCan:@"STAB"];
-							//losing health
-						} else if (dist>40){
-							pt.mystate = FRPointFollowing;
-							//starting to lose them.
-							[self speakEventually:[NSString stringWithFormat:@"You are outrunning %@",pt.title]];
-						} else {
-							//they are still about to get us.
-							[self speakIfYouCan:[NSString stringWithFormat:@"%i meters",(int)[latestsearch distanceFromRoot:pt.pos]]];
-						}
-					default:
-						break;
-				}
-				
-			} else {
-				//point is not in the pathsearch, so we cant do anything.
-				pt.pos = [themap move:pt.pos forwardRandomly:0.5];
-				
-			}
+			[pt updateForMission:self];
 		}
 		
 		//update 2d coordinate (so the map updates live)

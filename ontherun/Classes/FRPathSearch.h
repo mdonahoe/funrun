@@ -17,6 +17,7 @@
 	FRMap * map;
 	EdgePos root;
 }
+- (FRMap *)getMap;
 - (id) initWithRoot:(EdgePos)r previous:(NSDictionary *)p distance:(NSDictionary *)d map:(FRMap *)m;
 - (EdgePos) move:(EdgePos)ep towardRootWithDelta:(float)dx;
 - (EdgePos) move:(EdgePos)ep awayFromRootWithDelta:(float)dx;
