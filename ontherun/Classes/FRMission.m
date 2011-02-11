@@ -56,6 +56,9 @@
 	
 	healthbar = 100;
 	toBeSpoken = [[NSMutableArray alloc] initWithObjects:@"Let's begin",nil];
+	
+	
+	
 	//link to /Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.2.sdk/System/Library/PrivateFrameworks/VoiceServices.framework
 	voicebot = [[NSClassFromString(@"VSSpeechSynthesizer") alloc] init];
 	[voicebot startSpeakingString:@"Yippee Kaiyay Muthafuckers"];
@@ -150,7 +153,7 @@
 	
 	if (ticks++>10){
 		ticks = 0;
-		NSLog(@"play the fucking sound");
+		//NSLog(@"play the fucking sound");
 		[audioPlayer play];
 	}
 	
@@ -160,7 +163,33 @@
 	for (FRPoint * pt in points){
 		
 		if ([pt.title isEqualToString:@"user"]==NO){
+			
+			/*
+			 
+			 Thinking about making conveinence functions here, but i can write the method names
+			 
+			if (latestsearch && [latestsearch containsPoint:pt.pos]){
+				[pt updateForMissionInSight:self];
+			} else {
+				[pt updateForMissionOutOfSight:self];
+			}
+			 */
+			
 			[pt updateForMission:self];
+			
+			
+			/*
+			 
+			 ideally the points would return something that makes them aggregateable.??
+			 I should instead work on something that will let me do a live test with someone
+			 so they can describe the world to me in realtime, and I can record what they say
+			 
+			 That experience will give me a better sense of how to do the descriptions.
+			 
+			 Perhaps I can do it over text-to-speech using toqbot?
+			 */
+			
+			
 		}
 		
 		//update 2d coordinate (so the map updates live)

@@ -23,7 +23,7 @@
  New method for organizing this
  
  
- the mission object should handle the descriptions of where things are
+ the mission object *should* handle the descriptions of where things are
  points have two methods:
  - inPlayerView
  - notInPlayerView
