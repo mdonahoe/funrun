@@ -64,7 +64,15 @@
  
  ugh i hate not knowing what the plan should be, or losing focus.
  
- 
+ - group enemies together
+ - attack enemies if moving fast enough
+ - better location model (predicted position? particles?)
+ - confirm that deep sleep prevention is working
+ - subclass FRPoint to create good items and people to chase
+ - music that changes
+ - more talking (there are dull moments)
+ - sound effects instead of just txt-to-speech
+ - test with iPhone 3GS
  
  
  
