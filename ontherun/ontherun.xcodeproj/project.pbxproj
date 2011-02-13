@@ -47,6 +47,7 @@
 		C906C28412D4EA4000C14388 /* libz.1.2.3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = C906C27A12D4EA4000C14388 /* libz.1.2.3.dylib */; };
 		C906C28612D4EA4000C14388 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C906C27C12D4EA4000C14388 /* AudioToolbox.framework */; };
 		C906C38A12D508AE00C14388 /* FRTrigger.m in Sources */ = {isa = PBXBuildFile; fileRef = C906C38912D508AE00C14388 /* FRTrigger.m */; };
+		C9ABFF5013087EEF0031160A /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C9ABFF4F13087EEF0031160A /* MediaPlayer.framework */; };
 		C9C5378812E39A7A005C0BF0 /* FRMap.m in Sources */ = {isa = PBXBuildFile; fileRef = C9C5378712E39A7A005C0BF0 /* FRMap.m */; };
 		C9E494C212F8D7390006AB7B /* FRPathSearch.m in Sources */ = {isa = PBXBuildFile; fileRef = C9E494C112F8D7390006AB7B /* FRPathSearch.m */; };
 		C9E494C512F8D9550006AB7B /* FRPath.m in Sources */ = {isa = PBXBuildFile; fileRef = C9E494C412F8D9550006AB7B /* FRPath.m */; };
@@ -124,6 +125,7 @@
 		C906C27C12D4EA4000C14388 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		C906C38812D508AE00C14388 /* FRTrigger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRTrigger.h; sourceTree = "<group>"; };
 		C906C38912D508AE00C14388 /* FRTrigger.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRTrigger.m; sourceTree = "<group>"; };
+		C9ABFF4F13087EEF0031160A /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = System/Library/Frameworks/MediaPlayer.framework; sourceTree = SDKROOT; };
 		C9C5378612E39A7A005C0BF0 /* FRMap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRMap.h; sourceTree = "<group>"; };
 		C9C5378712E39A7A005C0BF0 /* FRMap.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRMap.m; sourceTree = "<group>"; };
 		C9E494C012F8D7390006AB7B /* FRPathSearch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRPathSearch.h; sourceTree = "<group>"; };
@@ -151,6 +153,7 @@
 				9BD50343130075340092D86A /* MapKit.framework in Frameworks */,
 				9BD504AE1300B2330092D86A /* VoiceServices.framework in Frameworks */,
 				9BC137431304A340006492A0 /* AVFoundation.framework in Frameworks */,
+				C9ABFF5013087EEF0031160A /* MediaPlayer.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -244,6 +247,7 @@
 				9BD50342130075340092D86A /* MapKit.framework */,
 				9BD504AD1300B2330092D86A /* VoiceServices.framework */,
 				9BC137421304A340006492A0 /* AVFoundation.framework */,
+				C9ABFF4F13087EEF0031160A /* MediaPlayer.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";

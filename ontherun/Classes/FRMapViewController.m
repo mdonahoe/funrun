@@ -49,7 +49,6 @@
 }
 - (MKAnnotationView *)mapView:(MKMapView *)theMapView viewForAnnotation:(id <MKAnnotation>)annotation{
 	static NSString* pinIdentifier = @"I love pins!";
-	NSLog(@"pin time");
 	MKPinAnnotationView* pinView = (MKPinAnnotationView *) [mapView dequeueReusableAnnotationViewWithIdentifier:pinIdentifier];
 	
 	if (!pinView){

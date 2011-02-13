@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 #import <AudioToolbox/AudioToolbox.h>
 #import <AVFoundation/AVFoundation.h>
+#import <MediaPlayer/MediaPlayer.h>
 #import "FRPoint.h"
 #import "FRMap.h"
 #import "FRPathSearch.h"
@@ -26,6 +27,7 @@
 	NSMutableArray * toBeSpoken;
 	AVAudioPlayer * audioPlayer;
 	int ticks;
+	MPMusicPlayerController * musicPlayer;
 	
 }
 

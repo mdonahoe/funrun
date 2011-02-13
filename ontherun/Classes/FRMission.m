@@ -13,16 +13,18 @@
 @implementation FRMission
 
 @synthesize points;
-
 - (id) init {
 	
 	self = [super init];
 	if (!self) return nil;
 	
 	
-	//audio player stuff
 	/*
 	 
+	 Be able to play random sound effects.
+	 Initially used to prevent deep sleep
+	 
+	 Code from this blog:
 	 http://blog.marcopeluso.com/2009/08/23/how-to-prevent-iphone-from-deep-sleeping/
 	 
 	 */
@@ -48,14 +50,29 @@
 	[audioPlayer prepareToPlay];
 	
 	// You may want to set this to 0.0 even if your sound file is silent.
-	[audioPlayer setVolume:0.0];
+	[audioPlayer setVolume:1.0];
 	[audioPlayer play];
-		
+	
+	
+	
 	ticks = 0;
-	
-	
 	healthbar = 100;
 	toBeSpoken = [[NSMutableArray alloc] initWithObjects:@"Let's begin",nil];
+	
+	
+	/*
+	 Basic music player setup.
+	 from http://discussions.apple.com/thread.jspa?threadID=2084104&tstart=0&messageID=9838244
+	 
+	 need to figure out interruption stuff. Sound can stop playing for some reasons
+	 
+	 */
+	musicPlayer = [MPMusicPlayerController applicationMusicPlayer];
+	[musicPlayer setQueueWithQuery: [MPMediaQuery songsQuery]];
+	[musicPlayer setShuffleMode:MPMusicShuffleModeSongs];
+	[musicPlayer setRepeatMode:MPMusicRepeatModeAll];
+	[musicPlayer setVolume:1.0]; //the volume for the two audio players is shared, and that sucks
+	[musicPlayer play];
 	
 	
 	
@@ -112,7 +129,10 @@
 	
 	[self startStandardUpdates];
 	[self ticktock];
+	
+	//use toqbot for gps position updates
 	//[m2 loadObjectForKey:@"userpos" toDelegate:self usingSelector:@selector(updatePosition:)];
+	
 	return self;
 }
 

@@ -36,8 +36,8 @@
  #game variety
  1. Add information to the mission.js
  1. Add methods to FRPoint and subclasses for determining Pin color
- 1. add more points to the game to decrease long gaps of silence
- 1. have player speed be a factor, like for attacking enemies
+ 1. Add more points to the game to decrease long gaps of silence
+ 1. Have player speed be a factor, like for attacking enemies
  
  #player position model
  1. use accuracy
@@ -50,15 +50,13 @@
  1. points emit sound effects
  
  #music
- 1. put songs on iPhone
- 1. have songs that play in the background, somehow. (perhaps by using the iPod?)
+ 1. put dramatic theme songs on iPhone
  1. the user can select songs that they want to play during the game.
+ 1. make the music volume seperate from the sound effect volume.
  
  #GPS reciever questions
  1. gps that works while the screen is off.
  1. fix the deep sleep module (i think the gps will shutoff after awhile)
  1. test on iPhone 3GS
- 
- 
  
 */
