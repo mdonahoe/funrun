@@ -15,7 +15,7 @@
 	 
 	 called every half second to update the position of the point.
 	 
-	 latestsearch is the latestest known position of the user in the form
+	 latestsearch is the latest known position of the user in the form
 	 of a PathSearch object, which provides methods for moving and measuring distance
 	 relative to the user's location
 	 
@@ -29,10 +29,9 @@
 	 */
 	
 	FRPathSearch * playerview = [mission getPlayerView];
-	FRMap * themap = [mission getMap];
+	//FRMap * themap = [mission getMap];
 	
 	if (playerview && [playerview containsPoint:pos]) {
-		//NSLog(@"in path search");
 		float dist = [playerview distanceFromRoot:pos];
 		switch (mystate){
 			case kHappy:
@@ -61,7 +60,7 @@
 				}
 				break;
 			case kDead:
-				//dead. do nothing.
+				//dead. do nothing ever again.
 				break;
 			default:
 				break;

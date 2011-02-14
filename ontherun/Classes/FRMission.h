@@ -28,6 +28,7 @@
 	AVAudioPlayer * audioPlayer;
 	int ticks;
 	MPMusicPlayerController * musicPlayer;
+	NSMutableArray * logarray;
 	
 }
 

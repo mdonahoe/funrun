@@ -12,6 +12,8 @@
 
 @implementation FRMission
 
+
+
 @synthesize points;
 - (id) init {
 	
@@ -72,7 +74,7 @@
 	[musicPlayer setShuffleMode:MPMusicShuffleModeSongs];
 	[musicPlayer setRepeatMode:MPMusicRepeatModeAll];
 	[musicPlayer setVolume:1.0]; //the volume for the two audio players is shared, and that sucks
-	[musicPlayer play];
+	//[musicPlayer play];
 	
 	
 	
@@ -135,7 +137,51 @@
 	
 	return self;
 }
+- (void) saveRunDataForLater {
+	//get the documents directory:
+	NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+	NSString *documentsDirectory = [paths objectAtIndex:0];
+	
+	//make a file name to write the data to using the documents directory:
+	NSString *fullFileName = [NSString stringWithFormat:@"%@/arraySaveFile", documentsDirectory];
+	
+	//this statement is what actually writes out the array
+	//to the file system:
+	[logarray writeToFile:fullFileName atomically:NO];
+	
+}
 
+- (NSArray *) loadRunData {
+	/* 
+	 Now, your information has been saved to the iPhone’s file system in the documents directory of your app.
+	 Here is how you would retrieve the information that you saved:
+	 */
+	
+	
+	//get the documents directory:
+	NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+	NSString *documentsDirectory = [paths objectAtIndex:0];
+	
+	//make a file name to read the data from using the documents directory:
+	NSString *fullFileName = [NSString stringWithFormat:@"%@/arraySaveFile", documentsDirectory];
+	
+	//retrieve your array by using initWithContentsOfFile while passing
+	//the name of the file where you saved the array contents.
+	NSMutableArray *array = [[NSMutableArray alloc] initWithContentsOfFile:fullFileName];
+	
+	//use an alert to display the first value in the array to prove
+	//that you were able to save and retrieve the information.
+	UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Alert"
+													message:[array objectAtIndex:0]
+												   delegate:self
+										  cancelButtonTitle:@"OK"
+										  otherButtonTitles: nil];
+	[alert show];
+	[alert release];
+	
+	
+	return array;
+}
 - (void) speakString:(NSString *)text {
 	[voicebot startSpeakingString:text];
 	//NSLog(@"%@",text);
