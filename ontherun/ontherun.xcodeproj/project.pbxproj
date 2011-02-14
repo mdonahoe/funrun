@@ -15,6 +15,7 @@
 		9B51D5C11305F53400978183 /* FRPoint.m in Sources */ = {isa = PBXBuildFile; fileRef = 9B51D5BC1305F53400978183 /* FRPoint.m */; };
 		9B51D5C21305F53400978183 /* FRPointFollower.m in Sources */ = {isa = PBXBuildFile; fileRef = 9B51D5BE1305F53400978183 /* FRPointFollower.m */; };
 		9B51D5C31305F53400978183 /* FRPointRabbit.m in Sources */ = {isa = PBXBuildFile; fileRef = 9B51D5C01305F53400978183 /* FRPointRabbit.m */; };
+		9B84A0D31309C80300BE94CF /* FRFileLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 9B84A0D21309C80300BE94CF /* FRFileLoader.m */; };
 		9BC137431304A340006492A0 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9BC137421304A340006492A0 /* AVFoundation.framework */; };
 		9BC137471304A8C9006492A0 /* lion1.wav in Resources */ = {isa = PBXBuildFile; fileRef = 9BC137461304A8C9006492A0 /* lion1.wav */; };
 		9BC1374D1304A99E006492A0 /* panther3.wav in Resources */ = {isa = PBXBuildFile; fileRef = 9BC1374C1304A99E006492A0 /* panther3.wav */; };
@@ -71,6 +72,8 @@
 		9B51D5BE1305F53400978183 /* FRPointFollower.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRPointFollower.m; sourceTree = "<group>"; };
 		9B51D5BF1305F53400978183 /* FRPointRabbit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRPointRabbit.h; sourceTree = "<group>"; };
 		9B51D5C01305F53400978183 /* FRPointRabbit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRPointRabbit.m; sourceTree = "<group>"; };
+		9B84A0D11309C80300BE94CF /* FRFileLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRFileLoader.h; sourceTree = "<group>"; };
+		9B84A0D21309C80300BE94CF /* FRFileLoader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRFileLoader.m; sourceTree = "<group>"; };
 		9BC137421304A340006492A0 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		9BC137461304A8C9006492A0 /* lion1.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = lion1.wav; path = ../funrun/sounds/lion1.wav; sourceTree = SOURCE_ROOT; };
 		9BC1374C1304A99E006492A0 /* panther3.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = panther3.wav; path = ../funrun/sounds/panther3.wav; sourceTree = SOURCE_ROOT; };
@@ -186,6 +189,8 @@
 				9BD5039D13007F760092D86A /* FRAnnotation.m */,
 				9BD504F21301BCA80092D86A /* FRMission.h */,
 				9BD504F31301BCA80092D86A /* FRMission.m */,
+				9B84A0D11309C80300BE94CF /* FRFileLoader.h */,
+				9B84A0D21309C80300BE94CF /* FRFileLoader.m */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -419,6 +424,7 @@
 				9B51D5C11305F53400978183 /* FRPoint.m in Sources */,
 				9B51D5C21305F53400978183 /* FRPointFollower.m in Sources */,
 				9B51D5C31305F53400978183 /* FRPointRabbit.m in Sources */,
+				9B84A0D31309C80300BE94CF /* FRFileLoader.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

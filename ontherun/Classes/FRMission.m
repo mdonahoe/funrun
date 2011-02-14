@@ -9,6 +9,7 @@
 #import "FRMission.h"
 #import "ASIFormDataRequest.h"
 #import "JSON.h"
+#import "FRFileLoader.h"
 
 @implementation FRMission
 
@@ -48,18 +49,16 @@
 	NSError * audioerror = nil;
 	// Set up audio player with sound file
 	audioPlayer = [[AVAudioPlayer alloc] initWithContentsOfURL:fileURL error:&audioerror];
-	NSLog(@"the error:%@",audioerror);
 	[audioPlayer prepareToPlay];
 	
 	// You may want to set this to 0.0 even if your sound file is silent.
 	[audioPlayer setVolume:1.0];
-	[audioPlayer play];
 	
 	
 	
 	ticks = 0;
 	healthbar = 100;
-	toBeSpoken = [[NSMutableArray alloc] initWithObjects:@"Let's begin",nil];
+	toBeSpoken = [[NSMutableArray alloc] initWithObjects:@"and load",nil];
 	
 	
 	/*
@@ -73,49 +72,45 @@
 	[musicPlayer setQueueWithQuery: [MPMediaQuery songsQuery]];
 	[musicPlayer setShuffleMode:MPMusicShuffleModeSongs];
 	[musicPlayer setRepeatMode:MPMusicRepeatModeAll];
-	[musicPlayer setVolume:1.0]; //the volume for the two audio players is shared, and that sucks
+	[musicPlayer setVolume:0.5]; //the volume for the two audio players is shared, and that sucks
 	//[musicPlayer play];
 	
 	
 	
 	//link to /Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.2.sdk/System/Library/PrivateFrameworks/VoiceServices.framework
 	voicebot = [[NSClassFromString(@"VSSpeechSynthesizer") alloc] init];
-	[voicebot startSpeakingString:@"Yippee Kaiyay Muthafuckers"];
 	[voicebot setDelegate:self];
 	
 	//communication with server
 	m2 = [[toqbot alloc] init];
 	
+	//create the special user point
 	user = [[FRPoint alloc] initWithDict:[NSDictionary dictionaryWithObject:@"user" forKey:@"name"]];
 	
-	NSURL * url = [NSURL URLWithString:@"http://toqbot.com/otr/pacman/mission.js"];
-	ASIHTTPRequest *request = [ASIHTTPRequest requestWithURL:url];
-	[request startSynchronous];
-	NSError * error = [request error];
-	if (!error) {
-		NSString * response = [request responseString];
-		NSDictionary * data = [response JSONValue];
-		
-		NSMutableArray * temp = [NSMutableArray arrayWithCapacity:10];
-		
-		[temp addObject:user];
-		for (NSDictionary * dict in [data valueForKey:@"points"]){
-			FRPoint * pt = [[FRPoint alloc] initWithDict:dict];
-			[temp addObject:pt];
-		}
-		points = [[NSArray alloc] initWithArray:temp];
-	}
+	//load the mission(s)
+	FRFileLoader * loader = [[FRFileLoader alloc] initWithBaseURLString:@"http://toqbot.com/otr/test1/"];
+	NSString * missionstring = [[NSString alloc] initWithData:[NSData dataWithContentsOfFile:[loader pathForFile:@"mission.js"]] encoding:NSUTF8StringEncoding];
+	NSDictionary * missiondata = [missionstring JSONValue];
+	[missionstring release];
 	
-	url = [NSURL URLWithString:@"http://toqbot.com/otr/mapdata.json"];
-	request = [ASIHTTPRequest requestWithURL:url];
-	[request startSynchronous];
-	error = [request error];
-	
-	if (!error) {
-		NSString * response = [request responseString];
-		NSDictionary * data = [response JSONValue];
-		themap = [[FRMap alloc] initWithNodes:[data objectForKey:@"nodes"] andRoads:[data objectForKey:@"roads"]];
+	NSMutableArray * temp = [NSMutableArray arrayWithCapacity:10];
+	[temp addObject:user];
+	for (NSDictionary * dict in [missiondata valueForKey:@"points"]){
+		FRPoint * pt = [[FRPoint alloc] initWithDict:dict];
+		[temp addObject:pt];
 	}
+	points = [[NSArray alloc] initWithArray:temp];
+	
+	
+	//load the map
+	NSDictionary * mapdata = [[NSString stringWithContentsOfFile:[loader pathForFile:@"mapdata.json"]
+														encoding:NSUTF8StringEncoding
+														   error:NULL] JSONValue];
+	
+	themap = [[FRMap alloc] initWithNodes:[mapdata objectForKey:@"nodes"] andRoads:[mapdata objectForKey:@"roads"]];
+	
+	//we dont need the file loader anymore
+	[loader release];
 	
 	
 	//set the EdgePos for every point (given its latlon)
@@ -134,7 +129,7 @@
 	
 	//use toqbot for gps position updates
 	//[m2 loadObjectForKey:@"userpos" toDelegate:self usingSelector:@selector(updatePosition:)];
-	
+	[self speakString:@"Lock"];
 	return self;
 }
 - (void) saveRunDataForLater {
