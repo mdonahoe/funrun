@@ -17,7 +17,7 @@
 	return self;
 }
 - (NSString *) pathForFile:(NSString *) filename {
-	if (filename==nil) return;
+	if (filename==nil) return nil;
 	
 	// Point to Document directory
 	NSString * documentsDirectory = [NSHomeDirectory() 

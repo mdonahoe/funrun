@@ -15,6 +15,7 @@
 #define kClosing 2
 
 @interface FRPointFollower : FRPoint{
+
 }
 
 @end

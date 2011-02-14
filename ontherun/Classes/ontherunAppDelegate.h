@@ -23,21 +23,17 @@
  
  TODO!
  
- 
- #speed up app launch
- 1. cache the mission and map scripts.
- 1. this is increasingly important because the application is failing to launch in time. and errors
- 
+  
  #better debugging
  1. record some gps data for offline playback.
  1. save everything that happens during a run so that the player can watch it later.
- 
- 
+  
  #game variety
  1. Add information to the mission.js
  1. Add methods to FRPoint and subclasses for determining Pin color
  1. Add more points to the game to decrease long gaps of silence
  1. Have player speed be a factor, like for attacking enemies
+ 1. have mission file specify PointType so I can create them. NSClassFromString
  
  #player position model
  1. use accuracy
@@ -67,6 +63,7 @@
  1. perform actions/choices?
  
  #testers
+ 1. confirm that i dont need COUHES
  1. patsy ?
  1. jessie ?
  1. dad
@@ -75,20 +72,18 @@
  1. gabe ?
  1. matt hirsch ?
  
- 
  #thesis
  1. start making notes on what i've done so far
  1. whenever i am too brain dead to code, write notes.
- 
  
  #map generation
  1. create constraint based map descriptions that can be fit to whever the user lives
  1. have the user input their home, running speed, and running goals, and let the generator configure a map for them
  
- 
  #interface
  1. menu screen
  1. level select
+ 1. have something besides the rootviewcontroller (tableview) to start.
  1. 
  
 */
