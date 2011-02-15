@@ -11,7 +11,7 @@
 
 @implementation FRPathSearch
 
-- (id) initWithRoot:(FREdgePos*)r previous:(NSDictionary *)p distance:(NSDictionary *)d map:(FRMap *)m {
+- (id) initWithRoot:(FREdgePos *)r previous:(NSDictionary *)p distance:(NSDictionary *)d map:(FRMap *)m {
 	self = [super init];
 	if (self){
 		root = r;
@@ -27,7 +27,7 @@
 	
 	return self;
 }
-- (BOOL) containsPoint:(FREdgePos*)ep {
+- (BOOL) containsPoint:(FREdgePos *)ep {
 	
 	//check to see if the the given position is on the path.
 	//(for example, if we did a BFS with a maxdist, it might not be)
@@ -84,7 +84,7 @@
 		node = end;
 	}
 	
-	int i=200; //limit the infinite loop.
+	int i=200; //limit the potentially infinite loop.
 	while (node && 0<i--) {
 		//traverse the tree to the root nodes. careful, the two roots point to each other.
 		if ([node intValue]==root.start) return YES;

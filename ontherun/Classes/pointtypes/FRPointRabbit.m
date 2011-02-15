@@ -7,34 +7,18 @@
 //
 
 #import "FRPointRabbit.h"
+#import "FRPathSearch.h"
 #import "FRMission.h"
 
 @implementation FRPointRabbit
-- (id) initWithDict:(NSDictionary*)dict {
-	self = [super initWithDict:dict];
+- (id) initWithDict:(NSDictionary*)dict onMap:(FRMap*)map {
+	self = [super initWithDict:dict onMap:map];
 	subtitle = @"FRPointRabbit";
 	return self;
 }
 - (void) updateForMission:(FRMission *)mission {
-	/*
-	 
-	 called every half second to update the position of the point.
-	 
-	 latestsearch is the latest known position of the user in the form
-	 of a PathSearch object, which provides methods for moving and measuring distance
-	 relative to the user's location
-	 
-	 perhaps instead I should create methods that are simpler
-	 
-	 - point can see player
-	 - point cant see player
-	 - player is 50 m away in this direction.
-	 
-	 
-	 */
-	
+
 	FRPathSearch * playerview = [mission getPlayerView];
-	//FRMap * themap = [mission getMap];
 	
 	if (playerview && [playerview containsPoint:pos]) {
 		float dist = [playerview distanceFromRoot:pos];

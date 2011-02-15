@@ -7,7 +7,6 @@
 //
 
 #import "FRMapViewController.h"
-#import "FRAnnotation.h"
 #import "FRPoint.h"
 
 @implementation FRMapViewController

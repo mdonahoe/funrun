@@ -16,7 +16,7 @@
 
 
 
-- (id) initWithDict:(NSDictionary*)dict {
+- (id) initWithDict:(NSDictionary*)dict onMap:(FRMap*)map {
 	self = [super init];
 	
 	if (self) {
@@ -26,6 +26,16 @@
 		[dictme retain];
 		self.subtitle = @"FRPoint";
 		mystate = kPointNew;
+		
+		
+		NSArray * latlon = [dictme objectForKey:@"pos"];
+		if (latlon) {
+			CLLocation * p = [[CLLocation alloc] initWithLatitude:[[latlon objectAtIndex:0] floatValue]
+														longitude:[[latlon objectAtIndex:1] floatValue]];
+			self.pos = [map edgePosFromPoint:p];
+			[p release];
+		}
+		
 	}
 	
 	return self;
@@ -33,7 +43,10 @@
 
 - (CLLocationCoordinate2D)coordinate;
 {
+	//if i make the view draggable, i can expect calls to this method from the mkmapview
     return mycoordinate;
+	
+	//it should set the FREdgePos accordingly, without messing up the direction or loooping
 }
 - (void) setCoordinate:(CLLocationCoordinate2D)newCoordinate {
 	mycoordinate = newCoordinate;

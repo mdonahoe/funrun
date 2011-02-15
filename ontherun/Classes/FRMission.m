@@ -83,12 +83,21 @@
 	
 	//communication with server
 	m2 = [[toqbot alloc] init];
+
+	//init the fileloader so we can skip network downloads if already cached
+	NSAutoreleasePool * thepool = [[NSAutoreleasePool alloc] init];
+	FRFileLoader * loader = [[FRFileLoader alloc] initWithBaseURLString:@"http://toqbot.com/otr/test1/"];
+	
+	//load the map
+	NSDictionary * mapdata = [[NSString stringWithContentsOfFile:[loader pathForFile:@"mapdata.json"]
+														encoding:NSUTF8StringEncoding
+														   error:NULL] JSONValue];
+	themap = [[FRMap alloc] initWithNodes:[mapdata objectForKey:@"nodes"] andRoads:[mapdata objectForKey:@"roads"]];
 	
 	//create the special user point
-	user = [[FRPoint alloc] initWithDict:[NSDictionary dictionaryWithObject:@"user" forKey:@"name"]];
+	user = [[FRPoint alloc] initWithDict:[NSDictionary dictionaryWithObject:@"user" forKey:@"name"] onMap:themap];
 	
 	//load the mission(s)
-	FRFileLoader * loader = [[FRFileLoader alloc] initWithBaseURLString:@"http://toqbot.com/otr/test1/"];
 	NSString * missionstring = [[NSString alloc] initWithData:[NSData dataWithContentsOfFile:[loader pathForFile:@"mission1.js"]] encoding:NSUTF8StringEncoding];
 	NSDictionary * missiondata = [missionstring JSONValue];
 	[missionstring release];
@@ -99,45 +108,32 @@
 		NSString * pointclass = [dict objectForKey:@"class"];
 		FRPoint * pt;
 		if (pointclass){
-			pt = [[NSClassFromString([NSString stringWithFormat:@"FRPoint%@",pointclass]) alloc] initWithDict:dict];
+			pt = [[NSClassFromString([NSString stringWithFormat:@"FRPoint%@",pointclass]) alloc] initWithDict:dict onMap:themap];
 		} else {
-			pt = [[FRPoint alloc] initWithDict:dict];
+			pt = [[FRPoint alloc] initWithDict:dict onMap:themap];
 		}
 		[temp addObject:pt];
 	}
 	points = [[NSArray alloc] initWithArray:temp];
 	
 	
-	//load the map
-	NSDictionary * mapdata = [[NSString stringWithContentsOfFile:[loader pathForFile:@"mapdata.json"]
-														encoding:NSUTF8StringEncoding
-														   error:NULL] JSONValue];
-	
-	themap = [[FRMap alloc] initWithNodes:[mapdata objectForKey:@"nodes"] andRoads:[mapdata objectForKey:@"roads"]];
-	
 	//we dont need the file loader anymore
 	[loader release];
 	
-	
-	//set the EdgePos for every point (given its latlon)
-	for (FRPoint * pt in points){
-		NSArray * latlon = [pt.dictme objectForKey:@"pos"];
-		if (latlon==nil) continue;
-		CLLocation * p = [[CLLocation alloc] initWithLatitude:[[latlon objectAtIndex:0] floatValue]
-													longitude:[[latlon objectAtIndex:1] floatValue]];
-		pt.pos = [themap edgePosFromPoint:p];
-		[p release];
-	}
+	//release the pool, which also drain it... i think
+	[thepool release];
 	
 	
-	[self startStandardUpdates];
+	//[self startStandardUpdates];
 	[self ticktock];
 	
 	//use toqbot for gps position updates
-	//[m2 loadObjectForKey:@"userpos" toDelegate:self usingSelector:@selector(updatePosition:)];
+	[m2 loadObjectForKey:@"userpos" toDelegate:self usingSelector:@selector(updatePosition:)];
+	
 	[self speakString:@"Lock"];
 	return self;
 }
+
 - (void) saveRunDataForLater {
 	//get the documents directory:
 	NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
@@ -151,7 +147,6 @@
 	[logarray writeToFile:fullFileName atomically:NO];
 	
 }
-
 - (NSArray *) loadRunData {
 	/* 
 	 Now, your information has been saved to the iPhone’s file system in the documents directory of your app.
@@ -183,6 +178,7 @@
 	
 	return array;
 }
+
 - (void) speakString:(NSString *)text {
 	[voicebot startSpeakingString:text];
 	//NSLog(@"%@",text);
@@ -190,7 +186,6 @@
 }
 - (void) speechSynthesizer:(NSObject *) synth didFinishSpeaking:(BOOL)didFinish withError:(NSError *) error { 
 	// Handle the end of speech here 
-	NSLog(@"done speaking");
 	if ([toBeSpoken count]){
 		[self speakString:[toBeSpoken objectAtIndex:0]];
 		[toBeSpoken removeObjectAtIndex:0];
@@ -221,7 +216,7 @@
 	if (ticks++>10){
 		ticks = 0;
 		//NSLog(@"play the fucking sound");
-		[audioPlayer play];
+		//[audioPlayer play];
 	}
 	
 	if (latestsearch==nil) NSLog(@"nilnil");
@@ -325,6 +320,7 @@
 	[points release];
 	[user release];
 	[locationManager stopUpdatingLocation];
+	[locationManager release];
 	[m2 release];
 	[themap release];
 	[latestsearch release];

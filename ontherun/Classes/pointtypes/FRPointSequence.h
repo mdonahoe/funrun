@@ -7,9 +7,9 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "FRPoint.h"
 
-
-@interface FRPointSequence : NSObject {
+@interface FRPointSequence : FRPoint {
 	NSArray * positions;
 	NSArray * messages;
 }

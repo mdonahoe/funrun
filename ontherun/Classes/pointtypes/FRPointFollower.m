@@ -11,8 +11,8 @@
 #import "FRMission.h"
 
 @implementation FRPointFollower
-- (id) initWithDict:(NSDictionary*)dict {
-	self = [super initWithDict:dict];
+- (id) initWithDict:(NSDictionary*)dict onMap:(FRMap*)map {
+	self = [super initWithDict:dict onMap:map];
 	subtitle = @"FRPointFollower";
 	return self;
 }

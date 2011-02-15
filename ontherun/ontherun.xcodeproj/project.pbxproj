@@ -22,7 +22,6 @@
 		9BD50325130070320092D86A /* FRMapViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9BD50324130070320092D86A /* FRMapViewController.m */; };
 		9BD50337130075020092D86A /* FRMapViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9BD50336130075020092D86A /* FRMapViewController.xib */; };
 		9BD50343130075340092D86A /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9BD50342130075340092D86A /* MapKit.framework */; };
-		9BD5039E13007F760092D86A /* FRAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = 9BD5039D13007F760092D86A /* FRAnnotation.m */; };
 		9BD504AE1300B2330092D86A /* VoiceServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9BD504AD1300B2330092D86A /* VoiceServices.framework */; };
 		9BD504F41301BCA80092D86A /* FRMission.m in Sources */ = {isa = PBXBuildFile; fileRef = 9BD504F31301BCA80092D86A /* FRMission.m */; };
 		C906C15D12D4EA2F00C14388 /* SoundEffect.m in Sources */ = {isa = PBXBuildFile; fileRef = C906C13D12D4EA2F00C14388 /* SoundEffect.m */; };
@@ -83,8 +82,6 @@
 		9BD50324130070320092D86A /* FRMapViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRMapViewController.m; sourceTree = "<group>"; };
 		9BD50336130075020092D86A /* FRMapViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = FRMapViewController.xib; sourceTree = "<group>"; };
 		9BD50342130075340092D86A /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
-		9BD5039C13007F760092D86A /* FRAnnotation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRAnnotation.h; sourceTree = "<group>"; };
-		9BD5039D13007F760092D86A /* FRAnnotation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRAnnotation.m; sourceTree = "<group>"; };
 		9BD504AD1300B2330092D86A /* VoiceServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = VoiceServices.framework; path = System/Library/PrivateFrameworks/VoiceServices.framework; sourceTree = SDKROOT; };
 		9BD504F21301BCA80092D86A /* FRMission.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRMission.h; sourceTree = "<group>"; };
 		9BD504F31301BCA80092D86A /* FRMission.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRMission.m; sourceTree = "<group>"; };
@@ -182,17 +179,11 @@
 				28C286E00D94DF7D0034E888 /* RootViewController.m */,
 				1D3623240D0F684500981E51 /* ontherunAppDelegate.h */,
 				1D3623250D0F684500981E51 /* ontherunAppDelegate.m */,
-				9B51D5E71305F81700978183 /* New Group */,
+				9B51D5E71305F81700978183 /* Unused */,
 				C9C5378612E39A7A005C0BF0 /* FRMap.h */,
 				C9C5378712E39A7A005C0BF0 /* FRMap.m */,
 				C9E494C012F8D7390006AB7B /* FRPathSearch.h */,
 				C9E494C112F8D7390006AB7B /* FRPathSearch.m */,
-				C9E494C312F8D9550006AB7B /* FRPath.h */,
-				C9E494C412F8D9550006AB7B /* FRPath.m */,
-				C9FC234712F9CCC700892CF6 /* toqbot.h */,
-				C9FC234812F9CCC700892CF6 /* toqbot.m */,
-				9BD5039C13007F760092D86A /* FRAnnotation.h */,
-				9BD5039D13007F760092D86A /* FRAnnotation.m */,
 				9BD504F21301BCA80092D86A /* FRMission.h */,
 				9BD504F31301BCA80092D86A /* FRMission.m */,
 				9B84A0D11309C80300BE94CF /* FRFileLoader.h */,
@@ -281,13 +272,17 @@
 			path = pointtypes;
 			sourceTree = "<group>";
 		};
-		9B51D5E71305F81700978183 /* New Group */ = {
+		9B51D5E71305F81700978183 /* Unused */ = {
 			isa = PBXGroup;
 			children = (
+				C9E494C312F8D9550006AB7B /* FRPath.h */,
+				C9E494C412F8D9550006AB7B /* FRPath.m */,
 				C906C38812D508AE00C14388 /* FRTrigger.h */,
 				C906C38912D508AE00C14388 /* FRTrigger.m */,
+				C9FC234712F9CCC700892CF6 /* toqbot.h */,
+				C9FC234812F9CCC700892CF6 /* toqbot.m */,
 			);
-			name = "New Group";
+			name = Unused;
 			sourceTree = "<group>";
 		};
 		C906C13B12D4EA2F00C14388 /* sound */ = {
@@ -429,7 +424,6 @@
 				C9E494C512F8D9550006AB7B /* FRPath.m in Sources */,
 				C9FC234912F9CCC700892CF6 /* toqbot.m in Sources */,
 				9BD50325130070320092D86A /* FRMapViewController.m in Sources */,
-				9BD5039E13007F760092D86A /* FRAnnotation.m in Sources */,
 				9BD504F41301BCA80092D86A /* FRMission.m in Sources */,
 				9B51D5C11305F53400978183 /* FRPoint.m in Sources */,
 				9B51D5C21305F53400978183 /* FRPointFollower.m in Sources */,

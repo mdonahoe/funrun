@@ -10,6 +10,7 @@
 #import <CoreLocation/CoreLocation.h>
 #import <MapKit/MapKit.h>
 #import "FREdgePos.h"
+#import "FRMap.h"
 /*
  
  It is getting difficult to create different point behaviors and control them all from
@@ -69,7 +70,7 @@
 @property(nonatomic,retain) NSString * title;
 @property(nonatomic,retain) NSString * subtitle;
 
-- (id) initWithDict:(NSDictionary*)dict;
+- (id) initWithDict:(NSDictionary*)dict onMap:(FRMap*)map;
 - (void) updateForMission:(FRMission *)mission;
 
 @end

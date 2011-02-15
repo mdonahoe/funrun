@@ -7,7 +7,8 @@
 //
 
 #import "FRPointSequence.h"
-
+#import "FRPathSearch.h"
+#import "FRMission.h"
 
 @implementation FRPointSequence
 - (id) initWithDict:(NSDictionary*)dict onMap:(FRMap*)map {
@@ -22,7 +23,7 @@
 		mystate = 0;
 		NSMutableArray * temppos = [[NSMutableArray alloc] init];
 		
-		for (NSDictionary * latlon in [dict objectForKey:@"positions"]){
+		for (NSArray * latlon in [dict objectForKey:@"positions"]){
 			CLLocation * p = [[CLLocation alloc] initWithLatitude:[[latlon objectAtIndex:0] floatValue]
 														longitude:[[latlon objectAtIndex:1] floatValue]];
 			
@@ -31,10 +32,30 @@
 		}
 		
 		positions = [[NSArray alloc] initWithArray:temppos];
+		[temppos release];
 		messages = [[NSArray alloc] initWithArray:[dict objectForKey:@"messages"]];
 		self.pos = [positions objectAtIndex:mystate];
 	}
 	
 	return self;
 }
+- (void) updateForMission:(FRMission *)mission {
+	
+	FRPathSearch * playerview = [mission getPlayerView];
+	
+	if (playerview && mystate < [positions count] && [playerview containsPoint:self.pos]) {
+		//NSLog(@"in path search");
+		float dist = [playerview distanceFromRoot:self.pos];
+		if (dist < 20) {
+			//reached the point
+			[mission speakEventually:[messages objectAtIndex:mystate]];
+			mystate++;
+			
+			//once it runs out of states, do nothing. (remove from mission.points?)
+			if (mystate < [positions count]) self.pos = [positions objectAtIndex:mystate];
+		}
+	}
+}
+
+
 @end

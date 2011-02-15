@@ -29,11 +29,10 @@
  1. save everything that happens during a run so that the player can watch it later.
   
  #game variety
- 1. Add information to the mission.js
  1. Add methods to FRPoint and subclasses for determining Pin color
  1. Add more points to the game to decrease long gaps of silence
  1. Have player speed be a factor, like for attacking enemies
- 1. have mission file specify PointType so I can create them. NSClassFromString
+ 1. Is it possible to lose? I can listen to STAB STAB STAB forever.
  
  #player position model
  1. use accuracy
@@ -44,6 +43,9 @@
  1. run a live test to see what a human would do
  1. agreggate points that are close together
  1. points emit sound effects
+ 1. deepsleep timer audio interferes with the speechsynth system
+ 1. get some audio recording samples from Charlie.
+ 
  
  #music
  1. put dramatic theme songs on iPhone
@@ -79,11 +81,21 @@
  #map generation
  1. create constraint based map descriptions that can be fit to whever the user lives
  1. have the user input their home, running speed, and running goals, and let the generator configure a map for them
+ 1. Game adjusts the mission based on the startup position of the user, and where they want to end up at the end of the run.
  
  #interface
  1. menu screen
  1. level select
  1. have something besides the rootviewcontroller (tableview) to start.
  1. 
+ 
+ #code smell
+ 1. learn about how imports work in objective-c.
+ 1. make sure we arent leaking objects
+ 1. use more pools to reduce memory footprint during startup?
+ 
+ 
+ 
+ 
  
 */
