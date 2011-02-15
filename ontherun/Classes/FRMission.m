@@ -89,14 +89,20 @@
 	
 	//load the mission(s)
 	FRFileLoader * loader = [[FRFileLoader alloc] initWithBaseURLString:@"http://toqbot.com/otr/test1/"];
-	NSString * missionstring = [[NSString alloc] initWithData:[NSData dataWithContentsOfFile:[loader pathForFile:@"mission.js"]] encoding:NSUTF8StringEncoding];
+	NSString * missionstring = [[NSString alloc] initWithData:[NSData dataWithContentsOfFile:[loader pathForFile:@"mission1.js"]] encoding:NSUTF8StringEncoding];
 	NSDictionary * missiondata = [missionstring JSONValue];
 	[missionstring release];
 	
 	NSMutableArray * temp = [NSMutableArray arrayWithCapacity:10];
 	[temp addObject:user];
 	for (NSDictionary * dict in [missiondata valueForKey:@"points"]){
-		FRPoint * pt = [[FRPoint alloc] initWithDict:dict];
+		NSString * pointclass = [dict objectForKey:@"class"];
+		FRPoint * pt;
+		if (pointclass){
+			pt = [[NSClassFromString([NSString stringWithFormat:@"FRPoint%@",pointclass]) alloc] initWithDict:dict];
+		} else {
+			pt = [[FRPoint alloc] initWithDict:dict];
+		}
 		[temp addObject:pt];
 	}
 	points = [[NSArray alloc] initWithArray:temp];
@@ -301,7 +307,7 @@
 }
 - (void) newUserLocation:(CLLocation *)location {
 	NSLog(@"newUserLocation: %@",location);
-	EdgePos ep = [themap edgePosFromPoint:location];
+	FREdgePos * ep = [themap edgePosFromPoint:location];
 	if (arc4random()%10==0) [self speakIfYouCan:@"click"];
 	if (latestsearch) {
 		//we already have a position

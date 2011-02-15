@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import <CoreLocation/CoreLocation.h>
 #import <MapKit/MapKit.h>
-#import "FRMap.h"
+#import "FREdgePos.h"
 /*
  
  It is getting difficult to create different point behaviors and control them all from
@@ -56,7 +56,7 @@
 
 @interface FRPoint : NSObject <MKAnnotation>{
 	NSString * title;
-	EdgePos pos;
+	FREdgePos * pos;
 	NSDictionary * dictme;
 	NSString * subtitle;
 	CLLocationCoordinate2D mycoordinate;
@@ -64,7 +64,7 @@
 }
 
 
-@property(assign) EdgePos pos;
+@property(nonatomic, retain) FREdgePos * pos;
 @property(readonly) NSDictionary * dictme;
 @property(nonatomic,retain) NSString * title;
 @property(nonatomic,retain) NSString * subtitle;

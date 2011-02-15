@@ -15,14 +15,14 @@
 	NSDictionary * previous;
 	NSDictionary * distance;
 	FRMap * map;
-	EdgePos root;
+	FREdgePos * root;
 }
 - (FRMap *)getMap;
-- (id) initWithRoot:(EdgePos)r previous:(NSDictionary *)p distance:(NSDictionary *)d map:(FRMap *)m;
-- (EdgePos) move:(EdgePos)ep towardRootWithDelta:(float)dx;
-- (EdgePos) move:(EdgePos)ep awayFromRootWithDelta:(float)dx;
-- (BOOL) isFacingRoot:(EdgePos)ep;
-- (BOOL) containsPoint:(EdgePos)ep;
-- (float) distanceFromRoot:(EdgePos)ep;
-- (NSString *) directionFromRoot:(EdgePos)ep;
+- (id) initWithRoot:(FREdgePos *)r previous:(NSDictionary *)p distance:(NSDictionary *)d map:(FRMap *)m;
+- (FREdgePos *) move:(FREdgePos*)ep towardRootWithDelta:(float)dx;
+- (FREdgePos *) move:(FREdgePos*)ep awayFromRootWithDelta:(float)dx;
+- (BOOL) isFacingRoot:(FREdgePos*)ep;
+- (BOOL) containsPoint:(FREdgePos*)ep;
+- (float) distanceFromRoot:(FREdgePos*)ep;
+- (NSString *) directionFromRoot:(FREdgePos*)ep;
 @end

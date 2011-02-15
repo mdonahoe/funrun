@@ -101,9 +101,9 @@
 	if (closest_edge==nil) NSLog(@" NIL TOWN! bummer");
 	return closest_edge;
 }
-- (EdgePos) edgePosFromPoint:(CLLocation *)p {
+- (FREdgePos *) edgePosFromPoint:(CLLocation *)p {
 	
-	EdgePos ep;
+	FREdgePos * ep = [[[FREdgePos alloc] init] autorelease];
 	
 	NSArray * edge = [self closestEdgeToPoint:p];
 	NSNumber * i = [edge objectAtIndex:0];
@@ -135,16 +135,16 @@
 - (float) edgeLengthFromStart:(NSNumber *)a toFinish:(NSNumber *)b {
 	return [[[[graph objectForKey:a] objectForKey:b] objectForKey:@"length"] floatValue];
 }
-- (float) maxPosition:(EdgePos)ep {
+- (float) maxPosition:(FREdgePos *)ep {
 	return [self edgeLengthFromStart:[NSNumber numberWithInt:ep.start] toFinish:[NSNumber numberWithInt:ep.end]];
 }
-- (FRPathSearch *) createPathSearchAt:(EdgePos)ep withMaxDistance:(NSNumber *)maxdist{
+- (FRPathSearch *) createPathSearchAt:(FREdgePos *)ep withMaxDistance:(NSNumber *)maxdist{
 	NSMutableArray * queue = [NSMutableArray arrayWithCapacity:3];
 	NSMutableDictionary * previous = [NSMutableDictionary dictionary];
 	NSMutableDictionary * distance = [NSMutableDictionary dictionary];
 	
 	
-	//edgePos is a struct with ints. convert to objects for use as keys
+	//edgePos is a object with ints. convert to objects for use as keys
 	NSNumber * a = [NSNumber numberWithInt:ep.start];
 	NSNumber * b = [NSNumber numberWithInt:ep.end];
 	
@@ -182,7 +182,7 @@
 	FRPathSearch * ps = [[FRPathSearch alloc] initWithRoot:ep previous:previous distance:distance map:self];
 	return ps;
 }
-- (EdgePos) randompos {
+- (FREdgePos *) randompos {
 	
 	//choose a random starting node
 	int i=0;
@@ -206,7 +206,7 @@
 	float position = length * (arc4random()%1000000)/1000000.0;
 	
 	//return the EdgePos
-	EdgePos x;
+	FREdgePos * x = [[[FREdgePos alloc] init] autorelease];
 	x.start = [start intValue];
 	x.end = [end intValue];
 	x.position = position;
@@ -221,17 +221,17 @@
 	}
 	return rnode;
 }
-- (EdgePos) flipEdgePos:(EdgePos)ep {
-	int temp = ep.start;
-	ep.start = ep.end;
-	ep.end = temp;
-	ep.position = [self maxPosition:ep] - ep.position;
+- (FREdgePos *) flipEdgePos:(FREdgePos*)ep {
+	FREdgePos * x = [[[FREdgePos alloc] init] autorelease];
+	x.start = ep.end;
+	x.end = ep.start;
+	x.position = [self maxPosition:ep] - ep.position;
 	
-	[self isValidEdgePos:ep];
-	NSLog(@"flip succeeded");
-	return ep;
+	[self isValidEdgePos:x];
+	//NSLog(@"flip succeeded");
+	return x;
 }
-- (BOOL) isValidEdgePos:(EdgePos)ep {
+- (BOOL) isValidEdgePos:(FREdgePos *)ep {
 	NSNumber * start = [NSNumber numberWithInt:ep.start];
 	NSNumber * end = [NSNumber numberWithInt:ep.end];
 	NSDictionary * neighbors = [graph objectForKey:start];
@@ -255,7 +255,7 @@
 	}
 	return YES;
 }
-- (EdgePos) move:(EdgePos)ep forwardRandomly:(float)dx {
+- (FREdgePos *) move:(FREdgePos *)ep forwardRandomly:(float)dx {
 	NSNumber * start = [NSNumber numberWithInt:ep.start];
 	NSNumber * end = [NSNumber numberWithInt:ep.end];	
 	float position = ep.position;
@@ -278,7 +278,7 @@
 		//NSLog(@"moved nodes: start %@, end %@, pos: %f",start,end,position);
 	}
 	
-	EdgePos x;
+	FREdgePos * x = [[[FREdgePos alloc] init] autorelease];
 	x.start = [start intValue];
 	x.end = [end intValue];
 	x.position = position;
@@ -291,7 +291,7 @@
 	[graph release];
 	[super dealloc];
 }
-- (CLLocationCoordinate2D) coordinateFromEdgePosition:(EdgePos)ep {
+- (CLLocationCoordinate2D) coordinateFromEdgePosition:(FREdgePos*)ep {
 	/*
 	 use an interpolation formula to find a position between two points
 	 

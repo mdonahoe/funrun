@@ -48,6 +48,8 @@
 		C906C28412D4EA4000C14388 /* libz.1.2.3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = C906C27A12D4EA4000C14388 /* libz.1.2.3.dylib */; };
 		C906C28612D4EA4000C14388 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C906C27C12D4EA4000C14388 /* AudioToolbox.framework */; };
 		C906C38A12D508AE00C14388 /* FRTrigger.m in Sources */ = {isa = PBXBuildFile; fileRef = C906C38912D508AE00C14388 /* FRTrigger.m */; };
+		C9557AA6130AE5BF004A6F54 /* FRPointSequence.m in Sources */ = {isa = PBXBuildFile; fileRef = C9557AA5130AE5BF004A6F54 /* FRPointSequence.m */; };
+		C9557AAC130AEAA2004A6F54 /* FREdgePos.m in Sources */ = {isa = PBXBuildFile; fileRef = C9557AAB130AEAA2004A6F54 /* FREdgePos.m */; };
 		C9ABFF5013087EEF0031160A /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C9ABFF4F13087EEF0031160A /* MediaPlayer.framework */; };
 		C9C5378812E39A7A005C0BF0 /* FRMap.m in Sources */ = {isa = PBXBuildFile; fileRef = C9C5378712E39A7A005C0BF0 /* FRMap.m */; };
 		C9E494C212F8D7390006AB7B /* FRPathSearch.m in Sources */ = {isa = PBXBuildFile; fileRef = C9E494C112F8D7390006AB7B /* FRPathSearch.m */; };
@@ -128,6 +130,10 @@
 		C906C27C12D4EA4000C14388 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		C906C38812D508AE00C14388 /* FRTrigger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRTrigger.h; sourceTree = "<group>"; };
 		C906C38912D508AE00C14388 /* FRTrigger.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRTrigger.m; sourceTree = "<group>"; };
+		C9557AA4130AE5BF004A6F54 /* FRPointSequence.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRPointSequence.h; sourceTree = "<group>"; };
+		C9557AA5130AE5BF004A6F54 /* FRPointSequence.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRPointSequence.m; sourceTree = "<group>"; };
+		C9557AAA130AEAA2004A6F54 /* FREdgePos.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FREdgePos.h; sourceTree = "<group>"; };
+		C9557AAB130AEAA2004A6F54 /* FREdgePos.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FREdgePos.m; sourceTree = "<group>"; };
 		C9ABFF4F13087EEF0031160A /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = System/Library/Frameworks/MediaPlayer.framework; sourceTree = SDKROOT; };
 		C9C5378612E39A7A005C0BF0 /* FRMap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRMap.h; sourceTree = "<group>"; };
 		C9C5378712E39A7A005C0BF0 /* FRMap.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRMap.m; sourceTree = "<group>"; };
@@ -191,6 +197,8 @@
 				9BD504F31301BCA80092D86A /* FRMission.m */,
 				9B84A0D11309C80300BE94CF /* FRFileLoader.h */,
 				9B84A0D21309C80300BE94CF /* FRFileLoader.m */,
+				C9557AAA130AEAA2004A6F54 /* FREdgePos.h */,
+				C9557AAB130AEAA2004A6F54 /* FREdgePos.m */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -266,6 +274,8 @@
 				9B51D5BE1305F53400978183 /* FRPointFollower.m */,
 				9B51D5BF1305F53400978183 /* FRPointRabbit.h */,
 				9B51D5C01305F53400978183 /* FRPointRabbit.m */,
+				C9557AA4130AE5BF004A6F54 /* FRPointSequence.h */,
+				C9557AA5130AE5BF004A6F54 /* FRPointSequence.m */,
 			);
 			name = Points;
 			path = pointtypes;
@@ -425,6 +435,8 @@
 				9B51D5C21305F53400978183 /* FRPointFollower.m in Sources */,
 				9B51D5C31305F53400978183 /* FRPointRabbit.m in Sources */,
 				9B84A0D31309C80300BE94CF /* FRFileLoader.m in Sources */,
+				C9557AA6130AE5BF004A6F54 /* FRPointSequence.m in Sources */,
+				C9557AAC130AEAA2004A6F54 /* FREdgePos.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

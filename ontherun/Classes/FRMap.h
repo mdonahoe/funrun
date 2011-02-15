@@ -8,12 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import <CoreLocation/CoreLocation.h>
-
-typedef struct _edgepos {
-	int start;
-	int end;
-	float position;
-} EdgePos;
+#import "FREdgePos.h"
 
 @class FRPathSearch;
 
@@ -31,32 +26,32 @@ typedef struct _edgepos {
 - (NSString *) closestRoad:(CLLocation *)p;
 
 //convert from latlon to EdgePos, using the map
-- (EdgePos) edgePosFromPoint:(CLLocation *)p;
+- (FREdgePos *) edgePosFromPoint:(CLLocation *)p;
 
 //convienence getter for edge length
 - (float) edgeLengthFromStart:(NSNumber *)a toFinish:(NSNumber *)b;
 
 //what is the max position for a given edge position
-- (float) maxPosition:(EdgePos)ep;
+- (float) maxPosition:(FREdgePos *)ep;
 
 //does a BFS on the graph starting at the two nodes on the give edge, returns the resulting pathsearch object
-- (FRPathSearch *) createPathSearchAt:(EdgePos)ep withMaxDistance:(NSNumber *)maxdist;
+- (FRPathSearch *) createPathSearchAt:(FREdgePos *)ep withMaxDistance:(NSNumber *)maxdist;
 
 //chooses a random edge, and a random position along that edge
-- (EdgePos) randompos;
+- (FREdgePos *) randompos;
 
 //moves forward, and chooses a new edge if need be.
-- (EdgePos) move:(EdgePos)ep forwardRandomly:(float)dx;
+- (FREdgePos *) move:(FREdgePos *)ep forwardRandomly:(float)dx;
 
 //returns a random node that is connected to the given node
 - (NSNumber *) randomNeighbor:(NSNumber *)node;
 
 //reverses the nodes and adjust the position accordingly
-- (EdgePos) flipEdgePos:(EdgePos)ep;
+- (FREdgePos *) flipEdgePos:(FREdgePos *)ep;
 
 //makes sure the edgepos is correct, raises and error otherwise (why bool?)
-- (BOOL) isValidEdgePos:(EdgePos)ep;
+- (BOOL) isValidEdgePos:(FREdgePos *)ep;
 
 //converts from edgepos back to lat-longs (for drawing purposes)
-- (CLLocationCoordinate2D) coordinateFromEdgePosition:(EdgePos)ep;
+- (CLLocationCoordinate2D) coordinateFromEdgePosition:(FREdgePos *)ep;
 @end

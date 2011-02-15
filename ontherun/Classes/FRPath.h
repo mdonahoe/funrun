@@ -14,6 +14,9 @@
  It would be produced by a FRPathSearch object
  
  
+ An FRPoint subclass could consume a path until the end is reached, or until the point
+ encounters the player and ditches the path.
+ 
  */
 
 

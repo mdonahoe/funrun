@@ -10,6 +10,11 @@
 #import "FRMission.h"
 
 @implementation FRPointRabbit
+- (id) initWithDict:(NSDictionary*)dict {
+	self = [super initWithDict:dict];
+	subtitle = @"FRPointRabbit";
+	return self;
+}
 - (void) updateForMission:(FRMission *)mission {
 	/*
 	 
@@ -38,21 +43,21 @@
 				if (dist<30){
 					mystate = kScared;
 					//say something
-					[mission speakEventually:[NSString stringWithFormat:@"You scared the %@",title]];
+					[mission speakEventually:[NSString stringWithFormat:@"You scared %@",title]];
 				}
 				break;
 			case kScared:
-				pos = [playerview move:pos awayFromRootWithDelta:2.0];
+				self.pos = [playerview move:pos awayFromRootWithDelta:2.0];
 				if (dist>150){
 					mystate = kHappy;
 					//we lost them.
-					[mission speakEventually:[NSString stringWithFormat:@"You cant see the %@",title]];
+					[mission speakEventually:[NSString stringWithFormat:@"You cant see %@",title]];
 				} else if (dist<5) {
 					mystate = kDead;
 					//closing in!
-					[mission speakEventually:[NSString stringWithFormat:@"You caught the %@",title]];
+					[mission speakEventually:[NSString stringWithFormat:@"You caught %@",title]];
 				} else {
-					if (arc4random()%5==0) [mission speakIfYouCan:[NSString stringWithFormat:@"The %@ is %i meters %@ you",
+					if (arc4random()%5==0) [mission speakIfYouCan:[NSString stringWithFormat:@"%@ is %i meters %@ you",
 																	title,
 																	(int)[playerview distanceFromRoot:pos],
 																	[playerview directionFromRoot:pos]]];

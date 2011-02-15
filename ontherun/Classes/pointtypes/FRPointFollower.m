@@ -11,7 +11,12 @@
 #import "FRMission.h"
 
 @implementation FRPointFollower
-
+- (id) initWithDict:(NSDictionary*)dict {
+	self = [super initWithDict:dict];
+	subtitle = @"FRPointFollower";
+	return self;
+}
+	
 - (void) updateForMission:(FRMission *)mission {
 	/*
 	 
@@ -38,7 +43,7 @@
 		float dist = [playerview distanceFromRoot:pos];
 		switch (mystate){
 			case kPatrolling:
-				pos = [themap move:pos forwardRandomly:0.5];
+				self.pos = [themap move:pos forwardRandomly:0.5];
 				if (dist<100){
 					mystate = kFollowing;
 					//say something
@@ -49,7 +54,7 @@
 				}
 				break;
 			case kFollowing:
-				pos = [playerview move:pos towardRootWithDelta:1.0];
+				self.pos = [playerview move:pos towardRootWithDelta:1.0];
 				if (dist>150){
 					mystate = kPatrolling;
 					//we lost them.
@@ -67,7 +72,7 @@
 				}
 				break;
 			case kClosing:
-				pos = [playerview move:pos towardRootWithDelta:1.0];
+				self.pos = [playerview move:pos towardRootWithDelta:1.0];
 				if (dist<10){
 					//this should do something more than say STAB. like reduce health or something
 					[mission speakIfYouCan:@"STAB"];
@@ -85,7 +90,7 @@
 		
 	} else {
 		//point is not in the pathsearch, so we cant do anything.
-		pos = [themap move:pos forwardRandomly:0.5];
+		self.pos = [themap move:pos forwardRandomly:0.5];
 		
 	}
 }

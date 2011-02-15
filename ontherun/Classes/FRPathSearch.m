@@ -11,10 +11,11 @@
 
 @implementation FRPathSearch
 
-- (id) initWithRoot:(EdgePos)r previous:(NSDictionary *)p distance:(NSDictionary *)d map:(FRMap *)m {
+- (id) initWithRoot:(FREdgePos*)r previous:(NSDictionary *)p distance:(NSDictionary *)d map:(FRMap *)m {
 	self = [super init];
 	if (self){
 		root = r;
+		[r retain];
 		
 		distance = [[NSDictionary alloc] initWithDictionary:d copyItems:YES];
 		
@@ -26,7 +27,7 @@
 	
 	return self;
 }
-- (BOOL) containsPoint:(EdgePos)ep {
+- (BOOL) containsPoint:(FREdgePos*)ep {
 	
 	//check to see if the the given position is on the path.
 	//(for example, if we did a BFS with a maxdist, it might not be)
@@ -41,7 +42,7 @@
 	if (dist) return [dist floatValue];
 	return 10000000000.0; // node not in pathsearch, return large number
 }
-- (BOOL) rootIsFacing:(EdgePos)ep {
+- (BOOL) rootIsFacing:(FREdgePos *)ep {
 	/* 
 	 useful for creating text descriptions of where things are relative to the root.
 	 */
@@ -95,7 +96,7 @@
 	
 	return NO;
 }
-- (BOOL) isFacingRoot:(EdgePos)ep {
+- (BOOL) isFacingRoot:(FREdgePos *)ep {
 	/* 
 	 helper function for several methods
 	 
@@ -137,7 +138,7 @@
 	//if start is closer, we are facing root
 	return (dstart < dend);
 }
-- (EdgePos) move:(EdgePos)ep towardRootWithDelta:(float)dx {
+- (FREdgePos *) move:(FREdgePos *)ep towardRootWithDelta:(float)dx {
 	/*
 	 moves a distance dx along an edge pointing toward the root
 	 or to the edge start, whichever is shorter.
@@ -147,37 +148,46 @@
 	 and reaching the root.
 	 */
 	
+	FREdgePos * x;
+	
+	
 	if ([self isFacingRoot:ep]==NO) {
 		//NSLog(@"not facing, flip so we can move forward");
-		ep = [map flipEdgePos:ep];
+		x = [map flipEdgePos:ep];
+	} else {
+		x = [[[FREdgePos alloc] init] autorelease];
+		x.start = ep.start;
+		x.end = ep.end;
+		x.position = ep.position;
 	}
 	
 	NSNumber * start = [NSNumber numberWithInt:ep.start];
-	ep.position = MAX(0,ep.position - dx);
+	x.position = MAX(0,x.position - dx);
 	//if root and ep are on the same edge, it is possible to overshoot.
 	
 	
 	
-	if (ep.position<=0 && [previous objectForKey:start]!=nil) {
+	if (x.position<=0 && [previous objectForKey:start]!=nil) {
 		//NSLog(@"next edge");
 		//move to a closer edge
-		ep.end = ep.start;
-		ep.start = [[previous objectForKey:start] intValue];
-		ep.position = [map maxPosition:ep];
+		x.end = x.start;
+		x.start = [[previous objectForKey:start] intValue];
+		x.position = [map maxPosition:x];
 	}
 	
 	
-	return ep;
+	return x;
 }
-- (EdgePos) move:(EdgePos)ep awayFromRootWithDelta:(float)dx {
+- (FREdgePos *) move:(FREdgePos *)ep awayFromRootWithDelta:(float)dx {
 	
 	//we need to orient the vector, making sure it is point away from
 	// the root.
 	
+	//setting ep might lose reference?? idk
 	if ([self isFacingRoot:ep]) ep = [map flipEdgePos:ep];
 	return [map move:ep forwardRandomly:dx];
 }
-- (float) distanceFromRoot:(EdgePos)ep {
+- (float) distanceFromRoot:(FREdgePos*)ep {
 	
 	//check to see if the point is inside the path
 	//if not, return a large number
@@ -211,7 +221,7 @@
 	
 	return MIN(dstart+position,dend+length-position);
 }
-- (NSString *) directionFromRoot:(EdgePos)ep {
+- (NSString *) directionFromRoot:(FREdgePos*)ep {
 	
 	//should probably make this more complicated, but for now this will work.
 	//this is wrong. isRootFacing should be a different method. fuck.
@@ -224,6 +234,7 @@
 - (void) dealloc {
 	[previous release];
 	[distance release];
+	[root release];
 	[super dealloc];
 }
 - (FRMap *)getMap { return map;}

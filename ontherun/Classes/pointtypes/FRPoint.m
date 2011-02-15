@@ -24,7 +24,7 @@
 		self.title = [dict objectForKey:@"name"];
 		dictme = dict;
 		[dictme retain];
-		self.subtitle = @"just a normal point";
+		self.subtitle = @"FRPoint";
 		mystate = kPointNew;
 	}
 	
