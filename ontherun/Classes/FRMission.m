@@ -98,7 +98,7 @@
 	user = [[FRPoint alloc] initWithDict:[NSDictionary dictionaryWithObject:@"user" forKey:@"name"] onMap:themap];
 	
 	//load the mission(s)
-	NSString * missionstring = [[NSString alloc] initWithData:[NSData dataWithContentsOfFile:[loader pathForFile:@"mission1.js"]] encoding:NSUTF8StringEncoding];
+	NSString * missionstring = [[NSString alloc] initWithData:[NSData dataWithContentsOfFile:[loader pathForFile:@"mission3.js"]] encoding:NSUTF8StringEncoding];
 	NSDictionary * missiondata = [missionstring JSONValue];
 	[missionstring release];
 	
@@ -128,8 +128,11 @@
 	[self ticktock];
 	
 	//use toqbot for gps position updates
-	[m2 loadObjectForKey:@"userpos" toDelegate:self usingSelector:@selector(updatePosition:)];
-	
+	if (0){
+		[m2 loadObjectForKey:@"userpos" toDelegate:self usingSelector:@selector(updatePosition:)];
+	} else {
+		[self startStandardUpdates];
+	}
 	[self speakString:@"Lock"];
 	return self;
 }

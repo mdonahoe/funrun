@@ -12,6 +12,7 @@
 		28AD73600D9D9599002E5188 /* MainWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 28AD735F0D9D9599002E5188 /* MainWindow.xib */; };
 		28C286E10D94DF7D0034E888 /* RootViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 28C286E00D94DF7D0034E888 /* RootViewController.m */; };
 		28F335F11007B36200424DE2 /* RootViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 28F335F01007B36200424DE2 /* RootViewController.xib */; };
+		9B3F805B130B6B8400DBE0FC /* FRPointItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 9B3F805A130B6B8400DBE0FC /* FRPointItem.m */; };
 		9B51D5C11305F53400978183 /* FRPoint.m in Sources */ = {isa = PBXBuildFile; fileRef = 9B51D5BC1305F53400978183 /* FRPoint.m */; };
 		9B51D5C21305F53400978183 /* FRPointFollower.m in Sources */ = {isa = PBXBuildFile; fileRef = 9B51D5BE1305F53400978183 /* FRPointFollower.m */; };
 		9B51D5C31305F53400978183 /* FRPointRabbit.m in Sources */ = {isa = PBXBuildFile; fileRef = 9B51D5C01305F53400978183 /* FRPointRabbit.m */; };
@@ -67,6 +68,8 @@
 		28F335F01007B36200424DE2 /* RootViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = RootViewController.xib; sourceTree = "<group>"; };
 		29B97316FDCFA39411CA2CEA /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		8D1107310486CEB800E47090 /* ontherun-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "ontherun-Info.plist"; plistStructureDefinitionIdentifier = "com.apple.xcode.plist.structure-definition.iphone.info-plist"; sourceTree = "<group>"; };
+		9B3F8059130B6B8400DBE0FC /* FRPointItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRPointItem.h; sourceTree = "<group>"; };
+		9B3F805A130B6B8400DBE0FC /* FRPointItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRPointItem.m; sourceTree = "<group>"; };
 		9B51D5BB1305F53400978183 /* FRPoint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRPoint.h; sourceTree = "<group>"; };
 		9B51D5BC1305F53400978183 /* FRPoint.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRPoint.m; sourceTree = "<group>"; };
 		9B51D5BD1305F53400978183 /* FRPointFollower.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRPointFollower.h; sourceTree = "<group>"; };
@@ -261,6 +264,8 @@
 			children = (
 				9B51D5BB1305F53400978183 /* FRPoint.h */,
 				9B51D5BC1305F53400978183 /* FRPoint.m */,
+				9B3F8059130B6B8400DBE0FC /* FRPointItem.h */,
+				9B3F805A130B6B8400DBE0FC /* FRPointItem.m */,
 				9B51D5BD1305F53400978183 /* FRPointFollower.h */,
 				9B51D5BE1305F53400978183 /* FRPointFollower.m */,
 				9B51D5BF1305F53400978183 /* FRPointRabbit.h */,
@@ -431,6 +436,7 @@
 				9B84A0D31309C80300BE94CF /* FRFileLoader.m in Sources */,
 				C9557AA6130AE5BF004A6F54 /* FRPointSequence.m in Sources */,
 				C9557AAC130AEAA2004A6F54 /* FREdgePos.m in Sources */,
+				9B3F805B130B6B8400DBE0FC /* FRPointItem.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

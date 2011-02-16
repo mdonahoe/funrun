@@ -256,6 +256,15 @@
 	return YES;
 }
 - (FREdgePos *) move:(FREdgePos *)ep forwardRandomly:(float)dx {
+	/*
+	 
+	 Move forward along an edge.
+	 If the start of the edge is reached, it chooses a connected edge at random
+	 
+	 
+	 It does not guarantee that the new position will be dx distance from the old position.
+	 Maybe it should. Traverse multiple edges. Useful for dynamic map generation.
+	 */
 	NSNumber * start = [NSNumber numberWithInt:ep.start];
 	NSNumber * end = [NSNumber numberWithInt:ep.end];	
 	float position = ep.position;

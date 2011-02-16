@@ -27,7 +27,7 @@
 				if (dist<30){
 					mystate = kScared;
 					//say something
-					[mission speakEventually:[NSString stringWithFormat:@"You scared %@",title]];
+					[mission speakEventually:[NSString stringWithFormat:@"You see %@",title]];
 				}
 				break;
 			case kScared:

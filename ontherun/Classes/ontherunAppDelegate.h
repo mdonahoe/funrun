@@ -79,6 +79,7 @@
  1. whenever i am too brain dead to code, write notes.
  
  #map generation
+ 1. generate a persistent map that lives ontop on the individual mission map
  1. create constraint based map descriptions that can be fit to whever the user lives
  1. have the user input their home, running speed, and running goals, and let the generator configure a map for them
  1. Game adjusts the mission based on the startup position of the user, and where they want to end up at the end of the run.
@@ -94,6 +95,11 @@
  1. make sure we arent leaking objects
  1. use more pools to reduce memory footprint during startup?
  
+ 
+ #persistant world
+ 1. missions will happen in realtime whether or not you decide to participate.
+ 1. get a call from someone who needs your help.
+ 1. schedule your run times in advance, so you know you have free time to do the run. test adherance to the schedule.
  
  
  

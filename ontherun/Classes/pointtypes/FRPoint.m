@@ -8,6 +8,7 @@
 
 #import "FRPoint.h"
 #import "FRMission.h"
+#define ARC4RANDOM_MAX      0x100000000
 
 @implementation FRPoint
 @synthesize title,pos,dictme,subtitle;
@@ -34,6 +35,13 @@
 														longitude:[[latlon objectAtIndex:1] floatValue]];
 			self.pos = [map edgePosFromPoint:p];
 			[p release];
+			
+			float randomradius = [[dictme objectForKey:@"randomradius"] floatValue];
+			if (arc4random()%2) self.pos = [map flipEdgePos:self.pos];
+			if (randomradius > 0) {
+				self.pos = [map move:self.pos forwardRandomly:((float)arc4random()/ARC4RANDOM_MAX)*randomradius];
+			}
+			
 		}
 		
 	}
