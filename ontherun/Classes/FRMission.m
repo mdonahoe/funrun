@@ -128,7 +128,7 @@
 	[self ticktock];
 	
 	//use toqbot for gps position updates
-	if (0){
+	if (1){
 		[m2 loadObjectForKey:@"userpos" toDelegate:self usingSelector:@selector(updatePosition:)];
 	} else {
 		[self startStandardUpdates];

@@ -262,28 +262,25 @@
 	 If the start of the edge is reached, it chooses a connected edge at random
 	 
 	 
-	 It does not guarantee that the new position will be dx distance from the old position.
-	 Maybe it should. Traverse multiple edges. Useful for dynamic map generation.
+	 The point will keep moving from edge to edge until dx is consumed.
 	 */
 	NSNumber * start = [NSNumber numberWithInt:ep.start];
 	NSNumber * end = [NSNumber numberWithInt:ep.end];	
 	float position = ep.position;
 	
-	//NSLog(@"start %@, end %@, pos %f",start,end,position);
+	position = position - dx;
 	
-	position = MAX(0,position - dx);
-	
-	if (position<=0) {
+	while (position<=0) {
 		int old = [end intValue];
 		int i = 0;
 		end = start;
 		
-		//avoid going backward
+		//avoid going backward, but turn around if you have to.
 		do {
 			start = [self randomNeighbor:end];
 		} while ([start intValue]==old && i++ < 10);
 		
-		position = [self edgeLengthFromStart:start toFinish:end];
+		position = [self edgeLengthFromStart:start toFinish:end] + position;
 		//NSLog(@"moved nodes: start %@, end %@, pos: %f",start,end,position);
 	}
 	
