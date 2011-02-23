@@ -311,7 +311,7 @@
 	var lon3 = lon1 + Math.atan2(By, Math.cos(lat1) + Bx);
 	 
 	 
-	 but currently im doing simple linear version, which will probably be fine for now, since the distances are closee
+	but currently im doing simple linear version, which will probably be fine for now, since the distances are closee
 	 and we arent crossing the date line.
 	 
 	 */
