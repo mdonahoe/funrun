@@ -53,12 +53,14 @@
 	//
 	mode = (mode+1)%6;
 	NSArray *modes = [NSArray arrayWithObjects:@"STOP", @"WALK", @"JOG", @"RUN", @"JOG", @"WALK", nil];
-	[voicebot startSpeakingString:[modes objectAtIndex:mode]];
-	printf("S:%s,%f\n",[[modes objectAtIndex:mode] UTF8String],[[NSDate date] timeIntervalSinceDate:startDate]);
+	NSString * x = [modes objectAtIndex:mode];
+	NSString *y  = [NSString stringWithFormat:@"%@ %@ %@ %@",x,x,x,x];
+	[voicebot startSpeakingString:y];
+	printf("S:%s,%f\n",[x UTF8String],[[NSDate date] timeIntervalSinceDate:startDate]);
 }
 - (void) speechSynthesizer:(NSObject *) synth didFinishSpeaking:(BOOL)didFinish withError:(NSError *) error { 
 	printf("D:%f\n",[[NSDate date] timeIntervalSinceDate:startDate]);
-	[self performSelector:@selector(nextMode) withObject:nil afterDelay:15.0];
+	[self performSelector:@selector(nextMode) withObject:nil afterDelay:10.0];
 }
 
 - (void)applicationWillResignActive:(UIApplication *)application {
