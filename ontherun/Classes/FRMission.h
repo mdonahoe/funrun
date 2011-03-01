@@ -29,6 +29,7 @@
 	int ticks;
 	MPMusicPlayerController * musicPlayer;
 	NSMutableArray * logarray;
+	float last_volume;
 	
 }
 

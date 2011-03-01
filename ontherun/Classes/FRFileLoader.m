@@ -16,6 +16,22 @@
 	baseurl = url;
 	return self;
 }
+- (void) deleteCacheForFile:(NSString *) filename {
+	if (filename==nil) return;
+	
+	// Point to Document directory
+	NSString * documentsDirectory = [NSHomeDirectory() 
+									 stringByAppendingPathComponent:@"Documents"];
+	// File we want to create in the documents directory 
+	NSString *filePath = [documentsDirectory 
+						  stringByAppendingPathComponent:filename];
+	
+	
+	//check if it actually exists
+	if ([[NSFileManager defaultManager] fileExistsAtPath:filePath]==NO){
+		//delete it
+	}
+}
 - (NSString *) pathForFile:(NSString *) filename {
 	if (filename==nil) return nil;
 	

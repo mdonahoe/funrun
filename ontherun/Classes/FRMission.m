@@ -98,7 +98,7 @@
 	user = [[FRPoint alloc] initWithDict:[NSDictionary dictionaryWithObject:@"user" forKey:@"name"] onMap:themap];
 	
 	//load the mission(s)
-	NSString * missionstring = [[NSString alloc] initWithData:[NSData dataWithContentsOfFile:[loader pathForFile:@"mission3.js"]] encoding:NSUTF8StringEncoding];
+	NSString * missionstring = [[NSString alloc] initWithData:[NSData dataWithContentsOfFile:[loader pathForFile:@"mission6.js"]] encoding:NSUTF8StringEncoding];
 	NSDictionary * missiondata = [missionstring JSONValue];
 	[missionstring release];
 	
@@ -112,6 +112,7 @@
 		} else {
 			pt = [[FRPoint alloc] initWithDict:dict onMap:themap];
 		}
+		//NSLog(@"point %i = %@",[temp count],pt);
 		[temp addObject:pt];
 	}
 	points = [[NSArray alloc] initWithArray:temp];
@@ -128,12 +129,17 @@
 	[self ticktock];
 	
 	//use toqbot for gps position updates
-	if (1){
+	if (0){
 		[m2 loadObjectForKey:@"userpos" toDelegate:self usingSelector:@selector(updatePosition:)];
 	} else {
 		[self startStandardUpdates];
 	}
 	[self speakString:@"Lock"];
+	NSString * name;
+	id avsc = [objc_getClass("AVSystemController") sharedAVSystemController];
+	[avsc getActiveCategoryVolume:&last_volume andName:&name];
+	
+	
 	return self;
 }
 
@@ -195,9 +201,6 @@
 	}
 	//[self performSelector:@selector(speakStatus) withObject:nil afterDelay:1.0];
 }
-- (void) speakStatus {
-	if ([voicebot isSpeaking]) return;
-}
 - (void)speakIfYouCan:(NSString*)text {
 	if ([voicebot isSpeaking]) return;
 	[self speakString:text];
@@ -215,7 +218,16 @@
 - (FRPathSearch *) getPlayerView { return latestsearch;}
 
 - (void) ticktock {
+	//quick hack for detecting remote control presses
+	// do this instead http://www.iphonedevsdk.com/forum/iphone-sdk-development/44433-there-way-respond-clicks-headphone-buttons.html
+	id avsc = [objc_getClass("AVSystemController") sharedAVSystemController];
+	float thevolume;
+	NSString * name;
+	[avsc getActiveCategoryVolume:&thevolume andName:&name];
+	if (thevolume!=last_volume) [self speakEventually:@"PUNCH"];
+	last_volume = thevolume;
 	
+	//NSLog(@"volume %f for %@",thevolume,name);
 	if (ticks++>10){
 		ticks = 0;
 		//NSLog(@"play the fucking sound");
@@ -239,7 +251,7 @@
 				[pt updateForMissionOutOfSight:self];
 			}
 			 */
-			
+			//NSLog(@"updating:%@",pt.title);
 			[pt updateForMission:self];
 			
 			
@@ -262,7 +274,7 @@
 		
 	}
 	
-	[self performSelector:@selector(ticktock) withObject:nil afterDelay:0.5];
+	[self performSelector:@selector(ticktock) withObject:nil afterDelay:1.0];
 };
 - (void) updatePosition:(id)obj {
 	
