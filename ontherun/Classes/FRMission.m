@@ -98,7 +98,7 @@
 	user = [[FRPoint alloc] initWithDict:[NSDictionary dictionaryWithObject:@"user" forKey:@"name"] onMap:themap];
 	
 	//load the mission(s)
-	NSString * missionstring = [[NSString alloc] initWithData:[NSData dataWithContentsOfFile:[loader pathForFile:@"mission6.js"]] encoding:NSUTF8StringEncoding];
+	NSString * missionstring = [[NSString alloc] initWithData:[NSData dataWithContentsOfFile:[loader pathForFile:@"mission7.js"]] encoding:NSUTF8StringEncoding];
 	NSDictionary * missiondata = [missionstring JSONValue];
 	[missionstring release];
 	
@@ -112,7 +112,6 @@
 		} else {
 			pt = [[FRPoint alloc] initWithDict:dict onMap:themap];
 		}
-		//NSLog(@"point %i = %@",[temp count],pt);
 		[temp addObject:pt];
 	}
 	points = [[NSArray alloc] initWithArray:temp];
@@ -139,6 +138,8 @@
 	id avsc = [objc_getClass("AVSystemController") sharedAVSystemController];
 	[avsc getActiveCategoryVolume:&last_volume andName:&name];
 	
+	current_road = @"start";
+	[current_road retain];
 	
 	return self;
 }
@@ -319,6 +320,14 @@
 	NSLog(@"newUserLocation: %@",location);
 	FREdgePos * ep = [themap edgePosFromPoint:location];
 	if (arc4random()%10==0) [self speakIfYouCan:@"click"];
+	NSString * roadname = [themap roadNameFromEdgePos:ep];
+	if ([roadname isEqualToString:current_road]==NO && roadname){
+		[roadname retain];
+		[current_road release];
+		current_road = roadname;
+		[self speakEventually:current_road];
+	}
+	
 	if (latestsearch) {
 		//we already have a position
 		//ensure that the direction of our new point is facing away from the old one.

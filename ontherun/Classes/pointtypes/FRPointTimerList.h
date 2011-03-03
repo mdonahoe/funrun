@@ -22,6 +22,10 @@
  
  provide a list of places, messages and times
  
+ 
+ might be good to have a local PathSearch object so that we can direct the player
+ to this location
+ 
  */
 
 

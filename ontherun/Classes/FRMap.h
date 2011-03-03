@@ -34,6 +34,8 @@
 //what is the max position for a given edge position
 - (float) maxPosition:(FREdgePos *)ep;
 
+- (NSString *) roadNameFromEdgePos:(FREdgePos *)ep;
+
 //does a BFS on the graph starting at the two nodes on the give edge, returns the resulting pathsearch object
 - (FRPathSearch *) createPathSearchAt:(FREdgePos *)ep withMaxDistance:(NSNumber *)maxdist;
 

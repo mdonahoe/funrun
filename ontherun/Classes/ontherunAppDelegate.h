@@ -47,7 +47,6 @@
  1. deepsleep timer audio interferes with the speechsynth system
  1. get some audio recording samples from Charlie.
  
- 
  #music
  1. put dramatic theme songs on iPhone
  1. the user can select songs that they want to play during the game.
@@ -57,7 +56,6 @@
  1. gps that works while the screen is off.
  1. fix the deep sleep module (i think the gps will shutoff after awhile)
  1. test on iPhone 3GS
-
  
  #offline play mode.
  1. web or iphone based?
@@ -90,7 +88,7 @@
  1. menu screen
  1. level select
  1. have something besides the rootviewcontroller (tableview) to start.
- 1. 
+ 
  
  #code smell
  1. learn about how #import works in objective-c.
@@ -119,4 +117,8 @@
  4. test
  5. port to obj-c
  6. real test
+ 
+ 
+ 
+ 
 */

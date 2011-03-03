@@ -30,6 +30,7 @@
 	MPMusicPlayerController * musicPlayer;
 	NSMutableArray * logarray;
 	float last_volume;
+	NSString * current_road;
 	
 }
 

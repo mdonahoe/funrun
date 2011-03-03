@@ -51,6 +51,12 @@
 	timer--;
 	if (timer==0){
 		[mission speakEventually:@"time's up"];
+		if (playerview && [playerview containsPoint:self.pos]) {
+			float dist = [playerview distanceFromRoot:self.pos];
+			[mission speakEventually:[NSString stringWithFormat:@"the checkpoint was %i meters %@ you",(int)dist,[playerview directionFromRoot:self.pos]]];
+		} else {
+			[mission speakEventually:@"you were not close to the checkpoint"];
+		}
 		return;
 	}
 	
@@ -73,7 +79,7 @@
 				timer = [[times objectAtIndex:mystate] intValue];
 			}
 		} else {
-			if (arc4random()%10==0) [mission speakIfYouCan:[NSString stringWithFormat:@"you are %i meters from the checkpoint",(int)dist]];
+			if (arc4random()%10==0) [mission speakIfYouCan:[NSString stringWithFormat:@"The checkpoint is %i meters %@ you",(int)dist,[playerview directionRoot:self.pos]]];
 		}
 	}
 }

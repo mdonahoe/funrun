@@ -138,6 +138,9 @@
 - (float) maxPosition:(FREdgePos *)ep {
 	return [self edgeLengthFromStart:[NSNumber numberWithInt:ep.start] toFinish:[NSNumber numberWithInt:ep.end]];
 }
+- (NSString *) roadNameFromEdgePos:(FREdgePos *)ep{
+	return [[[graph objectForKey:[NSNumber numberWithInt:ep.start]] objectForKey:[NSNumber numberWithInt:ep.end]] objectForKey:@"name"];
+}
 - (FRPathSearch *) createPathSearchAt:(FREdgePos *)ep withMaxDistance:(NSNumber *)maxdist{
 	NSMutableArray * queue = [NSMutableArray arrayWithCapacity:3];
 	NSMutableDictionary * previous = [NSMutableDictionary dictionary];
