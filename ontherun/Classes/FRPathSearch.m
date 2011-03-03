@@ -21,6 +21,11 @@
 		
 		previous = [[NSDictionary alloc] initWithDictionary:p copyItems:YES];
 		
+		
+		for (NSNumber * node in distance){
+			if ([[previous objectForKey:node] intValue]==[node intValue]) NSLog(@"node is dupe %i",[node intValue]);
+		}
+		
 		map = m;
 		//[m retain]; maybe?
 	}
@@ -161,7 +166,7 @@
 		x.position = ep.position;
 	}
 	
-	NSNumber * start = [NSNumber numberWithInt:ep.start];
+	NSNumber * start = [NSNumber numberWithInt:x.start];
 	x.position = MAX(0,x.position - dx);
 	//if root and ep are on the same edge, it is possible to overshoot.
 	

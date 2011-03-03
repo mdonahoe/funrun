@@ -11,5 +11,7 @@
 
 @implementation FREdgePos
 @synthesize start,end,position;
-
+- (NSString *) description {
+	return [NSString stringWithFormat:@"ep(start:%i,end:%i,position:%f)",start,end,position];
+}
 @end

@@ -79,7 +79,7 @@
 				timer = [[times objectAtIndex:mystate] intValue];
 			}
 		} else {
-			if (arc4random()%10==0) [mission speakIfYouCan:[NSString stringWithFormat:@"The checkpoint is %i meters %@ you",(int)dist,[playerview directionRoot:self.pos]]];
+			if (arc4random()%10==0) [mission speakIfYouCan:[NSString stringWithFormat:@"The checkpoint is %i meters %@ you",(int)dist,[playerview directionFromRoot:self.pos]]];
 		}
 	}
 }

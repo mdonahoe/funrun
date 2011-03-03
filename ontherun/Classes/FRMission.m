@@ -98,7 +98,7 @@
 	user = [[FRPoint alloc] initWithDict:[NSDictionary dictionaryWithObject:@"user" forKey:@"name"] onMap:themap];
 	
 	//load the mission(s)
-	NSString * missionstring = [[NSString alloc] initWithData:[NSData dataWithContentsOfFile:[loader pathForFile:@"mission7.js"]] encoding:NSUTF8StringEncoding];
+	NSString * missionstring = [[NSString alloc] initWithData:[NSData dataWithContentsOfFile:[loader pathForFile:@"mission6.js"]] encoding:NSUTF8StringEncoding];
 	NSDictionary * missiondata = [missionstring JSONValue];
 	[missionstring release];
 	

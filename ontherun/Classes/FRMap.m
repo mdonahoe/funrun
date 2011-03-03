@@ -226,6 +226,7 @@
 }
 - (FREdgePos *) flipEdgePos:(FREdgePos*)ep {
 	FREdgePos * x = [[[FREdgePos alloc] init] autorelease];
+	NSLog(@"flipping edge %@",ep);
 	x.start = ep.end;
 	x.end = ep.start;
 	x.position = [self maxPosition:ep] - ep.position;
@@ -239,12 +240,12 @@
 	NSNumber * end = [NSNumber numberWithInt:ep.end];
 	NSDictionary * neighbors = [graph objectForKey:start];
 	if (neighbors==nil) {
-		[NSException raise:@"Invalid start value" format:@"start of %i is invalid", ep.start];
+		[NSException raise:@"Invalid start value" format:@"start of %i is has no neighbors. %@", ep.start, ep];
 		return NO;
 	}
 	NSDictionary * data = [neighbors objectForKey:end];
 	if (data==nil) {
-		[NSException raise:@"Invalid end value" format:@"end of %i is invalid", ep.end];
+		[NSException raise:@"Invalid end value" format:@"end of %i is not a neighbor of start. %@", ep.end, ep];
 		return NO;
 	}
 	NSNumber * length = [data objectForKey:@"length"];
@@ -253,7 +254,7 @@
 		return NO;
 	}
 	if ([length floatValue] < ep.position) {
-		[NSException raise:@"Position is longer than edge" format:@"position %f > %f length", ep.position, [length floatValue]];
+		[NSException raise:@"Position is longer than edge" format:@"position %f > %f length. %@", ep.position, [length floatValue], ep];
 		return NO;
 	}
 	return YES;
