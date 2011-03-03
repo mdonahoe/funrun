@@ -20,7 +20,7 @@
 - (void) updateForMission:(FRMission *)mission {
 	/*
 	 
-	 called every half second to update the position of the point.
+	 called every second to update the position of the point.
 	 
 	 latestsearch is the latestest known position of the user in the form
 	 of a PathSearch object, which provides methods for moving and measuring distance

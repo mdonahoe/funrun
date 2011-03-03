@@ -32,7 +32,7 @@
 				if (dist>100){
 					mystate = kOutOfSight;
 					//we lost them.
-				} else if (dist<10) {
+				} else if (dist<30) {
 					mystate = kPickedUp;
 					//closing in!
 					[mission speakEventually:[NSString stringWithFormat:@"%You picked up %@",title]];
