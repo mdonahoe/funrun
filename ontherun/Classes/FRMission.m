@@ -16,8 +16,8 @@
 
 
 @synthesize points;
-- (id) init {
-	
+- (id) initWithMissionName:(NSString*)missionname {
+	NSLog(@"mission name = %@",missionname);
 	self = [super init];
 	if (!self) return nil;
 	
@@ -46,7 +46,7 @@
 	NSString *soundFilePath = [[NSBundle mainBundle] pathForResource:@"lion1"
 															  ofType:@"wav"];
 	NSURL *fileURL = [[NSURL alloc] initFileURLWithPath:soundFilePath];
-	NSError * audioerror = nil;
+	NSError *audioerror = nil;
 	// Set up audio player with sound file
 	audioPlayer = [[AVAudioPlayer alloc] initWithContentsOfURL:fileURL error:&audioerror];
 	[audioPlayer prepareToPlay];
@@ -98,7 +98,7 @@
 	user = [[FRPoint alloc] initWithDict:[NSDictionary dictionaryWithObject:@"user" forKey:@"name"] onMap:themap];
 	
 	//load the mission(s)
-	NSString * missionstring = [[NSString alloc] initWithData:[NSData dataWithContentsOfFile:[loader pathForFile:@"mission6.js"]] encoding:NSUTF8StringEncoding];
+	NSString * missionstring = [[NSString alloc] initWithData:[NSData dataWithContentsOfFile:[loader pathForFile:missionname]] encoding:NSUTF8StringEncoding];
 	NSDictionary * missiondata = [missionstring JSONValue];
 	[missionstring release];
 	

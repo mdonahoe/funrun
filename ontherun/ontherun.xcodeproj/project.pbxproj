@@ -18,6 +18,8 @@
 		9B51D5C31305F53400978183 /* FRPointRabbit.m in Sources */ = {isa = PBXBuildFile; fileRef = 9B51D5C01305F53400978183 /* FRPointRabbit.m */; };
 		9B84A0D31309C80300BE94CF /* FRFileLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 9B84A0D21309C80300BE94CF /* FRFileLoader.m */; };
 		9B852C5E131D5CBB00E18779 /* FRPointTimerList.m in Sources */ = {isa = PBXBuildFile; fileRef = 9B852C5D131D5CBB00E18779 /* FRPointTimerList.m */; };
+		9BBD3296132E81360082A0C7 /* StartView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9BBD3295132E81360082A0C7 /* StartView.xib */; };
+		9BBD329A132E81CC0082A0C7 /* StartViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9BBD3299132E81CC0082A0C7 /* StartViewController.m */; };
 		9BC137431304A340006492A0 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9BC137421304A340006492A0 /* AVFoundation.framework */; };
 		9BC137471304A8C9006492A0 /* lion1.wav in Resources */ = {isa = PBXBuildFile; fileRef = 9BC137461304A8C9006492A0 /* lion1.wav */; };
 		9BC1374D1304A99E006492A0 /* panther3.wav in Resources */ = {isa = PBXBuildFile; fileRef = 9BC1374C1304A99E006492A0 /* panther3.wav */; };
@@ -81,6 +83,9 @@
 		9B84A0D21309C80300BE94CF /* FRFileLoader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRFileLoader.m; sourceTree = "<group>"; };
 		9B852C5C131D5CBB00E18779 /* FRPointTimerList.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRPointTimerList.h; sourceTree = "<group>"; };
 		9B852C5D131D5CBB00E18779 /* FRPointTimerList.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRPointTimerList.m; sourceTree = "<group>"; };
+		9BBD3295132E81360082A0C7 /* StartView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = StartView.xib; sourceTree = "<group>"; };
+		9BBD3298132E81CC0082A0C7 /* StartViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StartViewController.h; sourceTree = "<group>"; };
+		9BBD3299132E81CC0082A0C7 /* StartViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StartViewController.m; sourceTree = "<group>"; };
 		9BC137421304A340006492A0 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		9BC137461304A8C9006492A0 /* lion1.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = lion1.wav; path = ../funrun/sounds/lion1.wav; sourceTree = SOURCE_ROOT; };
 		9BC1374C1304A99E006492A0 /* panther3.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = panther3.wav; path = ../funrun/sounds/panther3.wav; sourceTree = SOURCE_ROOT; };
@@ -196,6 +201,8 @@
 				9B84A0D21309C80300BE94CF /* FRFileLoader.m */,
 				C9557AAA130AEAA2004A6F54 /* FREdgePos.h */,
 				C9557AAB130AEAA2004A6F54 /* FREdgePos.m */,
+				9BBD3298132E81CC0082A0C7 /* StartViewController.h */,
+				9BBD3299132E81CC0082A0C7 /* StartViewController.m */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -236,6 +243,7 @@
 				9BC137461304A8C9006492A0 /* lion1.wav */,
 				9BD50336130075020092D86A /* FRMapViewController.xib */,
 				28F335F01007B36200424DE2 /* RootViewController.xib */,
+				9BBD3295132E81360082A0C7 /* StartView.xib */,
 				28AD735F0D9D9599002E5188 /* MainWindow.xib */,
 				8D1107310486CEB800E47090 /* ontherun-Info.plist */,
 			);
@@ -402,6 +410,7 @@
 				9BD50337130075020092D86A /* FRMapViewController.xib in Resources */,
 				9BC137471304A8C9006492A0 /* lion1.wav in Resources */,
 				9BC1374D1304A99E006492A0 /* panther3.wav in Resources */,
+				9BBD3296132E81360082A0C7 /* StartView.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -443,6 +452,7 @@
 				C9557AAC130AEAA2004A6F54 /* FREdgePos.m in Sources */,
 				9B3F805B130B6B8400DBE0FC /* FRPointItem.m in Sources */,
 				9B852C5E131D5CBB00E18779 /* FRPointTimerList.m in Sources */,
+				9BBD329A132E81CC0082A0C7 /* StartViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

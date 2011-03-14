@@ -35,7 +35,7 @@
 }
 
 @property(nonatomic,retain) NSArray * points;
-
+- (id) initWithMissionName:(NSString*)missionname;
 - (void) updatePosition:(id)obj;
 - (void) ticktock;
 - (void) startStandardUpdates;

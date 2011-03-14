@@ -7,7 +7,7 @@
 //
 
 #import "ontherunAppDelegate.h"
-#import "RootViewController.h"
+#import "StartViewController.h"
 
 
 @implementation ontherunAppDelegate
@@ -19,28 +19,36 @@
 #pragma mark Application lifecycle
 
 
-
+- (BOOL)application:(UIApplication *)application handleOpenURL:(NSURL *)url 
+{
+	/*themission = [[FRMission alloc] initWithMissionName:[url host]];
+	
+	FRMapViewController * detailViewController = [[FRMapViewController alloc] initWithNibName:@"FRMapViewController" bundle:nil];
+	[navigationController pushViewController:detailViewController animated:YES];
+	[detailViewController.mapView addAnnotations:themission.points];
+	[detailViewController release];	
+	*/
+	[self.navigationController.topViewController setMission:[url host]];
+	return YES;
+	
+}
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {    
     
     // Override point for customization after application launch.
     
 	//log to file
 #if 0
-    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-    NSString *documentsDirectory = [paths objectAtIndex:0];
-    NSString *logPath = [documentsDirectory stringByAppendingPathComponent:@"console.log"];
+    NSArray * paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString * documentsDirectory = [paths objectAtIndex:0];
+    NSString * logPath = [documentsDirectory stringByAppendingPathComponent:@"console.log"];
     freopen([logPath cStringUsingEncoding:NSASCIIStringEncoding],"a+",stderr);
 #endif
-	
-	
-    //create the game logic object here. (missions)
-	
 	
 	// Add the navigation controller's view to the window and display.
     [window addSubview:navigationController.view];
     [window makeKeyAndVisible];
-
-    return YES;
+	
+	return YES;
 }
 
 
