@@ -53,6 +53,8 @@
 		C906C38A12D508AE00C14388 /* FRTrigger.m in Sources */ = {isa = PBXBuildFile; fileRef = C906C38912D508AE00C14388 /* FRTrigger.m */; };
 		C9557AA6130AE5BF004A6F54 /* FRPointSequence.m in Sources */ = {isa = PBXBuildFile; fileRef = C9557AA5130AE5BF004A6F54 /* FRPointSequence.m */; };
 		C9557AAC130AEAA2004A6F54 /* FREdgePos.m in Sources */ = {isa = PBXBuildFile; fileRef = C9557AAB130AEAA2004A6F54 /* FREdgePos.m */; };
+		C97CA187132EF0E600E71AC4 /* FRMissionTemplate.m in Sources */ = {isa = PBXBuildFile; fileRef = C97CA186132EF0E600E71AC4 /* FRMissionTemplate.m */; };
+		C97CA18C132EF60700E71AC4 /* FRMissionOne.m in Sources */ = {isa = PBXBuildFile; fileRef = C97CA18B132EF60700E71AC4 /* FRMissionOne.m */; };
 		C9ABFF5013087EEF0031160A /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C9ABFF4F13087EEF0031160A /* MediaPlayer.framework */; };
 		C9C5378812E39A7A005C0BF0 /* FRMap.m in Sources */ = {isa = PBXBuildFile; fileRef = C9C5378712E39A7A005C0BF0 /* FRMap.m */; };
 		C9E494C212F8D7390006AB7B /* FRPathSearch.m in Sources */ = {isa = PBXBuildFile; fileRef = C9E494C112F8D7390006AB7B /* FRPathSearch.m */; };
@@ -142,6 +144,10 @@
 		C9557AA5130AE5BF004A6F54 /* FRPointSequence.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRPointSequence.m; sourceTree = "<group>"; };
 		C9557AAA130AEAA2004A6F54 /* FREdgePos.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FREdgePos.h; sourceTree = "<group>"; };
 		C9557AAB130AEAA2004A6F54 /* FREdgePos.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FREdgePos.m; sourceTree = "<group>"; };
+		C97CA185132EF0E600E71AC4 /* FRMissionTemplate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRMissionTemplate.h; sourceTree = "<group>"; };
+		C97CA186132EF0E600E71AC4 /* FRMissionTemplate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRMissionTemplate.m; sourceTree = "<group>"; };
+		C97CA18A132EF60700E71AC4 /* FRMissionOne.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRMissionOne.h; sourceTree = "<group>"; };
+		C97CA18B132EF60700E71AC4 /* FRMissionOne.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRMissionOne.m; sourceTree = "<group>"; };
 		C9ABFF4F13087EEF0031160A /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = System/Library/Frameworks/MediaPlayer.framework; sourceTree = SDKROOT; };
 		C9C5378612E39A7A005C0BF0 /* FRMap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRMap.h; sourceTree = "<group>"; };
 		C9C5378712E39A7A005C0BF0 /* FRMap.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRMap.m; sourceTree = "<group>"; };
@@ -180,6 +186,8 @@
 		080E96DDFE201D6D7F000001 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				C97CA18A132EF60700E71AC4 /* FRMissionOne.h */,
+				C97CA18B132EF60700E71AC4 /* FRMissionOne.m */,
 				9B51D5BA1305F53400978183 /* Points */,
 				9BD50323130070320092D86A /* FRMapViewController.h */,
 				9BD50324130070320092D86A /* FRMapViewController.m */,
@@ -203,6 +211,8 @@
 				C9557AAB130AEAA2004A6F54 /* FREdgePos.m */,
 				9BBD3298132E81CC0082A0C7 /* StartViewController.h */,
 				9BBD3299132E81CC0082A0C7 /* StartViewController.m */,
+				C97CA185132EF0E600E71AC4 /* FRMissionTemplate.h */,
+				C97CA186132EF0E600E71AC4 /* FRMissionTemplate.m */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -453,6 +463,8 @@
 				9B3F805B130B6B8400DBE0FC /* FRPointItem.m in Sources */,
 				9B852C5E131D5CBB00E18779 /* FRPointTimerList.m in Sources */,
 				9BBD329A132E81CC0082A0C7 /* StartViewController.m in Sources */,
+				C97CA187132EF0E600E71AC4 /* FRMissionTemplate.m in Sources */,
+				C97CA18C132EF60700E71AC4 /* FRMissionOne.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

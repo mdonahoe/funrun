@@ -13,10 +13,6 @@
 @implementation FRPoint
 @synthesize title,pos,dictme,subtitle;
 
-
-
-
-
 - (id) initWithDict:(NSDictionary*)dict onMap:(FRMap*)map {
 	self = [super init];
 	
@@ -83,8 +79,6 @@
 		mystate = kPointSeen;
 		[mission speakEventually:title];
 	}
-	
-	
 	
 }
 @end
