@@ -186,19 +186,17 @@
 		080E96DDFE201D6D7F000001 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				C906C13E12D4EA2F00C14388 /* json */,
+				C906C13B12D4EA2F00C14388 /* sound */,
+				9B51D5BA1305F53400978183 /* Points */,
+				9B51D5E71305F81700978183 /* Unused */,
+				C906C14A12D4EA2F00C14388 /* request */,
+				C9FC234712F9CCC700892CF6 /* toqbot.h */,
+				C9FC234812F9CCC700892CF6 /* toqbot.m */,
 				C97CA18A132EF60700E71AC4 /* FRMissionOne.h */,
 				C97CA18B132EF60700E71AC4 /* FRMissionOne.m */,
-				9B51D5BA1305F53400978183 /* Points */,
-				9BD50323130070320092D86A /* FRMapViewController.h */,
-				9BD50324130070320092D86A /* FRMapViewController.m */,
-				C906C13B12D4EA2F00C14388 /* sound */,
-				C906C13E12D4EA2F00C14388 /* json */,
-				C906C14A12D4EA2F00C14388 /* request */,
-				28C286DF0D94DF7D0034E888 /* RootViewController.h */,
-				28C286E00D94DF7D0034E888 /* RootViewController.m */,
 				1D3623240D0F684500981E51 /* ontherunAppDelegate.h */,
 				1D3623250D0F684500981E51 /* ontherunAppDelegate.m */,
-				9B51D5E71305F81700978183 /* Unused */,
 				C9C5378612E39A7A005C0BF0 /* FRMap.h */,
 				C9C5378712E39A7A005C0BF0 /* FRMap.m */,
 				C9E494C012F8D7390006AB7B /* FRPathSearch.h */,
@@ -303,12 +301,14 @@
 		9B51D5E71305F81700978183 /* Unused */ = {
 			isa = PBXGroup;
 			children = (
+				9BD50323130070320092D86A /* FRMapViewController.h */,
+				9BD50324130070320092D86A /* FRMapViewController.m */,
+				28C286DF0D94DF7D0034E888 /* RootViewController.h */,
+				28C286E00D94DF7D0034E888 /* RootViewController.m */,
 				C9E494C312F8D9550006AB7B /* FRPath.h */,
 				C9E494C412F8D9550006AB7B /* FRPath.m */,
 				C906C38812D508AE00C14388 /* FRTrigger.h */,
 				C906C38912D508AE00C14388 /* FRTrigger.m */,
-				C9FC234712F9CCC700892CF6 /* toqbot.h */,
-				C9FC234812F9CCC700892CF6 /* toqbot.m */,
 			);
 			name = Unused;
 			sourceTree = "<group>";

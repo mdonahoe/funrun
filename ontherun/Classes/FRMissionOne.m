@@ -114,17 +114,26 @@
 	
 	FREdgePos * newpos;
 	float dist;
-	NSTimeInterval timeleft;
+	NSTimeInterval timeleft = [drop_time timeIntervalSinceNow];
+	NSLog(@"timeleft = %f",timeleft);
+	
 	NSString * direction;
+	
+	
+	
 	//talk about how close the van is
-	if (current_objective  < 2 && current_announcement < [countdown count]) {
-		timeleft = [drop_time timeIntervalSinceNow];
-		NSLog(@"timeleft = %f",timeleft);
+	if (timeleft > 0 && current_announcement < [countdown count]) {
 		NSArray * count = [countdown objectAtIndex:current_announcement];
 		if (timeleft < [[count objectAtIndex:0] floatValue]/5.0){
 			current_announcement++;
 			[self speak:[count objectAtIndex:1]];
 		}
+	}
+	
+	//the target moves slowly and randomly until he sees you
+	newpos = nil;
+	if (current_objective < 3 && timeleft < 0){
+		newpos = [themap move:target.pos forwardRandomly:target_speed];
 	}
 	
 	NSLog(@"objective = %i",current_objective);
@@ -158,8 +167,6 @@
 			break;
 		case 2: //follow the target
 		
-			newpos = [themap move:target.pos forwardRandomly:target_speed];
-			//NSString * textualchange = [themap textFromEdgePos:target.pos toEdgePos:newpos];
 			direction = [themap directionFromEdgePos:target.pos toEdgePos:newpos];
 			NSLog(@"direction = %@",direction);
 			if ([direction isEqualToString:@"left"] || [direction isEqualToString:@"right"]){
@@ -167,11 +174,11 @@
 				[self speak:textualchange];
 			}
 			
-			target.pos = newpos;
 			
-			dist = [latestsearch distanceFromRoot:target.pos];
+			
+			dist = [latestsearch distanceFromRoot:newpos];
 			NSLog(@"timer = %f",[spotted_time timeIntervalSinceNow]);
-			if (dist < 30 || [spotted_time timeIntervalSinceNow] < 0) {
+			if (dist < 30 && [spotted_time timeIntervalSinceNow] < 0) {
 				current_objective++;
 				[self speak:@"He sees you!"];
 			}
@@ -181,7 +188,7 @@
 			
 			break;
 		case 3: //chase the target down
-			newpos = [themap move:target.pos forwardRandomly:10*target_speed];
+			newpos = [latestsearch move:target.pos awayFromRootWithDelta:10*target_speed];
 			direction = [themap directionFromEdgePos:target.pos toEdgePos:newpos];
 			NSLog(@"direction = %@",direction);
 			
@@ -189,9 +196,8 @@
 				NSString * textualchange = [NSString stringWithFormat:@"He ran %@ on %@",direction,[themap roadNameFromEdgePos:newpos]];
 				[self speak:textualchange];
 			}
-			target.pos = newpos;
 			
-			dist = [latestsearch distanceFromRoot:target.pos];
+			dist = [latestsearch distanceFromRoot:newpos];
 			
 			if (dist < 15) {
 				[self speak:@"You almost have him!"];
@@ -225,9 +231,19 @@
 			
 			break;
 	}
-	for (FRPoint * pt in points){
-		[pt setCoordinate:[themap coordinateFromEdgePosition:pt.pos]];
-	}
+	
+	if (newpos) target.pos = newpos;
+	NSMutableDictionary * data = [NSMutableDictionary dictionaryWithCapacity:2];
+	CLLocationCoordinate2D targetcoord = [themap coordinateFromEdgePosition:target.pos];
+	[data setObject:[NSNumber numberWithInt:current_objective] forKey:@"objective"];
+	[data setObject:[NSNumber numberWithFloat:targetcoord.latitude] forKey:@"lat"];
+	[data setObject:[NSNumber numberWithFloat:targetcoord.longitude] forKey:@"lon"];
+	[m2 sendObject:data forKey:@"mission1_target"];
+	
+	
+	//for (FRPoint * pt in points){
+	//	[pt setCoordinate:[themap coordinateFromEdgePosition:pt.pos]];
+	//}
 	[self performSelector:@selector(ticktock) withObject:nil afterDelay:1.0];
 };
 - (void) updatePosition:(id)obj {
