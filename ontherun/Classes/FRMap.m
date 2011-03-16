@@ -61,7 +61,6 @@
 	}
 	return self;
 }
-
 - (NSString *) closestRoad:(CLLocation *)p {
 	NSArray * edge = [self closestEdgeToPoint:p];
 	return [[[graph objectForKey:[edge objectAtIndex:0]] objectForKey:[edge objectAtIndex:1]] objectForKey:@"name"];
@@ -329,5 +328,22 @@
     theCoordinate.latitude = (1-fraction)*start.coordinate.latitude + fraction*end.coordinate.latitude;
     theCoordinate.longitude = (1-fraction)*start.coordinate.longitude + fraction*end.coordinate.longitude;
     return theCoordinate; 
+}
+- (NSString *) directionFromEdgePos:(FREdgePos *)e1 toEdgePos:(FREdgePos *)e2{
+	NSLog(@" %@ -- %@",e1,e2);
+	if (e1.start!=e2.end) return @"edges dont connect";
+	CLLocation * a = [nodes objectForKey:[e1 endObj]];
+	CLLocation * b = [nodes objectForKey:[e1 startObj]];
+	CLLocation * c = [nodes objectForKey:[e2 startObj]];
+	
+	float dx1 = [b coordinate].longitude - [a coordinate].longitude;
+	float dy1 = [b coordinate].latitude - [a coordinate].latitude;
+	float dx2 = [c coordinate].longitude - [b coordinate].longitude;
+	float dy2 = [c coordinate].latitude - [b coordinate].latitude;
+	
+	float sinangle =  (dx1*dy2-dy1*dx2)/sqrtf(dx1*dx1+dy1*dy1)/sqrtf(dx2*dx2+dy2*dy2);
+	if (sinangle > .5) return @"left";
+	if (sinangle < -.5) return @"right";
+	return @"straight";
 }
 @end

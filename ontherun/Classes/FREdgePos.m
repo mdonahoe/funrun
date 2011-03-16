@@ -14,4 +14,10 @@
 - (NSString *) description {
 	return [NSString stringWithFormat:@"ep(start:%i,end:%i,position:%f)",start,end,position];
 }
+- (NSNumber *) startObj {
+	return [NSNumber numberWithInt:start];
+}
+- (NSNumber *) endObj {
+	return [NSNumber numberWithInt:end];
+}
 @end

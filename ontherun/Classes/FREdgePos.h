@@ -48,5 +48,6 @@
 @property(assign) int start;
 @property(assign) int end;
 @property(assign) float position;
-
+- (NSNumber *) startObj;
+- (NSNumber *) endObj;
 @end

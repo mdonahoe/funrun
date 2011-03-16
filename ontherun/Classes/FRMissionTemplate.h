@@ -7,13 +7,12 @@
 //
 
 #import <Foundation/Foundation.h>
-
+#import <CoreLocation/CoreLocation.h>
 
 @interface FRMissionTemplate : NSObject {
 
 	
 }
-- (void) initWithInitialPosition:(CLLocation *)loc {
+- (void) initWithInitialPosition:(CLLocation *)loc;
 	//put all the common code that occurs in both mission One and Two
-}
 @end

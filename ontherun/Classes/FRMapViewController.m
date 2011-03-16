@@ -63,6 +63,7 @@
 - (void)dealloc {
     [super dealloc];
 }
+//currently unused
 -(void)zoomToFitMapAnnotations {
 	if([mapView.annotations count] < 2)
 	return;

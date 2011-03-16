@@ -56,4 +56,7 @@
 
 //converts from edgepos back to lat-longs (for drawing purposes)
 - (CLLocationCoordinate2D) coordinateFromEdgePosition:(FREdgePos *)ep;
+
+//computes the text direction of an edge transition. turned "left" "straight" "right"
+- (NSString *) directionFromEdgePos:(FREdgePos *)e1 toEdgePos:(FREdgePos *)e2;
 @end

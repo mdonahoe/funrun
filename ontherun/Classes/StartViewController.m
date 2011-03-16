@@ -32,7 +32,8 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
 	if (!missionid){
-		missionLabel.text = @"No Mission";
+		missionLabel.text = @"Mission One";
+		[self setMission:@"mission_one2.js"];
 	} else {
 		missionLabel.text = [NSString stringWithFormat:@"mission = %@",missionid];
 	}
@@ -67,7 +68,7 @@
 - (IBAction)doAction:(id)sender{
 	NSLog(@"clicked");
 	if (!missionid) return;
-	themission = [[FRMission alloc] initWithMissionName:missionid];
+	themission = [[FRMissionOne alloc] initWithFilename:missionid];
 	NSLog(@"points = %i",[themission.points count]);
 	FRMapViewController * detailViewController = [[FRMapViewController alloc] initWithNibName:@"FRMapViewController" bundle:nil];
 	[self.navigationController pushViewController:detailViewController animated:YES];

@@ -236,6 +236,14 @@
 	return @"behind";
 
 }
+- (NSString *) directionToRoot:(FREdgePos *)ep{
+	//turn by turn directions
+	if (![self containsPoint:ep]) return @"an unknown direction";
+	//this method is unfinished
+	
+	
+	
+}
 - (void) dealloc {
 	[previous release];
 	[distance release];

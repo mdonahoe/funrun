@@ -69,7 +69,8 @@
 @property(readonly) NSDictionary * dictme;
 @property(nonatomic,retain) NSString * title;
 @property(nonatomic,retain) NSString * subtitle;
-
+- (CLLocationCoordinate2D)coordinate;
+- (void) setCoordinate:(CLLocationCoordinate2D)newCoordinate;
 - (id) initWithDict:(NSDictionary*)dict onMap:(FRMap*)map;
 - (void) updateForMission:(FRMission *)mission;
 
