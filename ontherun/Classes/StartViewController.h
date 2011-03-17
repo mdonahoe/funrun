@@ -15,5 +15,5 @@
 	IBOutlet UILabel * missionLabel;
 }
 - (IBAction)doAction:(id)sender;
-
+- (void)setMission:(NSString*)m;
 @end

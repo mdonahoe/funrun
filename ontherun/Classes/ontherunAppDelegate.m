@@ -21,7 +21,7 @@
 
 - (BOOL)application:(UIApplication *)application handleOpenURL:(NSURL *)url 
 {
-	[self.navigationController.topViewController setMission:[url host]];
+	[(StartViewController *)self.navigationController.topViewController setMission:[url host]];
 	return YES;
 	
 }

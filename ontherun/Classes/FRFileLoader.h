@@ -19,5 +19,5 @@
 }
 - (id) initWithBaseURLString:(NSString *) url;
 - (NSString *) pathForFile:(NSString *) filename;
-
+- (void) deleteCacheForFile:(NSString *) filename;
 @end

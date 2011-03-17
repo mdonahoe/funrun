@@ -297,9 +297,14 @@
     return theCoordinate; 
 }
 - (NSString *) directionFromEdgePos:(FREdgePos *)e1 toEdgePos:(FREdgePos *)e2{
-	//NSLog(@" %@ -- %@",e1,e2);
+	//does NOT work unless the edges are connected. 
+	//Could be a problem for fast moving objects
+	
 	if (e1.start==e2.start) return nil;//@"edges are the same";
-	if (e1.start!=e2.end) return nil;//@"edges dont connect";
+	if (e1.start!=e2.end) {
+		NSLog(@"edges dont connect");
+		return nil;
+	}
 	CLLocation * a = [nodes objectForKey:[e1 endObj]];
 	CLLocation * b = [nodes objectForKey:[e1 startObj]];
 	CLLocation * c = [nodes objectForKey:[e2 startObj]];
@@ -368,9 +373,17 @@
 		//left or right
 		return [NSString stringWithFormat:@"%@ on %@",direction,[self roadNameFromEdgePos:e2]];
 	}
-	//he went straight, passed some road
-	//now we have to figure out what road he passed
 	
+	
+	//perhaps he turned, but not enough for the directionFromEdgePos:toEdgePos: method to catch
+	//check to see if he turned onto a new road.
+	if (![[self roadNameFromEdgePos:e1] isEqualToString:[self roadNameFromEdgePos:e2]]){
+		return [NSString stringWithFormat:@"onto %@",[self roadNameFromEdgePos:e2]];
+	}
+	
+	//he definitely went straight
+	//check to see if he passed a road
+		
 	NSDictionary * neighbors = [graph objectForKey:[e1 startObj]];
 	NSMutableArray * nottaken = [NSMutableArray arrayWithCapacity:2];
 	for (NSNumber * neighbor in neighbors){

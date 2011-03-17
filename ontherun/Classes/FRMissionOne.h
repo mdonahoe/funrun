@@ -11,7 +11,7 @@
 #import "FRMap.h"
 #import "FRPathSearch.h"
 #import "toqbot.h"
-
+#import "VSSpeechSynthesizer.h"
 /*
  
  Mission One.
@@ -52,7 +52,7 @@
 	FRMap * themap;
 	
 	CLLocationManager * locationManager;
-	NSObject * voicebot;
+	VSSpeechSynthesizer * voicebot;
 	toqbot * m2;
 	NSMutableArray * toBeSpoken;
 	

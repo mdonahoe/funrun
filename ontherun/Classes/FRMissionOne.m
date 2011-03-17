@@ -33,7 +33,9 @@
 	FRFileLoader * loader = [[FRFileLoader alloc] initWithBaseURLString:@"http://toqbot.com/otr/test1/"];
 	
 	//load the map
-	NSDictionary * mapdata = [[NSString stringWithContentsOfFile:[loader pathForFile:@"mapdata.json"]
+	
+	//[loader deleteCacheForFile:filename];
+	NSDictionary * mapdata = [[NSString stringWithContentsOfFile:[loader pathForFile:@"mapdata_nullfree.json"]
 														encoding:NSUTF8StringEncoding
 														   error:NULL] JSONValue];
 	themap = [[FRMap alloc] initWithNodes:[mapdata objectForKey:@"nodes"] andRoads:[mapdata objectForKey:@"roads"]];
@@ -73,7 +75,9 @@
 	}
 	[self speak:@"Lock"];
 	
-	
+	//NSLog(@"%f",(fl[voicebot rate]));
+	//[voicebot setRate:(float)2.0];
+	[voicebot setPitch:.25];
 	current_objective=3;
 	
 	
@@ -137,7 +141,6 @@
 	NSTimeInterval timeleft = [drop_time timeIntervalSinceNow];
 	//NSLog(@"timeleft = %f",timeleft);
 	
-	NSString * direction;
 	
 	
 	
@@ -176,10 +179,20 @@
 					[self speak:@"Wait for the target to arrive"];
 				}
 			}
-			//todo
-			//1. parse the map, getting rid of (null) street names
-			//2. detect when he turns around.
-			//3. prevent repeating the same shit.
+			/*
+			 
+			 todo
+			 (done)1. parse the map, getting rid of (null) street names
+			 2. detect when he turns around.
+			 (done)3. prevent repeating the same shit.
+			 4. "he is heading toward blah street" should happen less frequently
+			 5. it might be possible to pass him, which would be annoying. better user model, perhaps lines.
+			 6. "he turned down x street, heading toward y street. cut him off by taking z street"
+			 7. remove dead ends
+			 8. some turns dont get announced. wtf?!
+			 9. keep track of whether we said a road or not. try not to repeat it.
+			 10. if the enemy is on the shortest path between where i am and where i was, we probably got him.+
+			 */
 			break;
 		case 1: //wait for the target to arrive
 			if (timeleft < 0) {
