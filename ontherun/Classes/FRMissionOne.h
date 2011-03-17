@@ -47,7 +47,7 @@
 	FRPoint * pursuer;
 	FRPoint * base;
 	NSArray * points;
-	
+	NSString * previously_said;
 	FRPathSearch * latestsearch;
 	FRMap * themap;
 	
@@ -64,11 +64,12 @@
 	
 }
 @property(nonatomic,retain) NSArray * points;
-- (id) initWithFileName:(NSString*)filename;
+- (id) initWithFilename:(NSString*)filename;
 - (void) updatePosition:(id)obj;
 - (void) ticktock;
 - (void) startStandardUpdates;
 - (void) newUserLocation:(CLLocation *)location;
 - (void) speak:(NSString *)text;
+- (void) speakIfEmpty:(NSString *)text;
 
 @end

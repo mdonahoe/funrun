@@ -46,8 +46,8 @@
 	[outrequest setDelegate:self];
 	[outrequest startAsynchronous];
 }
--(void) sentObject:request {
-	NSLog(@"here is the request %@",request);
+-(void) sentObject:(id)request {
+	//NSLog(@"here is the request %@",request);
 }
 - (void) loadKeys {
 	//get the path we are going to run

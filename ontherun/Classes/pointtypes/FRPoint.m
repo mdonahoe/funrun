@@ -47,7 +47,7 @@
 
 - (CLLocationCoordinate2D)coordinate
 {
-	NSLog(@"coord called");
+	//NSLog(@"coord called");
 	//if i make the view draggable, i can expect calls to this method from the mkmapview
     return mycoordinate;
 	

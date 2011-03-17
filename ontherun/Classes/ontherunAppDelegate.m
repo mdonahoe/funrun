@@ -21,13 +21,6 @@
 
 - (BOOL)application:(UIApplication *)application handleOpenURL:(NSURL *)url 
 {
-	/*themission = [[FRMission alloc] initWithMissionName:[url host]];
-	
-	FRMapViewController * detailViewController = [[FRMapViewController alloc] initWithNibName:@"FRMapViewController" bundle:nil];
-	[navigationController pushViewController:detailViewController animated:YES];
-	[detailViewController.mapView addAnnotations:themission.points];
-	[detailViewController release];	
-	*/
 	[self.navigationController.topViewController setMission:[url host]];
 	return YES;
 	

@@ -46,10 +46,11 @@
 	[missionstring release];
 	
 	ticks = 0;
-	//
+	//uhuh
+	previously_said = nil;
 	target_speed = 1.0;
 	start_time = [[NSDate alloc] init]; //is this actually the current time?
-	drop_time = [[NSDate alloc] initWithTimeIntervalSinceNow:10];
+	drop_time = [[NSDate alloc] initWithTimeIntervalSinceNow:-10];
 	user = [[FRPoint alloc] initWithDict:[NSDictionary dictionaryWithObject:@"user" forKey:@"name"] onMap:themap];
 	droppoint = [[FRPoint alloc] initWithDict:[missiondata objectForKey:@"droppoint"] onMap:themap];
 	target = [[FRPoint alloc] initWithDict:[missiondata objectForKey:@"target"] onMap:themap];
@@ -71,16 +72,36 @@
 		[self startStandardUpdates];
 	}
 	[self speak:@"Lock"];
+	
+	
+	current_objective=3;
+	
+	
+	return self;
 }
 - (void) speak:(NSString *)text {
+	//NSLog(@"speak: %@",text);
+	//return;
+	if ([previously_said isEqualToString:text]) return; //dont repeat yourself
 	if ([voicebot isSpeaking]){
 		[toBeSpoken addObject:text];
 	} else {
 		[voicebot startSpeakingString:text];
 	}
+	[text retain];
+	[previously_said release];
+	previously_said = text;
 }
 - (void) speakIfEmpty:(NSString *) text {
-	if (![voicebot isSpeaking]) [voicebot startSpeakingString:text];
+	//NSLog(@"speakIfEmpty:%@",text);
+	//return;
+	if ([previously_said isEqualToString:text]) return; //dont repeat yourself
+	if (![voicebot isSpeaking]) {
+		[voicebot startSpeakingString:text];
+		[text retain];
+		[previously_said release];
+		previously_said = text;
+	}
 }
 - (void) speechSynthesizer:(NSObject *) synth didFinishSpeaking:(BOOL)didFinish withError:(NSError *) error { 
 	// Handle the end of speech here 
@@ -89,7 +110,6 @@
 		[toBeSpoken removeObjectAtIndex:0];
 	}
 }
-
 - (void) ticktock {
 	/*
 	 This method is called once a second
@@ -115,7 +135,7 @@
 	FREdgePos * newpos;
 	float dist;
 	NSTimeInterval timeleft = [drop_time timeIntervalSinceNow];
-	NSLog(@"timeleft = %f",timeleft);
+	//NSLog(@"timeleft = %f",timeleft);
 	
 	NSString * direction;
 	
@@ -156,28 +176,26 @@
 					[self speak:@"Wait for the target to arrive"];
 				}
 			}
-			
+			//todo
+			//1. parse the map, getting rid of (null) street names
+			//2. detect when he turns around.
+			//3. prevent repeating the same shit.
 			break;
 		case 1: //wait for the target to arrive
 			if (timeleft < 0) {
 				current_objective++;
 				[self speak:@"The target is in the open. Go get him."];
-				spotted_time = [[NSDate alloc] initWithTimeIntervalSinceNow:60];
+				spotted_time = [[NSDate alloc] initWithTimeIntervalSinceNow:30];
 			}
 			break;
 		case 2: //follow the target
-		
-			direction = [themap directionFromEdgePos:target.pos toEdgePos:newpos];
-			NSLog(@"direction = %@",direction);
-			if ([direction isEqualToString:@"left"] || [direction isEqualToString:@"right"]){
-				NSString * textualchange = [NSString stringWithFormat:@"He went %@ on %@",direction,[themap roadNameFromEdgePos:newpos]];
-				[self speak:textualchange];
-			}
-			
-			
 			
 			dist = [latestsearch distanceFromRoot:newpos];
-			NSLog(@"timer = %f",[spotted_time timeIntervalSinceNow]);
+			//NSLog(@"timer = %f",[spotted_time timeIntervalSinceNow]);
+			
+			//during this object, Charlie should talk about stuff
+			//eventually the suspect will realize that he has been followed
+			
 			if (dist < 30 && [spotted_time timeIntervalSinceNow] < 0) {
 				current_objective++;
 				[self speak:@"He sees you!"];
@@ -189,13 +207,6 @@
 			break;
 		case 3: //chase the target down
 			newpos = [latestsearch move:target.pos awayFromRootWithDelta:10*target_speed];
-			direction = [themap directionFromEdgePos:target.pos toEdgePos:newpos];
-			NSLog(@"direction = %@",direction);
-			
-			if ([direction isEqualToString:@"left"] || [direction isEqualToString:@"right"]){
-				NSString * textualchange = [NSString stringWithFormat:@"He ran %@ on %@",direction,[themap roadNameFromEdgePos:newpos]];
-				[self speak:textualchange];
-			}
 			
 			dist = [latestsearch distanceFromRoot:newpos];
 			
@@ -210,6 +221,8 @@
 			}
 			
 			if (dist > 100) {
+				//you should lose somehow if he gets too far.
+				
 				//[self speak:@"You are going to lose him."]; //random?
 			}
 			
@@ -232,18 +245,29 @@
 			break;
 	}
 	
-	if (newpos) target.pos = newpos;
-	NSMutableDictionary * data = [NSMutableDictionary dictionaryWithCapacity:2];
-	CLLocationCoordinate2D targetcoord = [themap coordinateFromEdgePosition:target.pos];
-	[data setObject:[NSNumber numberWithInt:current_objective] forKey:@"objective"];
-	[data setObject:[NSNumber numberWithFloat:targetcoord.latitude] forKey:@"lat"];
-	[data setObject:[NSNumber numberWithFloat:targetcoord.longitude] forKey:@"lon"];
-	[m2 sendObject:data forKey:@"mission1_target"];
+	if (newpos && current_objective<4) {
+		NSString * textualchange = [themap descriptionFromEdgePos:target.pos toEdgePos:newpos];
+		if (textualchange) {
+			[self speak:[NSString stringWithFormat:@"He just ran %@",textualchange]];
+		} else {
+			[self speakIfEmpty:[NSString stringWithFormat:@"He is heading %@",[themap descriptionOfEdgePos:newpos]]];
+		}
+		target.pos = newpos;
+	}
 	
-	
-	//for (FRPoint * pt in points){
-	//	[pt setCoordinate:[themap coordinateFromEdgePosition:pt.pos]];
-	//}
+	//send data to server for viz
+	if (0){
+		NSMutableDictionary * data = [NSMutableDictionary dictionaryWithCapacity:2];
+		CLLocationCoordinate2D targetcoord = [themap coordinateFromEdgePosition:target.pos];
+		[data setObject:[NSNumber numberWithInt:current_objective] forKey:@"objective"];
+		[data setObject:[NSNumber numberWithFloat:targetcoord.latitude] forKey:@"lat"];
+		[data setObject:[NSNumber numberWithFloat:targetcoord.longitude] forKey:@"lon"];
+		[m2 sendObject:data forKey:@"mission1_target"];
+	} else {
+		for (FRPoint * pt in points){
+			[pt setCoordinate:[themap coordinateFromEdgePosition:pt.pos]];
+		}
+	}
 	[self performSelector:@selector(ticktock) withObject:nil afterDelay:1.0];
 };
 - (void) updatePosition:(id)obj {
@@ -270,7 +294,6 @@
 	
 	[locationManager startUpdatingLocation];
 }
-
 // Delegate method from the CLLocationManagerDelegate protocol.
 - (void) locationManager:(CLLocationManager *)manager
 	 didUpdateToLocation:(CLLocation *)newLocation
@@ -295,8 +318,7 @@
 	 */
 	
 	
-	
-	
+	//Cancer man
 	NSLog(@"newUserLocation: %@",location);
 	
 	//convert to map coordinates
@@ -304,7 +326,6 @@
 	
 	//say something. helps with gps debugging
 	if (arc4random()%10==0) [self speakIfEmpty:@"click"];
-	
 	
 	//speak the current road, if it changed
 	NSString * roadname = [themap roadNameFromEdgePos:ep];

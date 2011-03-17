@@ -22,9 +22,6 @@
 //checks the distance to each edge segment, and returns to edge with the minimum distance
 - (NSArray *) closestEdgeToPoint:(CLLocation *)p;
 
-//returns the road name of the current edge
-- (NSString *) closestRoad:(CLLocation *)p;
-
 //convert from latlon to EdgePos, using the map
 - (FREdgePos *) edgePosFromPoint:(CLLocation *)p;
 
@@ -35,12 +32,10 @@
 - (float) maxPosition:(FREdgePos *)ep;
 
 - (NSString *) roadNameFromEdgePos:(FREdgePos *)ep;
+- (NSString *) roadNameFromNode:(NSNumber*)n1 andNode:(NSNumber *)n2;
 
 //does a BFS on the graph starting at the two nodes on the give edge, returns the resulting pathsearch object
 - (FRPathSearch *) createPathSearchAt:(FREdgePos *)ep withMaxDistance:(NSNumber *)maxdist;
-
-//chooses a random edge, and a random position along that edge
-- (FREdgePos *) randompos;
 
 //moves forward, and chooses a new edge if need be.
 - (FREdgePos *) move:(FREdgePos *)ep forwardRandomly:(float)dx;

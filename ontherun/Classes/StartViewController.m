@@ -60,26 +60,17 @@
     // Release any retained subviews of the main view.
     // e.g. self.myOutlet = nil;
 }
-
-
 - (void)dealloc {
     [super dealloc];
 }
 - (IBAction)doAction:(id)sender{
-	NSLog(@"clicked");
 	if (!missionid) return;
 	themission = [[FRMissionOne alloc] initWithFilename:missionid];
-	NSLog(@"points = %i",[themission.points count]);
-	
-	/*
-	FOR SOME REASON, map pins DONT WORK. WTF?
 	 
 	 FRMapViewController * detailViewController = [[FRMapViewController alloc] initWithNibName:@"FRMapViewController" bundle:nil];
 	[self.navigationController pushViewController:detailViewController animated:YES];
-	NSLog(@"map view = %@",detailViewController.mapView);
 	[detailViewController.mapView addAnnotations:themission.points];
 	[detailViewController release];	
-	*/
 }
 - (void) setMission:(NSString *)m {
 	[m retain];

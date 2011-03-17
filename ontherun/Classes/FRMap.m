@@ -61,10 +61,6 @@
 	}
 	return self;
 }
-- (NSString *) closestRoad:(CLLocation *)p {
-	NSArray * edge = [self closestEdgeToPoint:p];
-	return [[[graph objectForKey:[edge objectAtIndex:0]] objectForKey:[edge objectAtIndex:1]] objectForKey:@"name"];
-}
 - (NSArray *) closestEdgeToPoint:(CLLocation *)p {
 	float mindist = 10000000000000; //big number
 	NSArray * closest_edge = nil;
@@ -138,7 +134,10 @@
 	return [self edgeLengthFromStart:[NSNumber numberWithInt:ep.start] toFinish:[NSNumber numberWithInt:ep.end]];
 }
 - (NSString *) roadNameFromEdgePos:(FREdgePos *)ep{
-	return [[[graph objectForKey:[NSNumber numberWithInt:ep.start]] objectForKey:[NSNumber numberWithInt:ep.end]] objectForKey:@"name"];
+	return [self roadNameFromNode:[ep startObj] andNode:[ep endObj]];
+}
+- (NSString *) roadNameFromNode:(NSNumber *)n1 andNode:(NSNumber*)n2{
+	return [[[graph objectForKey:n1] objectForKey:n2] objectForKey:@"name"];
 }
 - (FRPathSearch *) createPathSearchAt:(FREdgePos *)ep withMaxDistance:(NSNumber *)maxdist{
 	NSMutableArray * queue = [NSMutableArray arrayWithCapacity:3];
@@ -184,36 +183,6 @@
 	FRPathSearch * ps = [[FRPathSearch alloc] initWithRoot:ep previous:previous distance:distance map:self];
 	return ps;
 }
-- (FREdgePos *) randompos {
-	
-	//choose a random starting node
-	int i=0;
-	int n=[nodes count];
-	NSNumber * start;
-	for (NSNumber * node in nodes){
-		if (arc4random()%(++i) == 0) start = node;
-	}
-	
-	//choose a random neighbor (replace with @selector(randomNeighbor:))
-	i=0;
-	NSDictionary * neighbors = [graph objectForKey:start];
-	n = [neighbors count];
-	NSNumber * end;
-	for (NSNumber * node in neighbors){
-		if (arc4random()%(++i)==0) end = node;
-	}
-	
-	//move a random distance along that edge
-	float length = [self edgeLengthFromStart:start toFinish:end];
-	float position = length * (arc4random()%1000000)/1000000.0;
-	
-	//return the EdgePos
-	FREdgePos * x = [[[FREdgePos alloc] init] autorelease];
-	x.start = [start intValue];
-	x.end = [end intValue];
-	x.position = position;
-	return x;
-}
 - (NSNumber *) randomNeighbor:(NSNumber *)node {
 	int i=0;
 	NSDictionary * neighbors = [graph objectForKey:node];
@@ -225,13 +194,11 @@
 }
 - (FREdgePos *) flipEdgePos:(FREdgePos*)ep {
 	FREdgePos * x = [[[FREdgePos alloc] init] autorelease];
-	NSLog(@"flipping edge %@",ep);
 	x.start = ep.end;
 	x.end = ep.start;
 	x.position = [self maxPosition:ep] - ep.position;
 	
 	[self isValidEdgePos:x];
-	//NSLog(@"flip succeeded");
 	return x;
 }
 - (BOOL) isValidEdgePos:(FREdgePos *)ep {
@@ -330,8 +297,9 @@
     return theCoordinate; 
 }
 - (NSString *) directionFromEdgePos:(FREdgePos *)e1 toEdgePos:(FREdgePos *)e2{
-	NSLog(@" %@ -- %@",e1,e2);
-	if (e1.start!=e2.end) return @"edges dont connect";
+	//NSLog(@" %@ -- %@",e1,e2);
+	if (e1.start==e2.start) return nil;//@"edges are the same";
+	if (e1.start!=e2.end) return nil;//@"edges dont connect";
 	CLLocation * a = [nodes objectForKey:[e1 endObj]];
 	CLLocation * b = [nodes objectForKey:[e1 startObj]];
 	CLLocation * c = [nodes objectForKey:[e2 startObj]];
@@ -341,9 +309,79 @@
 	float dx2 = [c coordinate].longitude - [b coordinate].longitude;
 	float dy2 = [c coordinate].latitude - [b coordinate].latitude;
 	
+	//should detect turning around?
 	float sinangle =  (dx1*dy2-dy1*dx2)/sqrtf(dx1*dx1+dy1*dy1)/sqrtf(dx2*dx2+dy2*dy2);
 	if (sinangle > .5) return @"left";
 	if (sinangle < -.5) return @"right";
 	return @"straight";
+	
+}
+- (NSString *) descriptionOfEdgePos:(FREdgePos *)ep {
+	//(on harvard st,) heading toward windsor street
+	//(someday) heading toward the drop point? or charlie could say that actually
+	NSNumber * goal = [ep startObj];
+	NSNumber * prev = [ep endObj];
+	NSString * currentroad = [self roadNameFromEdgePos:ep];
+	NSDictionary * neighbors;
+	while (1){
+		//move forward down the line until we hit an intersection or a dead end
+		neighbors = [graph objectForKey:goal];
+		if ([neighbors count]!=2) break;
+		NSNumber * newgoal = [[neighbors allKeys] objectAtIndex:0];
+		if ([newgoal intValue]==[prev intValue]) //[newgoal isEqual:prev]
+			newgoal = [[neighbors allKeys] objectAtIndex:1];
+		prev = goal;
+		goal = newgoal;
+	}
+	NSString * text;
+	switch ([neighbors count]) {
+		case 0:
+			text = @"lost";
+			break;
+		case 1:
+			text = @"toward a Dead End";
+			break;
+		case 2:
+			text = @"code error!";
+			break;
+		default://3 or more
+			//now we need to find a road that isnt the road we are currently on
+			for (NSNumber * neighbor in neighbors){
+				text = [self roadNameFromNode:goal andNode:neighbor];
+				if (![text isEqual:currentroad]) break;
+			}
+			//this could still be the current road, but not a big deal
+			text = [NSString stringWithFormat:@"toward %@",text];
+			break;
+	}
+	return text;
+	
+	
+}
+- (NSString *) descriptionFromEdgePos:(FREdgePos *)e1 toEdgePos:(FREdgePos*)e2 {
+	//just passed x street
+	
+	NSString * direction = [self directionFromEdgePos:e1 toEdgePos:e2];
+	if (!direction) return nil;
+	
+	if (![direction isEqualToString:@"straight"]){
+		//left or right
+		return [NSString stringWithFormat:@"%@ on %@",direction,[self roadNameFromEdgePos:e2]];
+	}
+	//he went straight, passed some road
+	//now we have to figure out what road he passed
+	
+	NSDictionary * neighbors = [graph objectForKey:[e1 startObj]];
+	NSMutableArray * nottaken = [NSMutableArray arrayWithCapacity:2];
+	for (NSNumber * neighbor in neighbors){
+		int n = [neighbor intValue];
+		if (n==e1.end || n==e2.start) continue;
+		[nottaken addObject:neighbor];
+	}
+	if ([nottaken count]==0) return nil; //he didnt pass anything
+
+		
+	NSString * road = [self roadNameFromNode:[nottaken objectAtIndex:0] andNode:[e1 startObj]];
+	return [NSString stringWithFormat:@"passed %@",road];
 }
 @end

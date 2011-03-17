@@ -201,16 +201,12 @@
 				C9C5378712E39A7A005C0BF0 /* FRMap.m */,
 				C9E494C012F8D7390006AB7B /* FRPathSearch.h */,
 				C9E494C112F8D7390006AB7B /* FRPathSearch.m */,
-				9BD504F21301BCA80092D86A /* FRMission.h */,
-				9BD504F31301BCA80092D86A /* FRMission.m */,
 				9B84A0D11309C80300BE94CF /* FRFileLoader.h */,
 				9B84A0D21309C80300BE94CF /* FRFileLoader.m */,
 				C9557AAA130AEAA2004A6F54 /* FREdgePos.h */,
 				C9557AAB130AEAA2004A6F54 /* FREdgePos.m */,
 				9BBD3298132E81CC0082A0C7 /* StartViewController.h */,
 				9BBD3299132E81CC0082A0C7 /* StartViewController.m */,
-				C97CA185132EF0E600E71AC4 /* FRMissionTemplate.h */,
-				C97CA186132EF0E600E71AC4 /* FRMissionTemplate.m */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -301,6 +297,10 @@
 		9B51D5E71305F81700978183 /* Unused */ = {
 			isa = PBXGroup;
 			children = (
+				C97CA185132EF0E600E71AC4 /* FRMissionTemplate.h */,
+				C97CA186132EF0E600E71AC4 /* FRMissionTemplate.m */,
+				9BD504F21301BCA80092D86A /* FRMission.h */,
+				9BD504F31301BCA80092D86A /* FRMission.m */,
 				9BD50323130070320092D86A /* FRMapViewController.h */,
 				9BD50324130070320092D86A /* FRMapViewController.m */,
 				28C286DF0D94DF7D0034E888 /* RootViewController.h */,

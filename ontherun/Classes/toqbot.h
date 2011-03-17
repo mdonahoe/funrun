@@ -18,7 +18,7 @@
 
 - (void) requestFinished:(ASIHTTPRequest *) request;
 - (void) sendObject:(NSObject *)x forKey:(NSString *)key;
-- (void) sentObject:request;
+- (void) sentObject:(id)request;
 - (void) loadKeys;
 - (void) loadObjectForKey:(NSString *)key toDelegate:(id)d usingSelector:(SEL)s;
 - (void) requestFinished:(ASIHTTPRequest *) request;
