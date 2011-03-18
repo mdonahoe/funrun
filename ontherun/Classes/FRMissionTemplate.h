@@ -46,4 +46,5 @@
 - (void) newPlayerLocation:(CLLocation *)location;
 - (void) speak:(NSString *)text;
 - (void) speakIfEmpty:(NSString *)text;
+- (void) speakNow:(NSString *)text;
 @end

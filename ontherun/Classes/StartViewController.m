@@ -8,7 +8,7 @@
 
 #import "StartViewController.h"
 #import "FRMapViewController.h"
-
+#import "FRMissionChase.h"
 @implementation StartViewController
 
 /*
@@ -67,8 +67,8 @@
 }
 - (IBAction)doAction:(id)sender{
 	if (!missionid) return;
-	themission = [[FRMissionOne alloc] initWithFilename:missionid];
-	 
+	//themission = [[FRMissionOne alloc] initWithFilename:missionid];
+	themission = [[FRMissionChase alloc] init];
 	 FRMapViewController * detailViewController = [[FRMapViewController alloc] initWithNibName:@"FRMapViewController" bundle:nil];
 	[self.navigationController pushViewController:detailViewController animated:YES];
 	[detailViewController.mapView addAnnotations:themission.points];

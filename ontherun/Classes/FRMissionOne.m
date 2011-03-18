@@ -32,7 +32,7 @@
 	ticks = 0;
 	target_speed = 1.0;
 	start_time = [[NSDate alloc] init]; //is this actually the current time?
-	drop_time = [[NSDate alloc] initWithTimeIntervalSinceNow:-10];
+	drop_time = [[NSDate alloc] initWithTimeIntervalSinceNow:250];
 	
 	//more points
 	droppoint = [[FRPoint alloc] initWithDict:[missiondata objectForKey:@"droppoint"] onMap:themap];
@@ -49,7 +49,7 @@
 	countdown = [[NSArray alloc] initWithArray:[missiondata objectForKey:@"countdown"]];
 	
 	//states
-	current_objective = 3;
+	current_objective = 0;
 	current_announcement = 0;
 	
 	return self;

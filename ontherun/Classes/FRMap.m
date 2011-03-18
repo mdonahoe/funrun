@@ -234,8 +234,8 @@
 	 
 	 The point will keep moving from edge to edge until dx is consumed.
 	 */
-	NSNumber * start = [NSNumber numberWithInt:ep.start];
-	NSNumber * end = [NSNumber numberWithInt:ep.end];	
+	NSNumber * start = [ep startObj];
+	NSNumber * end = [ep endObj];	
 	float position = ep.position;
 	
 	position = position - dx;
@@ -396,5 +396,9 @@
 		
 	NSString * road = [self roadNameFromNode:[nottaken objectAtIndex:0] andNode:[e1 startObj]];
 	return [NSString stringWithFormat:@"passed %@",road];
+}
+
+- (BOOL) is:(FREdgePos *)e1 onSameRoadAs:(FREdgePos *)e2{
+	return [[self roadNameFromEdgePos:e1] isEqualToString:[self roadNameFromEdgePos:e2]];
 }
 @end

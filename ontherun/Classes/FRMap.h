@@ -59,4 +59,7 @@
 
 //toward a blah street
 - (NSString *) descriptionOfEdgePos:(FREdgePos *)ep;
+
+//check road names
+- (BOOL) is:(FREdgePos *)e1 onSameRoadAs:(FREdgePos *)e2;
 @end

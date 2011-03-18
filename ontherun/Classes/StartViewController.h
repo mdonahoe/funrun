@@ -7,10 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "FRMissionOne.h"
+#import "FRMissionTemplate.h"
 
 @interface StartViewController : UIViewController {
-	FRMissionOne * themission;
+	FRMissionTemplate * themission;
 	NSString * missionid;
 	IBOutlet UILabel * missionLabel;
 }

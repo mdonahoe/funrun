@@ -7,7 +7,6 @@
 //
 
 #import "FRPoint.h"
-#import "FRMission.h"
 #define ARC4RANDOM_MAX      0x100000000
 
 @implementation FRPoint
@@ -60,26 +59,5 @@
 - (void) dealloc {
 	[dictme release];
 	[super dealloc];
-}
-
-
-- (void) updateForMission:(FRMission*)mission {
-	//normal points dont move or do anything.
-	//maybe they should announce when you get near them
-	
-	
-	FRPathSearch * playerview = [mission getPlayerView];
-	if (!playerview || ![playerview containsPoint:pos]) {
-		mystate = kPointNew; //reset;
-		return;
-	}
-	if (mystate == kPointSeen) return;
-	
-	float dist = [playerview distanceFromRoot:pos];
-	if (dist < 20){
-		mystate = kPointSeen;
-		[mission speakEventually:title];
-	}
-	
 }
 @end

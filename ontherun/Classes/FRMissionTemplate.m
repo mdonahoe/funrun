@@ -54,7 +54,7 @@
 	} else {
 		[self startStandardUpdates];
 	}
-	[self speak:@"Lock"];
+	[self speakNow:@"Lock"];
 	
 	[voicebot setRate:(float)1.3];
 	[voicebot setPitch:.35];
@@ -62,33 +62,27 @@
 	return self;
 }
 - (void) speak:(NSString *)text {
-	//NSLog(@"speak: %@",text);
-	//return;
-	if ([previously_said isEqualToString:text]) return; //dont repeat yourself
-	if ([voicebot isSpeaking]){
+	if ([voicebot isSpeaking] || [toBeSpoken count]){
 		[toBeSpoken addObject:text];
 	} else {
-		[voicebot startSpeakingString:text];
-		[text retain];
-		[previously_said release];
-		previously_said = text;
+		[self speakNow:text];
 	}
 }
+- (void) speakNow:(NSString *)text{
+	if ([text isEqualToString:previously_said]) return;
+	[voicebot startSpeakingString:text];
+	[text retain];
+	[previously_said release];
+	previously_said = text;
+}
 - (void) speakIfEmpty:(NSString *) text {
-	//NSLog(@"speakIfEmpty:%@",text);
-	//return;
-	if ([previously_said isEqualToString:text]) return; //dont repeat yourself
-	if (![voicebot isSpeaking]) {
-		[voicebot startSpeakingString:text];
-		[text retain];
-		[previously_said release];
-		previously_said = text;
-	}
+	if (![voicebot isSpeaking] && [toBeSpoken count]==0)
+		[self speakNow:text];
 }
 - (void) speechSynthesizer:(NSObject *) synth didFinishSpeaking:(BOOL)didFinish withError:(NSError *) error { 
 	// Handle the end of speech here 
 	if ([toBeSpoken count]){
-		[self speak:[toBeSpoken objectAtIndex:0]];
+		[self speakNow:[toBeSpoken objectAtIndex:0]];
 		[toBeSpoken removeObjectAtIndex:0];
 	}
 }
@@ -182,7 +176,7 @@
 	}
 	
 	[latestsearch release];
-	latestsearch = [themap createPathSearchAt:player.pos withMaxDistance:[NSNumber numberWithFloat:200.0]];
+	latestsearch = [themap createPathSearchAt:player.pos withMaxDistance:[NSNumber numberWithFloat:1000.0]];
 }
 
 /*
