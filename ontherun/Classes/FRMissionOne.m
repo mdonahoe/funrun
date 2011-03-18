@@ -100,7 +100,7 @@
 		newpos = [themap move:target.pos forwardRandomly:target_speed];
 	}
 	
-	NSLog(@"objective = %i",current_objective);
+	NSLog(@"objective = %i, queue = %i",current_objective,[toBeSpoken count]);
 	//what objective are we on? (game state)
 	switch (current_objective) {
 		case 0: //get to the drop point
@@ -170,6 +170,7 @@
 		case 4: //return to post
 			dist = [latestsearch distanceFromRoot:base.pos];
 			if (dist < 30){
+				NSLog(@"yesh!");
 				[self speak:@"Good work today agent. Head inside for a debriefing."];
 				current_objective++;
 			}

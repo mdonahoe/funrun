@@ -56,8 +56,8 @@
 	}
 	[self speak:@"Lock"];
 	
-	[voicebot setRate:(float)2.0];
-	[voicebot setPitch:.25];
+	[voicebot setRate:(float)1.3];
+	[voicebot setPitch:.35];
 	
 	return self;
 }
@@ -69,10 +69,10 @@
 		[toBeSpoken addObject:text];
 	} else {
 		[voicebot startSpeakingString:text];
+		[text retain];
+		[previously_said release];
+		previously_said = text;
 	}
-	[text retain];
-	[previously_said release];
-	previously_said = text;
 }
 - (void) speakIfEmpty:(NSString *) text {
 	//NSLog(@"speakIfEmpty:%@",text);

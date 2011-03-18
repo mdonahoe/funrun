@@ -61,6 +61,8 @@
     // e.g. self.myOutlet = nil;
 }
 - (void)dealloc {
+	[missionid release];
+	[themission release];
     [super dealloc];
 }
 - (IBAction)doAction:(id)sender{
