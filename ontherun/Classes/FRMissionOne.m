@@ -8,112 +8,53 @@
 
 #import "FRMissionOne.h"
 #import "FRFileLoader.h"
-//#import "ASIFormDataRequest.h"
 #import "JSON.h"
+
 @implementation FRMissionOne
 
 
-@synthesize points;
+
 - (id) initWithFilename:(NSString *)filename {
 	//load the location data from a file. create the mission
 	self = [super init];
 	if (!self) return nil;
 	
 	
-	//link to /Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.2.sdk/System/Library/PrivateFrameworks/VoiceServices.framework
-	voicebot = [[NSClassFromString(@"VSSpeechSynthesizer") alloc] init];
-	[voicebot setDelegate:self];
-	toBeSpoken = [[NSMutableArray alloc] initWithObjects:@"and load",nil];
-	
-	//communication with server
-	m2 = [[toqbot alloc] init];
-	
-	//init the fileloader so we can skip network downloads if already cached
-	NSAutoreleasePool * thepool = [[NSAutoreleasePool alloc] init];
 	FRFileLoader * loader = [[FRFileLoader alloc] initWithBaseURLString:@"http://toqbot.com/otr/test1/"];
 	
-	//load the map
-	
-	//[loader deleteCacheForFile:filename];
-	NSDictionary * mapdata = [[NSString stringWithContentsOfFile:[loader pathForFile:@"mapdata_nullfree.json"]
-														encoding:NSUTF8StringEncoding
-														   error:NULL] JSONValue];
-	themap = [[FRMap alloc] initWithNodes:[mapdata objectForKey:@"nodes"] andRoads:[mapdata objectForKey:@"roads"]];
-	
+	//load the mission
 	[loader deleteCacheForFile:filename];
 	NSString * missionstring = [[NSString alloc] initWithData:[NSData dataWithContentsOfFile:[loader pathForFile:filename]] encoding:NSUTF8StringEncoding];
 	[loader release];
-	[thepool release];
 	NSDictionary * missiondata = [missionstring JSONValue];
 	[missionstring release];
 	
 	ticks = 0;
-	//uhuh
-	previously_said = nil;
 	target_speed = 1.0;
 	start_time = [[NSDate alloc] init]; //is this actually the current time?
 	drop_time = [[NSDate alloc] initWithTimeIntervalSinceNow:-10];
-	user = [[FRPoint alloc] initWithDict:[NSDictionary dictionaryWithObject:@"user" forKey:@"name"] onMap:themap];
+	
+	//more points
 	droppoint = [[FRPoint alloc] initWithDict:[missiondata objectForKey:@"droppoint"] onMap:themap];
 	target = [[FRPoint alloc] initWithDict:[missiondata objectForKey:@"target"] onMap:themap];
 	pursuer = [[FRPoint alloc] initWithDict:[missiondata objectForKey:@"pursuer"] onMap:themap];
 	base = [[FRPoint alloc] initWithDict:[missiondata objectForKey:@"base"] onMap:themap];
 	
-	points = [[NSArray alloc] initWithObjects:user,droppoint,target,pursuer,base,nil];
-	for (FRPoint * pt in points){
-		[pt setCoordinate:[themap coordinateFromEdgePosition:pt.pos]];
-	}
+	
+	//only let target appear on the map for now
+	[points addObject:target];
+	[target setCoordinate:[themap coordinateFromEdgePosition:target.pos]];
 	
 	hurrylist = [[NSArray alloc] initWithArray:[missiondata objectForKey:@"hurrylist"]];
 	countdown = [[NSArray alloc] initWithArray:[missiondata objectForKey:@"countdown"]];
 	
-	//use toqbot for gps position updates
-	if (1){
-		[m2 loadObjectForKey:@"userpos" toDelegate:self usingSelector:@selector(updatePosition:)];
-	} else {
-		[self startStandardUpdates];
-	}
-	[self speak:@"Lock"];
-	
-	//NSLog(@"%f",(fl[voicebot rate]));
-	//[voicebot setRate:(float)2.0];
-	[voicebot setPitch:.25];
-	current_objective=3;
-	
+	//states
+	current_objective = 3;
+	current_announcement = 0;
 	
 	return self;
 }
-- (void) speak:(NSString *)text {
-	//NSLog(@"speak: %@",text);
-	//return;
-	if ([previously_said isEqualToString:text]) return; //dont repeat yourself
-	if ([voicebot isSpeaking]){
-		[toBeSpoken addObject:text];
-	} else {
-		[voicebot startSpeakingString:text];
-	}
-	[text retain];
-	[previously_said release];
-	previously_said = text;
-}
-- (void) speakIfEmpty:(NSString *) text {
-	//NSLog(@"speakIfEmpty:%@",text);
-	//return;
-	if ([previously_said isEqualToString:text]) return; //dont repeat yourself
-	if (![voicebot isSpeaking]) {
-		[voicebot startSpeakingString:text];
-		[text retain];
-		[previously_said release];
-		previously_said = text;
-	}
-}
-- (void) speechSynthesizer:(NSObject *) synth didFinishSpeaking:(BOOL)didFinish withError:(NSError *) error { 
-	// Handle the end of speech here 
-	if ([toBeSpoken count]){
-		[self speak:[toBeSpoken objectAtIndex:0]];
-		[toBeSpoken removeObjectAtIndex:0];
-	}
-}
+
 - (void) ticktock {
 	/*
 	 This method is called once a second
@@ -179,20 +120,6 @@
 					[self speak:@"Wait for the target to arrive"];
 				}
 			}
-			/*
-			 
-			 todo
-			 (done)1. parse the map, getting rid of (null) street names
-			 2. detect when he turns around.
-			 (done)3. prevent repeating the same shit.
-			 4. "he is heading toward blah street" should happen less frequently
-			 5. it might be possible to pass him, which would be annoying. better user model, perhaps lines.
-			 6. "he turned down x street, heading toward y street. cut him off by taking z street"
-			 7. remove dead ends
-			 8. some turns dont get announced. wtf?!
-			 9. keep track of whether we said a road or not. try not to repeat it.
-			 10. if the enemy is on the shortest path between where i am and where i was, we probably got him.+
-			 */
 			break;
 		case 1: //wait for the target to arrive
 			if (timeleft < 0) {
@@ -267,100 +194,8 @@
 		}
 		target.pos = newpos;
 	}
-	
-	//send data to server for viz
-	if (0){
-		NSMutableDictionary * data = [NSMutableDictionary dictionaryWithCapacity:2];
-		CLLocationCoordinate2D targetcoord = [themap coordinateFromEdgePosition:target.pos];
-		[data setObject:[NSNumber numberWithInt:current_objective] forKey:@"objective"];
-		[data setObject:[NSNumber numberWithFloat:targetcoord.latitude] forKey:@"lat"];
-		[data setObject:[NSNumber numberWithFloat:targetcoord.longitude] forKey:@"lon"];
-		[m2 sendObject:data forKey:@"mission1_target"];
-	} else {
-		for (FRPoint * pt in points){
-			[pt setCoordinate:[themap coordinateFromEdgePosition:pt.pos]];
-		}
-	}
-	[self performSelector:@selector(ticktock) withObject:nil afterDelay:1.0];
-};
-- (void) updatePosition:(id)obj {
-	
-	float lat = [[obj objectForKey:@"lat"] floatValue];
-	float lon = [[obj objectForKey:@"lon"] floatValue];
-	
-	CLLocation * ll = [[CLLocation alloc] initWithLatitude:lat longitude:lon];
-	[self newUserLocation:ll];
-	[ll release];
-	
-}
-- (void) startStandardUpdates{
-    // Create the location manager if this object does not
-    // already have one.
-    if (nil == locationManager) 
-		locationManager = [[CLLocationManager alloc] init];
-	
-	locationManager.delegate = self;
-	locationManager.desiredAccuracy = kCLLocationAccuracyBest;
-	
-	// Set a movement threshold for new events.
-	locationManager.distanceFilter = 1.0;
-	
-	[locationManager startUpdatingLocation];
-}
-// Delegate method from the CLLocationManagerDelegate protocol.
-- (void) locationManager:(CLLocationManager *)manager
-	 didUpdateToLocation:(CLLocation *)newLocation
-			fromLocation:(CLLocation *)oldLocation
-{
-	if (newLocation.horizontalAccuracy>100) return;
-	if (newLocation.coordinate.latitude==oldLocation.coordinate.latitude && newLocation.coordinate.longitude==oldLocation.coordinate.longitude){
-		NSLog(@"gps update is identical, skipping recalculations");
-		return;
-	}
-	
-	[self newUserLocation:newLocation];
-	
-}
-- (void) newUserLocation:(CLLocation *)location {
-	/*
-	 This method is called whenever a new user location
-	 update is available.
-	 
-	 a new point comes from the network
-	 or the gps
-	 */
-	
-	
-	//Cancer man
-	NSLog(@"newUserLocation: %@",location);
-	
-	//convert to map coordinates
-	FREdgePos * ep = [themap edgePosFromPoint:location];
-	
-	//say something. helps with gps debugging
-	if (arc4random()%10==0) [self speakIfEmpty:@"click"];
-	
-	//speak the current road, if it changed
-	NSString * roadname = [themap roadNameFromEdgePos:ep];
-	if ([roadname isEqualToString:current_road]==NO && roadname){
-		[roadname retain];
-		[current_road release];
-		current_road = roadname;
-		[self speak:current_road];
-	}
-	
-	if (latestsearch) {
-		//we already have a position
-		//ensure that the direction of our new point is facing away from the old one.
-		user.pos = [latestsearch move:ep awayFromRootWithDelta:0];
-	} else {
-		user.pos = ep;
-		//start the updates
-		[self performSelector:@selector(ticktock) withObject:nil afterDelay:1.0]; 
-	}
-	
-	[latestsearch release];
-	latestsearch = [themap createPathSearchAt:user.pos withMaxDistance:[NSNumber numberWithFloat:200.0]];
+
+	[super ticktock];
 }
 
 @end

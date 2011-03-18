@@ -7,11 +7,8 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "FRPoint.h"
-#import "FRMap.h"
-#import "FRPathSearch.h"
-#import "toqbot.h"
-#import "VSSpeechSynthesizer.h"
+#import "FRMissionTemplate.h"
+
 /*
  
  Mission One.
@@ -19,57 +16,54 @@
  Objectives:
  1. Get to the drop point
  2. Chase after the target
- 3. Get back to your hideout and await further instructions
- 
+ 3. Drop off the stuff you found and await further instructions
  
  Current Problems:
- 1. difficult to tell where the target is relative to you. need more information. How far away am i?
- "the target is on norfolk, running toward broadway"
- "the target is on norfolk, just passed broadway"
  
- 2. pins dont show up in the mapview. wtf
+ 1. The game only works if you start from where it wants you to.
+	- this is bad because if i lose, i have to run home to start again
+	- instead, the game could build a level based on your current location
+	- maybe even incorporate where you want to go
+ 2. Incorporate the building system into the app itself. download the map
+ and the constraint file, and build the level.
+ 3. make a loading screen/voices.
  
  
+ todo
+ (done)1. parse the map, getting rid of (null) street names
+ 2. detect when he turns around.
+ (done)3. prevent repeating the same shit.
+ 4. "he is heading toward blah street" should happen less frequently
+ 5. it might be possible to pass him, which would be annoying. better user model, perhaps lines.
+ 6. "he turned down x street, heading toward y street. cut him off by taking z street"
+ 7. remove dead ends
+ 8. some turns dont get announced. wtf?! (this could be because it is moving too fast and passes over an edge)
+ 9. keep track of whether we said a road or not. try not to repeat it.
+ 10. if the enemy is on the shortest path between where i am and where i was, we probably got him.
  */
 
 
-@interface FRMissionOne : NSObject <CLLocationManagerDelegate> {
+@interface FRMissionOne : FRMissionTemplate {
 	NSDate * start_time;
 	NSDate * drop_time;
 	NSDate * spotted_time;
+	
 	float target_speed;
-	NSString * current_road;
-	int current_objective;
-	int ticks;
+	
 	FRPoint * droppoint;
 	FRPoint * target;
-	FRPoint * user;
 	FRPoint * pursuer;
 	FRPoint * base;
-	NSArray * points;
-	NSString * previously_said;
-	FRPathSearch * latestsearch;
-	FRMap * themap;
-	
-	CLLocationManager * locationManager;
-	VSSpeechSynthesizer * voicebot;
-	toqbot * m2;
-	NSMutableArray * toBeSpoken;
-	
 	
 	NSArray * hurrylist;
 	NSArray * countdown;
 	
 	int current_announcement;
+	int current_objective;
+	int ticks;
 	
 }
-@property(nonatomic,retain) NSArray * points;
+
 - (id) initWithFilename:(NSString*)filename;
-- (void) updatePosition:(id)obj;
-- (void) ticktock;
-- (void) startStandardUpdates;
-- (void) newUserLocation:(CLLocation *)location;
-- (void) speak:(NSString *)text;
-- (void) speakIfEmpty:(NSString *)text;
 
 @end

@@ -25,7 +25,7 @@
 - (id)setPitch:(float)pitch; 
 - (float)volume;       // default volume: 0.8
 - (id)setVolume:(float)volume;
-- (BOOL) isSpeaking; //this this real?
+- (bool) isSpeaking; //this this real?
 - (void) setDelegate:(id)delegate;
 @end
 

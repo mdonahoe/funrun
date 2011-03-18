@@ -241,7 +241,7 @@
 	if (![self containsPoint:ep]) return @"an unknown direction";
 	//this method is unfinished
 	
-	
+	return nil;
 	
 }
 - (void) dealloc {

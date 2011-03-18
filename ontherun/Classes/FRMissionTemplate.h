@@ -8,11 +8,42 @@
 
 #import <Foundation/Foundation.h>
 #import <CoreLocation/CoreLocation.h>
+#import "FRMap.h"
+#import "FRPathSearch.h"
+#import "toqbot.h"
+#import "VSSpeechSynthesizer.h"
+#import "FRPoint.h"
 
-@interface FRMissionTemplate : NSObject {
 
+
+//sounds TODO
+//#import <AudioToolbox/AudioToolbox.h>
+//#import <AVFoundation/AVFoundation.h>
+//#import <MediaPlayer/MediaPlayer.h>
+
+/*
+ sometimes things dont get said.
+ */
+
+@interface FRMissionTemplate : NSObject <CLLocationManagerDelegate> {
+	NSString * previously_said;
+	FRPathSearch * latestsearch;
+	FRMap * themap;
+	FRPoint * player;
+	CLLocationManager * locationManager;
+	VSSpeechSynthesizer * voicebot;
+	toqbot * m2;
+	NSMutableArray * toBeSpoken;
+	NSMutableArray * points;
+	NSString * current_road;
 	
 }
-- (void) initWithInitialPosition:(CLLocation *)loc;
-	//put all the common code that occurs in both mission One and Two
+@property(nonatomic,retain) NSMutableArray * points;
+
+- (void) updatePosition:(id)obj;
+- (void) ticktock;
+- (void) startStandardUpdates;
+- (void) newPlayerLocation:(CLLocation *)location;
+- (void) speak:(NSString *)text;
+- (void) speakIfEmpty:(NSString *)text;
 @end
