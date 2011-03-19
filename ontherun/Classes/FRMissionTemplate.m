@@ -49,7 +49,7 @@
 	points = [[NSMutableArray alloc] initWithObjects:player,nil];
 	
 	//use toqbot for gps position updates
-	if (1){
+	if (0){
 		[m2 loadObjectForKey:@"userpos" toDelegate:self usingSelector:@selector(updatePosition:)];
 	} else {
 		[self startStandardUpdates];
@@ -65,25 +65,34 @@
 	if ([voicebot isSpeaking] || [toBeSpoken count]){
 		[toBeSpoken addObject:text];
 	} else {
+		if ([text isEqualToString:previously_said]) return;
 		[self speakNow:text];
 	}
 }
 - (void) speakNow:(NSString *)text{
-	if ([text isEqualToString:previously_said]) return;
 	[voicebot startSpeakingString:text];
 	[text retain];
 	[previously_said release];
 	previously_said = text;
 }
 - (void) speakIfEmpty:(NSString *) text {
-	if (![voicebot isSpeaking] && [toBeSpoken count]==0)
+	if (![voicebot isSpeaking] && [toBeSpoken count]==0 && [text isEqualToString:previously_said]==NO)
 		[self speakNow:text];
 }
 - (void) speechSynthesizer:(NSObject *) synth didFinishSpeaking:(BOOL)didFinish withError:(NSError *) error { 
-	// Handle the end of speech here 
-	if ([toBeSpoken count]){
-		[self speakNow:[toBeSpoken objectAtIndex:0]];
+	// Handle the end of speech here
+	
+	while ([toBeSpoken count]){
+		NSString * text = [toBeSpoken objectAtIndex:0];
+		[text retain];
 		[toBeSpoken removeObjectAtIndex:0];
+		if (![text isEqualToString:previously_said]){
+			[self speakNow:text];
+			[text release];
+			break;
+		} else {
+			[text release];
+		}
 	}
 }
 - (void) ticktock {
