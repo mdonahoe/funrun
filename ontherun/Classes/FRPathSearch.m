@@ -26,6 +26,7 @@
 			if ([[previous objectForKey:node] intValue]==[node intValue]) NSLog(@"node is dupe %i",[node intValue]);
 		}
 		
+		[m retain];
 		map = m;
 		//[m retain]; maybe?
 	}
@@ -190,6 +191,11 @@
 	
 	//setting ep might lose reference?? idk
 	if ([self isFacingRoot:ep]) ep = [map flipEdgePos:ep];
+	
+	
+	//now move forward randomly.
+	//would be better to look at the pathsearch and move optimally
+	
 	return [map move:ep forwardRandomly:dx];
 }
 - (float) distanceFromRoot:(FREdgePos*)ep {
@@ -241,13 +247,40 @@
 	if (![self containsPoint:ep]) return @"an unknown direction";
 	//this method is unfinished
 	
-	return nil;
+	//"turn right on maverick street"
 	
+	//it would be nice if these methods avoided badguys
+	//move toward root until you hit a different street.
+	//calculate direction needed to turn
+	
+
+	
+	if (![self isFacingRoot:ep]) {
+		return @"turn around";
+	}
+	
+	NSString * start_road = [map roadNameFromEdgePos:ep];
+	if ([start_road isEqualToString:[map roadNameFromEdgePos:root]]){
+		return [NSString stringWithFormat:@"continue on %@",start_road];
+	}
+	
+	NSString * current_road = nil;
+	FREdgePos * prev = nil;
+	
+	do {//potential infinite loop
+		prev = ep;
+		ep = [self move:ep towardRootWithDelta:10000000]; //takes advantage of the bug in that method to move forward a single edge
+		current_road = [map roadNameFromEdgePos:ep];
+	} while ([start_road isEqualToString:current_road]);
+	
+	
+	return [NSString stringWithFormat:@"turn %@",[map descriptionFromEdgePos:prev toEdgePos:ep]];
 }
 - (void) dealloc {
 	[previous release];
 	[distance release];
 	[root release];
+	[map release];
 	[super dealloc];
 }
 - (FRMap *)getMap { return map;}

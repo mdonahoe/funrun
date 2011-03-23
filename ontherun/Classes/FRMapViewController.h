@@ -13,5 +13,7 @@
 	MKMapView * mapView;
 }
 @property (nonatomic, retain) IBOutlet MKMapView *mapView;
+- (void) addPoints:(NSArray *)points;
+- (void) gotoLocation;
 
 @end

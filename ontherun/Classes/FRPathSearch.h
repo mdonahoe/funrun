@@ -25,4 +25,5 @@
 - (BOOL) containsPoint:(FREdgePos*)ep;
 - (float) distanceFromRoot:(FREdgePos*)ep;
 - (NSString *) directionFromRoot:(FREdgePos*)ep;
+- (NSString *) directionToRoot:(FREdgePos*)ep;
 @end

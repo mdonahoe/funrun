@@ -43,6 +43,7 @@
 		C906C28312D4EA4000C14388 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C906C27912D4EA4000C14388 /* SystemConfiguration.framework */; };
 		C906C28412D4EA4000C14388 /* libz.1.2.3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = C906C27A12D4EA4000C14388 /* libz.1.2.3.dylib */; };
 		C906C28612D4EA4000C14388 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C906C27C12D4EA4000C14388 /* AudioToolbox.framework */; };
+		C92B0F391338237F0060CE50 /* FRMissionTwo.m in Sources */ = {isa = PBXBuildFile; fileRef = C92B0F381338237F0060CE50 /* FRMissionTwo.m */; };
 		C9557AAC130AEAA2004A6F54 /* FREdgePos.m in Sources */ = {isa = PBXBuildFile; fileRef = C9557AAB130AEAA2004A6F54 /* FREdgePos.m */; };
 		C97CA187132EF0E600E71AC4 /* FRMissionTemplate.m in Sources */ = {isa = PBXBuildFile; fileRef = C97CA186132EF0E600E71AC4 /* FRMissionTemplate.m */; };
 		C97CA18C132EF60700E71AC4 /* FRMissionOne.m in Sources */ = {isa = PBXBuildFile; fileRef = C97CA18B132EF60700E71AC4 /* FRMissionOne.m */; };
@@ -117,6 +118,8 @@
 		C906C27912D4EA4000C14388 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		C906C27A12D4EA4000C14388 /* libz.1.2.3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.1.2.3.dylib; path = usr/lib/libz.1.2.3.dylib; sourceTree = SDKROOT; };
 		C906C27C12D4EA4000C14388 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
+		C92B0F371338237F0060CE50 /* FRMissionTwo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRMissionTwo.h; sourceTree = "<group>"; };
+		C92B0F381338237F0060CE50 /* FRMissionTwo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRMissionTwo.m; sourceTree = "<group>"; };
 		C9557AAA130AEAA2004A6F54 /* FREdgePos.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FREdgePos.h; sourceTree = "<group>"; };
 		C9557AAB130AEAA2004A6F54 /* FREdgePos.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FREdgePos.m; sourceTree = "<group>"; };
 		C97CA185132EF0E600E71AC4 /* FRMissionTemplate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRMissionTemplate.h; sourceTree = "<group>"; };
@@ -160,18 +163,15 @@
 			isa = PBXGroup;
 			children = (
 				9B1AA58313328DAF00850465 /* VSSpeechSynthesizer.h */,
+				C904845013393F1A00213A82 /* Missions */,
 				C906C13E12D4EA2F00C14388 /* json */,
 				C906C13B12D4EA2F00C14388 /* sound */,
 				9B51D5BA1305F53400978183 /* Points */,
 				C906C14A12D4EA2F00C14388 /* request */,
 				C9FC234712F9CCC700892CF6 /* toqbot.h */,
+				C9FC234812F9CCC700892CF6 /* toqbot.m */,
 				9BD50323130070320092D86A /* FRMapViewController.h */,
 				9BD50324130070320092D86A /* FRMapViewController.m */,
-				C9FC234812F9CCC700892CF6 /* toqbot.m */,
-				C97CA185132EF0E600E71AC4 /* FRMissionTemplate.h */,
-				C97CA186132EF0E600E71AC4 /* FRMissionTemplate.m */,
-				C97CA18A132EF60700E71AC4 /* FRMissionOne.h */,
-				C97CA18B132EF60700E71AC4 /* FRMissionOne.m */,
 				1D3623240D0F684500981E51 /* ontherunAppDelegate.h */,
 				1D3623250D0F684500981E51 /* ontherunAppDelegate.m */,
 				C9C5378612E39A7A005C0BF0 /* FRMap.h */,
@@ -184,8 +184,6 @@
 				C9557AAB130AEAA2004A6F54 /* FREdgePos.m */,
 				9BBD3298132E81CC0082A0C7 /* StartViewController.h */,
 				9BBD3299132E81CC0082A0C7 /* StartViewController.m */,
-				9B836776133403A300EC486F /* FRMissionChase.h */,
-				9B836777133403A300EC486F /* FRMissionChase.m */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -259,6 +257,21 @@
 			);
 			name = Points;
 			path = pointtypes;
+			sourceTree = "<group>";
+		};
+		C904845013393F1A00213A82 /* Missions */ = {
+			isa = PBXGroup;
+			children = (
+				C97CA185132EF0E600E71AC4 /* FRMissionTemplate.h */,
+				C97CA186132EF0E600E71AC4 /* FRMissionTemplate.m */,
+				C97CA18A132EF60700E71AC4 /* FRMissionOne.h */,
+				C97CA18B132EF60700E71AC4 /* FRMissionOne.m */,
+				9B836776133403A300EC486F /* FRMissionChase.h */,
+				9B836777133403A300EC486F /* FRMissionChase.m */,
+				C92B0F371338237F0060CE50 /* FRMissionTwo.h */,
+				C92B0F381338237F0060CE50 /* FRMissionTwo.m */,
+			);
+			name = Missions;
 			sourceTree = "<group>";
 		};
 		C906C13B12D4EA2F00C14388 /* sound */ = {
@@ -403,6 +416,7 @@
 				C97CA187132EF0E600E71AC4 /* FRMissionTemplate.m in Sources */,
 				C97CA18C132EF60700E71AC4 /* FRMissionOne.m in Sources */,
 				9B836778133403A300EC486F /* FRMissionChase.m in Sources */,
+				C92B0F391338237F0060CE50 /* FRMissionTwo.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

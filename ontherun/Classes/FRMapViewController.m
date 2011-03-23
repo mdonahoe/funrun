@@ -58,7 +58,10 @@
     // Release any retained subviews of the main view.
     // e.g. self.myOutlet = nil;
 }
-
+- (void) addPoints:(NSArray *)points {
+	NSLog(@"adding points, %@",points);
+	[self.mapView addAnnotations:points];
+}
 
 - (void)dealloc {
     [super dealloc];

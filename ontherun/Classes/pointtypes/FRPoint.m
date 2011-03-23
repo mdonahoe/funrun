@@ -43,6 +43,13 @@
 	
 	return self;
 }
+- (id) initWithName:(NSString *)name{
+	self = [super init];
+	if (!self) return nil;
+	self.title = name;
+	self.subtitle = @"named";
+	return self;
+}
 
 - (CLLocationCoordinate2D)coordinate
 {

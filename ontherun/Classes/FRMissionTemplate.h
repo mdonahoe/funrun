@@ -13,6 +13,7 @@
 #import "toqbot.h"
 #import "VSSpeechSynthesizer.h"
 #import "FRPoint.h"
+#import "FRMapViewController.h"
 
 
 
@@ -21,9 +22,7 @@
 //#import <AVFoundation/AVFoundation.h>
 //#import <MediaPlayer/MediaPlayer.h>
 
-/*
- sometimes things dont get said.
- */
+
 
 @interface FRMissionTemplate : NSObject <CLLocationManagerDelegate> {
 	NSString * previously_said;
@@ -36,9 +35,12 @@
 	NSMutableArray * toBeSpoken;
 	NSMutableArray * points;
 	NSString * current_road;
+	BOOL setup_complete;
+	FRMapViewController * mapControl;
 	
 }
 @property(nonatomic,retain) NSMutableArray * points;
+@property(nonatomic,retain) FRMapViewController * mapControl;
 
 - (void) updatePosition:(id)obj;
 - (void) ticktock;
@@ -47,4 +49,5 @@
 - (void) speak:(NSString *)text;
 - (void) speakIfEmpty:(NSString *)text;
 - (void) speakNow:(NSString *)text;
+- (void) initWithStart:(FREdgePos *)start;
 @end

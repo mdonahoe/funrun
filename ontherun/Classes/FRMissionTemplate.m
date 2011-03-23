@@ -11,12 +11,12 @@
 #import "FRFileLoader.h"
 
 @implementation FRMissionTemplate
-@synthesize points;
+@synthesize points,mapControl;
 
 - (id) init {
 	self = [super init];
 	if (!self) return nil;
-	
+	setup_complete = NO;
 	//Voice Communication
 	//link to /Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.2.sdk/System/Library/PrivateFrameworks/VoiceServices.framework
 	voicebot = [[NSClassFromString(@"VSSpeechSynthesizer") alloc] init];
@@ -138,7 +138,8 @@
 	 didUpdateToLocation:(CLLocation *)newLocation
 			fromLocation:(CLLocation *)oldLocation
 {
-	if (newLocation.horizontalAccuracy>100) return;
+	NSLog(@"recieved timestamp: %f",[newLocation.timestamp timeIntervalSinceNow]);
+	if (newLocation.horizontalAccuracy>100 || [newLocation.timestamp timeIntervalSinceNow] > 30) return;
 	if (newLocation.coordinate.latitude==oldLocation.coordinate.latitude && newLocation.coordinate.longitude==oldLocation.coordinate.longitude){
 		NSLog(@"gps update is identical, skipping recalculations");
 		return;
@@ -175,17 +176,14 @@
 	}
 	
 	if (latestsearch) {
-		//we already have a position
-		//ensure that the direction of our new point is facing away from the old one.
 		player.pos = [latestsearch move:ep awayFromRootWithDelta:0];
 	} else {
 		player.pos = ep;
-		//start the updates
-		[self performSelector:@selector(ticktock) withObject:nil afterDelay:1.0]; 
 	}
 	
 	[latestsearch release];
 	latestsearch = [themap createPathSearchAt:player.pos withMaxDistance:[NSNumber numberWithFloat:1000.0]];
+	if (!setup_complete) [self initWithStart:ep];
 }
 
 /*
@@ -239,6 +237,18 @@
 }
 */
 
+- (void) initWithStart:(FREdgePos*)start {
+	if (setup_complete){
+		NSLog(@"called initWithstartPoint: twice!");
+		return;
+	}
+	[self performSelector:@selector(ticktock) withObject:nil afterDelay:1.0];
+	setup_complete = YES;
+	for (FRPoint * pt in points){
+		[pt setCoordinate:[themap coordinateFromEdgePosition:pt.pos]];
+	}
+	if (mapControl) [mapControl addPoints:points];
+}
 - (void) dealloc {
 	[player release];
 	[points release];

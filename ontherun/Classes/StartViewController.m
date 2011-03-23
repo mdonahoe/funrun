@@ -9,6 +9,7 @@
 #import "StartViewController.h"
 #import "FRMapViewController.h"
 #import "FRMissionChase.h"
+#import "FRMissionTwo.h"
 @implementation StartViewController
 
 /*
@@ -68,10 +69,13 @@
 - (IBAction)doAction:(id)sender{
 	if (!missionid) return;
 	//themission = [[FRMissionOne alloc] initWithFilename:missionid];
-	themission = [[FRMissionChase alloc] init];
+	
+	themission = [[FRMissionTwo alloc] init];
 	 FRMapViewController * detailViewController = [[FRMapViewController alloc] initWithNibName:@"FRMapViewController" bundle:nil];
 	[self.navigationController pushViewController:detailViewController animated:YES];
-	[detailViewController.mapView addAnnotations:themission.points];
+	themission.mapControl = detailViewController;
+	
+	//[detailViewController.mapView addAnnotations:themission.points];
 	[detailViewController release];	
 }
 - (void) setMission:(NSString *)m {

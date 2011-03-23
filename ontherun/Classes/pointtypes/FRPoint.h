@@ -72,5 +72,6 @@
 - (CLLocationCoordinate2D)coordinate;
 - (void) setCoordinate:(CLLocationCoordinate2D)newCoordinate;
 - (id) initWithDict:(NSDictionary*)dict onMap:(FRMap*)map;
+- (id) initWithName:(NSString *)name;
 
 @end

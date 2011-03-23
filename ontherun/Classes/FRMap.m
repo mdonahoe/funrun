@@ -179,7 +179,7 @@
 		}
 	}
 	
-	
+	// should autorelease this. memory leak possible
 	FRPathSearch * ps = [[FRPathSearch alloc] initWithRoot:ep previous:previous distance:distance map:self];
 	return ps;
 }

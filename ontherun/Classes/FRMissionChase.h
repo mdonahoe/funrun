@@ -15,4 +15,15 @@
 	BOOL running;
 }
 
+
+/*
+ Problems from latest test:
+	1. i dont want to chase after people that arent on my way.
+	2. dead ends are terrible
+	3. repeats shit alot because of "click". come up with a better description system
+	4. no way to say that i dont want to follow someone
+	5. doesnt detect that i am off the map.
+	6. still no music!?
+ */
+
 @end
