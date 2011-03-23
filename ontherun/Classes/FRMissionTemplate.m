@@ -139,7 +139,7 @@
 			fromLocation:(CLLocation *)oldLocation
 {
 	NSLog(@"recieved timestamp: %f",[newLocation.timestamp timeIntervalSinceNow]);
-	if (newLocation.horizontalAccuracy>100 || [newLocation.timestamp timeIntervalSinceNow] > 30) return;
+	if (newLocation.horizontalAccuracy>100.0 || [newLocation.timestamp timeIntervalSinceNow] < -30.0) return;
 	if (newLocation.coordinate.latitude==oldLocation.coordinate.latitude && newLocation.coordinate.longitude==oldLocation.coordinate.longitude){
 		NSLog(@"gps update is identical, skipping recalculations");
 		return;
@@ -242,7 +242,7 @@
 		NSLog(@"called initWithstartPoint: twice!");
 		return;
 	}
-	[self performSelector:@selector(ticktock) withObject:nil afterDelay:1.0];
+	//[self performSelector:@selector(ticktock) withObject:nil afterDelay:1.0];
 	setup_complete = YES;
 	for (FRPoint * pt in points){
 		[pt setCoordinate:[themap coordinateFromEdgePosition:pt.pos]];

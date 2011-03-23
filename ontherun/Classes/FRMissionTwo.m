@@ -60,8 +60,8 @@
 		
 	}
 	
-	NSTimeInterval timeleft = [deadline timeIntervalSinceNow];
-	switch ((int)timeleft) {
+	int timeleft = (int)[deadline timeIntervalSinceNow];
+	switch (timeleft) {
 		case 120:
 			[self speak:@"two minutes"];
 			break;
@@ -81,12 +81,12 @@
 			[self speak:@"you're not gonna make it"];
 			break;
 		default:
-			if ((int)timeleft<6){
-				[self speak:[NSString stringWithFormat:@"%i",(int)timeleft]];
+			if (timeleft<6){
+				[self speak:[NSString stringWithFormat:@"%i",timeleft]];
 			}
 			break;
 	}
-	
+	//mapControl.timer.text = [NSString stringWithFormat:@"%i",timeleft];
 	float goal = [extraction distanceFromRoot:player.pos];
 	
 	if (goal < 30){
@@ -134,7 +134,18 @@
 	
 	//cops could exit buildings, or be in cars
 	//the map isnt going to have a points until this is called. connect to the MKMapView somehow?
+	
+	mapControl.navigationItem.rightBarButtonItem = [[[UIBarButtonItem alloc] initWithTitle:@"start"
+																					  style:UIBarButtonItemStyleDone
+																					 target:self
+																					 action:@selector(startup)] autorelease];
+	//(id)initWithTitle:(NSString *)title style:(UIBarButtonItemStyle)style target:(id)target action:(SEL)action
+
+	
 	[super initWithStart:start];
+}
+- (void) startup {
+	NSLog(@"booooooom");
 }
 - (void) dealloc {
 	[enemies release];
