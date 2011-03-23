@@ -17,6 +17,7 @@
 	FRMap * map;
 	FREdgePos * root;
 }
+@property (nonatomic,retain) FREdgePos * root;
 - (FRMap *)getMap;
 - (id) initWithRoot:(FREdgePos *)r previous:(NSDictionary *)p distance:(NSDictionary *)d map:(FRMap *)m;
 - (FREdgePos *) move:(FREdgePos*)ep towardRootWithDelta:(float)dx;

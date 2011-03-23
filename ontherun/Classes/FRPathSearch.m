@@ -10,12 +10,11 @@
 
 
 @implementation FRPathSearch
-
+@synthesize root;
 - (id) initWithRoot:(FREdgePos *)r previous:(NSDictionary *)p distance:(NSDictionary *)d map:(FRMap *)m {
 	self = [super init];
 	if (self){
-		root = r;
-		[r retain];
+		self.root = r;
 		
 		distance = [[NSDictionary alloc] initWithDictionary:d copyItems:YES];
 		
