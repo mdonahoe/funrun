@@ -125,10 +125,6 @@
 	FRPoint * extraction_point = [[FRPoint alloc] initWithName:@"extraction point"];
 	extraction_point.pos = [latestsearch move:player.pos awayFromRootWithDelta:1450.0];
 	extraction = [themap createPathSearchAt:extraction_point.pos withMaxDistance:[NSNumber numberWithFloat:1450.0]];
-	
-	deadline = [[NSDate alloc] initWithTimeIntervalSinceNow:360.0];
-	[self speak:[NSString stringWithFormat:@"You have 6 minutes to get to the extraction point on %@",[themap descriptionOfEdgePos:extraction_point.pos]]];
-	[self speak:@"good luck and get moving"];
 	[points addObject:extraction_point];
 	[extraction_point release];
 	
@@ -146,6 +142,20 @@
 }
 - (void) startup {
 	NSLog(@"booooooom");
+	deadline = [[NSDate alloc] initWithTimeIntervalSinceNow:360.0];
+	[self speak:[NSString stringWithFormat:@"You have 6 minutes to get to the extraction point on %@",[themap descriptionOfEdgePos:extraction.root]]];
+	[self speak:@"good luck and get moving"];
+	
+	[self ticktock];
+	mapControl.navigationItem.rightBarButtonItem = [[[UIBarButtonItem alloc] initWithTitle:@"Abort"
+																					 style:UIBarButtonItemStylePlain
+																					target:self
+																					action:@selector(abort)] autorelease];
+}
+- (void) abort {
+	[NSObject cancelPreviousPerformRequestsWithTarget:self];
+	mapControl.timer.text = @"ABORTED";
+	[toBeSpoken ]
 }
 - (void) dealloc {
 	[enemies release];
