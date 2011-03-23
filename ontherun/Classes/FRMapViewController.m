@@ -10,7 +10,7 @@
 #import "FRPoint.h"
 
 @implementation FRMapViewController
-@synthesize mapView;
+@synthesize mapView,timer;
 
 - (void)gotoLocation
 {

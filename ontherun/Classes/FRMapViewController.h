@@ -11,8 +11,10 @@
 
 @interface FRMapViewController : UIViewController <MKMapViewDelegate>{
 	MKMapView * mapView;
+	UILabel * timer;
 }
 @property (nonatomic, retain) IBOutlet MKMapView *mapView;
+@property (nonatomic, retain) IBOutlet UILabel * timer;
 - (void) addPoints:(NSArray *)points;
 - (void) gotoLocation;
 
