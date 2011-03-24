@@ -11,7 +11,7 @@
 #import "FRFileLoader.h"
 
 @implementation FRMissionTemplate
-@synthesize points,mapControl;
+@synthesize points,delegate;
 
 - (id) init {
 	self = [super init];
@@ -58,6 +58,8 @@
 	
 	[voicebot setRate:(float)1.3];
 	[voicebot setPitch:.35];
+	
+	delegate = nil;
 	
 	return self;
 }
@@ -107,7 +109,7 @@
 	for (FRPoint * pt in points){
 		[pt setCoordinate:[themap coordinateFromEdgePosition:pt.pos]];
 	}
-	
+	[delegate missionTick];
 	[self performSelector:@selector(ticktock) withObject:nil afterDelay:1.0];
 };
 - (void) updatePosition:(id)obj {
@@ -248,7 +250,7 @@
 	for (FRPoint * pt in points){
 		[pt setCoordinate:[themap coordinateFromEdgePosition:pt.pos]];
 	}
-	if (mapControl) [mapControl addPoints:points];
+	if (delegate) [delegate missionInitialized];
 }
 - (void) dealloc {
 	[player release];
@@ -260,7 +262,7 @@
 	[current_road release];
 	[m2 release];
 	[locationManager release];
-	[mapControl release];
+	[voicebot release];
 	[super dealloc];
 }
 @end

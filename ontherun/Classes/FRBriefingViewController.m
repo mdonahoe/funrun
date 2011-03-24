@@ -1,18 +1,15 @@
-    //
-//  StartViewController.m
+//
+//  FRBriefingViewController.m
 //  ontherun
 //
-//  Created by Matt Donahoe on 3/14/11.
-//  Copyright 2011 __MyCompanyName__. All rights reserved.
+//  Created by Matt Donahoe on 3/24/11.
+//  Copyright 2011 MIT Media Lab. All rights reserved.
 //
 
-#import "StartViewController.h"
 #import "FRBriefingViewController.h"
-#import "FRMissionChase.h"
-#import "FRMissionOne.h"
-#import "FRMissionTwo.h"
+#import "FRMapViewController.h"
 
-@implementation StartViewController
+@implementation FRBriefingViewController
 
 /*
  // The designated initializer.  Override if you create the controller programmatically and want to perform customization that is not appropriate for viewDidLoad.
@@ -24,17 +21,15 @@
 }
 */
 
-/*
-// Implement loadView to create a view hierarchy programmatically, without using a nib.
-- (void)loadView {
-}
-*/
-
 
 // Implement viewDidLoad to do additional setup after loading the view, typically from a nib.
 - (void)viewDidLoad {
     [super viewDidLoad];
-	NSLog(@"first view loaded");
+	NSLog(@"Briefing loaded");
+	self.navigationItem.rightBarButtonItem = [[[UIBarButtonItem alloc] initWithTitle:@"Map"
+																			   style:UIBarButtonItemStylePlain
+																			  target:self
+																			  action:@selector(loadMap)] autorelease];
 }
 
 
@@ -45,6 +40,16 @@
     return (interfaceOrientation == UIInterfaceOrientationPortrait);
 }
 */
+
+
+
+- (void) loadMap {
+	FRMapViewController * missionView =
+	[[FRMapViewController alloc] initWithNibName:@"FRMapViewController" bundle:nil];
+	[self.navigationController pushViewController:missionView animated:YES];
+	[missionView release];
+}
+
 
 - (void)didReceiveMemoryWarning {
     // Releases the view if it doesn't have a superview.
@@ -57,18 +62,13 @@
     [super viewDidUnload];
     // Release any retained subviews of the main view.
     // e.g. self.myOutlet = nil;
-	NSLog(@"first view unloaded");
 }
+
+
 - (void)dealloc {
-	[missionLabel release];
+	NSLog(@"bye bye briefing");
     [super dealloc];
 }
-- (IBAction)doAction:(id)sender{
-	//have different nibs for different missions?
-	//or download from the interwebs?
-	FRBriefingViewController * detailViewController =
-	[[FRBriefingViewController alloc] initWithNibName:@"FRBriefingViewController" bundle:nil];
-	[self.navigationController pushViewController:detailViewController animated:YES];
-	[detailViewController release];	
-}
+
+
 @end

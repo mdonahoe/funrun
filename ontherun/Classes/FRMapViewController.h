@@ -8,14 +8,16 @@
 
 #import <UIKit/UIKit.h>
 #import <MapKit/MapKit.h>
+#import "FRMissionTemplate.h"
 
 @interface FRMapViewController : UIViewController <MKMapViewDelegate>{
 	MKMapView * mapView;
 	UILabel * timer;
+	FRMissionTemplate * mission;
+	
 }
 @property (nonatomic, retain) IBOutlet MKMapView *mapView;
 @property (nonatomic, retain) IBOutlet UILabel * timer;
-- (void) addPoints:(NSArray *)points;
 - (void) gotoLocation;
 
 @end

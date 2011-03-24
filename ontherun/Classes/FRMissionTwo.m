@@ -86,7 +86,6 @@
 			}
 			break;
 	}
-	mapControl.timer.text = [NSString stringWithFormat:@"%i",timeleft];
 	float goal = [extraction distanceFromRoot:player.pos];
 	
 	if (goal < 30){
@@ -131,10 +130,6 @@
 	//cops could exit buildings, or be in cars
 	//the map isnt going to have a points until this is called. connect to the MKMapView somehow?
 	
-	mapControl.navigationItem.rightBarButtonItem = [[[UIBarButtonItem alloc] initWithTitle:@"start"
-																					  style:UIBarButtonItemStyleDone
-																					 target:self
-																					 action:@selector(startup)] autorelease];
 	//(id)initWithTitle:(NSString *)title style:(UIBarButtonItemStyle)style target:(id)target action:(SEL)action
 
 	
@@ -146,21 +141,12 @@
 	[self speak:[NSString stringWithFormat:@"You have 6 minutes to get to the extraction point on %@",[themap descriptionOfEdgePos:extraction.root]]];
 	[self speak:@"good luck and get moving"];
 	[self ticktock];
-	mapControl.navigationItem.rightBarButtonItem = [[[UIBarButtonItem alloc] initWithTitle:@"Abort"
-																					 style:UIBarButtonItemStylePlain
-																					target:self
-																					action:@selector(abort)] autorelease];
 }
 - (void) abort {
 	[NSObject cancelPreviousPerformRequestsWithTarget:self];
-	mapControl.timer.text = @"ABORTED";
 	[toBeSpoken removeAllObjects];
+	[voicebot setDelegate:nil];
 	[self speak:@"Mission Aborted"];
-	// load the status view
-	FRSummaryViewController * summaryViewControl = [[[FRSummaryViewController alloc] initWithNibName:@"FRSummaryViewController" bundle:nil] autorelease];
-	[mapControl.navigationController pushViewController:summaryViewControl animated:YES];
-	NSLog(@"popped");
-	//[mapControl.navigationController popToRootViewControllerAnimated:YES];
 }
 - (void) dealloc {
 	[enemies release];
@@ -168,6 +154,7 @@
 	[lastseen_date release];
 	[deadline release];
 	[extraction release];
+	NSLog(@"mission dealloc'd");
 	[super dealloc];
 }
 @end

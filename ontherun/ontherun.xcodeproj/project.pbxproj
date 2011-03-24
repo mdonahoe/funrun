@@ -45,6 +45,10 @@
 		C906C28612D4EA4000C14388 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C906C27C12D4EA4000C14388 /* AudioToolbox.framework */; };
 		C92B0F391338237F0060CE50 /* FRMissionTwo.m in Sources */ = {isa = PBXBuildFile; fileRef = C92B0F381338237F0060CE50 /* FRMissionTwo.m */; };
 		C9557AAC130AEAA2004A6F54 /* FREdgePos.m in Sources */ = {isa = PBXBuildFile; fileRef = C9557AAB130AEAA2004A6F54 /* FREdgePos.m */; };
+		C9624CC3133AD63300F6594F /* FRSummaryViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C9624CC1133AD63300F6594F /* FRSummaryViewController.m */; };
+		C9624CC4133AD63300F6594F /* FRSummaryViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = C9624CC2133AD63300F6594F /* FRSummaryViewController.xib */; };
+		C9624CD9133BB9F200F6594F /* FRBriefingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C9624CD7133BB9F200F6594F /* FRBriefingViewController.m */; };
+		C9624CDA133BB9F200F6594F /* FRBriefingViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = C9624CD8133BB9F200F6594F /* FRBriefingViewController.xib */; };
 		C97CA187132EF0E600E71AC4 /* FRMissionTemplate.m in Sources */ = {isa = PBXBuildFile; fileRef = C97CA186132EF0E600E71AC4 /* FRMissionTemplate.m */; };
 		C97CA18C132EF60700E71AC4 /* FRMissionOne.m in Sources */ = {isa = PBXBuildFile; fileRef = C97CA18B132EF60700E71AC4 /* FRMissionOne.m */; };
 		C9ABFF5013087EEF0031160A /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C9ABFF4F13087EEF0031160A /* MediaPlayer.framework */; };
@@ -122,6 +126,12 @@
 		C92B0F381338237F0060CE50 /* FRMissionTwo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRMissionTwo.m; sourceTree = "<group>"; };
 		C9557AAA130AEAA2004A6F54 /* FREdgePos.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FREdgePos.h; sourceTree = "<group>"; };
 		C9557AAB130AEAA2004A6F54 /* FREdgePos.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FREdgePos.m; sourceTree = "<group>"; };
+		C9624CC0133AD63300F6594F /* FRSummaryViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSummaryViewController.h; sourceTree = "<group>"; };
+		C9624CC1133AD63300F6594F /* FRSummaryViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSummaryViewController.m; sourceTree = "<group>"; };
+		C9624CC2133AD63300F6594F /* FRSummaryViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = FRSummaryViewController.xib; sourceTree = "<group>"; };
+		C9624CD6133BB9F200F6594F /* FRBriefingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRBriefingViewController.h; sourceTree = "<group>"; };
+		C9624CD7133BB9F200F6594F /* FRBriefingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRBriefingViewController.m; sourceTree = "<group>"; };
+		C9624CD8133BB9F200F6594F /* FRBriefingViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = FRBriefingViewController.xib; sourceTree = "<group>"; };
 		C97CA185132EF0E600E71AC4 /* FRMissionTemplate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRMissionTemplate.h; sourceTree = "<group>"; };
 		C97CA186132EF0E600E71AC4 /* FRMissionTemplate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRMissionTemplate.m; sourceTree = "<group>"; };
 		C97CA18A132EF60700E71AC4 /* FRMissionOne.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRMissionOne.h; sourceTree = "<group>"; };
@@ -168,10 +178,9 @@
 				C906C13B12D4EA2F00C14388 /* sound */,
 				9B51D5BA1305F53400978183 /* Points */,
 				C906C14A12D4EA2F00C14388 /* request */,
+				C9624CDB133BBDFD00F6594F /* ViewControllers */,
 				C9FC234712F9CCC700892CF6 /* toqbot.h */,
 				C9FC234812F9CCC700892CF6 /* toqbot.m */,
-				9BD50323130070320092D86A /* FRMapViewController.h */,
-				9BD50324130070320092D86A /* FRMapViewController.m */,
 				1D3623240D0F684500981E51 /* ontherunAppDelegate.h */,
 				1D3623250D0F684500981E51 /* ontherunAppDelegate.m */,
 				C9C5378612E39A7A005C0BF0 /* FRMap.h */,
@@ -182,8 +191,6 @@
 				9B84A0D21309C80300BE94CF /* FRFileLoader.m */,
 				C9557AAA130AEAA2004A6F54 /* FREdgePos.h */,
 				C9557AAB130AEAA2004A6F54 /* FREdgePos.m */,
-				9BBD3298132E81CC0082A0C7 /* StartViewController.h */,
-				9BBD3299132E81CC0082A0C7 /* StartViewController.m */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -220,6 +227,8 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				C9624CC2133AD63300F6594F /* FRSummaryViewController.xib */,
+				C9624CD8133BB9F200F6594F /* FRBriefingViewController.xib */,
 				9BD50336130075020092D86A /* FRMapViewController.xib */,
 				28F335F01007B36200424DE2 /* RootViewController.xib */,
 				9BBD3295132E81360082A0C7 /* StartView.xib */,
@@ -326,6 +335,21 @@
 			path = request;
 			sourceTree = "<group>";
 		};
+		C9624CDB133BBDFD00F6594F /* ViewControllers */ = {
+			isa = PBXGroup;
+			children = (
+				C9624CC0133AD63300F6594F /* FRSummaryViewController.h */,
+				C9624CC1133AD63300F6594F /* FRSummaryViewController.m */,
+				9BBD3298132E81CC0082A0C7 /* StartViewController.h */,
+				9BBD3299132E81CC0082A0C7 /* StartViewController.m */,
+				C9624CD6133BB9F200F6594F /* FRBriefingViewController.h */,
+				C9624CD7133BB9F200F6594F /* FRBriefingViewController.m */,
+				9BD50323130070320092D86A /* FRMapViewController.h */,
+				9BD50324130070320092D86A /* FRMapViewController.m */,
+			);
+			name = ViewControllers;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -380,6 +404,8 @@
 				28F335F11007B36200424DE2 /* RootViewController.xib in Resources */,
 				9BD50337130075020092D86A /* FRMapViewController.xib in Resources */,
 				9BBD3296132E81360082A0C7 /* StartView.xib in Resources */,
+				C9624CC4133AD63300F6594F /* FRSummaryViewController.xib in Resources */,
+				C9624CDA133BB9F200F6594F /* FRBriefingViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -417,6 +443,8 @@
 				C97CA18C132EF60700E71AC4 /* FRMissionOne.m in Sources */,
 				9B836778133403A300EC486F /* FRMissionChase.m in Sources */,
 				C92B0F391338237F0060CE50 /* FRMissionTwo.m in Sources */,
+				C9624CC3133AD63300F6594F /* FRSummaryViewController.m in Sources */,
+				C9624CD9133BB9F200F6594F /* FRBriefingViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

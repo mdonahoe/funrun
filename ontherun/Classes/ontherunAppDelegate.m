@@ -18,13 +18,13 @@
 #pragma mark -
 #pragma mark Application lifecycle
 
-
+/*
 - (BOOL)application:(UIApplication *)application handleOpenURL:(NSURL *)url 
 {
-	[(StartViewController *)self.navigationController.topViewController setMission:[url host]];
 	return YES;
 	
 }
+*/
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {    
     
     // Override point for customization after application launch.

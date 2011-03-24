@@ -13,7 +13,6 @@
 #import "toqbot.h"
 #import "VSSpeechSynthesizer.h"
 #import "FRPoint.h"
-#import "FRMapViewController.h"
 
 
 
@@ -36,11 +35,11 @@
 	NSMutableArray * points;
 	NSString * current_road;
 	BOOL setup_complete;
-	FRMapViewController * mapControl;
+	id delegate;
 	
 }
 @property(nonatomic,retain) NSMutableArray * points;
-@property(nonatomic,retain) FRMapViewController * mapControl;
+@property(nonatomic,assign) id delegate;
 
 - (void) updatePosition:(id)obj;
 - (void) ticktock;

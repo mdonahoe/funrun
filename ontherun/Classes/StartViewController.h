@@ -10,10 +10,7 @@
 #import "FRMissionTemplate.h"
 
 @interface StartViewController : UIViewController {
-	FRMissionTemplate * themission;
-	NSString * missionid;
 	IBOutlet UILabel * missionLabel;
 }
 - (IBAction)doAction:(id)sender;
-- (void)setMission:(NSString*)m;
 @end
