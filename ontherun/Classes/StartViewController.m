@@ -32,6 +32,7 @@
 // Implement viewDidLoad to do additional setup after loading the view, typically from a nib.
 - (void)viewDidLoad {
     [super viewDidLoad];
+	NSLog(@"first view loaded");
 	if (!missionid){
 		missionLabel.text = @"Mission One";
 		[self setMission:@"mission_one2.js"];
@@ -60,16 +61,18 @@
     [super viewDidUnload];
     // Release any retained subviews of the main view.
     // e.g. self.myOutlet = nil;
+	NSLog(@"first view unloaded");
 }
 - (void)dealloc {
 	[missionid release];
 	[themission release];
+	[missionLabel release];
     [super dealloc];
 }
 - (IBAction)doAction:(id)sender{
 	if (!missionid) return;
 	//themission = [[FRMissionOne alloc] initWithFilename:missionid];
-	
+	[themission release];
 	themission = [[FRMissionTwo alloc] init];
 	 FRMapViewController * detailViewController = [[FRMapViewController alloc] initWithNibName:@"FRMapViewController" bundle:nil];
 	[self.navigationController pushViewController:detailViewController animated:YES];

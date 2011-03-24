@@ -65,6 +65,9 @@
 
 - (void) dealloc {
 	[dictme release];
+	[title release];
+	[subtitle release];
+	[pos release];
 	[super dealloc];
 }
 @end

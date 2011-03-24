@@ -70,6 +70,7 @@
 	}
 }
 - (void) speakNow:(NSString *)text{
+	return;
 	[voicebot startSpeakingString:text];
 	[text retain];
 	[previously_said release];
@@ -259,6 +260,7 @@
 	[current_road release];
 	[m2 release];
 	[locationManager release];
+	[mapControl release];
 	[super dealloc];
 }
 @end

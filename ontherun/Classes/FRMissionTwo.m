@@ -7,7 +7,7 @@
 //
 
 #import "FRMissionTwo.h"
-
+#import "FRSummaryViewController.h"
 
 @implementation FRMissionTwo
 - (void) ticktock {
@@ -15,7 +15,7 @@
 	//anounce time remaining
 	//announce closest cop
 	//move cops toward their lastknown location
-	if (healthpoints<0) return;
+	if (healthpoints < 0) return;
 	
 	for (FRPoint * cop in enemies){
 		FREdgePos * newpos;
@@ -86,7 +86,7 @@
 			}
 			break;
 	}
-	//mapControl.timer.text = [NSString stringWithFormat:@"%i",timeleft];
+	mapControl.timer.text = [NSString stringWithFormat:@"%i",timeleft];
 	float goal = [extraction distanceFromRoot:player.pos];
 	
 	if (goal < 30){
@@ -145,7 +145,6 @@
 	deadline = [[NSDate alloc] initWithTimeIntervalSinceNow:360.0];
 	[self speak:[NSString stringWithFormat:@"You have 6 minutes to get to the extraction point on %@",[themap descriptionOfEdgePos:extraction.root]]];
 	[self speak:@"good luck and get moving"];
-	
 	[self ticktock];
 	mapControl.navigationItem.rightBarButtonItem = [[[UIBarButtonItem alloc] initWithTitle:@"Abort"
 																					 style:UIBarButtonItemStylePlain
@@ -155,7 +154,13 @@
 - (void) abort {
 	[NSObject cancelPreviousPerformRequestsWithTarget:self];
 	mapControl.timer.text = @"ABORTED";
-	[toBeSpoken ]
+	[toBeSpoken removeAllObjects];
+	[self speak:@"Mission Aborted"];
+	// load the status view
+	FRSummaryViewController * summaryViewControl = [[[FRSummaryViewController alloc] initWithNibName:@"FRSummaryViewController" bundle:nil] autorelease];
+	[mapControl.navigationController pushViewController:summaryViewControl animated:YES];
+	NSLog(@"popped");
+	//[mapControl.navigationController popToRootViewControllerAnimated:YES];
 }
 - (void) dealloc {
 	[enemies release];

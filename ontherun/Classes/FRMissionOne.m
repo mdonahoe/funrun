@@ -198,5 +198,16 @@
 
 	[super ticktock];
 }
-
+- (void) dealloc {
+	[start_time release];
+	[drop_time release];
+	[spotted_time release];
+	[droppoint release];
+	[target release];
+	[pursuer release];
+	[base release];
+	[hurrylist release];
+	[countdown release];
+	[super dealloc];
+}
 @end

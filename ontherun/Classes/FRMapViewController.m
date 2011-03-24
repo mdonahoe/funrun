@@ -64,6 +64,8 @@
 }
 
 - (void)dealloc {
+	mapView = nil;
+	timer = nil;
     [super dealloc];
 }
 //currently unused
