@@ -17,3 +17,11 @@
 @property(nonatomic,retain) IBOutlet MKMapView * mapView;
 - (id) initWithAnnotation:(id <MKAnnotation>)center delegate:(id)d;
 @end
+
+
+/*
+ todo:
+ save locations for use later
+ add a listview with editable destinations
+ 
+*/

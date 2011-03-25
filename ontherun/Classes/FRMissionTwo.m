@@ -113,6 +113,15 @@
 	self.viewControl = brief;
 }
 - (void) pickPoint {
+	//this is called when the player reads the briefing and decides to select the destination.
+	//perhaps this step can be incorporated into the briefing itself.
+	// "you need to get out of there. Choose an evac point and we will be there in 5 minutes to pick you up"
+	// "The evac point must be at least a mile from your current location. the cops are coming, and we dont want to be spotted."
+	
+	
+	//for mission one:
+	//"you need to chase down this guy and get his stuff. then head to a dropoff point to meet our agent and do the handoff."
+	
 	FRPoint * extraction_point = [[[FRPoint alloc] initWithName:@"extraction point"] autorelease];
 	[extraction_point setCoordinate:[themap coordinateFromEdgePosition:player.pos]];
 	
@@ -120,7 +129,12 @@
 	[[[LocationPicker alloc] initWithAnnotation:extraction_point delegate:self] autorelease];
 	[self.viewControl.navigationController pushViewController:lp animated:YES];
 }
-- (void) pickedLocation:(CLLocationCoordinate2D)location{
+- (void) pickedLocation:(CLLocationCoordinate2D)location {
+	//the location picker has returned a lat-lon for the destination coordinate.
+	//use it to finish building the mission map.
+	//make it so that cops are positioned along the way.
+	
+	
 	NSLog(@"location has been picked");
 	//[self.viewControl.navigationController popViewControllerAnimated:YES];
 	CLLocation * l = [[[CLLocation alloc] initWithLatitude:location.latitude longitude:location.longitude] autorelease];
@@ -190,3 +204,15 @@
 	[super dealloc];
 }
 @end
+
+
+/*
+ Todo:
+ 1. figure out what belongs in MissionTemplate instead of here
+ 2. add story dialog
+ 3. get yellow paper from maine
+ 4. make progress
+ 5. add cops between my picked location and my current location
+ 
+ 
+ */

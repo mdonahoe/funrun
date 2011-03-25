@@ -18,4 +18,8 @@
 @property (nonatomic, retain) IBOutlet UILabel * timer;
 - (void) gotoLocation;
 
+/* todo
+ new colors for the pins, depending on class type (destination, bad guy etc)
+ */
+
 @end

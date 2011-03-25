@@ -8,7 +8,9 @@
 
 #import <UIKit/UIKit.h>
 #import "FRMissionTemplate.h"
+// http://developer.apple.com/library/ios/#documentation/uikit/reference/UITableViewDelegate_Protocol/Reference/Reference.html
 
-@interface FRBriefingViewController : UIViewController {
+//
+@interface FRBriefingViewController : UITableViewController <UITableViewDelegate,UITableViewDataSource>{
 }
 @end

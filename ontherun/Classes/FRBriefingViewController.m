@@ -36,6 +36,34 @@
 																			  target:mission
 																			  action:@selector(pickPoint)] autorelease];
 }
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+	return 1;
+}
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    
+    static NSString *CellIdentifier = @"Cell";
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+    if (cell == nil) {
+        cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
+    }
+	
+	switch ([indexPath section]){
+		case 0:
+			cell.textLabel.text = @"One";
+			break;
+		case 1:
+			cell.textLabel.text = @"Two";
+			break;
+		case 2:
+			cell.textLabel.textColor = [UIColor blackColor];
+			cell.textLabel.text = [NSString stringWithFormat:@"%@",[messages objectAtIndex:[indexPath row]]];
+			break;
+	}
+	
+	return cell;
+	
+}
 
 /*
 // Override to allow orientations other than the default portrait orientation.

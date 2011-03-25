@@ -12,6 +12,8 @@
  
  permenantly caches remote resources into the app's Documents directory
  
+ todo:
+ provide an easy way to dump the cache for everything
  
  */
 @interface FRFileLoader : NSObject {
