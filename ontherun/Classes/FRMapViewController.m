@@ -7,9 +7,6 @@
 //
 
 #import "FRMapViewController.h"
-#import "FRMissionTwo.h"
-#import "FRSummaryViewController.h"
-
 
 
 @implementation FRMapViewController
@@ -32,8 +29,6 @@
 	NSLog(@"map loaded");
 	[super viewDidLoad];
 	self.mapView.mapType = MKMapTypeStandard;
-	mission = [[FRMissionTwo alloc] init];
-	mission.delegate = self;
 	[self gotoLocation];
 }
 - (MKAnnotationView *)mapView:(MKMapView *)theMapView viewForAnnotation:(id <MKAnnotation>)annotation{
@@ -64,45 +59,19 @@
     // e.g. self.myOutlet = nil;
 }
 
-- (void) missionInitialized {
+- (void) readyForMission:(FRMissionTemplate *)mission {
 	[self.mapView addAnnotations:mission.points];
 	timer.text = @"READY";
 	self.navigationItem.rightBarButtonItem = [[[UIBarButtonItem alloc] initWithTitle:@"start"
 																			   style:UIBarButtonItemStyleDone
-																			  target:self
-																			  action:@selector(startButton)] autorelease];
+																			  target:mission
+																			  action:@selector(startup)] autorelease];
 }
-- (void) startButton {
-	[mission startup];
-	self.navigationItem.rightBarButtonItem = [[[UIBarButtonItem alloc] initWithTitle:@"Abort"
-																			   style:UIBarButtonItemStylePlain
-																			  target:self
-																			  action:@selector(abortButton)] autorelease];
-}
-- (void) abortButton {
-	self.navigationItem.rightBarButtonItem = nil;
-	[mission abort];
-	[self missionEndedWithString:@"Aborted"];
-}
-- (void) missionTick {
-	NSLog(@"update view");
-	timer.text = @"in progress";
-}
-- (void) missionEndedWithString:(NSString *)status {
-	[mission release];
-	mission = nil;
-	timer.text = status;
-	FRSummaryViewController * summary =
-	[[FRSummaryViewController alloc] initWithNibName:@"FRSummaryViewController" bundle:nil];
-	[self.navigationController pushViewController:summary animated:YES];
-	summary.status.text = status;
-	[summary release];
-}
+
 - (void)dealloc {
 	mapView = nil;
 	timer = nil;
-	[mission release];
-    [super dealloc];
+	[super dealloc];
 }
 //currently unused
 -(void)zoomToFitMapAnnotations {

@@ -8,6 +8,9 @@
 
 #import "FRMissionTwo.h"
 #import "FRSummaryViewController.h"
+#import "FRBriefingViewController.h"
+#import "FRMapViewController.h"
+#import "LocationPicker.h"
 
 @implementation FRMissionTwo
 - (void) ticktock {
@@ -100,15 +103,31 @@
 	[super ticktock];
 	
 }
-
-- (void) initWithStart:(FREdgePos*)start{
-	//called after the mission figures out the users location
-	[self speak:@"the cops have been alerted of your location"];
+- (id) initWithViewControl:(UIViewController*)vc {
+	self = [super init];
+	if (!self) return;
+	FRBriefingViewController * brief = 
+	[[[FRBriefingViewController alloc] initWithNibName:@"FRBriefingViewController"
+												bundle:nil] autorelease];
+	[vc.navigationController pushViewController:brief animated:YES];
+	self.viewControl = brief;
+}
+- (void) pickPoint {
+	FRPoint * extraction_point = [[[FRPoint alloc] initWithName:@"extraction point"] autorelease];
+	[extraction_point setCoordinate:[themap coordinateFromEdgePosition:player.pos]];
 	
-	//last known position
-	[latestsearch retain];
-	lastseen_pos = latestsearch;
-	lastseen_date = [[NSDate alloc] init];
+	LocationPicker * lp = 
+	[[[LocationPicker alloc] initWithAnnotation:extraction_point delegate:self] autorelease];
+	[self.viewControl.navigationController pushViewController:lp animated:YES];
+}
+- (void) pickedLocation:(CLLocationCoordinate2D)location{
+	NSLog(@"location has been picked");
+	//[self.viewControl.navigationController popViewControllerAnimated:YES];
+	CLLocation * l = [[[CLLocation alloc] initWithLatitude:location.latitude longitude:location.longitude] autorelease];
+	FRPoint * extraction_point = [[[FRPoint alloc] initWithName:@"extraction point"] autorelease];
+	extraction_point.pos = [themap edgePosFromPoint:l];
+	extraction = [themap createPathSearchAt:extraction_point.pos withMaxDistance:[NSNumber numberWithFloat:1450.0]];
+	[points addObject:extraction_point];
 	
 	enemies = [[NSMutableArray alloc] init];
 	for (int i=0;i<4;i++){
@@ -119,34 +138,47 @@
 		[points addObject:cop]; //display the on the map
 		[cop release];
 	}
+	for (FRPoint * pt in points){
+		[pt setCoordinate:[themap coordinateFromEdgePosition:pt.pos]];
+	}
 	
-	
-	FRPoint * extraction_point = [[FRPoint alloc] initWithName:@"extraction point"];
-	extraction_point.pos = [latestsearch move:player.pos awayFromRootWithDelta:1450.0];
-	extraction = [themap createPathSearchAt:extraction_point.pos withMaxDistance:[NSNumber numberWithFloat:1450.0]];
-	[points addObject:extraction_point];
-	[extraction_point release];
-	
-	//cops could exit buildings, or be in cars
-	//the map isnt going to have a points until this is called. connect to the MKMapView somehow?
-	
-	//(id)initWithTitle:(NSString *)title style:(UIBarButtonItemStyle)style target:(id)target action:(SEL)action
-
-	
-	[super initWithStart:start];
+	FRMapViewController * mv = 
+	[[[FRMapViewController alloc] initWithNibName:@"FRMapViewController" bundle:nil] autorelease];
+	[self.viewControl.navigationController pushViewController:mv animated:YES];
+	self.viewControl = mv;
+	[self.viewControl readyForMission:self];
 }
 - (void) startup {
-	NSLog(@"booooooom");
+	[self speak:@"the cops have been alerted of your location"];
+	[latestsearch retain];
+	lastseen_pos = latestsearch;
+	lastseen_date = [[NSDate alloc] init];
 	deadline = [[NSDate alloc] initWithTimeIntervalSinceNow:360.0];
 	[self speak:[NSString stringWithFormat:@"You have 6 minutes to get to the extraction point on %@",[themap descriptionOfEdgePos:extraction.root]]];
 	[self speak:@"good luck and get moving"];
+	
+	
+	
 	[self ticktock];
+	self.viewControl.navigationItem.rightBarButtonItem = 
+	[[[UIBarButtonItem alloc] initWithTitle:@"Abort"
+									  style:UIBarButtonItemStylePlain
+									 target:self
+									 action:@selector(abort)] autorelease];
+	
+	
 }
 - (void) abort {
 	[NSObject cancelPreviousPerformRequestsWithTarget:self];
 	[toBeSpoken removeAllObjects];
-	[voicebot setDelegate:nil];
 	[self speak:@"Mission Aborted"];
+	FRSummaryViewController * summary =
+	[[FRSummaryViewController alloc] initWithNibName:@"FRSummaryViewController" bundle:nil];
+	[self.viewControl.navigationController pushViewController:summary animated:YES];
+	self.viewControl.navigationItem.rightBarButtonItem = nil;
+	self.viewControl = summary;
+	summary.status.text = @"IT WAS ABORT!";
+	[summary release];
 }
 - (void) dealloc {
 	[enemies release];

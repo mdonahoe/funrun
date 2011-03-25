@@ -43,7 +43,6 @@
 	int healthpoints;
 	NSDate * deadline; //time to the extraction point
 	FRPathSearch * extraction;
-	
 }
-
+- (void) pickedLocation:(CLLocationCoordinate2D)location;
 @end

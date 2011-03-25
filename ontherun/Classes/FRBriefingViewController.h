@@ -7,10 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
-
+#import "FRMissionTemplate.h"
 
 @interface FRBriefingViewController : UIViewController {
-
 }
-
 @end

@@ -13,8 +13,6 @@
 @interface FRMapViewController : UIViewController <MKMapViewDelegate>{
 	MKMapView * mapView;
 	UILabel * timer;
-	FRMissionTemplate * mission;
-	
 }
 @property (nonatomic, retain) IBOutlet MKMapView *mapView;
 @property (nonatomic, retain) IBOutlet UILabel * timer;

@@ -49,6 +49,8 @@
 		C9624CC4133AD63300F6594F /* FRSummaryViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = C9624CC2133AD63300F6594F /* FRSummaryViewController.xib */; };
 		C9624CD9133BB9F200F6594F /* FRBriefingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C9624CD7133BB9F200F6594F /* FRBriefingViewController.m */; };
 		C9624CDA133BB9F200F6594F /* FRBriefingViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = C9624CD8133BB9F200F6594F /* FRBriefingViewController.xib */; };
+		C9624D53133BFA4F00F6594F /* LocationPicker.m in Sources */ = {isa = PBXBuildFile; fileRef = C9624D51133BFA4F00F6594F /* LocationPicker.m */; };
+		C9624D54133BFA4F00F6594F /* LocationPicker.xib in Resources */ = {isa = PBXBuildFile; fileRef = C9624D52133BFA4F00F6594F /* LocationPicker.xib */; };
 		C97CA187132EF0E600E71AC4 /* FRMissionTemplate.m in Sources */ = {isa = PBXBuildFile; fileRef = C97CA186132EF0E600E71AC4 /* FRMissionTemplate.m */; };
 		C97CA18C132EF60700E71AC4 /* FRMissionOne.m in Sources */ = {isa = PBXBuildFile; fileRef = C97CA18B132EF60700E71AC4 /* FRMissionOne.m */; };
 		C9ABFF5013087EEF0031160A /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C9ABFF4F13087EEF0031160A /* MediaPlayer.framework */; };
@@ -132,6 +134,9 @@
 		C9624CD6133BB9F200F6594F /* FRBriefingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRBriefingViewController.h; sourceTree = "<group>"; };
 		C9624CD7133BB9F200F6594F /* FRBriefingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRBriefingViewController.m; sourceTree = "<group>"; };
 		C9624CD8133BB9F200F6594F /* FRBriefingViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = FRBriefingViewController.xib; sourceTree = "<group>"; };
+		C9624D50133BFA4F00F6594F /* LocationPicker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocationPicker.h; sourceTree = "<group>"; };
+		C9624D51133BFA4F00F6594F /* LocationPicker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LocationPicker.m; sourceTree = "<group>"; };
+		C9624D52133BFA4F00F6594F /* LocationPicker.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = LocationPicker.xib; sourceTree = "<group>"; };
 		C97CA185132EF0E600E71AC4 /* FRMissionTemplate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRMissionTemplate.h; sourceTree = "<group>"; };
 		C97CA186132EF0E600E71AC4 /* FRMissionTemplate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRMissionTemplate.m; sourceTree = "<group>"; };
 		C97CA18A132EF60700E71AC4 /* FRMissionOne.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRMissionOne.h; sourceTree = "<group>"; };
@@ -346,6 +351,9 @@
 				C9624CD7133BB9F200F6594F /* FRBriefingViewController.m */,
 				9BD50323130070320092D86A /* FRMapViewController.h */,
 				9BD50324130070320092D86A /* FRMapViewController.m */,
+				C9624D50133BFA4F00F6594F /* LocationPicker.h */,
+				C9624D51133BFA4F00F6594F /* LocationPicker.m */,
+				C9624D52133BFA4F00F6594F /* LocationPicker.xib */,
 			);
 			name = ViewControllers;
 			sourceTree = "<group>";
@@ -406,6 +414,7 @@
 				9BBD3296132E81360082A0C7 /* StartView.xib in Resources */,
 				C9624CC4133AD63300F6594F /* FRSummaryViewController.xib in Resources */,
 				C9624CDA133BB9F200F6594F /* FRBriefingViewController.xib in Resources */,
+				C9624D54133BFA4F00F6594F /* LocationPicker.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -445,6 +454,7 @@
 				C92B0F391338237F0060CE50 /* FRMissionTwo.m in Sources */,
 				C9624CC3133AD63300F6594F /* FRSummaryViewController.m in Sources */,
 				C9624CD9133BB9F200F6594F /* FRBriefingViewController.m in Sources */,
+				C9624D53133BFA4F00F6594F /* LocationPicker.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

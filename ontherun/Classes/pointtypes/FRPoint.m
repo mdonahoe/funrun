@@ -23,7 +23,6 @@
 		self.subtitle = @"FRPoint";
 		mystate = kPointNew;
 		
-		
 		NSArray * latlon = [dictme objectForKey:@"pos"];
 		if (latlon) {
 			CLLocation * p = [[CLLocation alloc] initWithLatitude:[[latlon objectAtIndex:0] floatValue]

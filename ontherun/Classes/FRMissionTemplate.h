@@ -35,11 +35,11 @@
 	NSMutableArray * points;
 	NSString * current_road;
 	BOOL setup_complete;
-	id delegate;
+	UIViewController * viewControl;
 	
 }
 @property(nonatomic,retain) NSMutableArray * points;
-@property(nonatomic,assign) id delegate;
+@property(nonatomic,assign) UIViewController * viewControl;
 
 - (void) updatePosition:(id)obj;
 - (void) ticktock;

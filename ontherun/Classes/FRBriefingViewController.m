@@ -26,12 +26,16 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
 	NSLog(@"Briefing loaded");
-	self.navigationItem.rightBarButtonItem = [[[UIBarButtonItem alloc] initWithTitle:@"Map"
-																			   style:UIBarButtonItemStylePlain
-																			  target:self
-																			  action:@selector(loadMap)] autorelease];
-}
 
+	
+}
+- (void) initializedMission:(FRMissionTemplate*)mission {
+	//good!
+	self.navigationItem.rightBarButtonItem = [[[UIBarButtonItem alloc] initWithTitle:@"Setup"
+																			   style:UIBarButtonItemStylePlain
+																			  target:mission
+																			  action:@selector(pickPoint)] autorelease];
+}
 
 /*
 // Override to allow orientations other than the default portrait orientation.
@@ -40,16 +44,6 @@
     return (interfaceOrientation == UIInterfaceOrientationPortrait);
 }
 */
-
-
-
-- (void) loadMap {
-	FRMapViewController * missionView =
-	[[FRMapViewController alloc] initWithNibName:@"FRMapViewController" bundle:nil];
-	[self.navigationController pushViewController:missionView animated:YES];
-	[missionView release];
-}
-
 
 - (void)didReceiveMemoryWarning {
     // Releases the view if it doesn't have a superview.

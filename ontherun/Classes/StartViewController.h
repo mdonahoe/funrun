@@ -11,6 +11,7 @@
 
 @interface StartViewController : UIViewController {
 	IBOutlet UILabel * missionLabel;
+	FRMissionTemplate * mission;
 }
 - (IBAction)doAction:(id)sender;
 @end

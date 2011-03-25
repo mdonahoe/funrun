@@ -11,6 +11,7 @@
 #import "FRMissionChase.h"
 #import "FRMissionOne.h"
 #import "FRMissionTwo.h"
+#import "LocationPicker.h"
 
 @implementation StartViewController
 
@@ -35,6 +36,9 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
 	NSLog(@"first view loaded");
+	[mission release];
+	mission = nil;
+	
 }
 
 
@@ -66,9 +70,7 @@
 - (IBAction)doAction:(id)sender{
 	//have different nibs for different missions?
 	//or download from the interwebs?
-	FRBriefingViewController * detailViewController =
-	[[FRBriefingViewController alloc] initWithNibName:@"FRBriefingViewController" bundle:nil];
-	[self.navigationController pushViewController:detailViewController animated:YES];
-	[detailViewController release];	
+	if (mission) [mission release];
+	mission = [[FRMissionTwo alloc] initWithViewControl:self];
 }
 @end
