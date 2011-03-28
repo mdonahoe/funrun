@@ -1,96 +1,248 @@
 //
-//  FRBriefingViewController.m
+//  BriefingViewController.m
 //  ontherun
 //
-//  Created by Matt Donahoe on 3/24/11.
+//  Created by Matt Donahoe on 3/25/11.
 //  Copyright 2011 MIT Media Lab. All rights reserved.
 //
 
 #import "FRBriefingViewController.h"
-#import "FRMapViewController.h"
+#import "LocationPicker.h"
+
+#define FONT_SIZE 15.0
+#define CELL_CONTENT_WIDTH 300.0
+#define CELL_CONTENT_MARGIN 10.0
+
+
+#define kSection_Objective 0
+#define kSection_Destination 1
 
 @implementation FRBriefingViewController
+#pragma mark -
+#pragma mark View lifecycle
 
-/*
- // The designated initializer.  Override if you create the controller programmatically and want to perform customization that is not appropriate for viewDidLoad.
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
-    if ((self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil])) {
-        // Custom initialization
-    }
-    return self;
-}
-*/
-
-
-// Implement viewDidLoad to do additional setup after loading the view, typically from a nib.
+//maybe do init instead
 - (void)viewDidLoad {
     [super viewDidLoad];
-	NSLog(@"Briefing loaded");
-
+	self.navigationItem.title = @"Mission One";
+	[missionText release];
+	missionText = @"We had a spy escape with some important data. We have tracked his movement, and have determined that he will be arriving in your area very shortly. Your task is to get to the place and chase him. Then take his stuff and bring it to a drop off point to complete the mission. Choose a dropoff point now, once you select the point, we cant change it.";
+	[missionText retain];
+	
+	//objective
+	objective = [[UITableViewCell alloc] initWithFrame:CGRectZero];
+	objective.selectionStyle = UITableViewCellSelectionStyleNone;
+	UILabel * label = [[[UILabel alloc] initWithFrame:CGRectZero] autorelease];
+	[label setLineBreakMode:UILineBreakModeWordWrap];
+	[label setMinimumFontSize:FONT_SIZE];
+	[label setNumberOfLines:0];
+	[label setFont:[UIFont systemFontOfSize:FONT_SIZE]];
+	NSString *text = missionText;		
+	CGSize constraint = CGSizeMake(CELL_CONTENT_WIDTH - (CELL_CONTENT_MARGIN * 2), 20000.0f);
+	CGSize size = [text sizeWithFont:[UIFont systemFontOfSize:FONT_SIZE] constrainedToSize:constraint lineBreakMode:UILineBreakModeWordWrap];
+	[label setText:text];
+	[label setFrame:CGRectMake(CELL_CONTENT_MARGIN, CELL_CONTENT_MARGIN, CELL_CONTENT_WIDTH - (CELL_CONTENT_MARGIN * 2), MAX(size.height, 44.0f))];			
+	[[objective contentView] addSubview:label];
+	
+	//destination
+	destination = [[UITableViewCell alloc] initWithFrame:CGRectZero];
+	destination.textLabel.text = @"loading";
+	destination.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+	
+	
+	//footerView
+	footerView  = [[UIView alloc] init];
+	
 	
 }
-- (void) initializedMission:(FRMissionTemplate*)mission {
-	//good!
-	self.navigationItem.rightBarButtonItem = [[[UIBarButtonItem alloc] initWithTitle:@"Setup"
-																			   style:UIBarButtonItemStylePlain
-																			  target:mission
-																			  action:@selector(pickPoint)] autorelease];
+
+#pragma mark -
+#pragma mark Table view data source
+
+// Customize the number of sections in the table view.
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
+    return 2;
 }
+
+
+// Customize the number of rows in the table view.
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-	return 1;
+    return 1;
 }
 
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    
-    static NSString *CellIdentifier = @"Cell";
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-    if (cell == nil) {
-        cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
-    }
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath;
+{
+	if (indexPath.section==kSection_Destination) return 50.0;
+	NSString *text = missionText;
 	
-	switch ([indexPath section]){
-		case 0:
-			cell.textLabel.text = @"One";
-			break;
-		case 1:
-			cell.textLabel.text = @"Two";
-			break;
-		case 2:
-			cell.textLabel.textColor = [UIColor blackColor];
-			cell.textLabel.text = [NSString stringWithFormat:@"%@",[messages objectAtIndex:[indexPath row]]];
+	CGSize constraint = CGSizeMake(CELL_CONTENT_WIDTH - (CELL_CONTENT_MARGIN * 2), 20000.0f);
+	
+	CGSize size = [text sizeWithFont:[UIFont systemFontOfSize:FONT_SIZE] constrainedToSize:constraint lineBreakMode:UILineBreakModeWordWrap];
+	
+	CGFloat height = MAX(size.height, 44.0f);
+	
+	return height + (CELL_CONTENT_MARGIN * 2);
+}
+- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
+	switch (section) {
+		case kSection_Objective:
+			return @"Objective";
+		case kSection_Destination:
+			return @"Destination";
+		default:
 			break;
 	}
+	return nil;
+}
+- (NSString *)tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section{
+	return nil;
 	
-	return cell;
+}
+- (void) initializedMission:(FRMissionTemplate *)m {
+	//we would like to show a gloosy red button, so get the image first
+	mission = m;
+	UIImage *image = [[UIImage imageNamed:@"button_green.png"]
+					  stretchableImageWithLeftCapWidth:8 topCapHeight:8];
 	
+	//create the button
+	UIButton *button = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+	[button setBackgroundImage:image forState:UIControlStateNormal];
+	
+	//the button should be as big as a table view cell
+	[button setFrame:CGRectMake(10, 3, 300, 44)];
+	
+	//set title, font size and font color
+	[button setTitle:@"Start Mission" forState:UIControlStateNormal];
+	[button.titleLabel setFont:[UIFont boldSystemFontOfSize:20]];
+	[button setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+	
+	//set action of the button
+	[button addTarget:mission action:@selector(startup)
+	 forControlEvents:UIControlEventTouchUpInside];
+	
+	//add the button to the view
+	[footerView addSubview:button];
+}
+// specify the height of your footer section
+- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section {
+    //differ between your sections or if you
+    //have only on section return a static value
+    if (section==kSection_Destination)return 50;
+	return 0;
 }
 
-/*
-// Override to allow orientations other than the default portrait orientation.
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
-    // Return YES for supported orientations
-    return (interfaceOrientation == UIInterfaceOrientationPortrait);
+// custom view for footer. will be adjusted to default or specified footer height
+// Notice: this will work only for one section within the table view
+- (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section {
+	if (section!=kSection_Destination) return nil;
+    if(footerView == nil) {
+        //allocate the view if it doesn't exist yet
+        
+    }
+	
+    //return the view for the footer
+    return footerView;
 }
-*/
+
+// Customize the appearance of table view cells.
+- (UITableViewCell *)tableView:(UITableView *)tv cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+	
+	if (indexPath.section==kSection_Objective){
+		return objective;
+	} else if (indexPath.section==kSection_Destination){
+		return destination;
+	}
+	return nil;
+}
+
+
+/*
+ // Override to support conditional editing of the table view.
+ - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
+ // Return NO if you do not want the specified item to be editable.
+ return YES;
+ }
+ */
+
+
+/*
+ // Override to support editing the table view.
+ - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
+ 
+ if (editingStyle == UITableViewCellEditingStyleDelete) {
+ // Delete the row from the data source.
+ [tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
+ }   
+ else if (editingStyle == UITableViewCellEditingStyleInsert) {
+ // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view.
+ }   
+ }
+ */
+
+
+/*
+ // Override to support rearranging the table view.
+ - (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath {
+ }
+ */
+
+
+/*
+ // Override to support conditional rearranging of the table view.
+ - (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath {
+ // Return NO if you do not want the item to be re-orderable.
+ return YES;
+ }
+ */
+#pragma mark -
+#pragma mark MissionInteraction
+- (void) setDest:(NSString *)name {
+	destination.textLabel.text = name;
+}
+
+
+- (void) showMap {
+	//start the mission i guess.
+	
+}
+#pragma mark -
+#pragma mark Table view delegate
+- (NSIndexPath *)tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+	if (indexPath.section==0) return nil;
+	return indexPath;
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    
+	//create the location picker view thing
+	//when it returns, send a pickedLocation: to the missionView
+	
+	if (indexPath.section!=kSection_Destination) return;
+	[mission pickPoint];
+}
+
+
+#pragma mark -
+#pragma mark Memory management
 
 - (void)didReceiveMemoryWarning {
     // Releases the view if it doesn't have a superview.
     [super didReceiveMemoryWarning];
     
-    // Release any cached data, images, etc that aren't in use.
+    // Relinquish ownership any cached data, images, etc that aren't in use.
 }
 
 - (void)viewDidUnload {
-    [super viewDidUnload];
-    // Release any retained subviews of the main view.
-    // e.g. self.myOutlet = nil;
+    // Relinquish ownership of anything that can be recreated in viewDidLoad or on demand.
+    // For example: self.myOutlet = nil;
 }
 
 
 - (void)dealloc {
-	NSLog(@"bye bye briefing");
     [super dealloc];
 }
 
 
 @end
+

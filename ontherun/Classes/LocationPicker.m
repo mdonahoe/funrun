@@ -49,7 +49,7 @@
 }
 - (void) donePicking {
 	NSLog(@"done picking");
-	[self.navigationController popViewControllerAnimated:NO];
+	[self.navigationController popViewControllerAnimated:YES];
 	[delegate pickedLocation:pt.coordinate];
 	
 }

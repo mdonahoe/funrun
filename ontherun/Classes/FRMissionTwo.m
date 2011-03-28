@@ -105,12 +105,13 @@
 }
 - (id) initWithViewControl:(UIViewController*)vc {
 	self = [super init];
-	if (!self) return;
+	if (!self) return nil;
 	FRBriefingViewController * brief = 
 	[[[FRBriefingViewController alloc] initWithNibName:@"FRBriefingViewController"
 												bundle:nil] autorelease];
 	[vc.navigationController pushViewController:brief animated:YES];
 	self.viewControl = brief;
+	return self;
 }
 - (void) pickPoint {
 	//this is called when the player reads the briefing and decides to select the destination.
@@ -156,11 +157,15 @@
 		[pt setCoordinate:[themap coordinateFromEdgePosition:pt.pos]];
 	}
 	
-	FRMapViewController * mv = 
-	[[[FRMapViewController alloc] initWithNibName:@"FRMapViewController" bundle:nil] autorelease];
-	[self.viewControl.navigationController pushViewController:mv animated:YES];
-	self.viewControl = mv;
-	[self.viewControl readyForMission:self];
+	
+	[self.viewControl setDest:[themap roadNameFromEdgePos:extraction_point.pos]];
+	
+	//dont do this part yet.
+	//FRMapViewController * mv = 
+	//[[[FRMapViewController alloc] initWithNibName:@"FRMapViewController" bundle:nil] autorelease];
+	//[self.viewControl.navigationController pushViewController:mv animated:YES];
+	//self.viewControl = mv;
+	//[self.viewControl readyForMission:self];
 }
 - (void) startup {
 	[self speak:@"the cops have been alerted of your location"];
@@ -171,15 +176,20 @@
 	[self speak:[NSString stringWithFormat:@"You have 6 minutes to get to the extraction point on %@",[themap descriptionOfEdgePos:extraction.root]]];
 	[self speak:@"good luck and get moving"];
 	
-	
-	
 	[self ticktock];
+	FRMapViewController * mv = 
+	[[[FRMapViewController alloc] initWithNibName:@"FRMapViewController" bundle:nil] autorelease];
+	
+	
+	[self.viewControl.navigationController pushViewController:mv animated:YES];
+	self.viewControl = mv;
 	self.viewControl.navigationItem.rightBarButtonItem = 
 	[[[UIBarButtonItem alloc] initWithTitle:@"Abort"
 									  style:UIBarButtonItemStylePlain
 									 target:self
 									 action:@selector(abort)] autorelease];
 	
+	[mv.mapView addAnnotations:points];
 	
 }
 - (void) abort {

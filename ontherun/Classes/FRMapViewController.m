@@ -62,15 +62,15 @@
 - (void) readyForMission:(FRMissionTemplate *)mission {
 	[self.mapView addAnnotations:mission.points];
 	timer.text = @"READY";
-	self.navigationItem.rightBarButtonItem = [[[UIBarButtonItem alloc] initWithTitle:@"start"
-																			   style:UIBarButtonItemStyleDone
-																			  target:mission
-																			  action:@selector(startup)] autorelease];
+	//self.navigationItem.rightBarButtonItem = [[[UIBarButtonItem alloc] initWithTitle:@"start"
+	//																		   style:UIBarButtonItemStyleDone
+	//																		  target:mission
+	//																		  action:@selector(startup)] autorelease];
 }
 
 - (void)dealloc {
-	mapView = nil;
-	timer = nil;
+	self.mapView = nil;
+	self.timer = nil;
 	[super dealloc];
 }
 //currently unused

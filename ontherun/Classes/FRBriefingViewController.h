@@ -12,5 +12,11 @@
 
 //
 @interface FRBriefingViewController : UITableViewController <UITableViewDelegate,UITableViewDataSource>{
+	UITableViewCell * objective;
+	UITableViewCell * destination;
+	UITableViewCell * footerView;
+	NSString * missionText;
+	FRMissionTemplate * mission;
 }
+- (void) setDest:(NSString *)name;
 @end
