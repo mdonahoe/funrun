@@ -10,8 +10,12 @@
 #import "FRMissionTemplate.h"
 
 @interface StartViewController : UIViewController {
-	IBOutlet UILabel * missionLabel;
+	UILabel * missionLabel;
 	FRMissionTemplate * mission;
+	UISwitch * gps;
 }
-- (IBAction)doAction:(id)sender;
+@property(nonatomic,retain) IBOutlet UILabel * missionLabel;
+@property(nonatomic,retain) IBOutlet UISwitch * gps;
+- (IBAction)loadMissionOne:(id)sender;
+- (IBAction)loadMissionTwo:(id)sender;
 @end

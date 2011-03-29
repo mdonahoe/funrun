@@ -103,22 +103,14 @@
 	[super ticktock];
 	
 }
-- (id) initWithViewControl:(UIViewController*)vc {
-	self = [super init];
-	if (!self) return nil;
-	FRBriefingViewController * brief = 
-	[[[FRBriefingViewController alloc] initWithNibName:@"FRBriefingViewController"
-												bundle:nil] autorelease];
-	[vc.navigationController pushViewController:brief animated:YES];
-	self.viewControl = brief;
-	return self;
-}
 - (void) pickPoint {
 	//this is called when the player reads the briefing and decides to select the destination.
 	//perhaps this step can be incorporated into the briefing itself.
 	// "you need to get out of there. Choose an evac point and we will be there in 5 minutes to pick you up"
 	// "The evac point must be at least a mile from your current location. the cops are coming, and we dont want to be spotted."
 	
+	//this method needs to exist for both missions.
+	//once the mission begins, you cant change this location
 	
 	//for mission one:
 	//"you need to chase down this guy and get his stuff. then head to a dropoff point to meet our agent and do the handoff."
@@ -157,15 +149,7 @@
 		[pt setCoordinate:[themap coordinateFromEdgePosition:pt.pos]];
 	}
 	
-	
 	[self.viewControl setDest:[themap roadNameFromEdgePos:extraction_point.pos]];
-	
-	//dont do this part yet.
-	//FRMapViewController * mv = 
-	//[[[FRMapViewController alloc] initWithNibName:@"FRMapViewController" bundle:nil] autorelease];
-	//[self.viewControl.navigationController pushViewController:mv animated:YES];
-	//self.viewControl = mv;
-	//[self.viewControl readyForMission:self];
 }
 - (void) startup {
 	[self speak:@"the cops have been alerted of your location"];
@@ -193,9 +177,6 @@
 	
 }
 - (void) abort {
-	[NSObject cancelPreviousPerformRequestsWithTarget:self];
-	[toBeSpoken removeAllObjects];
-	[self speak:@"Mission Aborted"];
 	FRSummaryViewController * summary =
 	[[FRSummaryViewController alloc] initWithNibName:@"FRSummaryViewController" bundle:nil];
 	[self.viewControl.navigationController pushViewController:summary animated:YES];
@@ -203,6 +184,7 @@
 	self.viewControl = summary;
 	summary.status.text = @"IT WAS ABORT!";
 	[summary release];
+	[super abort];
 }
 - (void) dealloc {
 	[enemies release];

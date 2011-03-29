@@ -18,16 +18,14 @@
 #define kSection_Destination 1
 
 @implementation FRBriefingViewController
+@synthesize desttext;
 #pragma mark -
 #pragma mark View lifecycle
 
 //maybe do init instead
 - (void)viewDidLoad {
     [super viewDidLoad];
-	self.navigationItem.title = @"Mission One";
-	[missionText release];
-	missionText = @"We had a spy escape with some important data. We have tracked his movement, and have determined that he will be arriving in your area very shortly. Your task is to get to the place and chase him. Then take his stuff and bring it to a drop off point to complete the mission. Choose a dropoff point now, once you select the point, we cant change it.";
-	[missionText retain];
+	//self.navigationItem.title = @"Mission One";
 	
 	//objective
 	objective = [[UITableViewCell alloc] initWithFrame:CGRectZero];
@@ -46,7 +44,7 @@
 	
 	//destination
 	destination = [[UITableViewCell alloc] initWithFrame:CGRectZero];
-	destination.textLabel.text = @"loading";
+	destination.textLabel.text = desttext;
 	destination.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
 	
 	
@@ -198,7 +196,8 @@
 #pragma mark -
 #pragma mark MissionInteraction
 - (void) setDest:(NSString *)name {
-	destination.textLabel.text = name;
+	self.desttext = name;
+	destination.textLabel.text = desttext;
 }
 
 
@@ -206,6 +205,13 @@
 	//start the mission i guess.
 	
 }
+- (void) setText:(NSString *)text{
+	[text retain];
+	[missionText release];
+	missionText = text;
+	//reload data?
+}
+
 #pragma mark -
 #pragma mark Table view delegate
 - (NSIndexPath *)tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -236,10 +242,20 @@
 - (void)viewDidUnload {
     // Relinquish ownership of anything that can be recreated in viewDidLoad or on demand.
     // For example: self.myOutlet = nil;
+	[destination release];
+	destination=nil;
+	[footerView release];
+	footerView = nil;
+	[objective release];
+	objective=nil;
 }
 
 
 - (void)dealloc {
+	[destination release];
+	[objective release];
+	[footerView release];
+	[missionText release];
     [super dealloc];
 }
 

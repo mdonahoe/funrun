@@ -14,17 +14,16 @@
 
 
 
-- (id) initWithFilename:(NSString *)filename {
-	//load the location data from a file. create the mission
-	self = [super init];
-	if (!self) return nil;
+- (void) completeSetupWithLocation:(FREdgePos *)start {
 	
+	
+	//load the location data from a file. create the mission
 	
 	FRFileLoader * loader = [[FRFileLoader alloc] initWithBaseURLString:@"http://toqbot.com/otr/test1/"];
 	
 	//load the mission
-	[loader deleteCacheForFile:filename];
-	NSString * missionstring = [[NSString alloc] initWithData:[NSData dataWithContentsOfFile:[loader pathForFile:filename]] encoding:NSUTF8StringEncoding];
+	[loader deleteCacheForFile:@"mission1.js"];
+	NSString * missionstring = [[NSString alloc] initWithData:[NSData dataWithContentsOfFile:[loader pathForFile:@"mission1.js"]] encoding:NSUTF8StringEncoding];
 	[loader release];
 	NSDictionary * missiondata = [missionstring JSONValue];
 	[missionstring release];
@@ -34,7 +33,7 @@
 	start_time = [[NSDate alloc] init]; //is this actually the current time?
 	drop_time = [[NSDate alloc] initWithTimeIntervalSinceNow:250];
 	
-	//more points
+	//more points, generate algorithmically, not from file
 	droppoint = [[FRPoint alloc] initWithDict:[missiondata objectForKey:@"droppoint"] onMap:themap];
 	target = [[FRPoint alloc] initWithDict:[missiondata objectForKey:@"target"] onMap:themap];
 	pursuer = [[FRPoint alloc] initWithDict:[missiondata objectForKey:@"pursuer"] onMap:themap];
@@ -51,8 +50,8 @@
 	//states
 	current_objective = 0;
 	current_announcement = 0;
+	[super completeSetupWithLocation:start];
 	
-	return self;
 }
 
 - (void) ticktock {

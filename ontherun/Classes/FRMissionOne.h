@@ -64,6 +64,4 @@
 	
 }
 
-- (id) initWithFilename:(NSString*)filename;
-
 @end

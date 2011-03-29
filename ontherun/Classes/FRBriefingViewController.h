@@ -16,7 +16,9 @@
 	UITableViewCell * destination;
 	UITableViewCell * footerView;
 	NSString * missionText;
+	NSString * desttext;
 	FRMissionTemplate * mission;
 }
+@property(nonatomic,retain) NSString * desttext;
 - (void) setDest:(NSString *)name;
 @end

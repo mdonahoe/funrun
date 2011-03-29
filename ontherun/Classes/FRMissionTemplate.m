@@ -7,13 +7,14 @@
 //
 
 #import "FRMissionTemplate.h"
+#import "FRBriefingViewController.h"
 #import "JSON.h"
 #import "FRFileLoader.h"
 
 @implementation FRMissionTemplate
 @synthesize points,viewControl;
 
-- (id) init {
+- (id) initWithGPS:(BOOL)gps viewControl:(UIViewController*)vc {
 	self = [super init];
 	if (!self) return nil;
 	setup_complete = NO;
@@ -49,7 +50,7 @@
 	points = [[NSMutableArray alloc] initWithObjects:player,nil];
 	
 	//use toqbot for gps position updates
-	if (0){
+	if (!gps){
 		[m2 loadObjectForKey:@"userpos" toDelegate:self usingSelector:@selector(updatePosition:)];
 	} else {
 		[self startStandardUpdates];
@@ -59,10 +60,15 @@
 	[voicebot setRate:(float)1.3];
 	[voicebot setPitch:.35];
 	
-	viewControl = nil;
-	
+	FRBriefingViewController * brief = 
+	[[[FRBriefingViewController alloc] initWithNibName:@"FRBriefingViewController"
+												bundle:nil] autorelease];
+	[brief setText:@"nothing to see here"];
+	[vc.navigationController pushViewController:brief animated:YES];
+	self.viewControl = brief;
 	return self;
 }
+
 - (void) speak:(NSString *)text {
 	if ([voicebot isSpeaking] || [toBeSpoken count]){
 		[toBeSpoken addObject:text];
@@ -186,7 +192,7 @@
 	
 	[latestsearch release];
 	latestsearch = [themap createPathSearchAt:player.pos withMaxDistance:[NSNumber numberWithFloat:1000.0]];
-	if (!setup_complete) [self initWithStart:ep];
+	if (!setup_complete) [self completeSetupWithLocation:ep];
 }
 
 /*
@@ -240,7 +246,7 @@
 }
 */
 
-- (void) initWithStart:(FREdgePos*)start {
+- (void) completeSetupWithLocation:(FREdgePos*)start {
 	if (setup_complete){
 		NSLog(@"called initWithstartPoint: twice!");
 		return;
@@ -251,6 +257,11 @@
 		[pt setCoordinate:[themap coordinateFromEdgePosition:pt.pos]];
 	}
 	if (viewControl) [viewControl initializedMission:self];
+}
+- (void) abort {
+	[NSObject cancelPreviousPerformRequestsWithTarget:self];
+	[toBeSpoken removeAllObjects];
+	[self speak:@"Mission Aborted"];
 }
 - (void) dealloc {
 	[player release];

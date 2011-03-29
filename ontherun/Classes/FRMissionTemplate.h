@@ -40,7 +40,8 @@
 }
 @property(nonatomic,retain) NSMutableArray * points;
 @property(nonatomic,assign) UIViewController * viewControl;
-
+- (id) initWithGPS:(BOOL)gps viewControl:(UIViewController*)vc;
+- (void) abort;
 - (void) updatePosition:(id)obj;
 - (void) ticktock;
 - (void) startStandardUpdates;
@@ -48,5 +49,5 @@
 - (void) speak:(NSString *)text;
 - (void) speakIfEmpty:(NSString *)text;
 - (void) speakNow:(NSString *)text;
-- (void) initWithStart:(FREdgePos *)start;
+- (void) completeSetupWithLocation:(FREdgePos *)start;
 @end

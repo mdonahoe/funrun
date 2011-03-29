@@ -14,6 +14,7 @@
 #import "LocationPicker.h"
 
 @implementation StartViewController
+@synthesize gps,missionLabel;
 
 /*
  // The designated initializer.  Override if you create the controller programmatically and want to perform customization that is not appropriate for viewDidLoad.
@@ -67,10 +68,16 @@
 	[missionLabel release];
     [super dealloc];
 }
-- (IBAction)doAction:(id)sender{
+- (IBAction)loadMissionTwo:(id)sender{
 	//have different nibs for different missions?
 	//or download from the interwebs?
 	if (mission) [mission release];
-	mission = [[FRMissionTwo alloc] initWithViewControl:self];
+	mission = [[FRMissionTwo alloc] initWithGPS:gps.state viewControl:self];
+}
+- (IBAction)loadMissionOne:(id)sender{
+	//have different nibs for different missions?
+	//or download from the interwebs?
+	if (mission) [mission release];
+	mission = [[FRMissionOne alloc] initWithGPS:gps.state viewControl:self];
 }
 @end

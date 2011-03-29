@@ -84,12 +84,6 @@
  1. have the user input their home, running speed, and running goals, and let the generator configure a map for them
  1. Game adjusts the mission based on the startup position of the user, and where they want to end up at the end of the run.
  
- #interface
- 1. menu screen
- 1. level select
- 1. have something besides the rootviewcontroller (tableview) to start.
- 
- 
  #code smell
  1. learn about how #import works in objective-c.
  1. make sure we arent leaking objects
