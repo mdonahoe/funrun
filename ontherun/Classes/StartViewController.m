@@ -72,12 +72,13 @@
 	//have different nibs for different missions?
 	//or download from the interwebs?
 	if (mission) [mission release];
-	mission = [[FRMissionTwo alloc] initWithGPS:gps.state viewControl:self];
+	mission = [[FRMissionTwo alloc] initWithGPS:gps.on viewControl:self];
 }
 - (IBAction)loadMissionOne:(id)sender{
 	//have different nibs for different missions?
 	//or download from the interwebs?
 	if (mission) [mission release];
-	mission = [[FRMissionOne alloc] initWithGPS:gps.state viewControl:self];
+	NSLog(@"gps state = %@",gps);
+	mission = [[FRMissionOne alloc] initWithGPS:gps.on viewControl:self];
 }
 @end

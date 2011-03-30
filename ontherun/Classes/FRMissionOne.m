@@ -9,6 +9,9 @@
 #import "FRMissionOne.h"
 #import "FRFileLoader.h"
 #import "JSON.h"
+#import "LocationPicker.h"
+#import "FRMapViewController.h"
+#import "FRSummaryViewController.h"
 
 @implementation FRMissionOne
 
@@ -22,8 +25,9 @@
 	FRFileLoader * loader = [[FRFileLoader alloc] initWithBaseURLString:@"http://toqbot.com/otr/test1/"];
 	
 	//load the mission
-	[loader deleteCacheForFile:@"mission1.js"];
-	NSString * missionstring = [[NSString alloc] initWithData:[NSData dataWithContentsOfFile:[loader pathForFile:@"mission1.js"]] encoding:NSUTF8StringEncoding];
+	NSString * filename = @"mission_one3.js";
+	[loader deleteCacheForFile:filename];
+	NSString * missionstring = [[NSString alloc] initWithData:[NSData dataWithContentsOfFile:[loader pathForFile:filename]] encoding:NSUTF8StringEncoding];
 	[loader release];
 	NSDictionary * missiondata = [missionstring JSONValue];
 	[missionstring release];
@@ -31,29 +35,101 @@
 	ticks = 0;
 	target_speed = 1.0;
 	start_time = [[NSDate alloc] init]; //is this actually the current time?
-	drop_time = [[NSDate alloc] initWithTimeIntervalSinceNow:250];
+	capture_time = nil;
+	rendezvous_time = nil;
 	
-	//more points, generate algorithmically, not from file
-	droppoint = [[FRPoint alloc] initWithDict:[missiondata objectForKey:@"droppoint"] onMap:themap];
-	target = [[FRPoint alloc] initWithDict:[missiondata objectForKey:@"target"] onMap:themap];
-	pursuer = [[FRPoint alloc] initWithDict:[missiondata objectForKey:@"pursuer"] onMap:themap];
-	base = [[FRPoint alloc] initWithDict:[missiondata objectForKey:@"base"] onMap:themap];
-	
-	
-	//only let target appear on the map for now
-	[points addObject:target];
-	[target setCoordinate:[themap coordinateFromEdgePosition:target.pos]];
 	
 	hurrylist = [[NSArray alloc] initWithArray:[missiondata objectForKey:@"hurrylist"]];
 	countdown = [[NSArray alloc] initWithArray:[missiondata objectForKey:@"countdown"]];
+	
+	
+	//we will create these after the player selects a rendezvous point
+	target = nil;
+	rendezvous = nil;
 	
 	//states
 	current_objective = 0;
 	current_announcement = 0;
 	[super completeSetupWithLocation:start];
+}
+- (void) pickPoint {
+	//this is called when the player reads the briefing and decides to select the destination.
+	//perhaps this step can be incorporated into the briefing itself.
+	// "you need to get out of there. Choose an evac point and we will be there in 5 minutes to pick you up"
+	// "The evac point must be at least a mile from your current location. the cops are coming, and we dont want to be spotted."
+	
+	//this method needs to exist for both missions.
+	//once the mission begins, you cant change this location
+	
+	//for mission one:
+	//"you need to chase down this guy and get his stuff. then head to a dropoff point to meet our agent and do the handoff."
+	
+	FRPoint * rendezvous_point = [[[FRPoint alloc] initWithName:@"extraction point"] autorelease];
+	[rendezvous_point setCoordinate:[themap coordinateFromEdgePosition:player.pos]];
+	
+	LocationPicker * lp = 
+	[[[LocationPicker alloc] initWithAnnotation:rendezvous_point delegate:self] autorelease];
+	[self.viewControl.navigationController pushViewController:lp animated:YES];
+}
+- (void) pickedLocation:(CLLocationCoordinate2D)location {
+	//the location picker has returned a lat-lon for the destination coordinate.
+	//use it to finish building the mission map.
+	//make it so that cops are positioned along the way.
+	
+	
+	NSLog(@"location has been picked");
+	//[self.viewControl.navigationController popViewControllerAnimated:YES];
+	CLLocation * l = [[[CLLocation alloc] initWithLatitude:location.latitude longitude:location.longitude] autorelease];
+	FRPoint * rendezvous_point = [[[FRPoint alloc] initWithName:@"rendezvous point"] autorelease];
+	rendezvous_point.pos = [themap edgePosFromPoint:l];
+	[rendezvous release];
+	rendezvous = [themap createPathSearchAt:rendezvous_point.pos withMaxDistance:[NSNumber numberWithFloat:1450.0]];
+	[points addObject:rendezvous_point];
+	
+	[target release];
+	target = [[FRPoint alloc] initWithName:@"target"];
+	
+	//unlike towardRootWithDelta, awayFromRootWithDelta traverses multiple edges at once
+	target.pos = [rendezvous move:rendezvous_point.pos awayFromRootWithDelta:600];
+	
+	[points removeAllObjects];
+	[points addObject:player];
+	[points addObject:rendezvous_point];
+	[points addObject:target];
+	
+	for (FRPoint * pt in points){
+		[pt setCoordinate:[themap coordinateFromEdgePosition:pt.pos]];
+	}
+	[self.viewControl setDest:[themap roadNameFromEdgePos:rendezvous_point.pos]];
+}
+- (void) startup {
+	[self speak:@"Agent, you must find the target before he escapes"];
+	[self ticktock];
+	FRMapViewController * mv = 
+	[[[FRMapViewController alloc] initWithNibName:@"FRMapViewController" bundle:nil] autorelease];
+	
+	
+	[self.viewControl.navigationController pushViewController:mv animated:YES];
+	self.viewControl = mv;
+	self.viewControl.navigationItem.rightBarButtonItem = 
+	[[[UIBarButtonItem alloc] initWithTitle:@"Abort"
+									  style:UIBarButtonItemStylePlain
+									 target:self
+									 action:@selector(abort)] autorelease];
+	
+	[mv.mapView addAnnotations:points];
 	
 }
-
+- (void) abort {
+	FRSummaryViewController * summary =
+	[[FRSummaryViewController alloc] initWithNibName:@"FRSummaryViewController" bundle:nil];
+	[self.viewControl.navigationController pushViewController:summary animated:YES];
+	self.viewControl.navigationItem.rightBarButtonItem = nil;
+	self.viewControl = summary;
+	summary.status.text = @"IT WAS ABORT!";
+	[summary release];
+	[super abort];
+}
 - (void) ticktock {
 	/*
 	 This method is called once a second
@@ -78,64 +154,42 @@
 	
 	FREdgePos * newpos;
 	float dist;
-	NSTimeInterval timeleft = [drop_time timeIntervalSinceNow];
+	NSTimeInterval timeleft;
+	if (rendezvous_time) timeleft = [rendezvous_time timeIntervalSinceNow];
 	//NSLog(@"timeleft = %f",timeleft);
 	
 	
 	
 	
-	//talk about how close the van is
-	if (timeleft > 0 && current_announcement < [countdown count]) {
+	/* time until van leaves
+	 if (timeleft > 0 && current_announcement < [countdown count]) {
 		NSArray * count = [countdown objectAtIndex:current_announcement];
 		if (timeleft < [[count objectAtIndex:0] floatValue]/5.0){
 			current_announcement++;
 			[self speak:[count objectAtIndex:1]];
 		}
 	}
+	*/
+	
+	
+	
 	
 	//the target moves slowly and randomly until he sees you
 	newpos = nil;
-	if (current_objective < 3 && timeleft < 0){
+	if (current_objective < 2){
 		newpos = [themap move:target.pos forwardRandomly:target_speed];
 	}
 	
 	NSLog(@"objective = %i, queue = %i",current_objective,[toBeSpoken count]);
 	//what objective are we on? (game state)
 	switch (current_objective) {
-		case 0: //get to the drop point
-			//if droppoint is not in latestsearch, this returns 10^9;
-			dist = [latestsearch distanceFromRoot:droppoint.pos];
-			
-			//todo: calculate the player's estimated time of arrival at the drop point
-			
-			if (dist > 30 && timeleft < 60){
-				[self speakIfEmpty:[hurrylist objectAtIndex:arc4random()%[hurrylist count]]];
-			}
-			
-			if (dist < 30){
-				current_objective++;
-				[self speak:@"Alright, this is the drop point."];
-				if (timeleft > 30) {
-					[self speak:@"Wait for the target to arrive"];
-				}
-			}
-			break;
-		case 1: //wait for the target to arrive
-			if (timeleft < 0) {
-				current_objective++;
-				[self speak:@"The target is in the open. Go get him."];
-				spotted_time = [[NSDate alloc] initWithTimeIntervalSinceNow:30];
-			}
-			break;
-		case 2: //follow the target
+		case 0: //find the target
 			
 			dist = [latestsearch distanceFromRoot:newpos];
-			//NSLog(@"timer = %f",[spotted_time timeIntervalSinceNow]);
 			
 			//during this object, Charlie should talk about stuff
-			//eventually the suspect will realize that he has been followed
 			
-			if (dist < 30 && [spotted_time timeIntervalSinceNow] < 0) {
+			if (dist < 30) {
 				current_objective++;
 				[self speak:@"He sees you!"];
 			}
@@ -144,7 +198,7 @@
 			
 			
 			break;
-		case 3: //chase the target down
+		case 1: //chase the target down
 			newpos = [latestsearch move:target.pos awayFromRootWithDelta:10*target_speed];
 			
 			dist = [latestsearch distanceFromRoot:newpos];
@@ -156,6 +210,8 @@
 					current_objective++;
 					[self speak:@"Shoot him! BANG BANG BANG"]; //randomly miss? press action button
 					[self speak:@"Good work. Now grab the device and get back to base"];
+					capture_time = [[NSDate alloc] initWithTimeIntervalSinceNow:0];
+					rendezvous_time = [[NSDate alloc] initWithTimeIntervalSinceNow:4*60]; //four minutes
 				}
 			}
 			
@@ -166,14 +222,17 @@
 			}
 			
 			break;
-		case 4: //return to post
-			dist = [latestsearch distanceFromRoot:base.pos];
+		case 2: //get to the retrieval van
+			dist = [rendezvous distanceFromRoot:player.pos];
 			if (dist < 30){
 				NSLog(@"yesh!");
 				[self speak:@"Good work today agent. Head inside for a debriefing."];
 				current_objective++;
+			} else if (timeleft<0){
+				[self speak:@"The van has left. Failed"];
+				[self abort];
+				return; //probably going to mess something up.
 			}
-			
 			
 			break;
 			
@@ -185,7 +244,7 @@
 			break;
 	}
 	
-	if (newpos && current_objective<4) {
+	if (newpos) {
 		NSString * textualchange = [themap descriptionFromEdgePos:target.pos toEdgePos:newpos];
 		if (textualchange) {
 			[self speak:[NSString stringWithFormat:@"He just ran %@",textualchange]];
@@ -199,12 +258,10 @@
 }
 - (void) dealloc {
 	[start_time release];
-	[drop_time release];
-	[spotted_time release];
-	[droppoint release];
+	[capture_time release];
+	[rendezvous release];
+	[rendezvous_time release];
 	[target release];
-	[pursuer release];
-	[base release];
 	[hurrylist release];
 	[countdown release];
 	[super dealloc];

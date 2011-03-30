@@ -13,9 +13,17 @@
 	UILabel * missionLabel;
 	FRMissionTemplate * mission;
 	UISwitch * gps;
+	
+	
+	
 }
 @property(nonatomic,retain) IBOutlet UILabel * missionLabel;
 @property(nonatomic,retain) IBOutlet UISwitch * gps;
 - (IBAction)loadMissionOne:(id)sender;
 - (IBAction)loadMissionTwo:(id)sender;
 @end
+
+
+/*
+ is there any way to tell if this view has control again?
+*/

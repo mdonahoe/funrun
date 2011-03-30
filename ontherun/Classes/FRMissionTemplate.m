@@ -36,6 +36,7 @@
 	//load the map
 	
 	//[loader deleteCacheForFile:filename];
+	//might still have dead ends
 	NSDictionary * mapdata = [[NSString stringWithContentsOfFile:[loader pathForFile:@"mapdata_nullfree.json"]
 														encoding:NSUTF8StringEncoding
 														   error:NULL] JSONValue];
@@ -271,10 +272,12 @@
 	[toBeSpoken release];
 	[previously_said release];
 	[current_road release];
+	if (m2) [m2 cancel];
 	[m2 release];
 	[locationManager release];
 	[voicebot release];
 	self.viewControl = nil;
 	[super dealloc];
+	NSLog(@"mission is dead");
 }
 @end

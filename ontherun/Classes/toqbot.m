@@ -46,6 +46,14 @@
 	[outrequest setDelegate:self];
 	[outrequest startAsynchronous];
 }
+-(void) cancel {
+	NSLog(@"cancelling requests");
+	[inrequest cancel];
+	[inrequest setDelegate:nil];
+	[inrequest release];
+	inrequest=nil;
+	
+}
 -(void) sentObject:(id)request {
 	//NSLog(@"here is the request %@",request);
 }
@@ -61,6 +69,7 @@
 	NSString * url = [NSString stringWithFormat:@"http://toqbot.com/db/?%@",resultString];
 	
 	[inrequest cancel];
+	[inrequest setDelegate:nil];
 	[inrequest release];
 	inrequest = [[ASIHTTPRequest alloc] initWithURL:[NSURL URLWithString:url]];
 	[inrequest setTimeOutSeconds:50];
@@ -113,5 +122,6 @@
 	[selectors release];
 	[keys release];
 	[super dealloc];
+	NSLog(@"toqbot dead");
 }
 @end

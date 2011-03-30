@@ -40,6 +40,7 @@
 }
 @property(nonatomic,retain) NSMutableArray * points;
 @property(nonatomic,assign) UIViewController * viewControl;
+- (id) initWithMap:(FRMap *)m andPlayer:(FRPoint*)p;
 - (id) initWithGPS:(BOOL)gps viewControl:(UIViewController*)vc;
 - (void) abort;
 - (void) updatePosition:(id)obj;
