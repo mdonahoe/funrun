@@ -30,6 +30,7 @@
 }
 */
 - (IBAction) statechange:(id)sender {
+	//when the view gets unloaded and reloaded, gps.on defaults to YES. might want to save it seperately.
 	if (gps.on){
 		NSLog(@"turning gps on");
 		[m2 cancel];
@@ -92,12 +93,9 @@
 	//have different nibs for different missions?
 	//or download from the interwebs?
 	if (mission) [mission release];
-	NSLog(@"gps state = %@",gps);
 	mission = [[FRMissionOne alloc] initWithLocation:self.latest_point viewControl:self];
-	NSLog(@"%@",[mission class]);
 }
 - (void) updatePosition:(id)obj {
-	NSLog(@"m2 comes thru");
 	float lat = [[obj objectForKey:@"lat"] floatValue];
 	float lon = [[obj objectForKey:@"lon"] floatValue];
 	
@@ -126,7 +124,6 @@
 	NSLog(@"recieved timestamp: %f",[newLocation.timestamp timeIntervalSinceNow]);
 	if (newLocation.horizontalAccuracy>100.0 || [newLocation.timestamp timeIntervalSinceNow] < -30.0) return;
 	if (newLocation.coordinate.latitude==oldLocation.coordinate.latitude && newLocation.coordinate.longitude==oldLocation.coordinate.longitude){
-		NSLog(@"gps update is identical, skipping recalculations");
 		return;
 	}
 	

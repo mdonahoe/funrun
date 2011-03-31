@@ -34,13 +34,14 @@
 	
 	
 	//destination
-	destination = [[UITableViewCell alloc] initWithFrame:CGRectZero];
+	if (nil=destination) destination = [[UITableViewCell alloc] initWithFrame:CGRectZero];
 	destination.textLabel.text = desttext;
 	destination.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
 	
 	
 	//footerView
-	footerView  = [[UIView alloc] init];
+	//the button could disappear. though we want it to anyway after the mission has been started.
+	if (nil==footerView) footerView  = [[UIView alloc] init];
 	
 	
 }
