@@ -275,6 +275,30 @@
 	
 	return [NSString stringWithFormat:@"turn %@",[map descriptionFromEdgePos:prev toEdgePos:ep]];
 }
+- (FREdgePos *) edgePosThatIsDistance:(float)d fromRootAndOther:(FRPathSearch*)p {
+	//useful for finding points that are a certain distance from two nodes.
+	//possible to fail like crazy if the max_dists of the pathsearches arent long enough
+	
+	
+	NSNumber * closest_node = nil;
+	float smallest_difference = 1000000000.0;
+	float dist;
+	float diff;
+	for (NSNumber * node in distance){
+		dist = [[distance objectForKey:node] floatValue]+[p nodeDistance:node];
+		diff = ABS(dist - d);
+		if (diff < smallest_difference){
+			smallest_difference = diff;
+			closest_node = node;
+		}
+	}
+	//somehow i need to return an edgepos. i might just be lame with this.
+	FREdgePos * ep = [[[FREdgePos alloc] init] autorelease];
+	ep.start = [closest_node intValue];
+	ep.end = [[previous objectForKey:closest_node] intValue];
+	ep.position = 1.0; //1m from the point. hackity hack.
+	return ep;
+}
 - (void) dealloc {
 	[previous release];
 	[distance release];

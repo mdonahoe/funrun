@@ -34,7 +34,7 @@
 	
 	
 	//destination
-	if (nil=destination) destination = [[UITableViewCell alloc] initWithFrame:CGRectZero];
+	if (nil==destination) destination = [[UITableViewCell alloc] initWithFrame:CGRectZero];
 	destination.textLabel.text = desttext;
 	destination.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
 	

@@ -91,8 +91,8 @@
 	target = [[FRPoint alloc] initWithName:@"target"];
 	
 	//unlike towardRootWithDelta, awayFromRootWithDelta traverses multiple edges at once
-	target.pos = [rendezvous move:rendezvous_point.pos awayFromRootWithDelta:600];
-	
+	//target.pos = [rendezvous move:rendezvous_point.pos awayFromRootWithDelta:600];
+	target.pos = [latestsearch edgePosThatIsDistance:1000.0 fromRootAndOther:rendezvous];
 	[points removeAllObjects];
 	[points addObject:player];
 	[points addObject:rendezvous_point];
