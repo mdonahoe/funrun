@@ -18,7 +18,7 @@
 #define kSection_Destination 1
 
 @implementation FRBriefingViewController
-@synthesize desttext;
+@synthesize desttext,mission;
 #pragma mark -
 #pragma mark View lifecycle
 
@@ -97,8 +97,7 @@
 	
 }
 - (void) initializedMission:(FRMissionTemplate *)m {
-	//we would like to show a gloosy red button, so get the image first
-	mission = m;
+	//we would like to show a glossy green button, so get the image first
 	UIImage *image = [[UIImage imageNamed:@"button_green.png"]
 					  stretchableImageWithLeftCapWidth:8 topCapHeight:8];
 	

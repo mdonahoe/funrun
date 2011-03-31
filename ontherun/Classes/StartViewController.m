@@ -14,17 +14,32 @@
 #import "LocationPicker.h"
 
 @implementation StartViewController
-@synthesize gps,missionLabel;
+@synthesize gps,missionLabel,latest_point;
 
 /*
  // The designated initializer.  Override if you create the controller programmatically and want to perform customization that is not appropriate for viewDidLoad.
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     if ((self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil])) {
         // Custom initialization
-    }
+		//use toqbot for gps position updates
+		m2 = [[toqbot alloc] init];
+		[self startStandardUpdates];
+		NSLog(@"created!");
+	}
     return self;
 }
 */
+- (IBAction) statechange:(id)sender {
+	if (gps.on){
+		NSLog(@"turning gps on");
+		[m2 cancel];
+		[self startStandardUpdates];
+	} else {
+		NSLog(@"GPS OFF");
+		[m2 loadObjectForKey:@"userpos" toDelegate:self usingSelector:@selector(updatePosition:)];
+		[locationManager stopUpdatingLocation];
+	}
+}
 
 /*
 // Implement loadView to create a view hierarchy programmatically, without using a nib.
@@ -37,6 +52,9 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
 	NSLog(@"first view loaded");
+	if (nil==m2) m2 = [[toqbot alloc] init];
+	[self statechange:self]; //what happens if this gets called twice in a row?
+	
 	[mission release];
 	mission = nil;
 	
@@ -64,21 +82,65 @@
     // e.g. self.myOutlet = nil;
 	NSLog(@"first view unloaded");
 }
-- (void)dealloc {
-	[missionLabel release];
-    [super dealloc];
-}
 - (IBAction)loadMissionTwo:(id)sender{
 	//have different nibs for different missions?
 	//or download from the interwebs?
 	if (mission) [mission release];
-	mission = [[FRMissionTwo alloc] initWithGPS:gps.on viewControl:self];
+	mission = [[FRMissionTwo alloc] initWithLocation:self.latest_point viewControl:self];
 }
 - (IBAction)loadMissionOne:(id)sender{
 	//have different nibs for different missions?
 	//or download from the interwebs?
 	if (mission) [mission release];
 	NSLog(@"gps state = %@",gps);
-	mission = [[FRMissionOne alloc] initWithGPS:gps.on viewControl:self];
+	mission = [[FRMissionOne alloc] initWithLocation:self.latest_point viewControl:self];
+	NSLog(@"%@",[mission class]);
+}
+- (void) updatePosition:(id)obj {
+	NSLog(@"m2 comes thru");
+	float lat = [[obj objectForKey:@"lat"] floatValue];
+	float lon = [[obj objectForKey:@"lon"] floatValue];
+	
+	self.latest_point = [[[CLLocation alloc] initWithLatitude:lat longitude:lon] autorelease];
+	if (mission) [mission newPlayerLocation:self.latest_point];
+}
+- (void) startStandardUpdates{
+    // Create the location manager if this object does not
+    // already have one.
+    if (nil == locationManager) 
+		locationManager = [[CLLocationManager alloc] init];
+	
+	locationManager.delegate = self;
+	locationManager.desiredAccuracy = kCLLocationAccuracyBest;
+	
+	// Set a movement threshold for new events.
+	locationManager.distanceFilter = 1.0;
+	
+	[locationManager startUpdatingLocation];
+}
+// Delegate method from the CLLocationManagerDelegate protocol.
+- (void) locationManager:(CLLocationManager *)manager
+	 didUpdateToLocation:(CLLocation *)newLocation
+			fromLocation:(CLLocation *)oldLocation
+{
+	NSLog(@"recieved timestamp: %f",[newLocation.timestamp timeIntervalSinceNow]);
+	if (newLocation.horizontalAccuracy>100.0 || [newLocation.timestamp timeIntervalSinceNow] < -30.0) return;
+	if (newLocation.coordinate.latitude==oldLocation.coordinate.latitude && newLocation.coordinate.longitude==oldLocation.coordinate.longitude){
+		NSLog(@"gps update is identical, skipping recalculations");
+		return;
+	}
+	
+	self.latest_point = newLocation;
+	if (mission) [mission newPlayerLocation:self.latest_point];
+	
+}
+- (void)dealloc {
+	[missionLabel release];
+	self.latest_point = nil;
+	if (m2) [m2 cancel];
+	[m2 release];
+	[locationManager release];
+	[mission release];
+	[super dealloc];
 }
 @end

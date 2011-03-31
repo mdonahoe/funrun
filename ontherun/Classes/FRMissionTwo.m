@@ -150,6 +150,7 @@
 	}
 	
 	[self.viewControl setDest:[themap roadNameFromEdgePos:extraction_point.pos]];
+	[self.viewControl initializedMission:self];
 }
 - (void) startup {
 	[self speak:@"the cops have been alerted of your location"];
@@ -205,6 +206,5 @@
  3. get yellow paper from maine
  4. make progress
  5. add cops between my picked location and my current location
- 
  
  */

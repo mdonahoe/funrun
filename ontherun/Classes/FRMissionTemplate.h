@@ -10,7 +10,6 @@
 #import <CoreLocation/CoreLocation.h>
 #import "FRMap.h"
 #import "FRPathSearch.h"
-#import "toqbot.h"
 #import "VSSpeechSynthesizer.h"
 #import "FRPoint.h"
 
@@ -23,32 +22,26 @@
 
 
 
-@interface FRMissionTemplate : NSObject <CLLocationManagerDelegate> {
+@interface FRMissionTemplate : NSObject {
 	NSString * previously_said;
 	FRPathSearch * latestsearch;
 	FRMap * themap;
 	FRPoint * player;
-	CLLocationManager * locationManager;
 	VSSpeechSynthesizer * voicebot;
-	toqbot * m2;
 	NSMutableArray * toBeSpoken;
 	NSMutableArray * points;
 	NSString * current_road;
-	BOOL setup_complete;
 	UIViewController * viewControl;
 	
 }
 @property(nonatomic,retain) NSMutableArray * points;
 @property(nonatomic,assign) UIViewController * viewControl;
 - (id) initWithMap:(FRMap *)m andPlayer:(FRPoint*)p;
-- (id) initWithGPS:(BOOL)gps viewControl:(UIViewController*)vc;
+- (id) initWithLocation:(CLLocation*)l viewControl:(UIViewController*)vc;
 - (void) abort;
-- (void) updatePosition:(id)obj;
 - (void) ticktock;
-- (void) startStandardUpdates;
-- (void) newPlayerLocation:(CLLocation *)location;
 - (void) speak:(NSString *)text;
 - (void) speakIfEmpty:(NSString *)text;
 - (void) speakNow:(NSString *)text;
-- (void) completeSetupWithLocation:(FREdgePos *)start;
+- (void) newPlayerLocation:(CLLocation *)location;
 @end

@@ -52,7 +52,8 @@
 	[inrequest setDelegate:nil];
 	[inrequest release];
 	inrequest=nil;
-	
+	[selectors removeAllObjects];
+	[delegates removeAllObjects];
 }
 -(void) sentObject:(id)request {
 	//NSLog(@"here is the request %@",request);

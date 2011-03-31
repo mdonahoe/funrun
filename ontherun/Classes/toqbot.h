@@ -24,6 +24,6 @@
 - (void) requestFinished:(ASIHTTPRequest *) request;
 - (void) requestFailed:(ASIHTTPRequest *)request;
 - (void) sendDictionary:(NSDictionary *)keyvals;
-
+- (void) cancel;
 
 @end

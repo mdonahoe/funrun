@@ -17,9 +17,9 @@
 
 
 
-- (void) completeSetupWithLocation:(FREdgePos *)start {
-	
-	
+- (id) initWithLocation:(CLLocation *)l viewControl:(UIViewController*)vc {
+	self = [super initWithLocation:l viewControl:vc];
+	if (!self) return nil;
 	//load the location data from a file. create the mission
 	
 	FRFileLoader * loader = [[FRFileLoader alloc] initWithBaseURLString:@"http://toqbot.com/otr/test1/"];
@@ -50,7 +50,8 @@
 	//states
 	current_objective = 0;
 	current_announcement = 0;
-	[super completeSetupWithLocation:start];
+	
+	return self;
 }
 - (void) pickPoint {
 	//this is called when the player reads the briefing and decides to select the destination.
@@ -101,6 +102,8 @@
 		[pt setCoordinate:[themap coordinateFromEdgePosition:pt.pos]];
 	}
 	[self.viewControl setDest:[themap roadNameFromEdgePos:rendezvous_point.pos]];
+	[self.viewControl setText:@"blah dee blah blah"];
+	[self.viewControl initializedMission:self];
 }
 - (void) startup {
 	[self speak:@"Agent, you must find the target before he escapes"];
@@ -186,7 +189,7 @@
 		case 0: //find the target
 			
 			dist = [latestsearch distanceFromRoot:newpos];
-			
+			NSLog(@"dist = %f",dist);
 			//during this object, Charlie should talk about stuff
 			
 			if (dist < 30) {

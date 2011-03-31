@@ -14,10 +14,11 @@
 @implementation FRMissionTemplate
 @synthesize points,viewControl;
 
-- (id) initWithGPS:(BOOL)gps viewControl:(UIViewController*)vc {
+- (id) initWithLocation:(CLLocation*)l viewControl:(UIViewController*)vc {
 	self = [super init];
 	if (!self) return nil;
-	setup_complete = NO;
+	NSLog(@"who am i? %@",[self class]);
+	//return self;
 	//Voice Communication
 	//link to /Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.2.sdk/System/Library/PrivateFrameworks/VoiceServices.framework
 	voicebot = [[NSClassFromString(@"VSSpeechSynthesizer") alloc] init];
@@ -26,7 +27,7 @@
 	previously_said = nil;
 	
 	//communication with server
-	m2 = [[toqbot alloc] init];
+	
 	
 	
 	//init the fileloader so we can skip network downloads if already cached
@@ -46,16 +47,12 @@
 	[thepool release];
 	
 	player = [[FRPoint alloc] initWithDict:[NSDictionary dictionaryWithObject:@"player" forKey:@"name"] onMap:themap];
-	
+	[self newPlayerLocation:l];
+	player.pos = [themap edgePosFromPoint:l];
 	[player setCoordinate:[themap coordinateFromEdgePosition:player.pos]];
 	points = [[NSMutableArray alloc] initWithObjects:player,nil];
 	
-	//use toqbot for gps position updates
-	if (!gps){
-		[m2 loadObjectForKey:@"userpos" toDelegate:self usingSelector:@selector(updatePosition:)];
-	} else {
-		[self startStandardUpdates];
-	}
+
 	[self speakNow:@"Lock"];
 	
 	[voicebot setRate:(float)1.3];
@@ -65,12 +62,14 @@
 	[[[FRBriefingViewController alloc] initWithNibName:@"FRBriefingViewController"
 												bundle:nil] autorelease];
 	[brief setText:@"nothing to see here"];
+	brief.mission = self;
 	[vc.navigationController pushViewController:brief animated:YES];
 	self.viewControl = brief;
 	return self;
 }
 
 - (void) speak:(NSString *)text {
+	NSLog(@"speak:%@",text);
 	if ([voicebot isSpeaking] || [toBeSpoken count]){
 		[toBeSpoken addObject:text];
 	} else {
@@ -79,6 +78,7 @@
 	}
 }
 - (void) speakNow:(NSString *)text{
+	NSLog(@"speakNow:%@",text);
 	return;
 	[voicebot startSpeakingString:text];
 	[text retain];
@@ -119,45 +119,6 @@
 	//[viewControl missionTick];
 	[self performSelector:@selector(ticktock) withObject:nil afterDelay:1.0];
 };
-- (void) updatePosition:(id)obj {
-	
-	float lat = [[obj objectForKey:@"lat"] floatValue];
-	float lon = [[obj objectForKey:@"lon"] floatValue];
-	
-	CLLocation * ll = [[CLLocation alloc] initWithLatitude:lat longitude:lon];
-	[self newPlayerLocation:ll];
-	[ll release];
-	
-}
-- (void) startStandardUpdates{
-    // Create the location manager if this object does not
-    // already have one.
-    if (nil == locationManager) 
-		locationManager = [[CLLocationManager alloc] init];
-	
-	locationManager.delegate = self;
-	locationManager.desiredAccuracy = kCLLocationAccuracyBest;
-	
-	// Set a movement threshold for new events.
-	locationManager.distanceFilter = 1.0;
-	
-	[locationManager startUpdatingLocation];
-}
-// Delegate method from the CLLocationManagerDelegate protocol.
-- (void) locationManager:(CLLocationManager *)manager
-	 didUpdateToLocation:(CLLocation *)newLocation
-			fromLocation:(CLLocation *)oldLocation
-{
-	NSLog(@"recieved timestamp: %f",[newLocation.timestamp timeIntervalSinceNow]);
-	if (newLocation.horizontalAccuracy>100.0 || [newLocation.timestamp timeIntervalSinceNow] < -30.0) return;
-	if (newLocation.coordinate.latitude==oldLocation.coordinate.latitude && newLocation.coordinate.longitude==oldLocation.coordinate.longitude){
-		NSLog(@"gps update is identical, skipping recalculations");
-		return;
-	}
-	
-	[self newPlayerLocation:newLocation];
-	
-}
 - (void) newPlayerLocation:(CLLocation *)location {
 	/*
 	 This method is called whenever a new player location
@@ -169,7 +130,6 @@
 	
 	
 	NSLog(@"newPlayerLocation: %@",location);
-	
 	//convert to map coordinates
 	FREdgePos * ep = [themap edgePosFromPoint:location];
 	
@@ -193,7 +153,6 @@
 	
 	[latestsearch release];
 	latestsearch = [themap createPathSearchAt:player.pos withMaxDistance:[NSNumber numberWithFloat:1000.0]];
-	if (!setup_complete) [self completeSetupWithLocation:ep];
 }
 
 /*
@@ -246,19 +205,6 @@
 	//[musicPlayer play];
 }
 */
-
-- (void) completeSetupWithLocation:(FREdgePos*)start {
-	if (setup_complete){
-		NSLog(@"called initWithstartPoint: twice!");
-		return;
-	}
-	//[self performSelector:@selector(ticktock) withObject:nil afterDelay:1.0];
-	setup_complete = YES;
-	for (FRPoint * pt in points){
-		[pt setCoordinate:[themap coordinateFromEdgePosition:pt.pos]];
-	}
-	if (viewControl) [viewControl initializedMission:self];
-}
 - (void) abort {
 	[NSObject cancelPreviousPerformRequestsWithTarget:self];
 	[toBeSpoken removeAllObjects];
@@ -272,9 +218,6 @@
 	[toBeSpoken release];
 	[previously_said release];
 	[current_road release];
-	if (m2) [m2 cancel];
-	[m2 release];
-	[locationManager release];
 	[voicebot release];
 	self.viewControl = nil;
 	[super dealloc];
