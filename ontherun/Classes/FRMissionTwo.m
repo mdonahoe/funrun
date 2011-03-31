@@ -13,6 +13,13 @@
 #import "LocationPicker.h"
 
 @implementation FRMissionTwo
+- (id)initWithLocation:(CLLocation *)l viewControl:(UIViewController *)vc{
+	self = [super initWithLocation:l viewControl:vc];
+	if (!self) return nil;
+	[self.viewControl setText:@"SWEET"];
+	return self;
+}
+
 - (void) ticktock {
 
 	//anounce time remaining

@@ -28,19 +28,10 @@
 	//self.navigationItem.title = @"Mission One";
 	
 	//objective
-	objective = [[UITableViewCell alloc] initWithFrame:CGRectZero];
+	if (nil==objective) objective = [[UITableViewCell alloc] initWithFrame:CGRectZero];
 	objective.selectionStyle = UITableViewCellSelectionStyleNone;
-	UILabel * label = [[[UILabel alloc] initWithFrame:CGRectZero] autorelease];
-	[label setLineBreakMode:UILineBreakModeWordWrap];
-	[label setMinimumFontSize:FONT_SIZE];
-	[label setNumberOfLines:0];
-	[label setFont:[UIFont systemFontOfSize:FONT_SIZE]];
-	NSString *text = missionText;		
-	CGSize constraint = CGSizeMake(CELL_CONTENT_WIDTH - (CELL_CONTENT_MARGIN * 2), 20000.0f);
-	CGSize size = [text sizeWithFont:[UIFont systemFontOfSize:FONT_SIZE] constrainedToSize:constraint lineBreakMode:UILineBreakModeWordWrap];
-	[label setText:text];
-	[label setFrame:CGRectMake(CELL_CONTENT_MARGIN, CELL_CONTENT_MARGIN, CELL_CONTENT_WIDTH - (CELL_CONTENT_MARGIN * 2), MAX(size.height, 44.0f))];			
-	[[objective contentView] addSubview:label];
+	[self setText:missionText];
+	
 	
 	//destination
 	destination = [[UITableViewCell alloc] initWithFrame:CGRectZero];
@@ -205,10 +196,27 @@
 	
 }
 - (void) setText:(NSString *)text{
+	NSLog(@"your text = %@",text);
 	[text retain];
 	[missionText release];
 	missionText = text;
 	//reload data?
+	UILabel * label = (UILabel*)[[objective contentView] viewWithTag:1];
+	if (nil==label){
+		NSLog(@"new label coming up!");
+		label = [[[UILabel alloc] initWithFrame:CGRectZero] autorelease];
+		[label setLineBreakMode:UILineBreakModeWordWrap];
+		[label setMinimumFontSize:FONT_SIZE];
+		[label setNumberOfLines:0];
+		[label setFont:[UIFont systemFontOfSize:FONT_SIZE]];
+		[label setTag:1];
+		//[[objective contentView] addSubview:label]; will it add the view twice?
+	}
+	CGSize constraint = CGSizeMake(CELL_CONTENT_WIDTH - (CELL_CONTENT_MARGIN * 2), 20000.0f);
+	CGSize size = [missionText sizeWithFont:[UIFont systemFontOfSize:FONT_SIZE] constrainedToSize:constraint lineBreakMode:UILineBreakModeWordWrap];
+	[label setText:missionText];
+	[label setFrame:CGRectMake(CELL_CONTENT_MARGIN, CELL_CONTENT_MARGIN, CELL_CONTENT_WIDTH - (CELL_CONTENT_MARGIN * 2), MAX(size.height, 44.0f))];			
+	[[objective contentView] addSubview:label];
 }
 
 #pragma mark -

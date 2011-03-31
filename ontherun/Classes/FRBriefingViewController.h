@@ -22,4 +22,5 @@
 @property(nonatomic,retain) NSString * desttext;
 @property(nonatomic,assign) FRMissionTemplate * mission; //retain?
 - (void) setDest:(NSString *)name;
+- (void) setText:(NSString *)text;
 @end
