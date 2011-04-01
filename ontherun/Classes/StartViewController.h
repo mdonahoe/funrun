@@ -29,7 +29,7 @@
 - (void) updatePosition:(id)obj;
 - (void) startStandardUpdates;
 - (IBAction) statechange:(id)sender;
-
+- (IBAction) newaction:(id)sender;
 
 @end
 
