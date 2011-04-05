@@ -12,6 +12,7 @@
 #import "FRPathSearch.h"
 #import "VSSpeechSynthesizer.h"
 #import "FRPoint.h"
+#import "LocationPicker.h"
 
 
 
@@ -19,7 +20,7 @@
 
 
 
-@interface FRMissionTemplate : NSObject {
+@interface FRMissionTemplate : NSObject <LocationPickerDelegate>{
 	NSString * previously_said;
 	FRPathSearch * latestsearch;
 	FRMap * themap;

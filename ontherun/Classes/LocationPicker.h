@@ -9,10 +9,16 @@
 #import <UIKit/UIKit.h>
 #import <MapKit/MapKit.h>
 
+@protocol LocationPickerDelegate <NSObject>
+
+- (void)pickedLocation:(CLLocationCoordinate2D)location;
+
+@end
+
 @interface LocationPicker : UIViewController <MKMapViewDelegate> {
 	IBOutlet MKMapView * mapView;
 	id <MKAnnotation> pt;
-	id delegate;
+	id <LocationPickerDelegate> delegate;
 }
 @property(nonatomic,retain) IBOutlet MKMapView * mapView;
 - (id) initWithAnnotation:(id <MKAnnotation>)center delegate:(id)d;
