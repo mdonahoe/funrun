@@ -1,6 +1,6 @@
 //
 //  FRMissionOne.m
-//  ontherun, turn-by-turn Directives, edge of your seat directions, real-time spoken action movie
+//  ontherun
 //
 //  Created by Matt Donahoe on 3/14/11.
 //  Copyright 2011 MIT Media Lab. All rights reserved.

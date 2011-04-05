@@ -194,8 +194,9 @@
 	
 	//now move forward randomly.
 	//would be better to look at the pathsearch and move optimally
-	
-	return [map move:ep forwardRandomly:dx];
+    
+    
+    return [map move:ep forwardRandomly:dx];
 }
 - (float) distanceFromRoot:(FREdgePos*)ep {
 	
@@ -244,7 +245,6 @@
 - (NSString *) directionToRoot:(FREdgePos *)ep{
 	//turn by turn directions
 	if (![self containsPoint:ep]) return @"an unknown direction";
-	//this method is unfinished
 	
 	//"turn right on maverick street"
 	

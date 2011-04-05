@@ -28,18 +28,6 @@
  and the constraint file, and build the level.
  3. make a loading screen/voices.
  
- 
- todo
- (done)1. parse the map, getting rid of (null) street names
- 2. detect when he turns around.
- (done)3. prevent repeating the same shit.
- 4. "he is heading toward blah street" should happen less frequently
- 5. it might be possible to pass him, which would be annoying. better user model, perhaps lines.
- 6. "he turned down x street, heading toward y street. cut him off by taking z street"
- 7. (done, i think) remove dead ends
- 8. some turns dont get announced. wtf?! (this could be because it is moving too fast and passes over an edge)
- 9. keep track of whether we said a road or not. try not to repeat it.
- 10. if the enemy is on the shortest path between where i am and where i was, we probably got him.
  */
 
 

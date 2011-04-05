@@ -1,9 +1,9 @@
-    //
+//
 //  StartViewController.m
 //  ontherun
 //
 //  Created by Matt Donahoe on 3/14/11.
-//  Copyright 2011 __MyCompanyName__. All rights reserved.
+//  Copyright 2011 MIT Media Lab. All rights reserved.
 //
 
 #import "StartViewController.h"

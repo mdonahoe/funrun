@@ -207,14 +207,14 @@
 	[player release];
 	[points release];
 	[themap release];
-	[latestsearch release];
+    [voicebot release];
 	[toBeSpoken release];
-	[previously_said release];
-	[current_road release];
-	[voicebot release];
+	[latestsearch release];
+    [current_road release];
+    [previously_said release];
+	[backgroundMusicPlayer release];
 	self.viewControl = nil;
-    [backgroundMusicPlayer release];
-	[super dealloc];
+    [super dealloc];
 	NSLog(@"mission is dead");
 }
 @end

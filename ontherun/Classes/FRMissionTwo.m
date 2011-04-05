@@ -204,14 +204,3 @@
 	[super dealloc];
 }
 @end
-
-
-/*
- Todo:
- 1. figure out what belongs in MissionTemplate instead of here
- 2. add story dialog
- 3. get yellow paper from maine
- 4. make progress
- 5. add cops between my picked location and my current location
- 
- */
