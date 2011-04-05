@@ -45,6 +45,8 @@
 		C906C28412D4EA4000C14388 /* libz.1.2.3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = C906C27A12D4EA4000C14388 /* libz.1.2.3.dylib */; };
 		C906C28612D4EA4000C14388 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C906C27C12D4EA4000C14388 /* AudioToolbox.framework */; };
 		C92B0F391338237F0060CE50 /* FRMissionTwo.m in Sources */ = {isa = PBXBuildFile; fileRef = C92B0F381338237F0060CE50 /* FRMissionTwo.m */; };
+		C93EEA5D134AD9D800AFE90C /* drum.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = C93EEA5B134AD9D800AFE90C /* drum.mp3 */; };
+		C93EEA5E134AD9D800AFE90C /* guitar.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = C93EEA5C134AD9D800AFE90C /* guitar.mp3 */; };
 		C9557AAC130AEAA2004A6F54 /* FREdgePos.m in Sources */ = {isa = PBXBuildFile; fileRef = C9557AAB130AEAA2004A6F54 /* FREdgePos.m */; };
 		C9624CC3133AD63300F6594F /* FRSummaryViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C9624CC1133AD63300F6594F /* FRSummaryViewController.m */; };
 		C9624CC4133AD63300F6594F /* FRSummaryViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = C9624CC2133AD63300F6594F /* FRSummaryViewController.xib */; };
@@ -128,6 +130,8 @@
 		C906C27C12D4EA4000C14388 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		C92B0F371338237F0060CE50 /* FRMissionTwo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRMissionTwo.h; sourceTree = "<group>"; };
 		C92B0F381338237F0060CE50 /* FRMissionTwo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRMissionTwo.m; sourceTree = "<group>"; };
+		C93EEA5B134AD9D800AFE90C /* drum.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = drum.mp3; sourceTree = "<group>"; };
+		C93EEA5C134AD9D800AFE90C /* guitar.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = guitar.mp3; sourceTree = "<group>"; };
 		C9557AAA130AEAA2004A6F54 /* FREdgePos.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FREdgePos.h; sourceTree = "<group>"; };
 		C9557AAB130AEAA2004A6F54 /* FREdgePos.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FREdgePos.m; sourceTree = "<group>"; };
 		C9624CC0133AD63300F6594F /* FRSummaryViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSummaryViewController.h; sourceTree = "<group>"; };
@@ -138,7 +142,7 @@
 		C9624CD8133BB9F200F6594F /* FRBriefingViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = FRBriefingViewController.xib; sourceTree = "<group>"; };
 		C9624D50133BFA4F00F6594F /* LocationPicker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocationPicker.h; sourceTree = "<group>"; };
 		C9624D51133BFA4F00F6594F /* LocationPicker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LocationPicker.m; sourceTree = "<group>"; };
-		C9624D52133BFA4F00F6594F /* LocationPicker.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = LocationPicker.xib; sourceTree = "<group>"; };
+		C9624D52133BFA4F00F6594F /* LocationPicker.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = LocationPicker.xib; path = Classes/LocationPicker.xib; sourceTree = "<group>"; };
 		C97CA185132EF0E600E71AC4 /* FRMissionTemplate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRMissionTemplate.h; sourceTree = "<group>"; };
 		C97CA186132EF0E600E71AC4 /* FRMissionTemplate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRMissionTemplate.m; sourceTree = "<group>"; };
 		C97CA18A132EF60700E71AC4 /* FRMissionOne.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRMissionOne.h; sourceTree = "<group>"; };
@@ -234,6 +238,9 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				C93EEA5B134AD9D800AFE90C /* drum.mp3 */,
+				C93EEA5C134AD9D800AFE90C /* guitar.mp3 */,
+				C9624D52133BFA4F00F6594F /* LocationPicker.xib */,
 				9B684BD51341066800F27C12 /* button_green.png */,
 				C9624CC2133AD63300F6594F /* FRSummaryViewController.xib */,
 				C9624CD8133BB9F200F6594F /* FRBriefingViewController.xib */,
@@ -356,7 +363,6 @@
 				9BD50324130070320092D86A /* FRMapViewController.m */,
 				C9624D50133BFA4F00F6594F /* LocationPicker.h */,
 				C9624D51133BFA4F00F6594F /* LocationPicker.m */,
-				C9624D52133BFA4F00F6594F /* LocationPicker.xib */,
 			);
 			name = ViewControllers;
 			sourceTree = "<group>";
@@ -419,6 +425,8 @@
 				C9624CDA133BB9F200F6594F /* FRBriefingViewController.xib in Resources */,
 				C9624D54133BFA4F00F6594F /* LocationPicker.xib in Resources */,
 				9B684BD61341066800F27C12 /* button_green.png in Resources */,
+				C93EEA5D134AD9D800AFE90C /* drum.mp3 in Resources */,
+				C93EEA5E134AD9D800AFE90C /* guitar.mp3 in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

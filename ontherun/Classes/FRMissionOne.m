@@ -195,6 +195,7 @@
 			if (dist < 30) {
 				current_objective++;
 				[self speak:@"He sees you!"];
+                [self playSong:@"drum"];
 			}
 			
 			
@@ -210,6 +211,7 @@
 				[self speak:@"You almost have him!"];
 				ticks++;
 				if (ticks>4){
+                    [self playSong:@"guitar"];
 					current_objective++;
 					[self speak:@"Shoot him! BANG BANG BANG"]; //randomly miss? press action button
 					[self speak:@"Good work. Now grab the device and get back to base"];

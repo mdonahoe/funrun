@@ -17,9 +17,8 @@
 - (id) initWithLocation:(CLLocation*)l viewControl:(UIViewController*)vc {
 	self = [super init];
 	if (!self) return nil;
-	NSLog(@"who am i? %@",[self class]);
-	//return self;
-	//Voice Communication
+	
+    //Voice Communication
 	//link to /Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.2.sdk/System/Library/PrivateFrameworks/VoiceServices.framework
 	voicebot = [[NSClassFromString(@"VSSpeechSynthesizer") alloc] init];
 	[voicebot setDelegate:self];
@@ -69,7 +68,6 @@
 }
 
 - (void) speak:(NSString *)text {
-	NSLog(@"speak:%@",text);
 	if ([voicebot isSpeaking] || [toBeSpoken count]){
 		[toBeSpoken addObject:text];
 	} else {
@@ -78,8 +76,6 @@
 	}
 }
 - (void) speakNow:(NSString *)text{
-	NSLog(@"speakNow:%@",text);
-	return;
 	[voicebot startSpeakingString:text];
 	[text retain];
 	[previously_said release];

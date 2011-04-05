@@ -31,8 +31,3 @@
 - (IBAction) statechange:(id)sender;
 
 @end
-
-
-/*
- is there any way to tell if this view has control again?
-*/
