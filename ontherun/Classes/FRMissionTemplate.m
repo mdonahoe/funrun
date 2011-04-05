@@ -189,26 +189,19 @@
 	
 }
 */
-
-/*
-- (void) music {
-	 //Basic music player setup.
-	 //from http://discussions.apple.com/thread.jspa?threadID=2084104&tstart=0&messageID=9838244
-	 
-	 //need to figure out interruption stuff. Sound can stop playing for some reasons
-	 
-	musicPlayer = [MPMusicPlayerController applicationMusicPlayer];
-	[musicPlayer setQueueWithQuery: [MPMediaQuery songsQuery]];
-	[musicPlayer setShuffleMode:MPMusicShuffleModeSongs];
-	[musicPlayer setRepeatMode:MPMusicRepeatModeAll];
-	[musicPlayer setVolume:0.5]; //the volume for the two audio players is shared, and that sucks
-	//[musicPlayer play];
-}
-*/
 - (void) abort {
 	[NSObject cancelPreviousPerformRequestsWithTarget:self];
 	[toBeSpoken removeAllObjects];
 	[self speak:@"Mission Aborted"];
+}
+- (void) playSong:(NSString *)name {
+    [backgroundMusicPlayer release];
+    NSString * path = [[NSBundle mainBundle] pathForResource:name ofType:@"mp3"];
+    NSURL * url = [NSURL fileURLWithPath:path];
+    NSError * error;
+    backgroundMusicPlayer = [[AVAudioPlayer alloc] initWithContentsOfURL:url error:&error];
+    [backgroundMusicPlayer prepareToPlay];
+    [backgroundMusicPlayer play];
 }
 - (void) dealloc {
 	[player release];
@@ -220,6 +213,7 @@
 	[current_road release];
 	[voicebot release];
 	self.viewControl = nil;
+    [backgroundMusicPlayer release];
 	[super dealloc];
 	NSLog(@"mission is dead");
 }

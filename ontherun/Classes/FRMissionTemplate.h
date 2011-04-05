@@ -17,7 +17,7 @@
 
 //sounds TODO
 //#import <AudioToolbox/AudioToolbox.h>
-//#import <AVFoundation/AVFoundation.h>
+#import <AVFoundation/AVFoundation.h>
 //#import <MediaPlayer/MediaPlayer.h>
 
 
@@ -32,11 +32,11 @@
 	NSMutableArray * points;
 	NSString * current_road;
 	UIViewController * viewControl;
-	
+    AVAudioPlayer * backgroundMusicPlayer;
 }
 @property(nonatomic,retain) NSMutableArray * points;
 @property(nonatomic,assign) UIViewController * viewControl;
-- (id) initWithMap:(FRMap *)m andPlayer:(FRPoint*)p;
+//- (id) initWithMap:(FRMap *)m andPlayer:(FRPoint*)p;
 - (id) initWithLocation:(CLLocation*)l viewControl:(UIViewController*)vc;
 - (void) abort;
 - (void) ticktock;
@@ -44,4 +44,5 @@
 - (void) speakIfEmpty:(NSString *)text;
 - (void) speakNow:(NSString *)text;
 - (void) newPlayerLocation:(CLLocation *)location;
+- (void) playSong:(NSString*)name;
 @end
