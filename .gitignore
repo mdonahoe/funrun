@@ -17,6 +17,7 @@ dsa_priv.pem
 *.pbxuser
 *.xcworkspace
 */project.xcworkspace/*
+*/xcuserdata/*
 # Generated files
 VersionX-revision.h
 
