@@ -28,7 +28,7 @@
 	lman.desiredAccuracy = kCLLocationAccuracyBest;
 	lman.distanceFilter = 1.0;
 	[lman startUpdatingLocation];
-	
+	[lman startUpdatingHeading];
 	//acceleration
 	[[UIAccelerometer sharedAccelerometer] setUpdateInterval:1.0 / 30];
     [[UIAccelerometer sharedAccelerometer] setDelegate:self];
@@ -39,13 +39,13 @@
     freopen([logPath cStringUsingEncoding:NSASCIIStringEncoding],"a+",stdout);
 	
 	//link to /Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.2.sdk/System/Library/PrivateFrameworks/VoiceServices.framework
-	voicebot = [[NSClassFromString(@"VSSpeechSynthesizer") alloc] init];
-	[voicebot setDelegate:self];
+	//voicebot = [[NSClassFromString(@"VSSpeechSynthesizer") alloc] init];
+	//[voicebot setDelegate:self];
 	
 	startDate = [NSDate date];
 	[startDate retain];
-	mode=0;
-	[self nextMode];
+	//mode=0;
+	//[self nextMode];
 	
     return YES;
 }
@@ -114,7 +114,12 @@
 			fromLocation:(CLLocation *)oldLocation
 {
 	//NSLog(@"L:%@",newLocation);
-	printf("L:%f,%f,%f,%f\n",newLocation.coordinate.latitude,newLocation.coordinate.longitude,newLocation.horizontalAccuracy,[newLocation.timestamp timeIntervalSinceDate:startDate],[[NSDate date] timeIntervalSinceDate:startDate]);
+	printf("L:%f,%f,%f,%f,%f\n",newLocation.coordinate.latitude,newLocation.coordinate.longitude,newLocation.horizontalAccuracy,[newLocation.timestamp timeIntervalSinceDate:startDate],[[NSDate date] timeIntervalSinceDate:startDate]);
+}
+
+- (void) locationManager:(CLLocationManager *)manager didUpdateHeading:(CLHeading *)newHeading {
+    //NSLog(@"heading: %@",newHeading);
+    printf("M:%f,%f,%f,%f,%f\n",newHeading.trueHeading,newHeading.x,newHeading.y,newHeading.z,[[NSDate date] timeIntervalSinceDate:startDate]);
 }
 
 - (void)dealloc {
@@ -124,7 +129,7 @@
 
 
 - (void)accelerometer:(UIAccelerometer *)accelerometer didAccelerate:(UIAcceleration *)acceleration {
-	printf("A:%f,%f,%f,%f\n",acceleration.x,acceleration.y,acceleration.z,[[NSDate date] timeIntervalSinceDate:startDate]);
+	//printf("A:%f,%f,%f,%f\n",acceleration.x,acceleration.y,acceleration.z,[[NSDate date] timeIntervalSinceDate:startDate]);
 }
 
 @end
