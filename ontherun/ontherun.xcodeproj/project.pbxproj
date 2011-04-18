@@ -15,6 +15,7 @@
 		9B684BD61341066800F27C12 /* button_green.png in Resources */ = {isa = PBXBuildFile; fileRef = 9B684BD51341066800F27C12 /* button_green.png */; };
 		9B836778133403A300EC486F /* FRMissionChase.m in Sources */ = {isa = PBXBuildFile; fileRef = 9B836777133403A300EC486F /* FRMissionChase.m */; };
 		9B84A0D31309C80300BE94CF /* FRFileLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 9B84A0D21309C80300BE94CF /* FRFileLoader.m */; };
+		9B9505BB135CD55A0070B7E7 /* FRMissionDownload.m in Sources */ = {isa = PBXBuildFile; fileRef = 9B9505BA135CD55A0070B7E7 /* FRMissionDownload.m */; };
 		9BBD3296132E81360082A0C7 /* StartView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9BBD3295132E81360082A0C7 /* StartView.xib */; };
 		9BBD329A132E81CC0082A0C7 /* StartViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9BBD3299132E81CC0082A0C7 /* StartViewController.m */; };
 		9BC137431304A340006492A0 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9BC137421304A340006492A0 /* AVFoundation.framework */; };
@@ -79,6 +80,8 @@
 		9B836777133403A300EC486F /* FRMissionChase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRMissionChase.m; sourceTree = "<group>"; };
 		9B84A0D11309C80300BE94CF /* FRFileLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRFileLoader.h; sourceTree = "<group>"; };
 		9B84A0D21309C80300BE94CF /* FRFileLoader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRFileLoader.m; sourceTree = "<group>"; };
+		9B9505B9135CD55A0070B7E7 /* FRMissionDownload.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRMissionDownload.h; sourceTree = "<group>"; };
+		9B9505BA135CD55A0070B7E7 /* FRMissionDownload.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRMissionDownload.m; sourceTree = "<group>"; };
 		9BBD3295132E81360082A0C7 /* StartView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = StartView.xib; sourceTree = "<group>"; };
 		9BBD3298132E81CC0082A0C7 /* StartViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StartViewController.h; sourceTree = "<group>"; };
 		9BBD3299132E81CC0082A0C7 /* StartViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StartViewController.m; sourceTree = "<group>"; };
@@ -294,6 +297,8 @@
 				9B836777133403A300EC486F /* FRMissionChase.m */,
 				C92B0F371338237F0060CE50 /* FRMissionTwo.h */,
 				C92B0F381338237F0060CE50 /* FRMissionTwo.m */,
+				9B9505B9135CD55A0070B7E7 /* FRMissionDownload.h */,
+				9B9505BA135CD55A0070B7E7 /* FRMissionDownload.m */,
 			);
 			name = Missions;
 			sourceTree = "<group>";
@@ -467,6 +472,7 @@
 				C9624CC3133AD63300F6594F /* FRSummaryViewController.m in Sources */,
 				C9624CD9133BB9F200F6594F /* FRBriefingViewController.m in Sources */,
 				C9624D53133BFA4F00F6594F /* LocationPicker.m in Sources */,
+				9B9505BB135CD55A0070B7E7 /* FRMissionDownload.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
