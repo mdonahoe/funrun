@@ -38,7 +38,7 @@
     [points addObject:hideout];
     
     NSError *error;
-    NSString * p = [[NSBundle mainBundle] pathForResource:@"woowoo" ofType:@".mp3"];
+    NSString * p = [[NSBundle mainBundle] pathForResource:@"woowoo" ofType:@"mp3"];
     NSURL * u = [NSURL URLWithString:p];
     siren = [[AVAudioPlayer alloc] initWithContentsOfURL:u error:&error];
     NSLog(@"siren loaded with error %@",error);
@@ -126,7 +126,7 @@
                 [self speakIfEmpty:[NSString stringWithFormat:@"%i meters",(int)dist]];
                 break;
             case 3:
-                siren.volume = (100.0 - dist / 2.0) / 100.0;
+                siren.volume = 10.0 / MAX(10.0,dist);//(100.0 - dist / 2.0) / 100.0;
                 NSLog(@"siren is %i, volume is %f",siren.playing,siren.volume);
                 if (dist < 30){
                     [self ulyssesSpeak:@"12stoppolice-2"];
@@ -157,11 +157,12 @@
     
 }
 - (void) startSiren {
-    siren.volume = 1.0;
+    siren.volume = 0.1;
+    [siren prepareToPlay];
     [siren play];
 }
 - (void) stopSiren {
-    [siren stop];
+    [siren pause];
 }
 - (void) the_download {
     NSTimeInterval timediff = ABS([hideout_date timeIntervalSinceNow]);
