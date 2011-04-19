@@ -53,9 +53,12 @@
     int current_state;
     int download_state;
     int intro_state;
+    int cop_state;
     NSDate * hideout_date;
     NSDate * start_date;
     FRPoint * cop;
+    FRPathSearch * destination;
 }
+- (void) ulyssesSpeak:(NSString *)filename;
 
 @end
