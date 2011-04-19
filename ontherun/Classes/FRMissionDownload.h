@@ -13,7 +13,7 @@
  This is the mission that was seen in the trailer.
  
  
- Ulysesses has tracked down the thief who framed you.
+ Ulysses has tracked down the thief who framed you.
  
  The man has a hideout nearby. You need to get there and download data using Wifi.
  
@@ -23,7 +23,7 @@
  
  
  states:
-    intro - ulyses talks about the mission
+    intro - ulysses talks about the mission
     halfway - a cop is nearby, and you need to route around him.
     download - you arrived at the location. wait for ulyses to hack the network and get the data.
     done - download complete. head to a safehouse
@@ -46,10 +46,15 @@
 
 
 @interface FRMissionDownload : FRMissionTemplate {
+    FRPoint * hideout;
     AVAudioPlayer * ulysses;
-    AVAudioPlayer * backgroundMusic;
+    AVAudioPlayer * _music;
     AVAudioPlayer * siren;
     int current_state;
+    int download_state;
+    int intro_state;
+    NSDate * hideout_date;
+    NSDate * start_date;
     FRPoint * cop;
 }
 
