@@ -54,8 +54,8 @@
 
 	[self speakNow:@"Lock"];
 	
-	[voicebot setRate:(float)1.3];
-	[voicebot setPitch:.35];
+	[voicebot setRate:1.3];
+	[voicebot setPitch:0.25];
 	
 	FRBriefingViewController * brief = 
 	[[[FRBriefingViewController alloc] initWithNibName:@"FRBriefingViewController"
@@ -148,7 +148,7 @@
 	}
 	
 	[latestsearch release];
-	latestsearch = [themap createPathSearchAt:player.pos withMaxDistance:[NSNumber numberWithFloat:1000.0]];
+	latestsearch = [themap createPathSearchAt:player.pos withMaxDistance:[NSNumber numberWithFloat:1000.0]]; //this number needs to be adjustable i think.
 }
 
 /*

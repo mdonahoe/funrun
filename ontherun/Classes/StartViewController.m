@@ -11,6 +11,7 @@
 #import "FRMissionChase.h"
 #import "FRMissionOne.h"
 #import "FRMissionTwo.h"
+#import "FRMissionDownload.h"
 #import "LocationPicker.h"
 
 @implementation StartViewController
@@ -93,7 +94,7 @@
 	//have different nibs for different missions?
 	//or download from the interwebs?
 	if (mission) [mission release];
-	mission = [[FRMissionOne alloc] initWithLocation:self.latest_point viewControl:self];
+	mission = [[FRMissionDownload alloc] initWithLocation:self.latest_point viewControl:self];
 }
 - (void) updatePosition:(id)obj {
 	float lat = [[obj objectForKey:@"lat"] floatValue];
