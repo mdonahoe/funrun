@@ -127,6 +127,7 @@
                 }
                 if (dist > 120){
                     cop_state = 0;
+                    [self playSong:@"chase_normal"];
                     [self ulyssesSpeak:@"16nicework"];
                 }
                 [self speakIfEmpty:[NSString stringWithFormat:@"%i meters",(int)dist]];
@@ -159,7 +160,6 @@
                 break;
         }
     }
-    
 }
 
 // lead the cop away from the destination
@@ -169,6 +169,10 @@
 // fix the front page
 // possible to lose
 // he is out of sight. make another turn to lose him.
+// audioroute stuff is going to fuck it up (push headphone button, starts ipod, press again... dead)
+// home location, and cops that chase you.
+// make audio fade before transitions
+// add home.
 
 
 - (void) startSiren {
@@ -235,9 +239,9 @@
                 [self speakNow:@"unsupported intro state"];
                 break;
         }
-        
     }
 }
+
 - (void) ulyssesSpeak:(NSString *)filename{
     [ulysses release];
     NSError *error;
@@ -261,7 +265,8 @@
 }
 - (void) audioPlayerDidFinishPlaying:(AVAudioPlayer *)audioplayer successfully:(BOOL)flag{
     //a player finished, do something depending on which one.
-    if (audioplayer==ulysses){
+    if (audioplayer==_music){
+        NSLog(@"finished");
         //we probably dont need to do anything here.
     }
 }

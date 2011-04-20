@@ -58,6 +58,9 @@
     NSDate * start_date;
     FRPoint * cop;
     FRPathSearch * destination;
+    
+    FRPoint * safehouse;
+    
 }
 - (void) ulyssesSpeak:(NSString *)filename;
 
