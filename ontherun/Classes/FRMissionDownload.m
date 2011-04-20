@@ -18,7 +18,7 @@
     current_state = 0;
     intro_state = -1;
     
-    [self playSong:@"chase1"];
+    [self playSong:@"chase_normal"];
     
     //create the destination
     hideout = [[FRPoint alloc] initWithName:@"hideout"];
@@ -28,12 +28,13 @@
         hideout.pos = [latestsearch move:hideout.pos awayFromRootWithDelta:100];
         dist = [latestsearch distanceFromRoot:hideout.pos];
     }
+    hideout.pos.position = 5; //make it at a corner.
+    
     destination = [themap createPathSearchAt:hideout.pos withMaxDistance:[NSNumber numberWithFloat:(dist+200.0)]];
     
-    //hideout.pos.position = 5; //make it at a corner.
     start_date = [[NSDate alloc] init];
     cop = [[FRPoint alloc] initWithName:@"cop"];
-    cop.pos = [latestsearch move:hideout.pos towardRootWithDelta:200.0];
+    cop.pos = [latestsearch move:hideout.pos towardRootWithDelta:400.0];
     [points addObject:cop];
     [points addObject:hideout];
     
@@ -80,14 +81,18 @@
             case 1:
                 [self speakIfEmpty:[destination directionToRoot:player.pos]];
                 if (dist < 100){
-                    [self speakIfEmpty:[NSString stringWithFormat:@"The target is %i meters %@ you",(int)dist,[latestsearch directionFromRoot:hideout.pos]]];
+                    [self speak:[NSString stringWithFormat:@"The target is %i meters %@ you",(int)dist,[latestsearch directionFromRoot:hideout.pos]]];
+                    current_state++;
                 }
+                break;
+            case 2:
+                [self speakIfEmpty:[destination directionToRoot:player.pos]];
                 if (dist < 30) {
                     current_state++;
                     hideout_date = [[NSDate alloc] init];
                 }
                 break;
-            case 2:
+            case 3:
                 [self the_download];
                 break;
         }
@@ -112,6 +117,7 @@
                 break;
             case 1:
                 [self speak:[NSString stringWithFormat:@"threat detected %@ you on %@",[latestsearch directionFromRoot:cop.pos],[themap roadNameFromEdgePos:cop.pos]]];
+                [self playSong:@"chase_elevated"];
                 cop_state++;
                 break;
             case 2:
@@ -127,16 +133,15 @@
                 break;
             case 3:
                 siren.volume = 10.0 / MAX(10.0,dist);//(100.0 - dist / 2.0) / 100.0;
-                NSLog(@"siren is %i, volume is %f",siren.playing,siren.volume);
                 if (dist < 30){
                     [self ulyssesSpeak:@"12stoppolice-2"];
                     cop_state++;
                 }
                 if (dist > 100){
+                    [self playSong:@"chase_normal"];
                     [self ulyssesSpeak:@"16nicework"];
                     cop_state = 0;
                     [self stopSiren];
-                    NSLog(@"got rid of them, %i",cop_state);
                 }
                 [self speakIfEmpty:[NSString stringWithFormat:@"%i",(int)dist]];
                 cop.pos = [latestsearch move:cop.pos towardRootWithDelta:2.0];
@@ -156,6 +161,16 @@
     }
     
 }
+
+// lead the cop away from the destination
+// prevent repeat directions
+// audio versions of "turn around" and distances
+// fix the map
+// fix the front page
+// possible to lose
+// he is out of sight. make another turn to lose him.
+
+
 - (void) startSiren {
     siren.volume = 0.1;
     [siren prepareToPlay];
@@ -204,7 +219,6 @@
                 //speak the location
                 [self speak:@"target acquired"];
                 [self speak:[NSString stringWithFormat:@"head over to %@",[themap roadNameFromEdgePos:hideout.pos]]];
-                //[self speakNow:@"target acquired. head to the corner of broadway and moore street"];
                 intro_state++;
                 break;
             case 2:
@@ -229,8 +243,7 @@
     NSError *error;
     NSString * s = [[NSBundle mainBundle] pathForResource:filename ofType:@"mp3"];
     NSURL * x = [NSURL fileURLWithPath:s];
-    ulysses = [[AVAudioPlayer alloc]
-                              initWithContentsOfURL:x error:&error];
+    ulysses = [[AVAudioPlayer alloc] initWithContentsOfURL:x error:&error];
     ulysses.volume = 0.5;
     [ulysses prepareToPlay];
     [ulysses play];
@@ -240,9 +253,9 @@
     NSError *error;
     NSString * s = [[NSBundle mainBundle] pathForResource:filename ofType:@"mp3"];
     NSURL * x = [NSURL fileURLWithPath:s];
-    _music = [[AVAudioPlayer alloc]
-                              initWithContentsOfURL:x error:&error];
+    _music = [[AVAudioPlayer alloc] initWithContentsOfURL:x error:&error];
     _music.volume = 0.5;
+    _music.numberOfLoops = -1;
     [_music prepareToPlay];
     [_music play];
 }
