@@ -20,4 +20,11 @@
 - (NSNumber *) endObj {
 	return [NSNumber numberWithInt:end];
 }
+- (BOOL) onSameEdgeAs:(FREdgePos *)other{
+    return ((start==other.start && end==other.end) || (start==other.end && end==other.start));
+}
+- (BOOL) onEdgeFromA:(NSNumber*)nodeA toB:(NSNumber *)nodeB{
+    return ([nodeA isEqualToNumber:[self startObj]] && [nodeB isEqualToNumber:[self endObj]]) ||
+    ([nodeA isEqualToNumber:[self endObj]] && [nodeB isEqualToNumber:[self startObj]]);
+}
 @end

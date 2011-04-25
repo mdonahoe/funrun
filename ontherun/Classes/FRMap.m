@@ -139,15 +139,27 @@
 - (NSString *) roadNameFromNode:(NSNumber *)n1 andNode:(NSNumber*)n2{
 	return [[[graph objectForKey:n1] objectForKey:n2] objectForKey:@"name"];
 }
-- (FRPathSearch *) createPathSearchAt:(FREdgePos *)ep withMaxDistance:(NSNumber *)maxdist{
+- (BOOL) ep:(FREdgePos*)ep isFacingOther:(FREdgePos*)other {
+    //only works if they are on the same edge;
+    if (ep.start==other.start) return ep.position > other.position;
+    return ep.position > [self maxPosition:other] - other.position;
+}
+- (FRPathSearch *) createPathSearchAt:(FREdgePos *)ep withMaxDistance:(NSNumber *)maxdist {
+
+    return [self createPathSearchAt:ep withMaxDistance:maxdist avoidingEdges:nil];
+}
+- (FRPathSearch *) createPathSearchAt:(FREdgePos *)ep withMaxDistance:(NSNumber *)maxweight avoidingEdges:(NSArray*)skipedges{
+    NSLog(@"skipedges = %@",skipedges);
 	NSMutableArray * queue = [NSMutableArray arrayWithCapacity:3];
 	NSMutableDictionary * previous = [NSMutableDictionary dictionary];
 	NSMutableDictionary * distance = [NSMutableDictionary dictionary];
+	NSMutableDictionary * weight = [NSMutableDictionary dictionary];
 	
-	
+    float penalty = 500.0;
+    
 	//edgePos is a object with ints. convert to objects for use as keys
-	NSNumber * a = [NSNumber numberWithInt:ep.start];
-	NSNumber * b = [NSNumber numberWithInt:ep.end];
+	NSNumber * a = [ep startObj];
+	NSNumber * b = [ep endObj];
 	
 	//add edge nodes to queue
 	[queue addObject:a];
@@ -158,6 +170,24 @@
 	[distance setObject:[NSNumber numberWithFloat:ep.position] forKey:a];
 	[distance setObject:[NSNumber numberWithFloat:[self edgeLengthFromStart:a toFinish:b] - ep.position] forKey:b];
 	
+    
+    
+    float a_weight = [[distance objectForKey:a] floatValue];
+    float b_weight = [[distance objectForKey:b] floatValue];
+    
+    //set their weights according to skipedges
+    for (FREdgePos * skip_ep in skipedges){
+        if (![skip_ep onSameEdgeAs:ep]) continue;
+        if ([self ep:ep isFacingOther:skip_ep]){
+            a_weight+=penalty;
+        } else {
+            b_weight+=penalty;
+        }
+    }
+    
+    [weight setObject:[NSNumber numberWithFloat:a_weight] forKey:a];
+    [weight setObject:[NSNumber numberWithFloat:b_weight] forKey:b];
+    
 	//set their previous nodes to each other
 	[previous setObject:a forKey:b];
 	[previous setObject:b forKey:a];
@@ -168,11 +198,23 @@
 		NSNumber * node = [queue objectAtIndex:0];
 		[queue removeObjectAtIndex:0];
 		float nodedist = [[distance objectForKey:node] floatValue];
+        float nodeweight = [[weight objectForKey:node] floatValue];
+        
 		for (NSNumber * neighbor in [graph objectForKey:node]){
-			float dist = [self edgeLengthFromStart:node toFinish:neighbor] + nodedist;
-			if (maxdist && [maxdist floatValue] < dist) continue; //dont add nodes that are too far from the root
-			if ([distance objectForKey:neighbor]==nil || dist < [[distance objectForKey:neighbor] floatValue]){
-				[distance setObject:[NSNumber numberWithFloat:dist] forKey:neighbor];
+			
+            //skip if this edge is in the avoid list
+            float dist = [self edgeLengthFromStart:node toFinish:neighbor];
+            float neighborweight = nodeweight + dist;
+            
+            for (FREdgePos * skip_ep in skipedges){
+                if ([skip_ep onEdgeFromA:node toB:neighbor]) neighborweight+=penalty;
+            }
+            
+            if (maxweight && [maxweight floatValue] < neighborweight) continue; //dont add nodes that are too costly
+			
+            if ([weight objectForKey:neighbor]==nil || neighborweight < [[weight objectForKey:neighbor] floatValue]){
+				[weight setObject:[NSNumber numberWithFloat:neighborweight] forKey:neighbor];
+                [distance setObject:[NSNumber numberWithFloat:dist+nodedist] forKey:neighbor];
 				[previous setObject:node forKey:neighbor];
 				[queue addObject:neighbor];
 			}
@@ -180,7 +222,11 @@
 	}
 	
 	// should autorelease this. memory leak possible
-	FRPathSearch * ps = [[FRPathSearch alloc] initWithRoot:ep previous:previous distance:distance map:self];
+    NSLog(@"creating path search");
+	
+    //we no longer need the weights in order to create the path search. though it doesnt incorporate distances to badguys
+    FRPathSearch * ps = [[FRPathSearch alloc] initWithRoot:ep previous:previous distance:distance map:self];
+    NSLog(@"path search created");
 	return ps;
 }
 - (NSNumber *) randomNeighbor:(NSNumber *)node {

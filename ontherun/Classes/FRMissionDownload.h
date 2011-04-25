@@ -54,14 +54,22 @@
     int download_state;
     int intro_state;
     int cop_state;
+    int chase_state;
     NSDate * hideout_date;
     NSDate * start_date;
     FRPoint * cop;
     FRPathSearch * destination;
-    
     FRPoint * safehouse;
+    BOOL cop_spotted;
     
 }
 - (void) ulyssesSpeak:(NSString *)filename;
+- (void) stopSiren;
+- (void) startSiren;
+- (void) the_cop;
+- (void) the_download;
+- (void) the_intro;
+- (void) the_chase;
+- (void) playSong:(NSString *)name;
 
 @end

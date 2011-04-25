@@ -28,5 +28,6 @@
 - (float) distanceFromRoot:(FREdgePos*)ep;
 - (NSString *) directionFromRoot:(FREdgePos*)ep;
 - (NSString *) directionToRoot:(FREdgePos*)ep;
+- (NSArray *) directionsToRoot:(FREdgePos *)ep;
 - (FREdgePos *) edgePosThatIsDistance:(float)d fromRootAndOther:(FRPathSearch*)p;
 @end

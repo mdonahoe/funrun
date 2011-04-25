@@ -71,6 +71,8 @@
 		C9449AD8135D4CCC008F8623 /* chase1.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = C9449AD7135D4CCC008F8623 /* chase1.mp3 */; };
 		C9449ADB135D4CE2008F8623 /* woop.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = C9449AD9135D4CE2008F8623 /* woop.mp3 */; };
 		C9449ADC135D4CE2008F8623 /* woowoo.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = C9449ADA135D4CE2008F8623 /* woowoo.mp3 */; };
+		C9449ADF135E35BD008F8623 /* chase_elevated.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = C9449ADD135E35B8008F8623 /* chase_elevated.mp3 */; };
+		C9449AE0135E35BD008F8623 /* chase_normal.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = C9449ADE135E35B9008F8623 /* chase_normal.mp3 */; };
 		C9557AAC130AEAA2004A6F54 /* FREdgePos.m in Sources */ = {isa = PBXBuildFile; fileRef = C9557AAB130AEAA2004A6F54 /* FREdgePos.m */; };
 		C9624CC3133AD63300F6594F /* FRSummaryViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C9624CC1133AD63300F6594F /* FRSummaryViewController.m */; };
 		C9624CC4133AD63300F6594F /* FRSummaryViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = C9624CC2133AD63300F6594F /* FRSummaryViewController.xib */; };
@@ -181,6 +183,8 @@
 		C9449AD7135D4CCC008F8623 /* chase1.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = chase1.mp3; sourceTree = "<group>"; };
 		C9449AD9135D4CE2008F8623 /* woop.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = woop.mp3; sourceTree = "<group>"; };
 		C9449ADA135D4CE2008F8623 /* woowoo.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = woowoo.mp3; sourceTree = "<group>"; };
+		C9449ADD135E35B8008F8623 /* chase_elevated.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = chase_elevated.mp3; sourceTree = "<group>"; };
+		C9449ADE135E35B9008F8623 /* chase_normal.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = chase_normal.mp3; sourceTree = "<group>"; };
 		C9557AAA130AEAA2004A6F54 /* FREdgePos.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FREdgePos.h; sourceTree = "<group>"; };
 		C9557AAB130AEAA2004A6F54 /* FREdgePos.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FREdgePos.m; sourceTree = "<group>"; };
 		C9624CC0133AD63300F6594F /* FRSummaryViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSummaryViewController.h; sourceTree = "<group>"; };
@@ -287,6 +291,8 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				C9449ADD135E35B8008F8623 /* chase_elevated.mp3 */,
+				C9449ADE135E35B9008F8623 /* chase_normal.mp3 */,
 				C9449AD9135D4CE2008F8623 /* woop.mp3 */,
 				C9449ADA135D4CE2008F8623 /* woowoo.mp3 */,
 				C9449AD7135D4CCC008F8623 /* chase1.mp3 */,
@@ -524,6 +530,8 @@
 				C9449AD8135D4CCC008F8623 /* chase1.mp3 in Resources */,
 				C9449ADB135D4CE2008F8623 /* woop.mp3 in Resources */,
 				C9449ADC135D4CE2008F8623 /* woowoo.mp3 in Resources */,
+				C9449ADF135E35BD008F8623 /* chase_elevated.mp3 in Resources */,
+				C9449AE0135E35BD008F8623 /* chase_normal.mp3 in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -37,6 +37,9 @@
 //does a BFS on the graph starting at the two nodes on the give edge, returns the resulting pathsearch object
 - (FRPathSearch *) createPathSearchAt:(FREdgePos *)ep withMaxDistance:(NSNumber *)maxdist;
 
+//avoids some edges
+- (FRPathSearch *) createPathSearchAt:(FREdgePos *)ep withMaxDistance:(NSNumber *)maxdist avoidingEdges:(NSArray*)skipedges;
+    
 //moves forward, and chooses a new edge if need be.
 - (FREdgePos *) move:(FREdgePos *)ep forwardRandomly:(float)dx;
 

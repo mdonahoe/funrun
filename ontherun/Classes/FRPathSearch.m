@@ -275,6 +275,44 @@
 	
 	return [NSString stringWithFormat:@"turn %@",[map descriptionFromEdgePos:prev toEdgePos:ep]];
 }
+- (NSArray *) directionsToRoot:(FREdgePos *)ep{
+	//turn by turn directions
+    NSMutableArray * directions = [NSMutableArray array];
+    
+	if (![self containsPoint:ep]) return nil;
+	
+	//"turn right on maverick street"
+	
+	//it would be nice if these methods avoided badguys
+	//move toward root until you hit a different street.
+	//calculate direction needed to turn
+	
+    
+	
+	if (![self isFacingRoot:ep]) {
+        
+		[directions addObject:@"turn around"];
+	}
+    
+    NSString * start_road = [map roadNameFromEdgePos:ep];
+    while (![ep onSameEdgeAs:root]){
+        NSLog(@"start road = %@",start_road);
+        start_road = [map roadNameFromEdgePos:ep];
+        NSString * current_road = nil;
+        FREdgePos * prev = nil;
+        
+        do {//potential infinite loop
+            prev = ep;
+            ep = [self move:ep towardRootWithDelta:10000000]; //takes advantage of the bug in that method to move forward a single edge
+            current_road = [map roadNameFromEdgePos:ep];
+            NSLog(@"cr = %@, ep = %@",current_road,ep);
+            
+        } while ([start_road isEqualToString:current_road] && ![ep onSameEdgeAs:root]);
+        [directions addObject:[NSString stringWithFormat:@"turn %@",[map descriptionFromEdgePos:prev toEdgePos:ep]]];
+    }
+    [directions addObject:[NSString stringWithFormat:@"continue on %@ to your destination",start_road]];
+    return [NSArray arrayWithArray:directions];
+}
 - (FREdgePos *) edgePosThatIsDistance:(float)d fromRootAndOther:(FRPathSearch*)p {
 	//useful for finding points that are a certain distance from two nodes.
 	//possible to fail like crazy if the max_dists of the pathsearches arent long enough

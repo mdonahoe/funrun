@@ -50,4 +50,6 @@
 @property(assign) float position;
 - (NSNumber *) startObj;
 - (NSNumber *) endObj;
+- (BOOL) onSameEdgeAs:(FREdgePos *)other;
+- (BOOL) onEdgeFromA:(NSNumber*)nodeA toB:(NSNumber *)nodeB;
 @end

@@ -22,7 +22,7 @@
 	//link to /Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.2.sdk/System/Library/PrivateFrameworks/VoiceServices.framework
 	voicebot = [[NSClassFromString(@"VSSpeechSynthesizer") alloc] init];
 	[voicebot setDelegate:self];
-	toBeSpoken = [[NSMutableArray alloc] initWithObjects:@"and load",nil];
+	toBeSpoken = [[NSMutableArray alloc] init];
 	previously_said = nil;
 	
 	//communication with server
@@ -52,8 +52,6 @@
 	points = [[NSMutableArray alloc] initWithObjects:player,nil];
 	
 
-	[self speakNow:@"Lock"];
-	
 	[voicebot setRate:1.3];
 	[voicebot setPitch:0.25];
 	
