@@ -222,12 +222,9 @@
 	}
 	
 	// should autorelease this. memory leak possible
-    NSLog(@"creating path search");
-	
     //we no longer need the weights in order to create the path search. though it doesnt incorporate distances to badguys
     FRPathSearch * ps = [[FRPathSearch alloc] initWithRoot:ep previous:previous distance:distance map:self];
-    NSLog(@"path search created");
-	return ps;
+    return ps;
 }
 - (NSNumber *) randomNeighbor:(NSNumber *)node {
 	int i=0;

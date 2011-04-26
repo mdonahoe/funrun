@@ -57,6 +57,7 @@
 
 //computes the text direction of an edge transition. turned "left" "straight" "right"
 - (NSString *) directionFromEdgePos:(FREdgePos *)e1 toEdgePos:(FREdgePos *)e2;
+
 //turned left/right on x street
 - (NSString *) descriptionFromEdgePos:(FREdgePos *)e1 toEdgePos:(FREdgePos*)e2;
 

@@ -40,7 +40,8 @@
 	NSDictionary * mapdata = [[NSString stringWithContentsOfFile:[loader pathForFile:@"mapdata_nullfree.json"]
 														encoding:NSUTF8StringEncoding
 														   error:NULL] JSONValue];
-	themap = [[FRMap alloc] initWithNodes:[mapdata objectForKey:@"nodes"] andRoads:[mapdata objectForKey:@"roads"]];
+	
+    themap = [[FRMap alloc] initWithNodes:[mapdata objectForKey:@"nodes"] andRoads:[mapdata objectForKey:@"roads"]];
 	
 	[loader release];
 	[thepool release];
@@ -126,9 +127,6 @@
 	NSLog(@"newPlayerLocation: %@",location);
 	//convert to map coordinates
 	FREdgePos * ep = [themap edgePosFromPoint:location];
-	
-	//say something. helps with gps debugging
-	if (arc4random()%10==0) [self speakIfEmpty:@"click"];
 	
 	//speak the current road, if it changed
 	NSString * roadname = [themap roadNameFromEdgePos:ep];

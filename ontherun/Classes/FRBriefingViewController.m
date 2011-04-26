@@ -157,14 +157,12 @@
 	
 }
 - (void) setText:(NSString *)text{
-	NSLog(@"your text = %@",text);
 	[text retain];
 	[missionText release];
 	missionText = text;
 	//reload data?
 	UILabel * label = (UILabel*)[[objective contentView] viewWithTag:1];
 	if (nil==label){
-		NSLog(@"new label coming up!");
 		label = [[[UILabel alloc] initWithFrame:CGRectZero] autorelease];
 		[label setLineBreakMode:UILineBreakModeWordWrap];
 		[label setMinimumFontSize:FONT_SIZE];

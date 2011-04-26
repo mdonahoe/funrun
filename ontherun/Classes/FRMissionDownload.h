@@ -61,8 +61,11 @@
     FRPathSearch * destination;
     FRPoint * safehouse;
     BOOL cop_spotted;
+    NSDate * progress_date;
+    float progress_dist;
     
 }
+- (void) finishWithText:(NSString *)text;
 - (void) ulyssesSpeak:(NSString *)filename;
 - (void) stopSiren;
 - (void) startSiren;

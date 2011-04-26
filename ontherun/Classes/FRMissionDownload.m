@@ -18,9 +18,13 @@
 // home location, and cops that chase you.
 // make audio fade before transitions
 // add home.
+// map dual streets? edit the map data.
+//continue on whatever to your desintation. lame
+// 
 
 #import "FRMissionDownload.h"
 #import "FRMapViewController.h"
+#import "FRSummaryViewController.h"
 
 @implementation FRMissionDownload
 
@@ -47,7 +51,8 @@
         dist = [latestsearch distanceFromRoot:hideout.pos];
         NSLog(@"hideout.pos = %@, dist = %f",hideout.pos,dist);
     }
-    
+    progress_dist = dist;
+    progress_date = [[NSDate alloc] init];
     destination = [themap createPathSearchAt:hideout.pos withMaxDistance:[NSNumber numberWithFloat:(2000.0)]];
     
     start_date = [[NSDate alloc] init];
@@ -77,19 +82,35 @@
 }
 - (void) ticktock {
     float dist;
-    NSLog(@"directions = %@",[destination directionsToRoot:player.pos]);
+    NSArray * directions = [destination directionsToRoot:player.pos];
+    NSString * direction = [directions objectAtIndex:0];
+    if ([direction isEqualToString:@"turn around"]){
+        //direction = [NSString stringWithFormat:@"%@ and %@", direction, [directions objectAtIndex:1]];
+        direction = [directions objectAtIndex:1];
+        //ulysses needs to say that you are going the wrong way.
+    }
     switch (current_state){
         case 0:
             [self the_intro];
             break;
         case 1:
             dist = [latestsearch distanceFromRoot:hideout.pos];
+            NSLog(@"directions = %@, progress = %f",directions,[progress_date timeIntervalSinceNow]);
+            if ([progress_date timeIntervalSinceNow] < -10){
+                if (dist - progress_dist > 20){
+                    [self speak:@"turn around, you idiot!"];
+                }
+                [progress_date release];
+                progress_date = [[NSDate alloc] init];
+                progress_dist = dist;
+            }
             [self the_cop]; //integrate the rest of this case into the_cop
-            [self speakIfEmpty:[destination directionToRoot:player.pos]];
+            [self speakIfEmpty:direction];
             if (dist < 30) {
                 if (cop_state){
                     [self speak:@"we cant do the download if you are being chased. failed"];
-                    current_state = 5;
+                    [self finishWithText:@"Mission Failed: cop watching the drop zone"];
+                    return;
                 } else {
                     current_state++;
                     hideout_date = [[NSDate alloc] init];
@@ -110,8 +131,10 @@
                 [self ulyssesSpeak:@"16greatwork"];
                 current_state++;
                 //you win!
+                [self finishWithText:[NSString stringWithFormat:@"Mission Complete\nDuration:%f",[start_date timeIntervalSinceNow]]];
+                return;
             }
-            [self speakIfEmpty:[destination directionToRoot:player.pos]];
+            [self speakIfEmpty:direction];
             break;
         default:
             NSLog(@"current_state invalid");
@@ -122,7 +145,7 @@
     //cop in sight.
     float dist = [latestsearch distanceFromRoot:cop.pos];
     NSLog(@"copdist = %f, cop_state = %i, uyl = %i",dist,cop_state,ulysses.playing);
-    if (!cop_spotted){
+    if (!cop_spotted && cop_state==0){
         cop.pos = [latestsearch move:cop.pos towardRootWithDelta:10.0];
     } else {
         cop.pos = [themap move:cop.pos forwardRandomly:1.0];
@@ -179,6 +202,10 @@
                 }
                 [self speakIfEmpty:[NSString stringWithFormat:@"%i",(int)dist]];
                 cop.pos = [latestsearch move:cop.pos towardRootWithDelta:2.0];
+                
+                if ([destination distanceFromRoot:cop.pos] < 100){
+                    cop.pos = [destination move:cop.pos awayFromRootWithDelta:100]; //move the cop totally away.
+                }
                 break;
             default:
                 siren.volume = (100.0 - dist / 2.0) / 100.0;
@@ -255,7 +282,7 @@
                 download_state++;
                 break;
             case 1:
-                if (timediff > 20) download_state++;
+                if (timediff > 15) download_state++;
                 break;
             case 2:
                 [self ulyssesSpeak:@"9headhome"];
@@ -269,6 +296,17 @@
                 break;
         }
     }    
+}
+- (void) finishWithText:(NSString *)text{
+    FRSummaryViewController * summary =
+    [[FRSummaryViewController alloc] initWithNibName:@"FRSummaryViewController" bundle:nil];
+    [self.viewControl.navigationController pushViewController:summary animated:YES];
+    self.viewControl.navigationItem.rightBarButtonItem = nil;
+    self.viewControl = summary;
+    summary.status.text = text;
+    [summary release];
+    [toBeSpoken removeAllObjects];
+    [NSObject cancelPreviousPerformRequestsWithTarget:self];
 }
 - (void) the_intro {
     //play ulysses' sound files one after another.
@@ -306,6 +344,7 @@
         }
     }
 }
+
 #pragma mark -
 
 
@@ -349,5 +388,23 @@
         //we probably dont need to do anything here.
     }
 }
-
+- (void) dealloc {
+    //date objects
+    [start_date release];
+    [progress_date release];
+    [hideout_date release];
+    
+    //avplayers
+    [siren release];
+    [ulysses release];
+    
+    //frpoints
+    [hideout release];
+    [safehouse release];
+    [cop release];
+    
+    [destination release];
+    
+    [super dealloc];
+}
 @end
