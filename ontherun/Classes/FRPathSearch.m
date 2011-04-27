@@ -143,6 +143,30 @@
 	//if start is closer, we are facing root
 	return (dstart < dend);
 }
+- (FREdgePos *) moveCloserToRoot:(FREdgePos *)ep{
+    FREdgePos * x;
+	
+	
+	if ([self isFacingRoot:ep]==NO) {
+		//NSLog(@"not facing, flip so we can move forward");
+		x = [map flipEdgePos:ep];
+	} else {
+		x = [[[FREdgePos alloc] init] autorelease];
+		x.start = ep.start;
+		x.end = ep.end;
+	}
+	
+    x.position = 0;
+	
+    NSNumber * next = [previous objectForKey:[x startObj]];
+	if (next!=nil) {
+		//move to a closer edge
+		x.end = x.start;
+		x.start = [next intValue];
+    }
+    
+	return x;
+}
 - (FREdgePos *) move:(FREdgePos *)ep towardRootWithDelta:(float)dx {
 	/*
 	 moves a distance dx along an edge pointing toward the root
@@ -151,6 +175,10 @@
 	
 	 in future versions, we can always move dx, even it it means traversing multiple edges
 	 and reaching the root.
+     
+     MAKE THIS MOVE FORWARD A GUARANTEED AMOUNT.
+     
+     
 	 */
 	
 	FREdgePos * x;
@@ -173,7 +201,6 @@
 	
 	
 	if (x.position<=0 && [previous objectForKey:start]!=nil) {
-		//NSLog(@"next edge");
 		//move to a closer edge
 		x.end = x.start;
 		x.start = [[previous objectForKey:start] intValue];
@@ -203,21 +230,17 @@
 	//check to see if the point is inside the path
 	//if not, return a large number
 	if ([self containsPoint:ep]==NO) {
-		//NSLog(@"uncontained. returning large number");
 		return 10000000000.0;
 	}
 	
 	if (ep.start==root.start && ep.end == root.end) {
-		//NSLog(@"distanceFrom: same edge, same direction");
 		return ABS(ep.position - root.position);
 	}
 	
 	if (ep.start==root.end && ep.end==root.start) {
-		//NSLog(@"distanceFrom: same edge, opposite directions");
 		return ABS(ep.position + root.position - [map maxPosition:ep]);
 	}
 	
-	//NSLog(@"distanceFrom: different edges, rely on node distance + position");
 	
 	float position = ep.position;
 	
@@ -235,7 +258,6 @@
 - (NSString *) directionFromRoot:(FREdgePos*)ep {
 	
 	//should probably make this more complicated, but for now this will work.
-	//this is wrong. isRootFacing should be a different method. fuck.
 	
 	
 	if ([self rootIsFacing:ep]) return @"infront of";
@@ -283,7 +305,6 @@
 	
 	//"turn right on maverick street"
 	
-	//it would be nice if these methods avoided badguys
 	//move toward root until you hit a different street.
 	//calculate direction needed to turn
 	
@@ -296,19 +317,22 @@
     
     NSString * start_road = [map roadNameFromEdgePos:ep];
     while (![ep onSameEdgeAs:root]){
-        NSLog(@"start road = %@",start_road);
         start_road = [map roadNameFromEdgePos:ep];
         NSString * current_road = nil;
         FREdgePos * prev = nil;
         
         do {//potential infinite loop
             prev = ep;
-            ep = [self move:ep towardRootWithDelta:10000000]; //takes advantage of the bug in that method to move forward a single edge
+            ep = [self moveCloserToRoot:ep];
             current_road = [map roadNameFromEdgePos:ep];
-            NSLog(@"cr = %@, ep = %@",current_road,ep);
             
         } while ([start_road isEqualToString:current_road] && ![ep onSameEdgeAs:root]);
-        [directions addObject:[NSString stringWithFormat:@"turn %@",[map descriptionFromEdgePos:prev toEdgePos:ep]]];
+        NSString * desc = [map descriptionFromEdgePos:prev toEdgePos:ep];
+        if (desc) {
+            [directions addObject:[NSString stringWithFormat:@"turn %@",desc]];
+        } else {
+            NSLog(@"no description available. ep is like on root edge True==%i",[ep onSameEdgeAs:root]);
+        }
     }
     [directions addObject:[NSString stringWithFormat:@"continue on %@ to your destination",start_road]];
     return [NSArray arrayWithArray:directions];
