@@ -19,7 +19,7 @@
 // make audio fade before transitions
 // add home.
 // map dual streets? edit the map data.
-//continue on whatever to your desintation. lame
+// continue on whatever to your desintation. lame
 // 
 
 #import "FRMissionDownload.h"
@@ -129,7 +129,7 @@
             dist = [destination distanceFromRoot:player.pos];
             if (dist < 30){
                 [self ulyssesSpeak:@"16greatwork"];
-                current_state++;
+                current_state=5;
                 //you win!
                 [self finishWithText:[NSString stringWithFormat:@"Mission Complete\nDuration:%f",[start_date timeIntervalSinceNow]]];
                 return;
@@ -139,7 +139,7 @@
         default:
             NSLog(@"current_state invalid");
     }
-    [super ticktock];
+    if (current_state!=5) [super ticktock];
 }
 - (void) the_cop {
     //cop in sight.
@@ -192,6 +192,7 @@
                 siren.volume = 10.0 / MAX(10.0,dist);//(100.0 - dist / 2.0) / 100.0;
                 if (dist < 30){
                     [self ulyssesSpeak:@"12stoppolice-2"];
+                    [self playSong:@"chase_scary"];
                     cop_state++;
                 }
                 if (dist > 100){
@@ -208,13 +209,22 @@
                 }
                 break;
             default:
-                siren.volume = (100.0 - dist / 2.0) / 100.0;
-                if (dist < 10){
+                //play different music
+                siren.volume = 100.0;
+                if (dist < 20){
                     cop_state++;
-                    if (cop_state==20) [self ulyssesSpeak:@"12holdit-2"];
+                    if (cop_state==6){
+                        [self ulyssesSpeak:@"woop"];
+                    }
+                    if (cop_state==8) {
+                        [self ulyssesSpeak:@"12holdit-2"];
+                        [self finishWithText:@"You were caught"];
+                        current_state = 5;
+                    }
                 }
                 if (dist > 40){
                     cop_state = 3;
+                    [self playSong:@"chase_elevated"];
                 }
                 cop.pos = [latestsearch move:cop.pos towardRootWithDelta:2.0];
                 break;
@@ -244,6 +254,7 @@
                 siren.volume = 10.0 / MAX(10.0,dist);//(100.0 - dist / 2.0) / 100.0;
                 if (dist < 30){
                     [self ulyssesSpeak:@"12stoppolice-2"];
+                    [self playSong:@"chase_scary"];
                     chase_state++;
                 }
                 if (dist > 100){
@@ -256,12 +267,20 @@
                 cop.pos = [latestsearch move:cop.pos towardRootWithDelta:2.0];
                 break;
             default:
-                siren.volume = (100.0 - dist / 2.0) / 100.0;
-                if (dist < 10){
+                siren.volume = 100.0;
+                if (dist < 20){
                     chase_state++;
-                    if (chase_state==20) [self ulyssesSpeak:@"12holdit-2"];
+                    if (chase_state==8) {
+                        [self ulyssesSpeak:@"12holdit-2"];
+                        [self finishWithText:@"you lost the chase"];
+                        current_state = 5;
+                    }
+                    if (cop_state==6){
+                        [self ulyssesSpeak:@"woop"];
+                    }
                 }
                 if (dist > 40){
+                    [self playSong:@"chase_elevated"];
                     chase_state = 3;
                 }
                 cop.pos = [latestsearch move:cop.pos towardRootWithDelta:2.0];
@@ -384,8 +403,6 @@
 - (void) audioPlayerDidFinishPlaying:(AVAudioPlayer *)audioplayer successfully:(BOOL)flag{
     //a player finished, do something depending on which one.
     if (audioplayer==_music){
-        NSLog(@"finished");
-        //we probably dont need to do anything here.
     }
 }
 - (void) dealloc {
@@ -397,6 +414,7 @@
     //avplayers
     [siren release];
     [ulysses release];
+    [_music release];
     
     //frpoints
     [hideout release];
