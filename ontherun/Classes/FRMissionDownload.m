@@ -33,13 +33,20 @@
 	if (!self) return nil;
 	[self.viewControl setText:@"Get to the thief's hideout and return safely."];
     current_state = 0;
-    intro_state = -1;
+    intro_state = 0;
+    cop_state = 0;
+    chase_state = 0;
+    
     cop_spotted = NO;
     [self playSong:@"chase_normal"];
     
     //create the safehouse (default to current position)
     safehouse = [[FRPoint alloc] initWithName:@"safehouse"];
     safehouse.pos = player.pos;
+    
+    player_speed = 2.0;
+    //player_distance = 2000.0; //1.25 miles
+    
     
     
     //create the destination
@@ -89,6 +96,8 @@
         direction = [directions objectAtIndex:1];
         //ulysses needs to say that you are going the wrong way.
     }
+    if (intro_state > 2) [self speakIfEmpty:direction];
+    
     switch (current_state){
         case 0:
             [self the_intro];
@@ -98,6 +107,7 @@
             NSLog(@"directions = %@, progress = %f",directions,[progress_date timeIntervalSinceNow]);
             if ([progress_date timeIntervalSinceNow] < -10){
                 if (dist - progress_dist > 20){
+                    //dist != weight, so they may actually be going the right way
                     [self speak:@"turn around, you idiot!"];
                 }
                 [progress_date release];
@@ -105,11 +115,10 @@
                 progress_dist = dist;
             }
             [self the_cop]; //integrate the rest of this case into the_cop
-            [self speakIfEmpty:direction];
             if (dist < 30) {
-                if (cop_state){
+                if (cop_state > 0){
                     [self speak:@"we cant do the download if you are being chased. failed"];
-                    [self finishWithText:@"Mission Failed: cop watching the drop zone"];
+                    [self finishWithText:@"Mission Failed:\n cop watching the drop zone"];
                     return;
                 } else {
                     current_state++;
@@ -129,36 +138,128 @@
             dist = [destination distanceFromRoot:player.pos];
             if (dist < 30){
                 [self ulyssesSpeak:@"16greatwork"];
-                current_state=5;
+                current_state = 10;
                 //you win!
                 [self finishWithText:[NSString stringWithFormat:@"Mission Complete\nDuration:%f",[start_date timeIntervalSinceNow]]];
-                return;
             }
-            [self speakIfEmpty:direction];
             break;
+        case 5:
+            //you lost the mission
+            [self speak:@"You failed the mission"];
+            current_state=10;
         default:
-            NSLog(@"current_state invalid");
+            [self stopSiren];
+            [_music release];
+            _music = nil;
+            NSLog(@"current_state invalid, stopping ticktock");
+            return;
     }
-    if (current_state!=5) [super ticktock];
+    [super ticktock];
+}
+- (void) finishWithText:(NSString *)text{
+    FRSummaryViewController * summary =
+    [[FRSummaryViewController alloc] initWithNibName:@"FRSummaryViewController" bundle:nil];
+    [self.viewControl.navigationController pushViewController:summary animated:YES];
+    self.viewControl.navigationItem.rightBarButtonItem = nil;
+    self.viewControl = summary;
+    summary.status.text = text;
+    [summary release];
+    [toBeSpoken removeAllObjects];
+    [NSObject cancelPreviousPerformRequestsWithTarget:self];
+}
+
+
+- (void) restartMission {
+    [self speak:@"the mission will restart in 10 seconds. Think about how shitty you are"];
+}
+# pragma mark -
+# pragma mark sequences
+- (void) the_intro {
+    //play ulysses' sound files one after another.
+    NSTimeInterval timediff = ABS([start_date timeIntervalSinceNow]);
+    NSLog(@" timediff = %f, intro_state = %i, players =  %i, %i",timediff,intro_state, ulysses.playing,[voicebot isSpeaking]);
+    if ([self readyToSpeak]){
+        switch (intro_state) {
+            case 0:
+                [self ulyssesSpeak:@"3coordinates"];
+                intro_state++;
+                break;
+            case 1:
+                //speak the location
+                [self speak:@"target acquired"];
+                [self speak:[NSString stringWithFormat:@"head over to %@",[themap roadNameFromEdgePos:hideout.pos]]];
+                intro_state++;
+                break;
+            case 2:
+                [self ulyssesSpeak:@"1phonehack"];
+                intro_state++;
+                break;
+            case 3:
+                [self ulyssesSpeak:@"2frameyou"];
+                intro_state++;
+                break;
+            case 4:
+                if (timediff > 20) intro_state++;
+                break;
+            case 5:
+                [self ulyssesSpeak:@"4cops"];
+                current_state++;
+                break;
+            default:
+                [self speakNow:@"unsupported intro state"];
+                break;
+        }
+    }
 }
 - (void) the_cop {
     //cop in sight.
+    
+    
+    
+    
     float dist = [latestsearch distanceFromRoot:cop.pos];
-    NSLog(@"copdist = %f, cop_state = %i, uyl = %i",dist,cop_state,ulysses.playing);
-    if (!cop_spotted && cop_state==0){
-        cop.pos = [latestsearch move:cop.pos towardRootWithDelta:10.0];
-    } else {
-        cop.pos = [themap move:cop.pos forwardRandomly:1.0];
+    
+    /*
+    cop movements
+     1. move toward the player from the destination, at the players speed, until dist < 100
+     2. move randomly at player_speed/2
+     3. if dist < 50 chase the player 
+     4. if dist > 120 disappear.
+     
+     */
+        
+    //always move the cop
+    switch (cop_state){
+        case -1:
+            //we lost the cop. he is gone forever
+            break;
+        case 0:
+            //move to the player's location
+            cop.pos = [latestsearch move:cop.pos towardRootWithDelta:10.0];
+            break;
+        case 1:
+            //cop ahead.
+            break;
+        case 2:
+            //player sees the cop
+            cop.pos = [themap move:cop.pos forwardRandomly:player_speed/2.0];
+            break;
+        default:
+            cop.pos = [latestsearch move:cop.pos towardRootWithDelta:player_speed];
+            break;
     }
-    if (dist > 100 && cop_state==0) return;
     
-    cop_spotted = YES;
     
-    if (!ulysses.playing && ![voicebot isSpeaking]){
+    if ([self readyToSpeak]){
         switch (cop_state){
+            case -1:
+                //dead
+                break;
             case 0:
-                [self ulyssesSpeak:@"6copahead"];
-                cop_state++;
+                if (dist < 100){
+                    [self ulyssesSpeak:@"6copahead"];
+                    cop_state++;
+                }
                 break;
             case 1:
                 [self speak:[NSString stringWithFormat:@"threat detected %@ you on %@",[latestsearch directionFromRoot:cop.pos],[themap roadNameFromEdgePos:cop.pos]]];
@@ -178,11 +279,9 @@
                     cop_state++;
                     [self playSong:@"chase_elevated"];
                     [self startSiren];
-                } else {
-                    [self speakIfEmpty:[destination directionToRoot:player.pos]];
                 }
                 if (dist > 120){
-                    cop_state = 0;
+                    cop_state = -1;
                     [self playSong:@"chase_normal"];
                     [self ulyssesSpeak:@"16nicework"];
                 }
@@ -198,19 +297,26 @@
                 if (dist > 100){
                     [self playSong:@"chase_normal"];
                     [self ulyssesSpeak:@"16nicework"];
-                    cop_state = 0;
+                    cop_state = -1;
                     [self stopSiren];
                 }
                 [self speakIfEmpty:[NSString stringWithFormat:@"%i",(int)dist]];
                 cop.pos = [latestsearch move:cop.pos towardRootWithDelta:2.0];
                 
-                if ([destination distanceFromRoot:cop.pos] < 100){
-                    cop.pos = [destination move:cop.pos awayFromRootWithDelta:100]; //move the cop totally away.
+                if ([destination distanceFromRoot:cop.pos] < 120){
+                    cop_state = -1;
+                    [self speak:@"The cop stopped chasing you"];
+                    [self stopSiren];
+                    [self playSong:@"chase_normal"];
+                
                 }
                 break;
             default:
-                //play different music
-                siren.volume = 100.0;
+                // you are about to lose the mission.
+                // need to clarify how dire the situation is. the player cant see the screen also.
+                // cop_state increases until the shit hits the fan.
+                
+                siren.volume = 1.0;
                 if (dist < 20){
                     cop_state++;
                     if (cop_state==6){
@@ -231,70 +337,13 @@
         }
     }
 }
-- (void) the_chase {
-    //you are being chased by the cop
-    float dist = [latestsearch distanceFromRoot:cop.pos];
-    NSLog(@"dist = %f, chase_state = %i, uyl = %i",dist,chase_state,ulysses.playing);
-    
-    [self speakIfEmpty:[destination directionToRoot:player.pos]];
-    
-    if (!ulysses.playing && ![voicebot isSpeaking]){
-        switch (chase_state){
-            case 0:
-                [self ulyssesSpeak:@"11copsaround"];
-                chase_state++;
-                break;
-            case 1:
-                [self speak:[NSString stringWithFormat:@"threat detected %@ you on %@",[latestsearch directionFromRoot:cop.pos],[themap roadNameFromEdgePos:cop.pos]]];
-                [self playSong:@"chase_elevated"];
-                chase_state++;
-                
-                break;
-            case 2:
-                siren.volume = 10.0 / MAX(10.0,dist);//(100.0 - dist / 2.0) / 100.0;
-                if (dist < 30){
-                    [self ulyssesSpeak:@"12stoppolice-2"];
-                    [self playSong:@"chase_scary"];
-                    chase_state++;
-                }
-                if (dist > 100){
-                    [self playSong:@"chase_normal"];
-                    [self ulyssesSpeak:@"16nicework"];
-                    [self stopSiren];
-                    current_state++;
-                }
-                [self speakIfEmpty:[NSString stringWithFormat:@"%i",(int)dist]];
-                cop.pos = [latestsearch move:cop.pos towardRootWithDelta:2.0];
-                break;
-            default:
-                siren.volume = 100.0;
-                if (dist < 20){
-                    chase_state++;
-                    if (chase_state==8) {
-                        [self ulyssesSpeak:@"12holdit-2"];
-                        [self finishWithText:@"you lost the chase"];
-                        current_state = 5;
-                    }
-                    if (cop_state==6){
-                        [self ulyssesSpeak:@"woop"];
-                    }
-                }
-                if (dist > 40){
-                    [self playSong:@"chase_elevated"];
-                    chase_state = 3;
-                }
-                cop.pos = [latestsearch move:cop.pos towardRootWithDelta:2.0];
-                break;
-        }
-    }
-}
 - (void) the_download {
     NSTimeInterval timediff = ABS([hideout_date timeIntervalSinceNow]);
     
     NSLog(@" timediff = %f, download_state = %i, players =  %i, %i",
           timediff,download_state, ulysses.playing,[voicebot isSpeaking]);
     
-    if (!ulysses.playing && ![voicebot isSpeaking]){
+    if ([self readyToSpeak]){
         switch (download_state){
             case 0:
                 [self ulyssesSpeak:@"7inrange"];
@@ -316,60 +365,81 @@
         }
     }    
 }
-- (void) finishWithText:(NSString *)text{
-    FRSummaryViewController * summary =
-    [[FRSummaryViewController alloc] initWithNibName:@"FRSummaryViewController" bundle:nil];
-    [self.viewControl.navigationController pushViewController:summary animated:YES];
-    self.viewControl.navigationItem.rightBarButtonItem = nil;
-    self.viewControl = summary;
-    summary.status.text = text;
-    [summary release];
-    [toBeSpoken removeAllObjects];
-    [NSObject cancelPreviousPerformRequestsWithTarget:self];
-}
-- (void) the_intro {
-    //play ulysses' sound files one after another.
-    NSTimeInterval timediff = ABS([start_date timeIntervalSinceNow]);
-    NSLog(@" timediff = %f, intro_state = %i, players =  %i, %i",timediff,intro_state, ulysses.playing,[voicebot isSpeaking]);
-    if (!ulysses.playing && ![voicebot isSpeaking]){
-        switch (intro_state) {
-            case -1:
-                [self ulyssesSpeak:@"1phonehack"];
-                intro_state++;
-                break;
+- (void) the_chase {
+    //you are being chased by the cop
+    float dist = [latestsearch distanceFromRoot:cop.pos];
+    NSLog(@"dist = %f, chase_state = %i, uyl = %i",dist,chase_state,ulysses.playing);
+    
+    [self speakIfEmpty:[destination directionToRoot:player.pos]];
+    
+    
+    if ([self readyToSpeak]){
+        switch (chase_state){
             case 0:
-                [self ulyssesSpeak:@"3coordinates"];
-                intro_state++;
+                [self ulyssesSpeak:@"11copsaround"];
+                chase_state++;
                 break;
             case 1:
-                //speak the location
-                [self speak:@"target acquired"];
-                [self speak:[NSString stringWithFormat:@"head over to %@",[themap roadNameFromEdgePos:hideout.pos]]];
-                intro_state++;
+                [self speak:[NSString stringWithFormat:@"threat detected %@ you on %@",[latestsearch directionFromRoot:cop.pos],[themap roadNameFromEdgePos:cop.pos]]];
+                [self playSong:@"chase_elevated"];
+                [self startSiren];
+                chase_state++;
+                
                 break;
             case 2:
-                [self ulyssesSpeak:@"2frameyou"];
-                intro_state++;
-                break;
-            case 3:
-                if (timediff > 20) intro_state++; break;
-            case 4:
-                [self ulyssesSpeak:@"4cops"];
-                current_state++;
+                siren.volume = 10.0 / MAX(10.0,dist);//(100.0 - dist / 2.0) / 100.0;
+                if (dist < 30){
+                    [self ulyssesSpeak:@"12stoppolice-2"];
+                    [self playSong:@"chase_scary"];
+                    chase_state++;
+                }
+                if (dist > 100){
+                    [self playSong:@"chase_normal"];
+                    [self ulyssesSpeak:@"16nicework"];
+                    [self stopSiren];
+                    current_state++;
+                }
+                [self speakIfEmpty:[NSString stringWithFormat:@"%i",(int)dist]];
+                cop.pos = [latestsearch move:cop.pos towardRootWithDelta:2.0];
                 break;
             default:
-                [self speakNow:@"unsupported intro state"];
+                siren.volume = 1.0;
+                if (dist < 20){
+                    chase_state++;
+                    if (chase_state==8) {
+                        [self ulyssesSpeak:@"12holdit-2"];
+                        [self finishWithText:@"you lost the chase"];
+                        current_state = 5;
+                    }
+                    if (cop_state==6){
+                        [self ulyssesSpeak:@"woop"];
+                    }
+                }
+                if (dist > 40){
+                    [self playSong:@"chase_elevated"];
+                    chase_state = 2;
+                }
+                cop.pos = [latestsearch move:cop.pos towardRootWithDelta:2.0];
                 break;
         }
     }
+    
+    
+    //always move the cop
+    cop.pos = [latestsearch move:cop.pos towardRootWithDelta:2.0];
 }
 
-#pragma mark -
 
+
+#pragma mark -
+#pragma mark sound stuff
 
 - (void) speakIfEmpty:(NSString *)text{
     if (ulysses.playing) return;
     [super speakIfEmpty:text];
+}
+- (BOOL) readyToSpeak {
+    return (!ulysses.playing && ![voicebot isSpeaking]);
 }
 - (void) ulyssesSpeak:(NSString *)filename{
     [ulysses release];

@@ -63,6 +63,7 @@
     BOOL cop_spotted;
     NSDate * progress_date;
     float progress_dist;
+    float player_speed;
     
 }
 - (void) finishWithText:(NSString *)text;
@@ -74,5 +75,6 @@
 - (void) the_intro;
 - (void) the_chase;
 - (void) playSong:(NSString *)name;
+- (BOOL) readyToSpeak;
 
 @end

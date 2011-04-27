@@ -13,6 +13,7 @@
 		28F335F11007B36200424DE2 /* RootViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 28F335F01007B36200424DE2 /* RootViewController.xib */; };
 		9B51D5C11305F53400978183 /* FRPoint.m in Sources */ = {isa = PBXBuildFile; fileRef = 9B51D5BC1305F53400978183 /* FRPoint.m */; };
 		9B684BD61341066800F27C12 /* button_green.png in Resources */ = {isa = PBXBuildFile; fileRef = 9B684BD51341066800F27C12 /* button_green.png */; };
+		9B6A24631368996A00A7228C /* chase_scary.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 9B6A24621368996A00A7228C /* chase_scary.mp3 */; };
 		9B836778133403A300EC486F /* FRMissionChase.m in Sources */ = {isa = PBXBuildFile; fileRef = 9B836777133403A300EC486F /* FRMissionChase.m */; };
 		9B84A0D31309C80300BE94CF /* FRFileLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 9B84A0D21309C80300BE94CF /* FRFileLoader.m */; };
 		9B9505BB135CD55A0070B7E7 /* FRMissionDownload.m in Sources */ = {isa = PBXBuildFile; fileRef = 9B9505BA135CD55A0070B7E7 /* FRMissionDownload.m */; };
@@ -101,6 +102,7 @@
 		9B51D5BB1305F53400978183 /* FRPoint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRPoint.h; sourceTree = "<group>"; };
 		9B51D5BC1305F53400978183 /* FRPoint.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRPoint.m; sourceTree = "<group>"; };
 		9B684BD51341066800F27C12 /* button_green.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = button_green.png; sourceTree = "<group>"; };
+		9B6A24621368996A00A7228C /* chase_scary.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = chase_scary.mp3; sourceTree = "<group>"; };
 		9B836776133403A300EC486F /* FRMissionChase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRMissionChase.h; sourceTree = "<group>"; };
 		9B836777133403A300EC486F /* FRMissionChase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRMissionChase.m; sourceTree = "<group>"; };
 		9B84A0D11309C80300BE94CF /* FRFileLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRFileLoader.h; sourceTree = "<group>"; };
@@ -291,6 +293,7 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				9B6A24621368996A00A7228C /* chase_scary.mp3 */,
 				C9449ADD135E35B8008F8623 /* chase_elevated.mp3 */,
 				C9449ADE135E35B9008F8623 /* chase_normal.mp3 */,
 				C9449AD9135D4CE2008F8623 /* woop.mp3 */,
@@ -532,6 +535,7 @@
 				C9449ADC135D4CE2008F8623 /* woowoo.mp3 in Resources */,
 				C9449ADF135E35BD008F8623 /* chase_elevated.mp3 in Resources */,
 				C9449AE0135E35BD008F8623 /* chase_normal.mp3 in Resources */,
+				9B6A24631368996A00A7228C /* chase_scary.mp3 in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
