@@ -25,6 +25,8 @@
 	FRPathSearch * latestsearch;
 	FRMap * themap;
 	FRPoint * player;
+    NSDate * last_location_received_date;
+    float average_player_speed;
 	VSSpeechSynthesizer * voicebot;
 	NSMutableArray * toBeSpoken;
 	NSMutableArray * points;
