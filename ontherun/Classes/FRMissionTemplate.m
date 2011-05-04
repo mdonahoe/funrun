@@ -14,11 +14,11 @@
 @implementation FRMissionTemplate
 @synthesize points,viewControl;
 
-- (id) initWithLocation:(CLLocation*)l viewControl:(UIViewController*)vc {
+- (id) initWithLocation:(CLLocation*)l distance:(float)dist viewControl:(UIViewController*)vc {
 	self = [super init];
 	if (!self) return nil;
 	
-    
+    player_max_distance = dist*1000; //convert to meters
     last_location_received_date = nil;
     average_player_speed = 0.0;
     
@@ -152,7 +152,7 @@
         float new_dist = [latestsearch distanceFromRoot:ep];
 #define SPEED_ALPHA 0.5
         average_player_speed = SPEED_ALPHA*(new_dist / [current_date timeIntervalSinceDate:last_location_received_date]) + (1.0-SPEED_ALPHA)*(average_player_speed);
-        if (arc4random()%10==0) [self speakIfEmpty:[NSString stringWithFormat:@"%i meters per second",(int)average_player_speed]];
+        if (arc4random()%30==0) [self speakIfEmpty:[NSString stringWithFormat:@"%i meters per second",(int)average_player_speed]];
 		player.pos = [latestsearch move:ep awayFromRootWithDelta:0];
 	} else {
 		player.pos = ep;
@@ -161,7 +161,7 @@
     last_location_received_date = current_date;
 	
     [latestsearch release];
-	latestsearch = [themap createPathSearchAt:player.pos withMaxDistance:[NSNumber numberWithFloat:1000.0]]; //this number needs to be adjustable i think.
+	latestsearch = [themap createPathSearchAt:player.pos withMaxDistance:[NSNumber numberWithFloat:player_max_distance/1.8]]; //this number needs to be adjustable i think.
 }
 
 /*

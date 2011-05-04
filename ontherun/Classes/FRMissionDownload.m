@@ -28,8 +28,8 @@
 
 @implementation FRMissionDownload
 
-- (id)initWithLocation:(CLLocation *)l viewControl:(UIViewController *)vc{
-	self = [super initWithLocation:l viewControl:vc];
+- (id)initWithLocation:(CLLocation *)l distance:(float)dist viewControl:(UIViewController *)vc{
+	self = [super initWithLocation:l distance:dist viewControl:vc];
 	if (!self) return nil;
 	[self.viewControl setText:@"Get to the thief's hideout and return safely."];
     current_state = 0;
@@ -52,15 +52,15 @@
     //create the destination
     hideout = [[FRPoint alloc] initWithName:@"hideout"];
     hideout.pos = player.pos;
-    float dist = 0.0;
-    while (dist < 500){
-        hideout.pos = [latestsearch move:player.pos awayFromRootWithDelta:600];
-        dist = [latestsearch distanceFromRoot:hideout.pos];
-        NSLog(@"hideout.pos = %@, dist = %f",hideout.pos,dist);
+    float distance = 0.0;
+    while (distance < player_max_distance/2){
+        hideout.pos = [latestsearch move:player.pos awayFromRootWithDelta:player_max_distance/1.9];
+        distance = [latestsearch distanceFromRoot:hideout.pos];
+        NSLog(@"hideout.pos = %@, dist = %f",hideout.pos,distance);
     }
-    progress_dist = dist;
+    progress_dist = distance;
     progress_date = [[NSDate alloc] init];
-    destination = [themap createPathSearchAt:hideout.pos withMaxDistance:[NSNumber numberWithFloat:(2000.0)]];
+    destination = [themap createPathSearchAt:hideout.pos withMaxDistance:[NSNumber numberWithFloat:player_max_distance]];
     
     start_date = [[NSDate alloc] init];
     cop = [[FRPoint alloc] initWithName:@"cop"];
@@ -272,7 +272,7 @@
                 
                 [destination release];
                 
-                destination = [themap createPathSearchAt:hideout.pos withMaxDistance:[NSNumber numberWithInt:1000] avoidingEdges:cops];
+                destination = [themap createPathSearchAt:hideout.pos withMaxDistance:[NSNumber numberWithFloat:player_max_distance] avoidingEdges:cops];
                 break;
             case 2:
                 if (dist < 50) {
@@ -355,7 +355,7 @@
             case 2:
                 [self ulyssesSpeak:@"9headhome"];
                 [destination release];
-                destination = [themap createPathSearchAt:safehouse.pos withMaxDistance:[NSNumber numberWithInt:2000]];
+                destination = [themap createPathSearchAt:safehouse.pos withMaxDistance:[NSNumber numberWithFloat:player_max_distance]];
                 cop.pos = [destination move:player.pos awayFromRootWithDelta:50.0];
                 
                 current_state++;

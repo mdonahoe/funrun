@@ -15,7 +15,7 @@
 #import "LocationPicker.h"
 
 @implementation StartViewController
-@synthesize gps,missionLabel,latest_point;
+@synthesize gps,missionLabel,latest_point,distanceLabel,distanceSlider;
 
 /*
  // The designated initializer.  Override if you create the controller programmatically and want to perform customization that is not appropriate for viewDidLoad.
@@ -41,6 +41,11 @@
 		[m2 loadObjectForKey:@"userpos" toDelegate:self usingSelector:@selector(updatePosition:)];
 		[locationManager stopUpdatingLocation];
 	}
+}
+
+- (IBAction) sliderchange:(id)sender {
+	//update the label according to the slider
+    distanceLabel.text = [NSString stringWithFormat:@"%f miles",(int)(distanceSlider.value*10)/10.0];
 }
 
 /*
@@ -94,7 +99,7 @@
 	//have different nibs for different missions?
 	//or download from the interwebs?
 	if (mission) [mission release];
-	mission = [[FRMissionDownload alloc] initWithLocation:self.latest_point viewControl:self];
+	mission = [[FRMissionDownload alloc] initWithLocation:self.latest_point distance:distanceSlider.value viewControl:self];
 }
 - (void) updatePosition:(id)obj {
 	float lat = [[obj objectForKey:@"lat"] floatValue];

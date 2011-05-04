@@ -18,10 +18,14 @@
 	CLLocationManager * locationManager;
 	toqbot * m2;
 	CLLocation * latest_point;
+    UILabel * distanceLabel;
+    UISlider * distanceSlider;
 	
 }
 @property(nonatomic,retain) IBOutlet UILabel * missionLabel;
 @property(nonatomic,retain) IBOutlet UISwitch * gps;
+@property(nonatomic,retain) IBOutlet UILabel * distanceLabel;
+@property(nonatomic,retain) IBOutlet UISlider * distanceSlider;
 @property(nonatomic,retain) CLLocation * latest_point;
 
 - (IBAction)loadMissionOne:(id)sender;
@@ -29,5 +33,6 @@
 - (void) updatePosition:(id)obj;
 - (void) startStandardUpdates;
 - (IBAction) statechange:(id)sender;
+- (IBAction) sliderchange:(id)sender;
 
 @end
