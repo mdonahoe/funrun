@@ -14,13 +14,15 @@
 @implementation FRMissionTemplate
 @synthesize points,viewControl;
 
-- (id) initWithLocation:(CLLocation*)l distance:(float)dist viewControl:(UIViewController*)vc {
+- (id) initWithLocation:(CLLocation*)l distance:(float)dist destination:dest viewControl:(UIViewController*)vc {
 	self = [super init];
 	if (!self) return nil;
 	
     player_max_distance = dist*1000; //convert to meters
     last_location_received_date = nil;
     average_player_speed = 0.0;
+    
+
     
     //Voice Communication
 	//link to /Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.2.sdk/System/Library/PrivateFrameworks/VoiceServices.framework
@@ -37,7 +39,7 @@
 	NSAutoreleasePool * thepool = [[NSAutoreleasePool alloc] init];
 	
 	//load the map
-    NSString * mapurl = [NSString stringWithFormat:@"http://toqbot.com/map/download?lat=%f&lng=%f&dist=2000",l.coordinate.latitude,l.coordinate.longitude];
+    NSString * mapurl = [NSString stringWithFormat:@"http://toqbot.com/map/download?lat=%f&lng=%f&dist=%f",l.coordinate.latitude,l.coordinate.longitude,player_max_distance];
     NSURL *url = [NSURL URLWithString:mapurl];
     ASIHTTPRequest *request = [ASIHTTPRequest requestWithURL:url];
     [request startSynchronous];
@@ -61,7 +63,17 @@
 	[self newPlayerLocation:l];
 	player.pos = [themap edgePosFromPoint:l];
 	[player setCoordinate:[themap coordinateFromEdgePosition:player.pos]];
-	points = [[NSMutableArray alloc] initWithObjects:player,nil];
+	
+    
+    endPoint = [[FRPoint alloc] initWithName:@"end point"];
+    if (dest==nil) {
+        endPoint.pos = player.pos;
+    } else {
+        endPoint.pos = [themap edgePosFromPoint:dest];
+    }
+    
+    
+    points = [[NSMutableArray alloc] initWithObjects:player,nil];
 	
 
 	[voicebot setRate:1.3];

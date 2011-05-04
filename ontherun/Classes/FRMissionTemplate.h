@@ -25,6 +25,7 @@
 	FRPathSearch * latestsearch;
 	FRMap * themap;
 	FRPoint * player;
+    FRPoint * endPoint;
     NSDate * last_location_received_date;
     float average_player_speed;
     float player_max_distance;
@@ -38,7 +39,7 @@
 @property(nonatomic,retain) NSMutableArray * points;
 @property(nonatomic,assign) UIViewController * viewControl;
 //- (id) initWithMap:(FRMap *)m andPlayer:(FRPoint*)p;
-- (id) initWithLocation:(CLLocation*)l distance:(float)dist viewControl:(UIViewController*)vc;
+- (id) initWithLocation:(CLLocation*)l distance:(float)dist destination:(CLLocation*)dest viewControl:(UIViewController*)vc;
 - (void) abort;
 - (void) ticktock;
 - (void) speak:(NSString *)text;

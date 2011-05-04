@@ -10,8 +10,9 @@
 #import <CoreLocation/CoreLocation.h>
 #import "toqbot.h"
 #import "FRMissionTemplate.h"
+#import "LocationPicker.h"
 
-@interface StartViewController : UIViewController <CLLocationManagerDelegate> {
+@interface StartViewController : UIViewController <CLLocationManagerDelegate,LocationPickerDelegate> {
 	UILabel * missionLabel;
 	FRMissionTemplate * mission;
 	UISwitch * gps;
@@ -20,6 +21,7 @@
 	CLLocation * latest_point;
     UILabel * distanceLabel;
     UISlider * distanceSlider;
+    CLLocation * destination;
 	
 }
 @property(nonatomic,retain) IBOutlet UILabel * missionLabel;
@@ -28,6 +30,7 @@
 @property(nonatomic,retain) IBOutlet UISlider * distanceSlider;
 @property(nonatomic,retain) CLLocation * latest_point;
 
+- (IBAction)pickDestination:(id)sender;
 - (IBAction)loadMissionOne:(id)sender;
 - (IBAction)loadMissionTwo:(id)sender;
 - (void) updatePosition:(id)obj;

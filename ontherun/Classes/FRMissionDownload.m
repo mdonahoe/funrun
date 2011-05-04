@@ -28,8 +28,8 @@
 
 @implementation FRMissionDownload
 
-- (id)initWithLocation:(CLLocation *)l distance:(float)dist viewControl:(UIViewController *)vc{
-	self = [super initWithLocation:l distance:dist viewControl:vc];
+- (id)initWithLocation:(CLLocation *)l distance:(float)dist destination:(CLLocation*)dest viewControl:(UIViewController *)vc{
+	self = [super initWithLocation:l distance:dist destination:dest viewControl:vc];
 	if (!self) return nil;
 	[self.viewControl setText:@"Get to the thief's hideout and return safely."];
     current_state = 0;
@@ -40,9 +40,9 @@
     cop_spotted = NO;
     [self playSong:@"chase_normal"];
     
-    //create the safehouse (default to current position)
+    //create the safehouse
     safehouse = [[FRPoint alloc] initWithName:@"safehouse"];
-    safehouse.pos = player.pos;
+    safehouse.pos = endPoint.pos;
     
     player_speed = 2.0;
     //player_distance = 2000.0; //1.25 miles

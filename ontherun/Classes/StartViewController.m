@@ -47,7 +47,11 @@
 	//update the label according to the slider
     distanceLabel.text = [NSString stringWithFormat:@"%f miles",(int)(distanceSlider.value*10)/10.0];
 }
-
+- (void) pickedLocation:(CLLocationCoordinate2D)location{
+    [destination release];
+    destination = [[CLLocation alloc] initWithLatitude:location.latitude longitude:location.longitude];
+    //destinationLabel.text = 
+}
 /*
 // Implement loadView to create a view hierarchy programmatically, without using a nib.
 - (void)loadView {
@@ -62,9 +66,13 @@
 	if (nil==m2) m2 = [[toqbot alloc] init];
 	[self statechange:self]; //what happens if this gets called twice in a row?
 	
+    
 	[mission release];
 	mission = nil;
-	
+    
+    //do we need to initialize destination to nil?
+    //[destination release];
+	//destination = nil;
 }
 
 
@@ -99,7 +107,15 @@
 	//have different nibs for different missions?
 	//or download from the interwebs?
 	if (mission) [mission release];
-	mission = [[FRMissionDownload alloc] initWithLocation:self.latest_point distance:distanceSlider.value viewControl:self];
+	mission = [[FRMissionDownload alloc] initWithLocation:self.latest_point distance:distanceSlider.value destination:destination viewControl:self];
+}
+- (IBAction) pickDestination:(id)sender{
+    FRPoint * extraction_point = [[[FRPoint alloc] initWithName:@"extraction point"] autorelease];
+	[extraction_point setCoordinate:latest_point.coordinate];
+	
+	LocationPicker * lp = 
+	[[[LocationPicker alloc] initWithAnnotation:extraction_point delegate:self] autorelease];
+	[self.navigationController pushViewController:lp animated:YES];
 }
 - (void) updatePosition:(id)obj {
 	float lat = [[obj objectForKey:@"lat"] floatValue];
