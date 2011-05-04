@@ -45,20 +45,27 @@
     safehouse.pos = endPoint.pos;
     
     player_speed = 2.0;
-    //player_distance = 2000.0; //1.25 miles
     
+    
+    FRPathSearch * endmap = [themap createPathSearchAt:endPoint.pos withMaxDistance:nil];
+    float dist_to_player = [endmap distanceFromRoot:player.pos];
+    NSLog(@"max %f, dest = %f",player_max_distance,dist_to_player);
     
     
     //create the destination
     hideout = [[FRPoint alloc] initWithName:@"hideout"];
     hideout.pos = player.pos;
-    float distance = 0.0;
-    while (distance < player_max_distance/2){
+    
+    float dist2 = 0.0;
+    float dist1 = 0.0;
+    while (dist1+dist2 < player_max_distance*.95 || dist2 > player_max_distance/1.9){
         hideout.pos = [latestsearch move:player.pos awayFromRootWithDelta:player_max_distance/1.9];
-        distance = [latestsearch distanceFromRoot:hideout.pos];
-        NSLog(@"hideout.pos = %@, dist = %f",hideout.pos,distance);
+        dist1 = [latestsearch distanceFromRoot:hideout.pos];
+        dist2 = [endmap distanceFromRoot:hideout.pos];
+        NSLog(@"hideout.pos = %@, dist1 = %f, dist2 = %f",hideout.pos,dist1,dist2);
     }
-    progress_dist = distance;
+    [endmap release];
+    progress_dist = dist1; //why is this?
     progress_date = [[NSDate alloc] init];
     destination = [themap createPathSearchAt:hideout.pos withMaxDistance:[NSNumber numberWithFloat:player_max_distance]];
     
@@ -89,6 +96,7 @@
 }
 - (void) ticktock {
     float dist;
+    NSDate * ticktime = [NSDate date];
     NSArray * directions = [destination directionsToRoot:player.pos];
     NSString * direction = [directions objectAtIndex:0];
     if ([direction isEqualToString:@"turn around"]){
@@ -114,7 +122,7 @@
                 progress_date = [[NSDate alloc] init];
                 progress_dist = dist;
             }
-            [self the_cop]; //integrate the rest of this case into the_cop
+            //[self the_cop]; //integrate the rest of this case into the_cop
             if (dist < 30) {
                 if (cop_state > 0){
                     [self speak:@"we cant do the download if you are being chased. failed"];
@@ -155,6 +163,7 @@
             return;
     }
     [super ticktock];
+    NSLog(@"ticktime = %f",[ticktime timeIntervalSinceNow]);
 }
 - (void) finishWithText:(NSString *)text{
     FRSummaryViewController * summary =
@@ -370,7 +379,7 @@
     float dist = [latestsearch distanceFromRoot:cop.pos];
     NSLog(@"dist = %f, chase_state = %i, uyl = %i",dist,chase_state,ulysses.playing);
     
-    [self speakIfEmpty:[destination directionToRoot:player.pos]];
+    //[self speakIfEmpty:[destination directionToRoot:player.pos]];
     
     
     if ([self readyToSpeak]){
