@@ -170,13 +170,7 @@
 - (FREdgePos *) move:(FREdgePos *)ep towardRootWithDelta:(float)dx {
 	/*
 	 moves a distance dx along an edge pointing toward the root
-	 or to the edge start, whichever is shorter.
-	 if it reaches the edge start, a new edge is formed that is closer to the root.
-	
-	 in future versions, we can always move dx, even it it means traversing multiple edges
-	 and reaching the root.
-     
-     MAKE THIS MOVE FORWARD A GUARANTEED AMOUNT.
+     jumps to the next closer edge if necessary, repeating until dx is consumed.
      
      
 	 */
@@ -194,17 +188,16 @@
 		x.position = ep.position;
 	}
 	
-	NSNumber * start = [NSNumber numberWithInt:x.start];
-	x.position = MAX(0,x.position - dx);
+	x.position = x.position - dx;
 	//if root and ep are on the same edge, it is possible to overshoot.
 	
 	
 	
-	if (x.position<=0 && [previous objectForKey:start]!=nil) {
+	while (x.position<=0 && [previous objectForKey:[x startObj]]!=nil) {
 		//move to a closer edge
 		x.end = x.start;
-		x.start = [[previous objectForKey:start] intValue];
-		x.position = [map maxPosition:x];
+		x.start = [[previous objectForKey:[x startObj]] intValue];
+		x.position = [map maxPosition:x] + x.position;
 	}
 	
 	
@@ -290,7 +283,7 @@
 	
 	do {//potential infinite loop
 		prev = ep;
-		ep = [self move:ep towardRootWithDelta:10000000]; //takes advantage of the bug in that method to move forward a single edge
+		ep = [self moveCloserToRoot:ep];
 		current_road = [map roadNameFromEdgePos:ep];
 	} while ([start_road isEqualToString:current_road]);
 	
