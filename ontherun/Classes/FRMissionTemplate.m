@@ -50,6 +50,7 @@
         mapstring = [request responseString];
     } else {
         NSLog(@"there was a download error %@",error);
+        [self dealloc];
         return nil;
     }
     //dict of nodes and roads
