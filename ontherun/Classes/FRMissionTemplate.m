@@ -9,7 +9,7 @@
 #import "FRMissionTemplate.h"
 #import "FRBriefingViewController.h"
 #import "JSON.h"
-#import "FRFileLoader.h"
+#import "ASIHTTPRequest.h"
 
 @implementation FRMissionTemplate
 @synthesize points,viewControl;
@@ -33,21 +33,28 @@
 	
 	
 	
-	//init the fileloader so we can skip network downloads if already cached
+	//init the pool
 	NSAutoreleasePool * thepool = [[NSAutoreleasePool alloc] init];
-	FRFileLoader * loader = [[FRFileLoader alloc] initWithBaseURLString:@"http://toqbot.com/otr/test1/"];
 	
 	//load the map
-	
-	//[loader deleteCacheForFile:filename];
-	//might still have dead ends
-	NSDictionary * mapdata = [[NSString stringWithContentsOfFile:[loader pathForFile:@"mapdata_nullfree.json"]
-														encoding:NSUTF8StringEncoding
-														   error:NULL] JSONValue];
+    NSString * mapurl = [NSString stringWithFormat:@"http://toqbot.com/map/download?lat=%f&lng=%f&dist=2000",l.coordinate.latitude,l.coordinate.longitude];
+    NSURL *url = [NSURL URLWithString:mapurl];
+    ASIHTTPRequest *request = [ASIHTTPRequest requestWithURL:url];
+    [request startSynchronous];
+    NSError *error = [request error];
+    
+    NSString * mapstring;
+    if (!error) {
+        mapstring = [request responseString];
+    } else {
+        NSLog(@"there was a download error %@",error);
+        return nil;
+    }
+    //dict of nodes and roads
+    NSDictionary * mapdata = [mapstring JSONValue];
 	
     themap = [[FRMap alloc] initWithNodes:[mapdata objectForKey:@"nodes"] andRoads:[mapdata objectForKey:@"roads"]];
 	
-	[loader release];
 	[thepool release];
 	
 	player = [[FRPoint alloc] initWithDict:[NSDictionary dictionaryWithObject:@"player" forKey:@"name"] onMap:themap];
