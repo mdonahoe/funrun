@@ -83,6 +83,31 @@
 		C9624D54133BFA4F00F6594F /* LocationPicker.xib in Resources */ = {isa = PBXBuildFile; fileRef = C9624D52133BFA4F00F6594F /* LocationPicker.xib */; };
 		C97CA187132EF0E600E71AC4 /* FRMissionTemplate.m in Sources */ = {isa = PBXBuildFile; fileRef = C97CA186132EF0E600E71AC4 /* FRMissionTemplate.m */; };
 		C97CA18C132EF60700E71AC4 /* FRMissionOne.m in Sources */ = {isa = PBXBuildFile; fileRef = C97CA18B132EF60700E71AC4 /* FRMissionOne.m */; };
+		C99EBE1A137AE09E0079A70E /* TheCarMission.m in Sources */ = {isa = PBXBuildFile; fileRef = C99EBE19137AE09E0079A70E /* TheCarMission.m */; };
+		C99EBE33137AE3520079A70E /* A01_car_nearby.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = C99EBE1B137AE34F0079A70E /* A01_car_nearby.mp3 */; };
+		C99EBE34137AE3520079A70E /* A02_back_soon.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = C99EBE1C137AE34F0079A70E /* A02_back_soon.mp3 */; };
+		C99EBE35137AE3520079A70E /* A03_good_time.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = C99EBE1D137AE34F0079A70E /* A03_good_time.mp3 */; };
+		C99EBE36137AE3520079A70E /* A04_hurry_up.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = C99EBE1E137AE34F0079A70E /* A04_hurry_up.mp3 */; };
+		C99EBE37137AE3520079A70E /* A05_pickup_pace.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = C99EBE1F137AE34F0079A70E /* A05_pickup_pace.mp3 */; };
+		C99EBE38137AE3520079A70E /* A06_not_gonna_make_it.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = C99EBE20137AE34F0079A70E /* A06_not_gonna_make_it.mp3 */; };
+		C99EBE39137AE3520079A70E /* A07_ten_minutes.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = C99EBE21137AE3500079A70E /* A07_ten_minutes.mp3 */; };
+		C99EBE3A137AE3520079A70E /* A08_nine_minutes.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = C99EBE22137AE3500079A70E /* A08_nine_minutes.mp3 */; };
+		C99EBE3B137AE3520079A70E /* A09_eight_minutes.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = C99EBE23137AE3500079A70E /* A09_eight_minutes.mp3 */; };
+		C99EBE3C137AE3520079A70E /* A10_seven_minutes.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = C99EBE24137AE3500079A70E /* A10_seven_minutes.mp3 */; };
+		C99EBE3D137AE3520079A70E /* A11_six_minutes.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = C99EBE25137AE3500079A70E /* A11_six_minutes.mp3 */; };
+		C99EBE3E137AE3520079A70E /* A12_five_minutes.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = C99EBE26137AE3500079A70E /* A12_five_minutes.mp3 */; };
+		C99EBE3F137AE3520079A70E /* A13_four_minutes.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = C99EBE27137AE3500079A70E /* A13_four_minutes.mp3 */; };
+		C99EBE40137AE3520079A70E /* A14_three_minutes.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = C99EBE28137AE3500079A70E /* A14_three_minutes.mp3 */; };
+		C99EBE41137AE3520079A70E /* A15_two_minutes.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = C99EBE29137AE3500079A70E /* A15_two_minutes.mp3 */; };
+		C99EBE42137AE3520079A70E /* A16_one_minute.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = C99EBE2A137AE3500079A70E /* A16_one_minute.mp3 */; };
+		C99EBE43137AE3520079A70E /* A17_too_late.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = C99EBE2B137AE3500079A70E /* A17_too_late.mp3 */; };
+		C99EBE44137AE3520079A70E /* A18_elaborate_plan.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = C99EBE2C137AE3500079A70E /* A18_elaborate_plan.mp3 */; };
+		C99EBE45137AE3520079A70E /* A18_getting_close.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = C99EBE2D137AE3510079A70E /* A18_getting_close.mp3 */; };
+		C99EBE46137AE3520079A70E /* A19_get_out_of_there.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = C99EBE2E137AE3510079A70E /* A19_get_out_of_there.mp3 */; };
+		C99EBE47137AE3520079A70E /* A20_watch_out_police.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = C99EBE2F137AE3510079A70E /* A20_watch_out_police.mp3 */; };
+		C99EBE48137AE3520079A70E /* A21_cop_ahead.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = C99EBE30137AE3510079A70E /* A21_cop_ahead.mp3 */; };
+		C99EBE49137AE3520079A70E /* A22_coast_clear.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = C99EBE31137AE3510079A70E /* A22_coast_clear.mp3 */; };
+		C99EBE4A137AE3520079A70E /* A23_successful_mission.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = C99EBE32137AE3510079A70E /* A23_successful_mission.mp3 */; };
 		C9ABFF5013087EEF0031160A /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C9ABFF4F13087EEF0031160A /* MediaPlayer.framework */; };
 		C9C5378812E39A7A005C0BF0 /* FRMap.m in Sources */ = {isa = PBXBuildFile; fileRef = C9C5378712E39A7A005C0BF0 /* FRMap.m */; };
 		C9E494C212F8D7390006AB7B /* FRPathSearch.m in Sources */ = {isa = PBXBuildFile; fileRef = C9E494C112F8D7390006AB7B /* FRPathSearch.m */; };
@@ -202,6 +227,32 @@
 		C97CA186132EF0E600E71AC4 /* FRMissionTemplate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRMissionTemplate.m; sourceTree = "<group>"; };
 		C97CA18A132EF60700E71AC4 /* FRMissionOne.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRMissionOne.h; sourceTree = "<group>"; };
 		C97CA18B132EF60700E71AC4 /* FRMissionOne.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRMissionOne.m; sourceTree = "<group>"; };
+		C99EBE18137AE09E0079A70E /* TheCarMission.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TheCarMission.h; sourceTree = "<group>"; };
+		C99EBE19137AE09E0079A70E /* TheCarMission.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TheCarMission.m; sourceTree = "<group>"; };
+		C99EBE1B137AE34F0079A70E /* A01_car_nearby.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = A01_car_nearby.mp3; sourceTree = "<group>"; };
+		C99EBE1C137AE34F0079A70E /* A02_back_soon.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = A02_back_soon.mp3; sourceTree = "<group>"; };
+		C99EBE1D137AE34F0079A70E /* A03_good_time.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = A03_good_time.mp3; sourceTree = "<group>"; };
+		C99EBE1E137AE34F0079A70E /* A04_hurry_up.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = A04_hurry_up.mp3; sourceTree = "<group>"; };
+		C99EBE1F137AE34F0079A70E /* A05_pickup_pace.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = A05_pickup_pace.mp3; sourceTree = "<group>"; };
+		C99EBE20137AE34F0079A70E /* A06_not_gonna_make_it.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = A06_not_gonna_make_it.mp3; sourceTree = "<group>"; };
+		C99EBE21137AE3500079A70E /* A07_ten_minutes.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = A07_ten_minutes.mp3; sourceTree = "<group>"; };
+		C99EBE22137AE3500079A70E /* A08_nine_minutes.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = A08_nine_minutes.mp3; sourceTree = "<group>"; };
+		C99EBE23137AE3500079A70E /* A09_eight_minutes.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = A09_eight_minutes.mp3; sourceTree = "<group>"; };
+		C99EBE24137AE3500079A70E /* A10_seven_minutes.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = A10_seven_minutes.mp3; sourceTree = "<group>"; };
+		C99EBE25137AE3500079A70E /* A11_six_minutes.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = A11_six_minutes.mp3; sourceTree = "<group>"; };
+		C99EBE26137AE3500079A70E /* A12_five_minutes.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = A12_five_minutes.mp3; sourceTree = "<group>"; };
+		C99EBE27137AE3500079A70E /* A13_four_minutes.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = A13_four_minutes.mp3; sourceTree = "<group>"; };
+		C99EBE28137AE3500079A70E /* A14_three_minutes.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = A14_three_minutes.mp3; sourceTree = "<group>"; };
+		C99EBE29137AE3500079A70E /* A15_two_minutes.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = A15_two_minutes.mp3; sourceTree = "<group>"; };
+		C99EBE2A137AE3500079A70E /* A16_one_minute.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = A16_one_minute.mp3; sourceTree = "<group>"; };
+		C99EBE2B137AE3500079A70E /* A17_too_late.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = A17_too_late.mp3; sourceTree = "<group>"; };
+		C99EBE2C137AE3500079A70E /* A18_elaborate_plan.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = A18_elaborate_plan.mp3; sourceTree = "<group>"; };
+		C99EBE2D137AE3510079A70E /* A18_getting_close.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = A18_getting_close.mp3; sourceTree = "<group>"; };
+		C99EBE2E137AE3510079A70E /* A19_get_out_of_there.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = A19_get_out_of_there.mp3; sourceTree = "<group>"; };
+		C99EBE2F137AE3510079A70E /* A20_watch_out_police.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = A20_watch_out_police.mp3; sourceTree = "<group>"; };
+		C99EBE30137AE3510079A70E /* A21_cop_ahead.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = A21_cop_ahead.mp3; sourceTree = "<group>"; };
+		C99EBE31137AE3510079A70E /* A22_coast_clear.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = A22_coast_clear.mp3; sourceTree = "<group>"; };
+		C99EBE32137AE3510079A70E /* A23_successful_mission.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = A23_successful_mission.mp3; sourceTree = "<group>"; };
 		C9ABFF4F13087EEF0031160A /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = System/Library/Frameworks/MediaPlayer.framework; sourceTree = SDKROOT; };
 		C9C5378612E39A7A005C0BF0 /* FRMap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRMap.h; sourceTree = "<group>"; };
 		C9C5378712E39A7A005C0BF0 /* FRMap.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRMap.m; sourceTree = "<group>"; };
@@ -293,6 +344,30 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				C99EBE1B137AE34F0079A70E /* A01_car_nearby.mp3 */,
+				C99EBE1C137AE34F0079A70E /* A02_back_soon.mp3 */,
+				C99EBE1D137AE34F0079A70E /* A03_good_time.mp3 */,
+				C99EBE1E137AE34F0079A70E /* A04_hurry_up.mp3 */,
+				C99EBE1F137AE34F0079A70E /* A05_pickup_pace.mp3 */,
+				C99EBE20137AE34F0079A70E /* A06_not_gonna_make_it.mp3 */,
+				C99EBE21137AE3500079A70E /* A07_ten_minutes.mp3 */,
+				C99EBE22137AE3500079A70E /* A08_nine_minutes.mp3 */,
+				C99EBE23137AE3500079A70E /* A09_eight_minutes.mp3 */,
+				C99EBE24137AE3500079A70E /* A10_seven_minutes.mp3 */,
+				C99EBE25137AE3500079A70E /* A11_six_minutes.mp3 */,
+				C99EBE26137AE3500079A70E /* A12_five_minutes.mp3 */,
+				C99EBE27137AE3500079A70E /* A13_four_minutes.mp3 */,
+				C99EBE28137AE3500079A70E /* A14_three_minutes.mp3 */,
+				C99EBE29137AE3500079A70E /* A15_two_minutes.mp3 */,
+				C99EBE2A137AE3500079A70E /* A16_one_minute.mp3 */,
+				C99EBE2B137AE3500079A70E /* A17_too_late.mp3 */,
+				C99EBE2C137AE3500079A70E /* A18_elaborate_plan.mp3 */,
+				C99EBE2D137AE3510079A70E /* A18_getting_close.mp3 */,
+				C99EBE2E137AE3510079A70E /* A19_get_out_of_there.mp3 */,
+				C99EBE2F137AE3510079A70E /* A20_watch_out_police.mp3 */,
+				C99EBE30137AE3510079A70E /* A21_cop_ahead.mp3 */,
+				C99EBE31137AE3510079A70E /* A22_coast_clear.mp3 */,
+				C99EBE32137AE3510079A70E /* A23_successful_mission.mp3 */,
 				9B6A24621368996A00A7228C /* chase_scary.mp3 */,
 				C9449ADD135E35B8008F8623 /* chase_elevated.mp3 */,
 				C9449ADE135E35B9008F8623 /* chase_normal.mp3 */,
@@ -377,6 +452,8 @@
 				C92B0F381338237F0060CE50 /* FRMissionTwo.m */,
 				9B9505B9135CD55A0070B7E7 /* FRMissionDownload.h */,
 				9B9505BA135CD55A0070B7E7 /* FRMissionDownload.m */,
+				C99EBE18137AE09E0079A70E /* TheCarMission.h */,
+				C99EBE19137AE09E0079A70E /* TheCarMission.m */,
 			);
 			name = Missions;
 			sourceTree = "<group>";
@@ -536,6 +613,30 @@
 				C9449ADF135E35BD008F8623 /* chase_elevated.mp3 in Resources */,
 				C9449AE0135E35BD008F8623 /* chase_normal.mp3 in Resources */,
 				9B6A24631368996A00A7228C /* chase_scary.mp3 in Resources */,
+				C99EBE33137AE3520079A70E /* A01_car_nearby.mp3 in Resources */,
+				C99EBE34137AE3520079A70E /* A02_back_soon.mp3 in Resources */,
+				C99EBE35137AE3520079A70E /* A03_good_time.mp3 in Resources */,
+				C99EBE36137AE3520079A70E /* A04_hurry_up.mp3 in Resources */,
+				C99EBE37137AE3520079A70E /* A05_pickup_pace.mp3 in Resources */,
+				C99EBE38137AE3520079A70E /* A06_not_gonna_make_it.mp3 in Resources */,
+				C99EBE39137AE3520079A70E /* A07_ten_minutes.mp3 in Resources */,
+				C99EBE3A137AE3520079A70E /* A08_nine_minutes.mp3 in Resources */,
+				C99EBE3B137AE3520079A70E /* A09_eight_minutes.mp3 in Resources */,
+				C99EBE3C137AE3520079A70E /* A10_seven_minutes.mp3 in Resources */,
+				C99EBE3D137AE3520079A70E /* A11_six_minutes.mp3 in Resources */,
+				C99EBE3E137AE3520079A70E /* A12_five_minutes.mp3 in Resources */,
+				C99EBE3F137AE3520079A70E /* A13_four_minutes.mp3 in Resources */,
+				C99EBE40137AE3520079A70E /* A14_three_minutes.mp3 in Resources */,
+				C99EBE41137AE3520079A70E /* A15_two_minutes.mp3 in Resources */,
+				C99EBE42137AE3520079A70E /* A16_one_minute.mp3 in Resources */,
+				C99EBE43137AE3520079A70E /* A17_too_late.mp3 in Resources */,
+				C99EBE44137AE3520079A70E /* A18_elaborate_plan.mp3 in Resources */,
+				C99EBE45137AE3520079A70E /* A18_getting_close.mp3 in Resources */,
+				C99EBE46137AE3520079A70E /* A19_get_out_of_there.mp3 in Resources */,
+				C99EBE47137AE3520079A70E /* A20_watch_out_police.mp3 in Resources */,
+				C99EBE48137AE3520079A70E /* A21_cop_ahead.mp3 in Resources */,
+				C99EBE49137AE3520079A70E /* A22_coast_clear.mp3 in Resources */,
+				C99EBE4A137AE3520079A70E /* A23_successful_mission.mp3 in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -577,6 +678,7 @@
 				C9624CD9133BB9F200F6594F /* FRBriefingViewController.m in Sources */,
 				C9624D53133BFA4F00F6594F /* LocationPicker.m in Sources */,
 				9B9505BB135CD55A0070B7E7 /* FRMissionDownload.m in Sources */,
+				C99EBE1A137AE09E0079A70E /* TheCarMission.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
