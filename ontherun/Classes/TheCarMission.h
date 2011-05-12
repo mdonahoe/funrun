@@ -27,6 +27,7 @@
     FRPoint * car;
     FRPoint * cop;
     FRPoint * safehouse;
+    FREdgePos * unsafe_spot; //hack for finding distance to path.
     
     int car_time_left;
     int car_times_spoken;
@@ -40,6 +41,9 @@
 - (void) the_cop;
 - (void) the_safehouse;
 - (void) ulyssesSpeak:(NSString *)filename;
-
+- (void) stopSiren;
+- (void) startSiren;
+- (void) playSong:(NSString *)name;
+- (BOOL) readyToSpeak;
 
 @end

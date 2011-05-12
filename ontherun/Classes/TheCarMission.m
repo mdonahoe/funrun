@@ -10,6 +10,66 @@
 
 
 @implementation TheCarMission
+- (id) initWithLocation:(CLLocation *)l distance:(float)dist destination:(CLLocation *)dest viewControl:(UIViewController *)vc{
+    self = [super initWithLocation:l distance:dist destination:dest viewControl:vc];
+    if (!self) return nil;
+    unsafe_spot = nil;
+    car_state=13; //unlike other states, this one counts down.
+    
+    current_state = 0;
+    cop_state = 0;
+    
+    [self playSong:@"chase_normal"];
+    
+    //create the safehouse
+    safehouse = [[FRPoint alloc] initWithName:@"safehouse"];
+    safehouse.pos = endPoint.pos;
+    
+    
+    
+    FRPathSearch * endmap = [themap createPathSearchAt:endPoint.pos withMaxDistance:nil];
+    float dist_to_player = [endmap distanceFromRoot:player.pos];
+    NSLog(@"max %f, dest = %f",player_max_distance,dist_to_player);
+    
+    
+    //create the destination
+    car = [[FRPoint alloc] initWithName:@"car"];
+    car.pos = player.pos;
+    
+    float dist2 = 0.0;
+    float dist1 = 0.0;
+    while (dist1+dist2 < player_max_distance*.95 || dist2 > player_max_distance/1.9){
+        car.pos = [latestsearch move:player.pos awayFromRootWithDelta:player_max_distance/1.9];
+        dist1 = [latestsearch distanceFromRoot:car.pos];
+        dist2 = [endmap distanceFromRoot:car.pos];
+        NSLog(@"hideout.pos = %@, dist1 = %f, dist2 = %f",car.pos,dist1,dist2);
+    }
+    [endmap release];
+    destination = [themap createPathSearchAt:car.pos withMaxDistance:[NSNumber numberWithFloat:player_max_distance]];
+    
+    cop = [[FRPoint alloc] initWithName:@"cop"];
+    
+    //maybe make the cop position random?
+    cop.pos = player.pos;
+    
+    [points addObject:cop];
+    [points addObject:car];
+    [points addObject:safehouse];
+    
+    NSError * error;
+    NSString * p = [[NSBundle mainBundle] pathForResource:@"woowoo" ofType:@"mp3"];
+    NSURL * u = [NSURL URLWithString:p];
+    siren = [[AVAudioPlayer alloc] initWithContentsOfURL:u error:&error];
+    if (error){
+        NSLog(@"siren error");
+    }
+    siren.numberOfLoops = -1;
+    [siren prepareToPlay];
+        
+    [self ticktock];
+
+    return self;
+}
 - (void) ticktock {
     //NSDate * ticktime = [NSDate date];
     NSArray * directions = [destination directionsToRoot:player.pos];
@@ -124,6 +184,13 @@
 - (void) the_cop {
     cop.pos = [cop_goal move:cop.pos towardRootWithDelta:10.0]; //moving at 10m/s
     float dist = [latestsearch distanceFromRoot:cop.pos];
+    
+    BOOL onpath = [cop_goal edgepos:player.pos isOnPathFromRootTo:cop.pos];
+    if (onpath) {
+        [unsafe_spot release];
+        unsafe_spot = player.pos;
+        [unsafe_spot retain];
+    }
     switch (cop_state){
         case 0:
             [self ulyssesSpeak:@"A20_watch_out_police"];
@@ -138,7 +205,7 @@
             [self startSiren];
             cop_state++;
             break;
-        case 3:
+        default:
             siren.volume = (100-dist)/100.0;
             //if the cop is closer to the car than the player is, then the player is off the track
             //if the cop gets too close, you lose.
@@ -150,17 +217,23 @@
             if (dist < 30){
                 //cop see you.
                 [self ulyssesSpeak:@"12stoppolice-2"];
-                current_state=4;
+                current_state = 4;
             } else if (dist > 120) {
                 //you are clear
                 [self ulyssesSpeak:@"A22_coast_clear"];
                 current_state++;
-            } else {
-                //check if you are on the path. new pathsearch function?
-                // if we are safe, say so
+            } else if (cop_state==3 && dist < 60 && onpath) {
+                
+                [self speak:@"You are gonna get caught. get off this road"];
+                cop_state=4;
+                //the cop is going to see you any second now. get off his path.
+            
+            } else if (cop_state==3 && !onpath){
+                if ([latestsearch distanceFromRoot:unsafe_spot]>40){
+                    cop_state = 5;
+                    [self speak:@"You should be safe here"];
+                }
             }
-            break;
-        default:
             break;
     }
 }
