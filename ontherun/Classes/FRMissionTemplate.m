@@ -34,7 +34,12 @@
 	//communication with server
 	
 	
-	
+    endPoint = [[FRPoint alloc] initWithName:@"end point"];
+    if (dest==nil) {
+        endPoint.pos = player.pos;
+    } else {
+        endPoint.pos = [themap edgePosFromPoint:dest];
+    }	
 	//init the pool
 	NSAutoreleasePool * thepool = [[NSAutoreleasePool alloc] init];
 	
