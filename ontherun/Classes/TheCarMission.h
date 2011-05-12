@@ -27,13 +27,19 @@
     FRPoint * car;
     FRPoint * cop;
     FRPoint * safehouse;
+    
+    int car_time_left;
+    int car_times_spoken;
+    
+    FRPathSearch * destination;
+    FRPathSearch * cop_goal;
 }
 
 - (void) the_car;
 - (void) the_alarm;
 - (void) the_cop;
 - (void) the_safehouse;
-
+- (void) ulyssesSpeak:(NSString *)filename;
 
 
 @end
