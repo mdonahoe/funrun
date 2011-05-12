@@ -43,7 +43,10 @@
 - (void) ulyssesSpeak:(NSString *)filename;
 - (void) stopSiren;
 - (void) startSiren;
+- (void) stopAlarm;
+- (void) startAlarm;
 - (void) playSong:(NSString *)name;
 - (BOOL) readyToSpeak;
+- (void) speaktime:(int)t;
 
 @end

@@ -13,11 +13,13 @@
 - (id) initWithLocation:(CLLocation *)l distance:(float)dist destination:(CLLocation *)dest viewControl:(UIViewController *)vc{
     self = [super initWithLocation:l distance:dist destination:dest viewControl:vc];
     if (!self) return nil;
-    unsafe_spot = nil;
-    car_state=13; //unlike other states, this one counts down.
+    unsafe_spot = nil; //used in the_cop
     
     current_state = 0;
+    car_state = 13; //countsdown, not up.
+    alarm_state = 0;
     cop_state = 0;
+    safehouse_state = 0;
     
     [self playSong:@"chase_normal"];
     
@@ -26,15 +28,20 @@
     safehouse.pos = endPoint.pos;
     
     
-    
+    //pathsearch from the endpoint. used for positioning the car
     FRPathSearch * endmap = [themap createPathSearchAt:endPoint.pos withMaxDistance:nil];
     float dist_to_player = [endmap distanceFromRoot:player.pos];
     NSLog(@"max %f, dest = %f",player_max_distance,dist_to_player);
     
     
-    //create the destination
+    //create the car
     car = [[FRPoint alloc] initWithName:@"car"];
     car.pos = player.pos;
+    
+    
+    
+    //randomly move the car until it is properly placed in the map
+    //such that it is equally placed from start and end points.
     
     float dist2 = 0.0;
     float dist1 = 0.0;
@@ -42,21 +49,29 @@
         car.pos = [latestsearch move:player.pos awayFromRootWithDelta:player_max_distance/1.9];
         dist1 = [latestsearch distanceFromRoot:car.pos];
         dist2 = [endmap distanceFromRoot:car.pos];
-        NSLog(@"hideout.pos = %@, dist1 = %f, dist2 = %f",car.pos,dist1,dist2);
+        NSLog(@"car.pos = %@, dist1 = %f, dist2 = %f",car.pos,dist1,dist2);
     }
     [endmap release];
+    
+    
+    //now create the destination pathsearch.
     destination = [themap createPathSearchAt:car.pos withMaxDistance:[NSNumber numberWithFloat:player_max_distance]];
     
-    cop = [[FRPoint alloc] initWithName:@"cop"];
     
-    //maybe make the cop position random?
+    //The cop starts at the player's location, but doesnt interact until later.
+    cop = [[FRPoint alloc] initWithName:@"cop"];
     cop.pos = player.pos;
     
+    //add to the points list for display.
     [points addObject:cop];
     [points addObject:car];
     [points addObject:safehouse];
     
+    
+    
     NSError * error;
+    
+    //load the siren
     NSString * p = [[NSBundle mainBundle] pathForResource:@"woowoo" ofType:@"mp3"];
     NSURL * u = [NSURL URLWithString:p];
     siren = [[AVAudioPlayer alloc] initWithContentsOfURL:u error:&error];
@@ -65,19 +80,29 @@
     }
     siren.numberOfLoops = -1;
     [siren prepareToPlay];
-        
+    
+    //load the alarm
+    p = [[NSBundle mainBundle] pathForResource:@"woop" ofType:@"mp3"];
+    u = [NSURL URLWithString:p];
+    alarm = [[AVAudioPlayer alloc] initWithContentsOfURL:u error:&error];
+    if (error){
+        NSLog(@"alarm error");
+    }
+    alarm.numberOfLoops=-1;
+    [alarm prepareToPlay];
+    
+    
+    car_time_left = 300; //default to 3 minutes, but this should be depending on difficulty.
+    //start working.
     [self ticktock];
 
     return self;
 }
 - (void) ticktock {
-    //NSDate * ticktime = [NSDate date];
     NSArray * directions = [destination directionsToRoot:player.pos];
     NSString * direction = [directions objectAtIndex:0];
     if ([direction isEqualToString:@"turn around"]){
-        //direction = [NSString stringWithFormat:@"%@ and %@", direction, [directions objectAtIndex:1]];
         direction = [directions objectAtIndex:1];
-        //ulysses needs to say that you are going the wrong way.
     }
     
     if (current_state!=2) [self speakIfEmpty:direction];
@@ -112,6 +137,8 @@
     [super ticktock];
     
 }
+#pragma mark -
+
 - (void) the_car {
     // start with the introduction.
     
@@ -174,12 +201,14 @@
             // adjust the sound of the alarm with the distance
             // once the distance exceeds 200m, kill, cue the cop.
             alarm.volume = (150.0 - alarmdist) / 100.0;
-            if (alarmdist > 200) current_state++;
+            if (alarmdist > 200) {
+                [self stopAlarm];
+                current_state++;
+            }
             break;
         default:
             break;
     }
-    
 }
 - (void) the_cop {
     cop.pos = [cop_goal move:cop.pos towardRootWithDelta:10.0]; //moving at 10m/s
@@ -245,6 +274,9 @@
         current_state=5;
     }
 }
+
+#pragma mark -
+
 - (BOOL) readyToSpeak {
     return (!ulysses.playing && ![voicebot isSpeaking]);
 }
@@ -293,5 +325,32 @@
     ulysses.volume = 0.5;
     [ulysses prepareToPlay];
     [ulysses play];
+}
+- (void) startSiren {
+    siren.volume = 0.1;
+    [siren prepareToPlay];
+    [siren play];
+}
+- (void) stopSiren {
+    [siren pause];
+}
+- (void) startAlarm {
+    alarm.volume = 1.0;
+    [alarm prepareToPlay];
+    [alarm play];
+}
+- (void) stopAlarm {
+    [alarm pause];
+}
+- (void) playSong:(NSString *)filename{
+    [_music release];
+    NSError *error;
+    NSString * s = [[NSBundle mainBundle] pathForResource:filename ofType:@"mp3"];
+    NSURL * x = [NSURL fileURLWithPath:s];
+    _music = [[AVAudioPlayer alloc] initWithContentsOfURL:x error:&error];
+    _music.volume = 0.5;
+    _music.numberOfLoops = -1;
+    [_music prepareToPlay];
+    [_music play];
 }
 @end
