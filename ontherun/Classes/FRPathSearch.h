@@ -31,4 +31,5 @@
 - (NSString *) directionToRoot:(FREdgePos*)ep;
 - (NSArray *) directionsToRoot:(FREdgePos *)ep;
 - (FREdgePos *) edgePosThatIsDistance:(float)d fromRootAndOther:(FRPathSearch*)p;
+- (BOOL) edgepos:(FREdgePos*)A isOnPathFromRootTo:(FREdgePos*)B;
 @end

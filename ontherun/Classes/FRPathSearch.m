@@ -354,6 +354,17 @@
 	ep.position = 1.0; //1m from the point. hackity hack.
 	return ep;
 }
+- (BOOL) edgepos:(FREdgePos*)A isOnPathFromRootTo:(FREdgePos*)B{
+    int i=0;
+    do {
+        if ([A onSameEdgeAs:B]) return YES;
+        if ([B onSameEdgeAs:root]) return NO;
+        B = [self moveCloserToRoot:B];
+        i++;
+    } while (i<1000);
+    NSLog(@"Loop exceeded expectations.");
+    return NO;
+}
 - (void) dealloc {
 	[previous release];
 	[distance release];
