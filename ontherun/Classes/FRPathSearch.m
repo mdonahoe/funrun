@@ -27,7 +27,6 @@
 		
 		[m retain];
 		map = m;
-		//[m retain]; maybe?
 	}
 	
 	return self;
@@ -310,22 +309,24 @@
     
     NSString * start_road = [map roadNameFromEdgePos:ep];
     while (![ep onSameEdgeAs:root]){
-        start_road = [map roadNameFromEdgePos:ep];
         NSString * current_road = nil;
         FREdgePos * prev = nil;
         
-        do {//potential infinite loop
+        do {//go forward until we switch roads (potential infinite loop)
             prev = ep;
             ep = [self moveCloserToRoot:ep];
             current_road = [map roadNameFromEdgePos:ep];
             
         } while ([start_road isEqualToString:current_road] && ![ep onSameEdgeAs:root]);
+        
+        //get the description for this change
         NSString * desc = [map descriptionFromEdgePos:prev toEdgePos:ep];
         if (desc) {
             [directions addObject:[NSString stringWithFormat:@"turn %@",desc]];
         } else {
-            NSLog(@"no description available. ep is like on root edge True==%i",[ep onSameEdgeAs:root]);
+            NSLog(@"no description available. ep is likely on root edge True==%i",[ep onSameEdgeAs:root]);
         }
+        start_road = current_road;
     }
     [directions addObject:[NSString stringWithFormat:@"continue on %@ to your destination",start_road]];
     return [NSArray arrayWithArray:directions];
