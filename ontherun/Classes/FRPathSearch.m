@@ -305,6 +305,7 @@
 	if (![self isFacingRoot:ep]) {
         
 		[directions addObject:@"turn around"];
+        ep = [map flipEdgePos:ep];
 	}
     
     NSString * start_road = [map roadNameFromEdgePos:ep];
@@ -324,7 +325,7 @@
         if (desc) {
             [directions addObject:[NSString stringWithFormat:@"turn %@",desc]];
         } else {
-            NSLog(@"no description available. ep is likely on root edge True==%i",[ep onSameEdgeAs:root]);
+            NSLog(@"no description available. ep is likely on root edge True==%i. current_road=%@, start_road=%@",[ep onSameEdgeAs:root],current_road,start_road);
         }
         start_road = current_road;
     }
