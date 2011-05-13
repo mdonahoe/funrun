@@ -8,13 +8,30 @@
 
 #import "TheCarMission.h"
 
-
+/*
+ 
+ notes:
+ 1. how far am i from the destination
+ 2. where is the destination
+ 3. alarm starts too early.
+ 4. no glass breaking sound effects
+ 5. alarm is LOUD, ulysses is quiet.
+ 6. the cops come really quickly. i need a chance to escape.
+ 7. directions on where to go to avoid the cop?
+ 8. if you manage to completely avoid the cop, the game fails.
+ 9. where is the cop?
+ 
+ 
+ A. if the gps isnt accurate, it fails completely.
+ B. Toqbot slow over 3G
+ 
+ */
 @implementation TheCarMission
 - (id) initWithLocation:(CLLocation *)l distance:(float)dist destination:(CLLocation *)dest viewControl:(UIViewController *)vc{
     self = [super initWithLocation:l distance:dist destination:dest viewControl:vc];
     if (!self) return nil;
     unsafe_spot = nil; //used in the_cop
-    
+    direct = NO;
     current_state = 0;
     car_state = 13; //countsdown, not up.
     alarm_state = 0;
@@ -92,20 +109,23 @@
     [alarm prepareToPlay];
     
     
-    car_time_left = 300; //default to 3 minutes, but this should be depending on difficulty.
+    car_time_left = 300; //default to 5 minutes, but this should be depending on difficulty.
     //start working.
     [self ticktock];
 
     return self;
 }
+- (void) finishWithText:(NSString*)t{
+    //display something. or restart the mission. idk.
+}
 - (void) ticktock {
+    NSLog(@"tick tock");
     NSArray * directions = [destination directionsToRoot:player.pos];
     NSString * direction = [directions objectAtIndex:0];
     if ([direction isEqualToString:@"turn around"]){
         direction = [directions objectAtIndex:1];
     }
     
-    if (current_state!=2) [self speakIfEmpty:direction];
     
     switch (current_state){
         case 0:
@@ -122,6 +142,7 @@
             break;
         case 4:
             //you lost the mission
+            if (![self readyToSpeak]) break;
             [self speak:@"You failed the mission"];
             [self finishWithText:@"Mission Failed"];
             current_state=10;
@@ -133,6 +154,7 @@
             NSLog(@"current_state invalid, stopping ticktock");
             return;
     }
+    if (direct && [self readyToSpeak]) [self speakIfEmpty:direction];
     
     [super ticktock];
     
@@ -161,12 +183,13 @@
             [self ulyssesSpeak:@"A02_back_soon"];
             car_state--;
             car_state = timer;
+            direct = YES;
             break;
         default:
             //speak the time.
             if (timer < car_state) {
                 car_state--;
-                if (car_state>0){
+                if (car_state>=0){
                     [self speaktime:timer];
                 } else {
                     current_state=4;
@@ -181,6 +204,7 @@
         current_state++;
         cop_goal = destination;//[destination release];
         destination = [themap createPathSearchAt:safehouse.pos withMaxDistance:[NSNumber numberWithFloat:player_max_distance]];
+        direct = NO;
     }
     
 }
@@ -191,11 +215,12 @@
         case 0:
             [self ulyssesSpeak:@"A18_elaborate_plan"];
             alarm_state++;
-            [self startAlarm];
             break;
         case 1:
+            [self startAlarm];
             [self ulyssesSpeak:@"A19_get_out_of_there"];
             alarm_state++;
+            direct = YES;
             break;
         case 2:
             // adjust the sound of the alarm with the distance
@@ -204,6 +229,7 @@
             if (alarmdist > 200) {
                 [self stopAlarm];
                 current_state++;
+                direct = NO;
             }
             break;
         default:
@@ -220,6 +246,7 @@
         unsafe_spot = player.pos;
         [unsafe_spot retain];
     }
+    if (![self readyToSpeak]) return;
     switch (cop_state){
         case 0:
             [self ulyssesSpeak:@"A20_watch_out_police"];
@@ -249,8 +276,11 @@
                 current_state = 4;
             } else if (dist > 120) {
                 //you are clear
+                [self stopSiren];
                 [self ulyssesSpeak:@"A22_coast_clear"];
                 current_state++;
+                direct = YES;
+                
             } else if (cop_state==3 && dist < 60 && onpath) {
                 
                 [self speak:@"You are gonna get caught. get off this road"];
@@ -282,34 +312,34 @@
 }
 - (void) speaktime:(int)t{
     switch(t){
-        case 10:
+        case 9:
             [self ulyssesSpeak:@"A07_ten_minutes"];
             break;
-        case 9:
+        case 8:
             [self ulyssesSpeak:@"A08_nine_minutes"];
             break;
-        case 8:
+        case 7:
             [self ulyssesSpeak:@"A09_eight_minutes"];
             break;
-        case 7:
+        case 6:
             [self ulyssesSpeak:@"A10_seven_minutes"];
             break;
-        case 6:
+        case 5:
             [self ulyssesSpeak:@"A11_six_minutes"];
             break;
-        case 5:
+        case 4:
             [self ulyssesSpeak:@"A12_five_minutes"];
             break;
-        case 4:
+        case 3:
             [self ulyssesSpeak:@"A13_four_minutes"];
             break;
-        case 3:
+        case 2:
             [self ulyssesSpeak:@"A14_three_minutes"];
             break;
-        case 2:
+        case 1:
             [self ulyssesSpeak:@"A15_two_minutes"];
             break;
-        case 1:
+        case 0:
             [self ulyssesSpeak:@"A16_one_minute"];
             break;
         default:
@@ -322,7 +352,7 @@
     NSString * s = [[NSBundle mainBundle] pathForResource:filename ofType:@"mp3"];
     NSURL * x = [NSURL fileURLWithPath:s];
     ulysses = [[AVAudioPlayer alloc] initWithContentsOfURL:x error:&error];
-    ulysses.volume = 0.5;
+    ulysses.volume = 1.0;
     [ulysses prepareToPlay];
     [ulysses play];
 }
