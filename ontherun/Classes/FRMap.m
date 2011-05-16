@@ -268,6 +268,9 @@
 	}
 	return YES;
 }
+- (int) numNeighbors:(NSNumber*)node{
+    return [[graph objectForKey:node] count];
+}
 - (FREdgePos *) move:(FREdgePos *)ep forwardRandomly:(float)dx {
 	/*
 	 

@@ -46,6 +46,9 @@
 //returns a random node that is connected to the given node
 - (NSNumber *) randomNeighbor:(NSNumber *)node;
 
+//number of neighboring nodes
+- (int) numNeighbors:(NSNumber*)node;
+
 //reverses the nodes and adjust the position accordingly
 - (FREdgePos *) flipEdgePos:(FREdgePos *)ep;
 
