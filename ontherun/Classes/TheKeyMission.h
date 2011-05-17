@@ -14,6 +14,17 @@
     FRPoint * pointB;
     FRPoint * pointC;
     FRPoint * dude;
+    FRPoint * safehouse;
+    int main_state;
+    int sub_state;
+    FRPathSearch * destination;
+    float xdist;
+    float dude_speed;
 }
+- (void) the_first;
+- (void) the_second;
+- (void) the_third;
+- (void) the_chase;
+
 
 @end

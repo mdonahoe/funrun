@@ -13,6 +13,7 @@
 #import "FRMissionTwo.h"
 #import "FRMissionDownload.h"
 #import "TheCarMission.h"
+#import "TheKeyMission.h"
 #import "LocationPicker.h"
 
 @implementation StartViewController
@@ -102,7 +103,7 @@
 	//have different nibs for different missions?
 	//or download from the interwebs?
 	if (mission) [mission release];
-	mission = [[FRMissionTwo alloc] initWithLocation:self.latest_point viewControl:self];
+	mission = [[TheKeyMission alloc] initWithLocation:self.latest_point distance:distanceSlider.value destination:destination viewControl:self];
 }
 - (IBAction)loadMissionOne:(id)sender{
 	//have different nibs for different missions?
