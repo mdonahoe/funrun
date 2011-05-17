@@ -26,6 +26,7 @@
 - (FREdgePos *) move:(FREdgePos*)ep awayFromRootWithDelta:(float)dx;
 - (BOOL) isFacingRoot:(FREdgePos*)ep;
 - (BOOL) containsPoint:(FREdgePos*)ep;
+- (FREdgePos *) forkPoint:(FREdgePos*)ep;
 - (float) distanceFromRoot:(FREdgePos*)ep;
 - (NSString *) directionFromRoot:(FREdgePos*)ep;
 - (NSString *) directionToRoot:(FREdgePos*)ep;

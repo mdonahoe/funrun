@@ -356,6 +356,39 @@
 	ep.position = 1.0; //1m from the point. hackity hack.
 	return ep;
 }
+- (FREdgePos *) forkPoint:(FREdgePos*)ep{
+    
+    
+    //travel toward root until you find a side street
+    NSNumber * node = [ep startObj];
+    NSNumber * prev = [ep endObj];
+    int i=0;
+    while ([map numNeighbors:node]<3 && i++<50){
+        prev = node;
+        node = [previous objectForKey:node];
+    }
+    
+    //failed
+    if (i>=50){
+        [NSException raise:@"Unable to fork" format:@"start of %i. %@", ep.start, ep];
+		return nil;
+    }
+    
+    //get a node on the side street
+    i=0;
+    NSNumber * next = [previous objectForKey:node];
+    NSNumber * sidenode = next;
+    while (i++<50 && (sidenode==next || sidenode == prev)){
+        sidenode = [map randomNeighbor:node];
+    }
+    
+    //return a position off that side street.
+    FREdgePos * x = [[[FREdgePos alloc] init] autorelease];
+    x.start = [sidenode intValue];
+    x.end = [node intValue];
+    x.position = 1;
+    return x;
+}
 - (BOOL) edgepos:(FREdgePos*)A isOnPathFromRootTo:(FREdgePos*)B{
     int i=0;
     do {
