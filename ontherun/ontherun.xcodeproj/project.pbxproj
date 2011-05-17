@@ -110,6 +110,7 @@
 		C99EBE4A137AE3520079A70E /* A23_successful_mission.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = C99EBE32137AE3510079A70E /* A23_successful_mission.mp3 */; };
 		C9ABFF5013087EEF0031160A /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C9ABFF4F13087EEF0031160A /* MediaPlayer.framework */; };
 		C9C5378812E39A7A005C0BF0 /* FRMap.m in Sources */ = {isa = PBXBuildFile; fileRef = C9C5378712E39A7A005C0BF0 /* FRMap.m */; };
+		C9E3F22A137DE6010077E168 /* TheKeyMission.m in Sources */ = {isa = PBXBuildFile; fileRef = C9E3F229137DE6010077E168 /* TheKeyMission.m */; };
 		C9E494C212F8D7390006AB7B /* FRPathSearch.m in Sources */ = {isa = PBXBuildFile; fileRef = C9E494C112F8D7390006AB7B /* FRPathSearch.m */; };
 		C9FC234912F9CCC700892CF6 /* toqbot.m in Sources */ = {isa = PBXBuildFile; fileRef = C9FC234812F9CCC700892CF6 /* toqbot.m */; };
 /* End PBXBuildFile section */
@@ -256,6 +257,8 @@
 		C9ABFF4F13087EEF0031160A /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = System/Library/Frameworks/MediaPlayer.framework; sourceTree = SDKROOT; };
 		C9C5378612E39A7A005C0BF0 /* FRMap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRMap.h; sourceTree = "<group>"; };
 		C9C5378712E39A7A005C0BF0 /* FRMap.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRMap.m; sourceTree = "<group>"; };
+		C9E3F228137DE6010077E168 /* TheKeyMission.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TheKeyMission.h; sourceTree = "<group>"; };
+		C9E3F229137DE6010077E168 /* TheKeyMission.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TheKeyMission.m; sourceTree = "<group>"; };
 		C9E494C012F8D7390006AB7B /* FRPathSearch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRPathSearch.h; sourceTree = "<group>"; };
 		C9E494C112F8D7390006AB7B /* FRPathSearch.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRPathSearch.m; sourceTree = "<group>"; };
 		C9FC234712F9CCC700892CF6 /* toqbot.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = toqbot.h; sourceTree = "<group>"; };
@@ -454,6 +457,8 @@
 				9B9505BA135CD55A0070B7E7 /* FRMissionDownload.m */,
 				C99EBE18137AE09E0079A70E /* TheCarMission.h */,
 				C99EBE19137AE09E0079A70E /* TheCarMission.m */,
+				C9E3F228137DE6010077E168 /* TheKeyMission.h */,
+				C9E3F229137DE6010077E168 /* TheKeyMission.m */,
 			);
 			name = Missions;
 			sourceTree = "<group>";
@@ -679,6 +684,7 @@
 				C9624D53133BFA4F00F6594F /* LocationPicker.m in Sources */,
 				9B9505BB135CD55A0070B7E7 /* FRMissionDownload.m in Sources */,
 				C99EBE1A137AE09E0079A70E /* TheCarMission.m in Sources */,
+				C9E3F22A137DE6010077E168 /* TheKeyMission.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

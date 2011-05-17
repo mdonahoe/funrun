@@ -176,7 +176,7 @@
             car_state--;
             break;
         case 12:
-            [self speak:@"your destination is blah"];
+            [self speak:[NSString stringWithFormat:@"your destination is %@. %@",[themap roadNameFromEdgePos:car.pos],[themap descriptionOfEdgePos:car.pos]]];
             car_state--;
             break;
         case 11:
@@ -237,6 +237,25 @@
     }
 }
 - (void) the_cop {
+    /*
+     the cop needs to be placed somewhere, instead
+     common failures.there is no place to escape to.
+    
+     
+     the perfect scenario would be if there was a street ahead of you
+     that you can run onto in order to get out of the way.
+     
+     but that may not always be possible. but it would be good.
+     
+     also, i tend not to know if there is enough time for me to run away.
+     "do you see that cop ahead? you have about 20 seconds to get off this road."
+     
+     
+     
+     
+     */
+    
+    
     cop.pos = [cop_goal move:cop.pos towardRootWithDelta:10.0]; //moving at 10m/s
     float dist = [latestsearch distanceFromRoot:cop.pos];
     
@@ -250,19 +269,34 @@
     switch (cop_state){
         case 0:
             [self ulyssesSpeak:@"A20_watch_out_police"];
+            siren.volume = 0.05;
+            [self startSiren];
             cop_state++;
             break;
         case 1:
-            if (dist < 100) cop_state++;
+            if (dist < 150) cop_state++;
             break;
             
         case 2:
             [self ulyssesSpeak:@"A21_cop_ahead"];
             [self startSiren];
             cop_state++;
+            
+            FREdgePos * goal = [destination forkPoint:player.pos];
+            NSLog(@"goal = %@",[themap roadNameFromEdgePos:goal]);
+            [destination release];
+            destination = [themap createPathSearchAt:goal withMaxDistance:[NSNumber numberWithFloat:player_max_distance]];
+            NSArray * directions = [destination directionsToRoot:player.pos];
+            NSLog(@"directions = %@",directions);
+            [self speak:[NSString stringWithFormat:@"your destination is %@",[themap roadNameFromEdgePos:goal]]];
+            direct = YES;
+            //[destination release];
+            //destination = [themap createPathSearchAt:goal withMaxDistance:player_max_distance];
+            
             break;
         default:
-            siren.volume = (100-dist)/100.0;
+            NSLog(@"cop is on %@",[themap roadNameFromEdgePos:cop.pos]);
+            siren.volume = ABS((100-dist)/100.0);
             //if the cop is closer to the car than the player is, then the player is off the track
             //if the cop gets too close, you lose.
             
@@ -279,6 +313,8 @@
                 [self stopSiren];
                 [self ulyssesSpeak:@"A22_coast_clear"];
                 current_state++;
+                [destination release];
+                destination = [themap createPathSearchAt:safehouse.pos withMaxDistance:[NSNumber numberWithFloat:player_max_distance]];
                 direct = YES;
                 
             } else if (cop_state==3 && dist < 60 && onpath) {
@@ -347,6 +383,7 @@
     }
 }
 - (void) ulyssesSpeak:(NSString *)filename{
+    return;
     [ulysses release];
     NSError *error;
     NSString * s = [[NSBundle mainBundle] pathForResource:filename ofType:@"mp3"];
