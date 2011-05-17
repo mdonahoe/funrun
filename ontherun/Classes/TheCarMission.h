@@ -29,6 +29,8 @@
     FRPoint * safehouse;
     FREdgePos * unsafe_spot; //hack for finding distance to path.
     
+    NSString * last_played_sound;
+    
     int car_time_left;
     int car_times_spoken;
     BOOL direct;

@@ -345,7 +345,7 @@
             prev = ep;
             ep = [self moveCloserToRoot:ep];
             current_road = [map roadNameFromEdgePos:ep];
-            
+            NSLog(@"ep = %@ and root = %@",ep,root);
         } while ([start_road isEqualToString:current_road] && ![ep onSameEdgeAs:root]);
         
         //get the description for this change

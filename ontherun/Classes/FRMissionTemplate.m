@@ -115,7 +115,7 @@
 }
 - (void) speechSynthesizer:(NSObject *) synth didFinishSpeaking:(BOOL)didFinish withError:(NSError *) error { 
 	// Handle the end of speech here
-	
+	//perhaps ditch this method and instead do a call in ticktock
 	while ([toBeSpoken count]){
 		NSString * text = [toBeSpoken objectAtIndex:0];
 		[text retain];

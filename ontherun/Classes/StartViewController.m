@@ -108,7 +108,7 @@
 	//have different nibs for different missions?
 	//or download from the interwebs?
 	if (mission) [mission release];
-	mission = [[TheCarMission alloc] initWithLocation:self.latest_point distance:distanceSlider.value destination:destination viewControl:self];
+    mission = [[TheCarMission alloc] initWithLocation:self.latest_point distance:distanceSlider.value destination:destination viewControl:self];
 }
 - (IBAction) pickDestination:(id)sender{
     FRPoint * extraction_point = [[[FRPoint alloc] initWithName:@"extraction point"] autorelease];

@@ -12,15 +12,15 @@
  
  notes:
  1. how far am i from the destination
- 2. where is the destination
- 3. alarm starts too early.
+X2. where is the destination
+X3. alarm starts too early.
  4. no glass breaking sound effects
- 5. alarm is LOUD, ulysses is quiet.
- 6. the cops come really quickly. i need a chance to escape.
- 7. directions on where to go to avoid the cop?
- 8. if you manage to completely avoid the cop, the game fails.
+X5. alarm is LOUD, ulysses is quiet.
+X6. the cops come really quickly. i need a chance to escape.
+X7. directions on where to go to avoid the cop?
+X8. if you manage to completely avoid the cop, the game fails.
  9. where is the cop?
- 
+ 10. there is some infinite loop bug in the directionsToRoot code.
  
  A. if the gps isnt accurate, it fails completely.
  B. Toqbot slow over 3G
@@ -30,6 +30,7 @@
 - (id) initWithLocation:(CLLocation *)l distance:(float)dist destination:(CLLocation *)dest viewControl:(UIViewController *)vc{
     self = [super initWithLocation:l distance:dist destination:dest viewControl:vc];
     if (!self) return nil;
+    last_played_sound = nil;
     unsafe_spot = nil; //used in the_cop
     direct = NO;
     current_state = 0;
@@ -59,10 +60,9 @@
     
     //randomly move the car until it is properly placed in the map
     //such that it is equally placed from start and end points.
-    
     float dist2 = 0.0;
     float dist1 = 0.0;
-    while (dist1+dist2 < player_max_distance*.95 || dist2 > player_max_distance/1.9){
+    while (dist1+dist2 < player_max_distance*.95 || dist2 > player_max_distance/1.8){
         car.pos = [latestsearch move:player.pos awayFromRootWithDelta:player_max_distance/1.9];
         dist1 = [latestsearch distanceFromRoot:car.pos];
         dist2 = [endmap distanceFromRoot:car.pos];
@@ -237,27 +237,20 @@
 }
 - (void) the_cop {
     /*
-     the cop needs to be placed somewhere, instead
-     common failures.there is no place to escape to.
-    
      
-     the perfect scenario would be if there was a street ahead of you
-     that you can run onto in order to get out of the way.
+     sometimes it still totally fails and i dont know why.
      
-     but that may not always be possible. but it would be good.
-     
-     also, i tend not to know if there is enough time for me to run away.
-     "do you see that cop ahead? you have about 20 seconds to get off this road."
+     cop needs to move faster when you are "safe"
      
      
-     
-     
+     "stop running so you dont draw attention" "dont move"
      */
     
     
     float dist_cop_to_player;
     float dist_cop_to_car;
     float dist_player_to_car;
+    float dist_player_to_spot;
     
     BOOL onpath = [cop_goal edgepos:player.pos isOnPathFromRootTo:cop.pos];
     if (onpath) {
@@ -269,7 +262,7 @@
     switch (cop_state){
         case 0:
             [self ulyssesSpeak:@"A20_watch_out_police"];
-            siren.volume = 0.05;
+            siren.volume = 0.01;
             [self startSiren];
             cop_state++;
             break;
@@ -298,7 +291,8 @@
             NSLog(@"goal = %@",[themap roadNameFromEdgePos:goal]);
             goal = [themap move:goal forwardRandomly:40.0];
             NSLog(@"new goal = %@",[themap roadNameFromEdgePos:goal]);
-            
+            CLLocationCoordinate2D x = [themap coordinateFromEdgePosition:goal];
+            NSLog(@"lat = %f, lon=%f",x.latitude,x.longitude);
             //move the cop so that he arrives at the correct time.
             float dist_to_safepoint = [latestsearch distanceFromRoot:goal];
             cop.pos = [destination move:coppos towardRootWithDelta:dist_to_safepoint]; //assumes that the cop moves at the same speed as you do. wrong, but ok fornow.
@@ -316,6 +310,7 @@
             dist_cop_to_player = [latestsearch distanceFromRoot:cop.pos];
             dist_cop_to_car = [cop_goal distanceFromRoot:cop.pos];
             dist_player_to_car = [cop_goal distanceFromRoot:player.pos];
+            dist_player_to_spot = [destination distanceFromRoot:player.pos];
             NSLog(@"d1 = %f,d2 = %f, d3 = %f",dist_cop_to_player,dist_cop_to_car,dist_player_to_car);
             NSLog(@"cop is on %@",[themap roadNameFromEdgePos:cop.pos]);
             siren.volume = MAX(0.01,(100-dist_cop_to_player)/100.0);
@@ -408,6 +403,12 @@
 - (void) ulyssesSpeak:(NSString *)filename{
     //short circuit
     //return;
+    if ([last_played_sound isEqualToString:filename]) return; //dont play the same thing twice in a row
+    
+    [filename retain];
+    [last_played_sound release];
+    last_played_sound = filename;
+    
     [ulysses release];
     NSError *error;
     NSString * s = [[NSBundle mainBundle] pathForResource:filename ofType:@"mp3"];
