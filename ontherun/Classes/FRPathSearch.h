@@ -19,18 +19,27 @@
 }
 @property (nonatomic,retain) FREdgePos * root;
 
-- (FRMap *)getMap;
 - (id) initWithRoot:(FREdgePos *)r previous:(NSDictionary *)p distance:(NSDictionary *)d map:(FRMap *)m;
+
+- (BOOL) isFacingRoot:(FREdgePos*)ep;
+- (BOOL) containsPoint:(FREdgePos*)ep;
+- (BOOL) edgepos:(FREdgePos*)A isOnPathFromRootTo:(FREdgePos*)B;
+
 - (FREdgePos *) moveCloserToRoot:(FREdgePos *)ep;
 - (FREdgePos *) move:(FREdgePos*)ep towardRootWithDelta:(float)dx;
 - (FREdgePos *) move:(FREdgePos*)ep awayFromRootWithDelta:(float)dx;
-- (BOOL) isFacingRoot:(FREdgePos*)ep;
-- (BOOL) containsPoint:(FREdgePos*)ep;
 - (FREdgePos *) forkPoint:(FREdgePos*)ep;
+- (FREdgePos *) edgePosThatIsDistance:(float)d fromRootAndOther:(FRPathSearch*)p;
+
+- (FRMap *)getMap;
+
 - (float) distanceFromRoot:(FREdgePos*)ep;
+- (float) nodeDistance:(NSNumber*)node;
+- (NSArray *) directionsToRoot:(FREdgePos *)ep;
+
+- (NSNumber *)closerNode:(NSNumber*)node;
+
 - (NSString *) directionFromRoot:(FREdgePos*)ep;
 - (NSString *) directionToRoot:(FREdgePos*)ep;
-- (NSArray *) directionsToRoot:(FREdgePos *)ep;
-- (FREdgePos *) edgePosThatIsDistance:(float)d fromRootAndOther:(FRPathSearch*)p;
-- (BOOL) edgepos:(FREdgePos*)A isOnPathFromRootTo:(FREdgePos*)B;
+
 @end

@@ -41,11 +41,6 @@
 			[distance objectForKey:[NSNumber numberWithInt:ep.end]]!=nil);
 	
 }
-- (float) nodeDistance:(NSNumber *)node {
-	NSNumber * dist = [distance objectForKey:node];
-	if (dist) return [dist floatValue];
-	return 10000000000.0; // node not in pathsearch, return large number
-}
 - (BOOL) rootIsFacing:(FREdgePos *)ep {
 	/* 
 	 useful for creating text descriptions of where things are relative to the root.
@@ -142,6 +137,53 @@
 	//if start is closer, we are facing root
 	return (dstart < dend);
 }
+- (BOOL) edgepos:(FREdgePos*)A isOnPathFromRootTo:(FREdgePos*)B{
+    int i=0;
+    do {
+        if ([A onSameEdgeAs:B]) return YES;
+        if ([B onSameEdgeAs:root]) return NO;
+        B = [self moveCloserToRoot:B];
+        i++;
+    } while (i<1000);
+    NSLog(@"Loop exceeded expectations.");
+    return NO;
+}
+- (float) nodeDistance:(NSNumber *)node {
+	NSNumber * dist = [distance objectForKey:node];
+	if (dist) return [dist floatValue];
+	return 10000000000.0; // node not in pathsearch, return large number
+}
+- (float) distanceFromRoot:(FREdgePos*)ep {
+	
+	//check to see if the point is inside the path
+	//if not, return a large number
+	if ([self containsPoint:ep]==NO) {
+		return 10000000000.0;
+	}
+	
+	if (ep.start==root.start && ep.end == root.end) {
+		return ABS(ep.position - root.position);
+	}
+	
+	if (ep.start==root.end && ep.end==root.start) {
+		return ABS(ep.position + root.position - [map maxPosition:ep]);
+	}
+	
+	
+	float position = ep.position;
+	
+	NSNumber * start = [NSNumber numberWithInt:ep.start];
+	NSNumber * end = [NSNumber numberWithInt:ep.end];
+	
+	float length = [map edgeLengthFromStart:start toFinish:end];
+	
+	
+	float dstart = [self nodeDistance:start];
+	float dend = [self nodeDistance:end];
+	
+	return MIN(dstart+position,dend+length-position);
+}
+
 - (FREdgePos *) moveCloserToRoot:(FREdgePos *)ep{
     FREdgePos * x;
 	
@@ -217,121 +259,6 @@
     
     return [map move:ep forwardRandomly:dx];
 }
-- (float) distanceFromRoot:(FREdgePos*)ep {
-	
-	//check to see if the point is inside the path
-	//if not, return a large number
-	if ([self containsPoint:ep]==NO) {
-		return 10000000000.0;
-	}
-	
-	if (ep.start==root.start && ep.end == root.end) {
-		return ABS(ep.position - root.position);
-	}
-	
-	if (ep.start==root.end && ep.end==root.start) {
-		return ABS(ep.position + root.position - [map maxPosition:ep]);
-	}
-	
-	
-	float position = ep.position;
-	
-	NSNumber * start = [NSNumber numberWithInt:ep.start];
-	NSNumber * end = [NSNumber numberWithInt:ep.end];
-	
-	float length = [map edgeLengthFromStart:start toFinish:end];
-	
-	
-	float dstart = [self nodeDistance:start];
-	float dend = [self nodeDistance:end];
-	
-	return MIN(dstart+position,dend+length-position);
-}
-- (NSString *) directionFromRoot:(FREdgePos*)ep {
-	
-	//should probably make this more complicated, but for now this will work.
-	
-	
-	if ([self rootIsFacing:ep]) return @"infront of";
-	return @"behind";
-
-}
-- (NSString *) directionToRoot:(FREdgePos *)ep{
-	//turn by turn directions
-	if (![self containsPoint:ep]) return @"an unknown direction";
-	
-	//"turn right on maverick street"
-	
-	//it would be nice if these methods avoided badguys
-	//move toward root until you hit a different street.
-	//calculate direction needed to turn
-	
-
-	
-	if (![self isFacingRoot:ep]) {
-		return @"turn around";
-	}
-	
-	NSString * start_road = [map roadNameFromEdgePos:ep];
-	if ([start_road isEqualToString:[map roadNameFromEdgePos:root]]){
-		return [NSString stringWithFormat:@"continue on %@",start_road];
-	}
-	
-	NSString * current_road = nil;
-	FREdgePos * prev = nil;
-	
-	do {//potential infinite loop
-		prev = ep;
-		ep = [self moveCloserToRoot:ep];
-		current_road = [map roadNameFromEdgePos:ep];
-	} while ([start_road isEqualToString:current_road]);
-	
-	
-	return [NSString stringWithFormat:@"turn %@",[map descriptionFromEdgePos:prev toEdgePos:ep]];
-}
-- (NSArray *) directionsToRoot:(FREdgePos *)ep{
-	//turn by turn directions
-    NSMutableArray * directions = [NSMutableArray array];
-    
-	if (![self containsPoint:ep]) return nil;
-	
-	//"turn right on maverick street"
-	
-	//move toward root until you hit a different street.
-	//calculate direction needed to turn
-	
-    
-	
-	if (![self isFacingRoot:ep]) {
-        
-		[directions addObject:@"turn around"];
-        ep = [map flipEdgePos:ep];
-	}
-    
-    NSString * start_road = [map roadNameFromEdgePos:ep];
-    while (![ep onSameEdgeAs:root]){
-        NSString * current_road = nil;
-        FREdgePos * prev = nil;
-        
-        do {//go forward until we switch roads (potential infinite loop)
-            prev = ep;
-            ep = [self moveCloserToRoot:ep];
-            current_road = [map roadNameFromEdgePos:ep];
-            
-        } while ([start_road isEqualToString:current_road] && ![ep onSameEdgeAs:root]);
-        
-        //get the description for this change
-        NSString * desc = [map descriptionFromEdgePos:prev toEdgePos:ep];
-        if (desc) {
-            [directions addObject:[NSString stringWithFormat:@"turn %@",desc]];
-        } else {
-            NSLog(@"no description available. ep is likely on root edge True==%i. current_road=%@, start_road=%@",[ep onSameEdgeAs:root],current_road,start_road);
-        }
-        start_road = current_road;
-    }
-    [directions addObject:[NSString stringWithFormat:@"continue on %@ to your destination",start_road]];
-    return [NSArray arrayWithArray:directions];
-}
 - (FREdgePos *) edgePosThatIsDistance:(float)d fromRootAndOther:(FRPathSearch*)p {
 	//useful for finding points that are a certain distance from two nodes.
 	//possible to fail like crazy if the max_dists of the pathsearches arent long enough
@@ -386,20 +313,99 @@
     FREdgePos * x = [[[FREdgePos alloc] init] autorelease];
     x.start = [sidenode intValue];
     x.end = [node intValue];
-    x.position = 1;
+    x.position = [map maxPosition:x];
     return x;
 }
-- (BOOL) edgepos:(FREdgePos*)A isOnPathFromRootTo:(FREdgePos*)B{
-    int i=0;
-    do {
-        if ([A onSameEdgeAs:B]) return YES;
-        if ([B onSameEdgeAs:root]) return NO;
-        B = [self moveCloserToRoot:B];
-        i++;
-    } while (i<1000);
-    NSLog(@"Loop exceeded expectations.");
-    return NO;
+- (FRMap *)getMap { return map;}
+- (NSArray *) directionsToRoot:(FREdgePos *)ep{
+	//turn by turn directions
+    NSMutableArray * directions = [NSMutableArray array];
+    
+	if (![self containsPoint:ep]) return nil;
+	
+	//"turn right on maverick street"
+	
+	//move toward root until you hit a different street.
+	//calculate direction needed to turn
+	
+    
+	
+	if (![self isFacingRoot:ep]) {
+        
+		[directions addObject:@"turn around"];
+        ep = [map flipEdgePos:ep];
+	}
+    
+    NSString * start_road = [map roadNameFromEdgePos:ep];
+    while (![ep onSameEdgeAs:root]){
+        NSString * current_road = nil;
+        FREdgePos * prev = nil;
+        
+        do {//go forward until we switch roads (potential infinite loop)
+            prev = ep;
+            ep = [self moveCloserToRoot:ep];
+            current_road = [map roadNameFromEdgePos:ep];
+            
+        } while ([start_road isEqualToString:current_road] && ![ep onSameEdgeAs:root]);
+        
+        //get the description for this change
+        NSString * desc = [map descriptionFromEdgePos:prev toEdgePos:ep];
+        if (desc) {
+            [directions addObject:[NSString stringWithFormat:@"turn %@",desc]];
+        } else {
+            NSLog(@"no description available. ep is likely on root edge True==%i. current_road=%@, start_road=%@",[ep onSameEdgeAs:root],current_road,start_road);
+        }
+        start_road = current_road;
+    }
+    [directions addObject:[NSString stringWithFormat:@"continue on %@ to your destination",start_road]];
+    return [NSArray arrayWithArray:directions];
 }
+- (NSNumber *) closerNode:(NSNumber*)node{
+    return [previous objectForKey:node];
+}
+- (NSString *) directionFromRoot:(FREdgePos*)ep {
+	
+	//should probably make this more complicated, but for now this will work.
+	
+	
+	if ([self rootIsFacing:ep]) return @"infront of";
+	return @"behind";
+    
+}
+- (NSString *) directionToRoot:(FREdgePos *)ep{
+	//turn by turn directions
+	if (![self containsPoint:ep]) return @"an unknown direction";
+	
+	//"turn right on maverick street"
+	
+	//it would be nice if these methods avoided badguys
+	//move toward root until you hit a different street.
+	//calculate direction needed to turn
+	
+    
+	
+	if (![self isFacingRoot:ep]) {
+		return @"turn around";
+	}
+	
+	NSString * start_road = [map roadNameFromEdgePos:ep];
+	if ([start_road isEqualToString:[map roadNameFromEdgePos:root]]){
+		return [NSString stringWithFormat:@"continue on %@",start_road];
+	}
+	
+	NSString * current_road = nil;
+	FREdgePos * prev = nil;
+	
+	do {//potential infinite loop
+		prev = ep;
+		ep = [self moveCloserToRoot:ep];
+		current_road = [map roadNameFromEdgePos:ep];
+	} while ([start_road isEqualToString:current_road]);
+	
+	
+	return [NSString stringWithFormat:@"turn %@",[map descriptionFromEdgePos:prev toEdgePos:ep]];
+}
+
 - (void) dealloc {
 	[previous release];
 	[distance release];
@@ -407,5 +413,4 @@
 	[map release];
 	[super dealloc];
 }
-- (FRMap *)getMap { return map;}
 @end
