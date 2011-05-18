@@ -66,8 +66,8 @@
     }
     [endmap release];
     
-    pointA.pos = [latestsearch move:pointC.pos towardRootWithDelta:player_max_distance/4.0];
-    pointB.pos = [latestsearch move:pointC.pos towardRootWithDelta:player_max_distance/2.0];
+    pointA.pos = [latestsearch move:pointC.pos towardRootWithDelta:2*player_max_distance/3.0];
+    pointB.pos = [latestsearch move:pointC.pos towardRootWithDelta:1*player_max_distance/3.0];
     
     
     destination = [themap createPathSearchAt:pointA.pos withMaxDistance:[NSNumber numberWithFloat:player_max_distance]];
@@ -108,17 +108,28 @@
             return;
             break;
     }
+    if ([self readyToSpeak]){
+        
+        NSArray * directions = [destination directionsToRoot:player.pos];
+        NSString * direction = [directions objectAtIndex:0];
+        if ([direction isEqualToString:@"turn around"]){
+            direction = [NSString stringWithFormat:@"turn around and %@",[directions objectAtIndex:1]];
+        }
+        //NSLog(@"d = %@",direction);
+        [self speakIfEmpty:direction];
+    }
     
     [super ticktock];
 }
 #pragma mark -
 - (void) the_first {
     float dist;
-    //if (![self readyToSpeak]) return;
+    if (![self readyToSpeak]) return;
     switch (sub_state){
         case 0:
             //say some shit
             NSLog(@"ok, got some points. go get them");
+            [self soundfile:@"B01"];
             sub_state++;
             break;
         case 1:
@@ -131,7 +142,7 @@
             NSLog(@"dist = %f",dist);
             if (dist < 30) {
                 NSLog(@"thats the place. try the key. Click. Fuck, next place");
-                
+                [self soundfile:@"B06"];
                 sub_state=0;
                 [destination release];
                 destination = [themap createPathSearchAt:pointB.pos withMaxDistance:[NSNumber numberWithFloat:player_max_distance]];
@@ -145,7 +156,8 @@
 }
 - (void) the_second {
     float dist;
-    //if (![self readyToSpeak]) return;
+    if (![self readyToSpeak]) return;
+    
     switch (sub_state){
         case 0:
             NSLog(@"your destination is %@",[themap roadNameFromEdgePos:pointB.pos]);
@@ -172,6 +184,8 @@
 - (void) the_third {
     float dist;
     //if (![self readyToSpeak]) return;
+    if (![self readyToSpeak]) return;
+    
     switch (sub_state){
         case 0:
             //say some shit
@@ -207,9 +221,11 @@
 - (void) the_chase {
     float dist;
     float dist_dude_to_safehouse;
+    if (![self readyToSpeak]) return;
     switch (sub_state){
         case 0:
             NSLog(@"WHO THE FUCK ARE YOU!");
+            [self soundfile:@"E01"];
             sub_state++;
             break;
         case 1:
@@ -239,7 +255,8 @@
             }
             if (dist < .75 * xdist){
                  NSLog(@"he is gaining on you.");
-                 xdist = dist;
+                [self soundfile:@"B16"]; 
+                xdist = dist;
             } else if (xdist < .75 * dist){
                  NSLog(@"you are losing him");
                  xdist = dist;
@@ -283,4 +300,24 @@
             break;
     }    
 }
+
+
+#pragma mark -
+
+- (BOOL) readyToSpeak {
+    return (!soundfx.playing && ![voicebot isSpeaking]);
+}
+
+- (void) soundfile:(NSString*)filename{
+    [soundfx release];
+    NSError *error;
+    NSString * s = [[NSBundle mainBundle] pathForResource:filename ofType:@"aiff"];
+    NSURL * x = [NSURL fileURLWithPath:s];
+    soundfx = [[AVAudioPlayer alloc] initWithContentsOfURL:x error:&error];
+    soundfx.volume = 1.0;
+    [soundfx prepareToPlay];
+    [soundfx play];
+}
+
+
 @end

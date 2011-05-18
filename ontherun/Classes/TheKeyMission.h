@@ -20,6 +20,7 @@
     FRPathSearch * destination;
     float xdist;
     float dude_speed;
+    AVAudioPlayer * soundfx;
 }
 - (void) the_first;
 - (void) the_second;
