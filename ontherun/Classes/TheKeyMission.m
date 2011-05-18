@@ -49,9 +49,26 @@
     pointC = [[FRPoint alloc] initWithName:@"third"];
     
     
-    pointA.pos = [latestsearch move:player.pos awayFromRootWithDelta:player_max_distance/4.0];
-    pointB.pos = [latestsearch move:pointA.pos awayFromRootWithDelta:player_max_distance/4.0];
-    pointC.pos = [latestsearch move:pointB.pos awayFromRootWithDelta:player_max_distance/4.0];
+    //pathsearch from the endpoint. used for positioning the car
+    FRPathSearch * endmap = [themap createPathSearchAt:endPoint.pos withMaxDistance:nil];
+    float dist_to_player = [endmap distanceFromRoot:player.pos];
+    NSLog(@"max %f, dest = %f",player_max_distance,dist_to_player);
+    
+    //randomly move the last point until it is properly placed in the map
+    //such that it is equally placed from start and end points.
+    float dist2 = 0.0;
+    float dist1 = 0.0;
+    while (dist1+dist2 < player_max_distance*.95 || dist2 > player_max_distance/1.8){
+        pointC.pos = [latestsearch move:player.pos awayFromRootWithDelta:player_max_distance/1.9];
+        dist1 = [latestsearch distanceFromRoot:pointC.pos];
+        dist2 = [endmap distanceFromRoot:pointC.pos];
+        NSLog(@"pos = %@, dist1 = %f, dist2 = %f",pointC.pos,dist1,dist2);
+    }
+    [endmap release];
+    
+    pointA.pos = [latestsearch move:pointC.pos towardRootWithDelta:player_max_distance/4.0];
+    pointB.pos = [latestsearch move:pointC.pos towardRootWithDelta:player_max_distance/2.0];
+    
     
     destination = [themap createPathSearchAt:pointA.pos withMaxDistance:[NSNumber numberWithFloat:player_max_distance]];
     
