@@ -51,6 +51,14 @@
 		9BA7892913845C64006C8759 /* E04.aiff in Resources */ = {isa = PBXBuildFile; fileRef = 9BA7890813845C63006C8759 /* E04.aiff */; };
 		9BA7892A13845C64006C8759 /* E05.aiff in Resources */ = {isa = PBXBuildFile; fileRef = 9BA7890913845C63006C8759 /* E05.aiff */; };
 		9BA7892B13845C64006C8759 /* E06.aiff in Resources */ = {isa = PBXBuildFile; fileRef = 9BA7890A13845C63006C8759 /* E06.aiff */; };
+		9BA789341385B89C006C8759 /* FRProgress.m in Sources */ = {isa = PBXBuildFile; fileRef = 9BA789331385B89B006C8759 /* FRProgress.m */; };
+		9BA7893A1385C6AF006C8759 /* 50.aiff in Resources */ = {isa = PBXBuildFile; fileRef = 9BA789351385C6AF006C8759 /* 50.aiff */; };
+		9BA7893B1385C6AF006C8759 /* 100.aiff in Resources */ = {isa = PBXBuildFile; fileRef = 9BA789361385C6AF006C8759 /* 100.aiff */; };
+		9BA7893C1385C6AF006C8759 /* 200.aiff in Resources */ = {isa = PBXBuildFile; fileRef = 9BA789371385C6AF006C8759 /* 200.aiff */; };
+		9BA7893D1385C6AF006C8759 /* 500.aiff in Resources */ = {isa = PBXBuildFile; fileRef = 9BA789381385C6AF006C8759 /* 500.aiff */; };
+		9BA7893E1385C6AF006C8759 /* 1000.aiff in Resources */ = {isa = PBXBuildFile; fileRef = 9BA789391385C6AF006C8759 /* 1000.aiff */; };
+		9BA789411385C823006C8759 /* getting_close.aiff in Resources */ = {isa = PBXBuildFile; fileRef = 9BA7893F1385C822006C8759 /* getting_close.aiff */; };
+		9BA789421385C823006C8759 /* halfway.aiff in Resources */ = {isa = PBXBuildFile; fileRef = 9BA789401385C822006C8759 /* halfway.aiff */; };
 		9BBD3296132E81360082A0C7 /* StartView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9BBD3295132E81360082A0C7 /* StartView.xib */; };
 		9BBD329A132E81CC0082A0C7 /* StartViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9BBD3299132E81CC0082A0C7 /* StartViewController.m */; };
 		9BC137431304A340006492A0 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9BC137421304A340006492A0 /* AVFoundation.framework */; };
@@ -203,6 +211,15 @@
 		9BA7890813845C63006C8759 /* E04.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; name = E04.aiff; path = aiff/E04.aiff; sourceTree = "<group>"; };
 		9BA7890913845C63006C8759 /* E05.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; name = E05.aiff; path = aiff/E05.aiff; sourceTree = "<group>"; };
 		9BA7890A13845C63006C8759 /* E06.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; name = E06.aiff; path = aiff/E06.aiff; sourceTree = "<group>"; };
+		9BA789321385B89B006C8759 /* FRProgress.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRProgress.h; sourceTree = "<group>"; };
+		9BA789331385B89B006C8759 /* FRProgress.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRProgress.m; sourceTree = "<group>"; };
+		9BA789351385C6AF006C8759 /* 50.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; name = 50.aiff; path = aiff/50.aiff; sourceTree = "<group>"; };
+		9BA789361385C6AF006C8759 /* 100.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; name = 100.aiff; path = aiff/100.aiff; sourceTree = "<group>"; };
+		9BA789371385C6AF006C8759 /* 200.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; name = 200.aiff; path = aiff/200.aiff; sourceTree = "<group>"; };
+		9BA789381385C6AF006C8759 /* 500.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; name = 500.aiff; path = aiff/500.aiff; sourceTree = "<group>"; };
+		9BA789391385C6AF006C8759 /* 1000.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; name = 1000.aiff; path = aiff/1000.aiff; sourceTree = "<group>"; };
+		9BA7893F1385C822006C8759 /* getting_close.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; name = getting_close.aiff; path = aiff/getting_close.aiff; sourceTree = "<group>"; };
+		9BA789401385C822006C8759 /* halfway.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; name = halfway.aiff; path = aiff/halfway.aiff; sourceTree = "<group>"; };
 		9BBD3295132E81360082A0C7 /* StartView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = StartView.xib; sourceTree = "<group>"; };
 		9BBD3298132E81CC0082A0C7 /* StartViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StartViewController.h; sourceTree = "<group>"; };
 		9BBD3299132E81CC0082A0C7 /* StartViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StartViewController.m; sourceTree = "<group>"; };
@@ -379,6 +396,8 @@
 				9B84A0D21309C80300BE94CF /* FRFileLoader.m */,
 				C9557AAA130AEAA2004A6F54 /* FREdgePos.h */,
 				C9557AAB130AEAA2004A6F54 /* FREdgePos.m */,
+				9BA789321385B89B006C8759 /* FRProgress.h */,
+				9BA789331385B89B006C8759 /* FRProgress.m */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -514,6 +533,13 @@
 		9BA788E713845C3A006C8759 /* aiff */ = {
 			isa = PBXGroup;
 			children = (
+				9BA7893F1385C822006C8759 /* getting_close.aiff */,
+				9BA789401385C822006C8759 /* halfway.aiff */,
+				9BA789351385C6AF006C8759 /* 50.aiff */,
+				9BA789361385C6AF006C8759 /* 100.aiff */,
+				9BA789371385C6AF006C8759 /* 200.aiff */,
+				9BA789381385C6AF006C8759 /* 500.aiff */,
+				9BA789391385C6AF006C8759 /* 1000.aiff */,
 				9BA788EA13845C63006C8759 /* B02.aiff */,
 				9BA788EB13845C63006C8759 /* B03.aiff */,
 				9BA788EC13845C63006C8759 /* B04.aiff */,
@@ -786,6 +812,13 @@
 				9BA7892913845C64006C8759 /* E04.aiff in Resources */,
 				9BA7892A13845C64006C8759 /* E05.aiff in Resources */,
 				9BA7892B13845C64006C8759 /* E06.aiff in Resources */,
+				9BA7893A1385C6AF006C8759 /* 50.aiff in Resources */,
+				9BA7893B1385C6AF006C8759 /* 100.aiff in Resources */,
+				9BA7893C1385C6AF006C8759 /* 200.aiff in Resources */,
+				9BA7893D1385C6AF006C8759 /* 500.aiff in Resources */,
+				9BA7893E1385C6AF006C8759 /* 1000.aiff in Resources */,
+				9BA789411385C823006C8759 /* getting_close.aiff in Resources */,
+				9BA789421385C823006C8759 /* halfway.aiff in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -829,6 +862,7 @@
 				9B9505BB135CD55A0070B7E7 /* FRMissionDownload.m in Sources */,
 				C99EBE1A137AE09E0079A70E /* TheCarMission.m in Sources */,
 				C9E3F22A137DE6010077E168 /* TheKeyMission.m in Sources */,
+				9BA789341385B89C006C8759 /* FRProgress.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

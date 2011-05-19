@@ -58,16 +58,20 @@
     //such that it is equally placed from start and end points.
     float dist2 = 0.0;
     float dist1 = 0.0;
+    FREdgePos * start = [themap flipEdgePos:player.pos];
     while (dist1+dist2 < player_max_distance*.95 || dist2 > player_max_distance/1.8){
-        pointC.pos = [latestsearch move:player.pos awayFromRootWithDelta:player_max_distance/1.9];
+        start = [themap flipEdgePos:start];
+        pointC.pos = [latestsearch move:start awayFromRootWithDelta:player_max_distance/1.9];
         dist1 = [latestsearch distanceFromRoot:pointC.pos];
         dist2 = [endmap distanceFromRoot:pointC.pos];
         NSLog(@"pos = %@, dist1 = %f, dist2 = %f",pointC.pos,dist1,dist2);
     }
     [endmap release];
     
-    pointA.pos = [latestsearch move:pointC.pos towardRootWithDelta:2*player_max_distance/3.0];
-    pointB.pos = [latestsearch move:pointC.pos towardRootWithDelta:1*player_max_distance/3.0];
+    float rundist = [latestsearch distanceFromRoot:pointC.pos];
+    
+    pointA.pos = [latestsearch move:pointC.pos towardRootWithDelta:2*rundist/3.0];
+    pointB.pos = [latestsearch move:pointC.pos towardRootWithDelta:1*rundist/3.0];
     
     
     destination = [themap createPathSearchAt:pointA.pos withMaxDistance:[NSNumber numberWithFloat:player_max_distance]];
@@ -78,6 +82,7 @@
     dude = [[FRPoint alloc] initWithName:@"dude"];
     dude.pos = pointC.pos;
     
+    prog = [[FRProgress alloc] initWithStart:[destination distanceFromRoot:player.pos] delegate:self];
     
     //position these points such that the total distance is correct
     //th final run should be the longest part. that chase sequence needs to last awhile.
@@ -118,7 +123,6 @@
         //NSLog(@"d = %@",direction);
         [self speakIfEmpty:direction];
     }
-    
     [super ticktock];
 }
 #pragma mark -
@@ -127,28 +131,34 @@
     if (![self readyToSpeak]) return;
     switch (sub_state){
         case 0:
-            //say some shit
-            NSLog(@"ok, got some points. go get them");
+            //intro
             [self soundfile:@"B01"];
+            [self playSong:@"chase_normal"];
             sub_state++;
             break;
         case 1:
-            NSLog(@"your destination is %@",[themap roadNameFromEdgePos:pointA.pos]);
+            [self speak:[NSString stringWithFormat:@"your destination is %@",[themap roadNameFromEdgePos:pointA.pos]]];
             
             sub_state++;
             break;
         case 2:
             dist = [destination distanceFromRoot:player.pos];
+            [prog update:dist];
             NSLog(@"dist = %f",dist);
             if (dist < 30) {
-                NSLog(@"thats the place. try the key. Click. Fuck, next place");
                 [self soundfile:@"B06"];
-                sub_state=0;
-                [destination release];
-                destination = [themap createPathSearchAt:pointB.pos withMaxDistance:[NSNumber numberWithFloat:player_max_distance]];
-                main_state++;
+                sub_state++;
             }
             //say some shit
+            break;
+        case 3:
+            [self soundfile:@"B10"];
+            sub_state=0;
+            [destination release];
+            destination = [themap createPathSearchAt:pointB.pos withMaxDistance:[NSNumber numberWithFloat:player_max_distance]];
+            main_state++;
+            [prog release];
+            prog = [[FRProgress alloc] initWithStart:[destination distanceFromRoot:player.pos] delegate:self];
             break;
         default:
             break;
@@ -161,20 +171,25 @@
     switch (sub_state){
         case 0:
             NSLog(@"your destination is %@",[themap roadNameFromEdgePos:pointB.pos]);
+            [self speak:[NSString stringWithFormat:@"your destination is %@",[themap roadNameFromEdgePos:pointB.pos]]]; 
             
             sub_state++;
             break;
         case 1:
             dist = [destination distanceFromRoot:player.pos];
             NSLog(@"dist = %f",dist);
+            [prog update:dist];
             
             if (dist < 30) {
                 NSLog(@"this is it. Cant you unlock it? Click. Crap, move on");
-                
+                [self soundfile:@"B07"];
                 sub_state=0;
                 [destination release];
                 destination = [themap createPathSearchAt:pointC.pos withMaxDistance:[NSNumber numberWithFloat:player_max_distance]];
                 main_state++;
+                [prog release];
+                prog = [[FRProgress alloc] initWithStart:[destination distanceFromRoot:player.pos] delegate:self];
+                
             }
             break;
         default:
@@ -183,37 +198,49 @@
 }
 - (void) the_third {
     float dist;
-    //if (![self readyToSpeak]) return;
     if (![self readyToSpeak]) return;
     
     switch (sub_state){
         case 0:
             //say some shit
             NSLog(@"Alright there are two more.");
+            [self soundfile:@"B11"];
             sub_state++;
             break;
         case 1:
             NSLog(@"your destination is %@",[themap roadNameFromEdgePos:pointC.pos]);
+            [self speak:[NSString stringWithFormat:@"your destination is %@",[themap roadNameFromEdgePos:pointC.pos]]]; 
             sub_state++;
             break;
         case 2:
             dist = [destination distanceFromRoot:player.pos];
             NSLog(@"dist = %f",dist);
             
+            [prog update:dist];
+            
             if (dist < 30) {
                 NSLog(@"here we are. give it a shot. cha-cha. Interesting...");
-                
-                sub_state=0;
-                [destination release];
-                destination = [themap createPathSearchAt:safehouse.pos withMaxDistance:[NSNumber numberWithFloat:player_max_distance]];
-                dude.pos = [destination move:player.pos awayFromRootWithDelta:30.0];
-                dude_speed = 4.0;
-                xdist = 30.0;
-                //[self playSong:@"scaryshit"];
-                main_state++;
+                [self soundfile:@"B08"];
+                [self playSong:@"chase_elevated"];
+                sub_state++;
+            } else if (dist < 100){
+                //[self speak:@"getting close"];
             }
             //say some shit
             break;
+        case 3:
+            [self soundfile:@"B12"];
+            sub_state=0;
+            [destination release];
+            destination = [themap createPathSearchAt:safehouse.pos withMaxDistance:[NSNumber numberWithFloat:player_max_distance]];
+            dude.pos = [destination move:player.pos awayFromRootWithDelta:30.0];
+            dude_speed = 4.0;
+            xdist = 30.0;
+            main_state++;
+            [prog release];
+            prog=nil;
+            break;
+            
         default:
             break;
     }   
@@ -222,18 +249,22 @@
     float dist;
     float dist_dude_to_safehouse;
     if (![self readyToSpeak]) return;
+    FREdgePos * newpos;
+    NSString * textualchange;
     switch (sub_state){
         case 0:
-            NSLog(@"WHO THE FUCK ARE YOU!");
+            //NSLog(@"WHO THE FUCK ARE YOU!");
             [self soundfile:@"E01"];
+            [self playSong:@"chase_scary"];
             sub_state++;
             break;
         case 1:
             NSLog(@"oh shiiit, get out of there!");
+            [self soundfile:@"B13"];
             sub_state++;
             break;
         case 2:
-            dude.pos = [latestsearch move:dude.pos towardRootWithDelta:dude_speed];
+            newpos = [latestsearch move:dude.pos towardRootWithDelta:dude_speed];
             dist = [latestsearch distanceFromRoot:dude.pos];
             /*
              
@@ -247,23 +278,50 @@
                 if you get away, he stops
                 if he gets too close to the safehouse he slows down or stops
              */
+            
+            if (![[themap roadNameFromEdgePos:newpos] isEqualToString:[themap roadNameFromEdgePos:dude.pos]]){
+                
+                [self speak:[NSString stringWithFormat:@"He just turned onto %@",[themap roadNameFromEdgePos:newpos]]];
+                
+                
+            } else {
+                textualchange = [themap descriptionFromEdgePos:dude.pos toEdgePos:newpos];
+                if (textualchange) {
+                    [self speak:[NSString stringWithFormat:@"He just went %@",textualchange]];
+                }
+            }
+            
+            dude.pos = newpos;
+            
+            
+            
             if (dist < 10){
                 
                 NSLog(@"I GOT YOU FUCKER!");
+                [self soundfile:@"E06"];
                 main_state=5;
                 return;
+            } else if (dist < 20){
+                [self soundfile:@"E03"];
             }
+            
+            
+            
+            //gaining/losing him. might want to randomize the sound files
             if (dist < .75 * xdist){
                  NSLog(@"he is gaining on you.");
                 [self soundfile:@"B16"]; 
                 xdist = dist;
             } else if (xdist < .75 * dist){
                  NSLog(@"you are losing him");
+                [self soundfile:@"B23"];
                  xdist = dist;
             }
             
             if (dist > 150){
                 NSLog(@"you lost him");
+                [self soundfile:@"B24"];
+                [self playSong:@"chase_elevated"];
                 sub_state++;
             }
         
@@ -271,6 +329,7 @@
             dist_dude_to_safehouse = [destination distanceFromRoot:dude.pos];
             if (dist_dude_to_safehouse<100 && dude_speed>1.1){
                 dude_speed=1.0;
+                [self soundfile:@"B19"];
                 NSLog(@"he is slowing down");
             } 
             
@@ -278,6 +337,7 @@
                 dude_speed =0;
                 NSLog(@"he stopped. weird.");
                 sub_state++;
+                [self playSong:@"chase_elevated"];
             }
              
              
@@ -285,13 +345,18 @@
             break;
         case 3:
             NSLog(@"keep going to the safehouse");
+            [self soundfile:@"B27"];
+            prog = [[FRProgress alloc] initWithStart:[destination distanceFromRoot:player.pos] delegate:self];
+            
             sub_state++;
             break;
         case 4:
             dist = [destination distanceFromRoot:player.pos];
             NSLog(@"dist = %f",dist);
-            
+            [prog update:dist];
             if (dist < 30){
+                [self soundfile:@"B28"];
+                [self playSong:@"chase_normal"];
                 NSLog(@"you made it. ima look at the data");
                 main_state++;
                 sub_state=0;
@@ -318,6 +383,32 @@
     [soundfx prepareToPlay];
     [soundfx play];
 }
-
-
+- (BOOL) playSoundFile:(NSString*)filename {
+    if (![self readyToSpeak]) return NO;
+    [self soundfile:filename];
+    return YES;
+}
+- (void) playSong:(NSString *)filename{
+    [_music release];
+    NSError *error;
+    NSString * s = [[NSBundle mainBundle] pathForResource:filename ofType:@"mp3"];
+    NSURL * x = [NSURL fileURLWithPath:s];
+    _music = [[AVAudioPlayer alloc] initWithContentsOfURL:x error:&error];
+    _music.volume = 0.5;
+    _music.numberOfLoops = -1;
+    [_music prepareToPlay];
+    [_music play];
+}
+- (void) dealloc {
+    [_music release];
+    [soundfx release];
+    [destination release];
+    [pointA release];
+    [pointB release];
+    [pointC release];
+    [safehouse release];
+    [dude release];
+    [prog release];
+    [super dealloc];
+}
 @end

@@ -8,8 +8,9 @@
 
 #import <Foundation/Foundation.h>
 #import "FRMissionTemplate.h"
+#import "FRProgress.h"
 
-@interface TheKeyMission : FRMissionTemplate {
+@interface TheKeyMission : FRMissionTemplate <FRSoundFilePlayer>{
     FRPoint * pointA;
     FRPoint * pointB;
     FRPoint * pointC;
@@ -21,11 +22,15 @@
     float xdist;
     float dude_speed;
     AVAudioPlayer * soundfx;
+    AVAudioPlayer * _music;
+    FRProgress * prog;
 }
+- (BOOL) playSoundFile:(NSString *)filename;
 - (void) the_first;
 - (void) the_second;
 - (void) the_third;
 - (void) the_chase;
-
-
+- (void) soundfile:(NSString *)filename;
+- (BOOL) readyToSpeak;
+- (void) playSong:(NSString *)name;
 @end
