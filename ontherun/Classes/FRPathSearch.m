@@ -200,7 +200,8 @@
     x.position = 0;
 	
     NSNumber * next = [previous objectForKey:[x startObj]];
-	if (next!=nil) {
+	//NSLog(@"next = %@",next);
+    if (next!=nil) {
 		//move to a closer edge
 		x.end = x.start;
 		x.start = [next intValue];
@@ -340,20 +341,25 @@
     while (![ep onSameEdgeAs:root]){
         NSString * current_road = nil;
         FREdgePos * prev = nil;
-        
+        int i=0;
         do {//go forward until we switch roads (potential infinite loop)
             prev = ep;
             ep = [self moveCloserToRoot:ep];
             current_road = [map roadNameFromEdgePos:ep];
-            NSLog(@"ep = %@ and root = %@",ep,root);
-        } while ([start_road isEqualToString:current_road] && ![ep onSameEdgeAs:root]);
+            //NSLog(@"ep = %@ and root = %@",ep,root);
+        } while (i++<200 && [start_road isEqualToString:current_road] && ![ep onSameEdgeAs:root]);
+        
+        if (i>=200){
+            NSLog(@"inf loop, ep = %@, root = %@",ep,root);
+            return nil;
+        }
         
         //get the description for this change
         NSString * desc = [map descriptionFromEdgePos:prev toEdgePos:ep];
         if (desc) {
             [directions addObject:[NSString stringWithFormat:@"turn %@",desc]];
         } else {
-            NSLog(@"no description available. ep is likely on root edge True==%i. current_road=%@, start_road=%@",[ep onSameEdgeAs:root],current_road,start_road);
+            //NSLog(@"no description available. ep is likely on root edge True==%i. current_road=%@, start_road=%@",[ep onSameEdgeAs:root],current_road,start_road);
         }
         start_road = current_road;
     }
