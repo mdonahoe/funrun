@@ -200,8 +200,7 @@
     x.position = 0;
 	
     NSNumber * next = [previous objectForKey:[x startObj]];
-	//NSLog(@"next = %@",next);
-    if (next!=nil) {
+	if (next!=nil) {
 		//move to a closer edge
 		x.end = x.start;
 		x.start = [next intValue];
@@ -221,7 +220,6 @@
 	
 	
 	if ([self isFacingRoot:ep]==NO) {
-		//NSLog(@"not facing, flip so we can move forward");
 		x = [map flipEdgePos:ep];
 	} else {
 		x = [[[FREdgePos alloc] init] autorelease];
@@ -346,7 +344,6 @@
             prev = ep;
             ep = [self moveCloserToRoot:ep];
             current_road = [map roadNameFromEdgePos:ep];
-            //NSLog(@"ep = %@ and root = %@",ep,root);
         } while (i++<200 && [start_road isEqualToString:current_road] && ![ep onSameEdgeAs:root]);
         
         if (i>=200){
@@ -358,8 +355,6 @@
         NSString * desc = [map descriptionFromEdgePos:prev toEdgePos:ep];
         if (desc) {
             [directions addObject:[NSString stringWithFormat:@"turn %@",desc]];
-        } else {
-            //NSLog(@"no description available. ep is likely on root edge True==%i. current_road=%@, start_road=%@",[ep onSameEdgeAs:root],current_road,start_road);
         }
         start_road = current_road;
     }

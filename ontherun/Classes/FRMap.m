@@ -71,7 +71,6 @@
 		float a = [p distanceFromLocation:[nodes objectForKey:i]];
 		float b = [self edgeLengthFromStart:i toFinish:j];
 		float c = [p distanceFromLocation:[nodes objectForKey:j]];
-		//NSLog(@"a=%f, b=%f, c=%f",a,b,c);
 		
 		float a2 = a*a;
 		float b2 = b*b;
@@ -86,9 +85,8 @@
 			float area = sqrtf(s*(s-a)*(s-b)*(s-c));
 			h = 2*area/b;		
 		}
-		//NSLog(@"h=%f and mindist=%f",h,mindist);
-		if (h < mindist){
-			//NSLog(@"edge = %@",edge);
+		
+        if (h < mindist){
 			mindist = h;
 			closest_edge = edge;
 		}
@@ -149,8 +147,7 @@
     return [self createPathSearchAt:ep withMaxDistance:maxdist avoidingEdges:nil];
 }
 - (FRPathSearch *) createPathSearchAt:(FREdgePos *)ep withMaxDistance:(NSNumber *)maxweight avoidingEdges:(NSArray*)skipedges{
-    NSLog(@"skipedges = %@",skipedges);
-	NSMutableArray * queue = [NSMutableArray arrayWithCapacity:3];
+    NSMutableArray * queue = [NSMutableArray arrayWithCapacity:3];
 	NSMutableDictionary * previous = [NSMutableDictionary dictionary];
 	NSMutableDictionary * distance = [NSMutableDictionary dictionary];
 	NSMutableDictionary * weight = [NSMutableDictionary dictionary];
@@ -297,7 +294,6 @@
 		} while ([start intValue]==old && i++ < 10);
 		
 		position = [self edgeLengthFromStart:start toFinish:end] + position;
-		//NSLog(@"moved nodes: start %@, end %@, pos: %f",start,end,position);
 	}
 	
 	FREdgePos * x = [[[FREdgePos alloc] init] autorelease];

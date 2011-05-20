@@ -120,7 +120,6 @@
         if ([direction isEqualToString:@"turn around"]){
             direction = [NSString stringWithFormat:@"turn around and %@",[directions objectAtIndex:1]];
         }
-        //NSLog(@"d = %@",direction);
         [self speakIfEmpty:direction];
     }
     [super ticktock];
@@ -149,7 +148,6 @@
                 [self soundfile:@"B06"];
                 sub_state++;
             }
-            //say some shit
             break;
         case 3:
             [self soundfile:@"B10"];
@@ -202,7 +200,6 @@
     
     switch (sub_state){
         case 0:
-            //say some shit
             NSLog(@"Alright there are two more.");
             [self soundfile:@"B11"];
             sub_state++;
@@ -226,7 +223,6 @@
             } else if (dist < 100){
                 //[self speak:@"getting close"];
             }
-            //say some shit
             break;
         case 3:
             [self soundfile:@"B12"];
@@ -253,7 +249,6 @@
     NSString * textualchange;
     switch (sub_state){
         case 0:
-            //NSLog(@"WHO THE FUCK ARE YOU!");
             [self soundfile:@"E01"];
             [self playSong:@"chase_scary"];
             sub_state++;

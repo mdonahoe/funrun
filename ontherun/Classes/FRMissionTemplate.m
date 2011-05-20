@@ -140,7 +140,6 @@
 	for (FRPoint * pt in points){
 		[pt setCoordinate:[themap coordinateFromEdgePosition:pt.pos]];
 	}
-	//[viewControl missionTick];
 	[self performSelector:@selector(ticktock) withObject:nil afterDelay:1.0];
 };
 - (void) newPlayerLocation:(CLLocation *)location {

@@ -159,7 +159,6 @@
 	float dist;
 	NSTimeInterval timeleft;
 	if (rendezvous_time) timeleft = [rendezvous_time timeIntervalSinceNow];
-	//NSLog(@"timeleft = %f",timeleft);
 	
 	
 	
