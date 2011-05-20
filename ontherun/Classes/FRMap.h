@@ -20,9 +20,16 @@
 - (id) initWithNodes:(NSMutableDictionary*)_nodes andRoads:(NSMutableArray *)roads;
 
 //checks the distance to each edge segment, and returns to edge with the minimum distance
+- (NSArray*) closest:(int)n edgesToPoint:(CLLocation*)p;
 - (NSArray *) closestEdgeToPoint:(CLLocation *)p;
 
+
+- (float) distanceFromEdge:(NSArray*)e toPoint:(CLLocation*)p;
+
+
+
 //convert from latlon to EdgePos, using the map
+- (FREdgePos *) edgePosFromPoint:(CLLocation *)p usingEdge:(NSArray *)edge;
 - (FREdgePos *) edgePosFromPoint:(CLLocation *)p;
 
 //convienence getter for edge length

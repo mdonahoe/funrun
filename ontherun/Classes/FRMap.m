@@ -66,39 +66,67 @@
 	NSArray * closest_edge = nil;
 	
 	for (NSArray * edge in edges){
-		NSNumber * i = [edge objectAtIndex:0];
-		NSNumber * j = [edge objectAtIndex:1];
-		float a = [p distanceFromLocation:[nodes objectForKey:i]];
-		float b = [self edgeLengthFromStart:i toFinish:j];
-		float c = [p distanceFromLocation:[nodes objectForKey:j]];
-		
-		float a2 = a*a;
-		float b2 = b*b;
-		float c2 = c*c;
-		float h;
-		if (c2>a2+b2) {
-			h = a;
-		} else if (a2>b2+c2) {
-			h = c;
-		} else {
-			float s = (a+b+c)/2.0;
-			float area = sqrtf(s*(s-a)*(s-b)*(s-c));
-			h = 2*area/b;		
-		}
-		
+		float h = [self distanceFromEdge:edge toPoint:p];
         if (h < mindist){
-			mindist = h;
-			closest_edge = edge;
-		}
+            mindist = h;
+            closest_edge = edge;
+        }
 	}
+    
 	if (closest_edge==nil) NSLog(@" NIL TOWN! bummer");
 	return closest_edge;
 }
-- (FREdgePos *) edgePosFromPoint:(CLLocation *)p {
+- (NSArray*) closest:(int)n edgesToPoint:(CLLocation*)p{
+    NSMutableArray * closest = [[[NSMutableArray alloc] initWithCapacity:n] autorelease];
+    NSMutableArray * scores = [[[NSMutableArray alloc] initWithCapacity:n] autorelease];
+    
+    for (NSArray * edge in edges){
+        float h = [self distanceFromEdge:edge toPoint:p];
+        int i;
+        for (i=0;i<[closest count];i++) {
+            if ([[scores objectAtIndex:i] floatValue] > h){
+                [closest insertObject:edge atIndex:i];
+                [scores insertObject:[NSNumber numberWithFloat:h] atIndex:i];
+                break;
+            }
+        }
+        if ([closest count] < n && i==[closest count]){
+            [closest addObject:edge];
+            [scores addObject:[NSNumber numberWithFloat:h]];
+        }
+        
+        
+    }
+    
+    return [NSArray arrayWithArray:closest];
+    
+}
+- (float) distanceFromEdge:(NSArray*)e toPoint:(CLLocation*)p{
+    NSNumber * i = [e objectAtIndex:0];
+    NSNumber * j = [e objectAtIndex:1];
+    float a = [p distanceFromLocation:[nodes objectForKey:i]];
+    float b = [self edgeLengthFromStart:i toFinish:j];
+    float c = [p distanceFromLocation:[nodes objectForKey:j]];
+    
+    float a2 = a*a;
+    float b2 = b*b;
+    float c2 = c*c;
+    float h;
+    if (c2>a2+b2) {
+        h = a;
+    } else if (a2>b2+c2) {
+        h = c;
+    } else {
+        float s = (a+b+c)/2.0;
+        float area = sqrtf(s*(s-a)*(s-b)*(s-c));
+        h = 2*area/b;		
+    }
+    
+    return h;
+}
+- (FREdgePos *) edgePosFromPoint:(CLLocation *)p usingEdge:(NSArray *)edge{
+    FREdgePos * ep = [[[FREdgePos alloc] init] autorelease];
 	
-	FREdgePos * ep = [[[FREdgePos alloc] init] autorelease];
-	
-	NSArray * edge = [self closestEdgeToPoint:p];
 	NSNumber * i = [edge objectAtIndex:0];
 	NSNumber * j = [edge objectAtIndex:1];
 	
@@ -108,7 +136,7 @@
 	float a = [p distanceFromLocation:[nodes objectForKey:i]];
 	float b = [self edgeLengthFromStart:i toFinish:j];
 	float c = [p distanceFromLocation:[nodes objectForKey:j]];
-
+    
 	
 	float a2 = a*a;
 	float b2 = b*b;
@@ -124,6 +152,10 @@
 		ep.position = sqrtf(a2-h*h); //hopefully never -1
 	}
 	return ep;
+}
+- (FREdgePos *) edgePosFromPoint:(CLLocation *)p {
+	NSArray * edge = [self closestEdgeToPoint:p];
+	return [self edgePosFromPoint:p usingEdge:edge];
 }
 - (float) edgeLengthFromStart:(NSNumber *)a toFinish:(NSNumber *)b {
 	return [[[[graph objectForKey:a] objectForKey:b] objectForKey:@"length"] floatValue];
