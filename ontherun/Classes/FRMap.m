@@ -94,7 +94,10 @@
             [closest addObject:edge];
             [scores addObject:[NSNumber numberWithFloat:h]];
         }
-        
+        while ([closest count] > n) {
+            [closest removeLastObject];
+            [scores  removeLastObject];
+        }
         
     }
     
