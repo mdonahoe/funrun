@@ -20,7 +20,7 @@
 @property (nonatomic,retain) FREdgePos * root;
 
 - (id) initWithRoot:(FREdgePos *)r previous:(NSDictionary *)p distance:(NSDictionary *)d map:(FRMap *)m;
-
+- (BOOL) rootIsFacing:(FREdgePos*)ep;
 - (BOOL) isFacingRoot:(FREdgePos*)ep;
 - (BOOL) containsPoint:(FREdgePos*)ep;
 - (BOOL) edgepos:(FREdgePos*)A isOnPathFromRootTo:(FREdgePos*)B;
@@ -38,7 +38,7 @@
 - (NSArray *) directionsToRoot:(FREdgePos *)ep;
 
 - (NSNumber *)closerNode:(NSNumber*)node;
-
+- (NSString *) nextRoad:(FREdgePos *)ep;
 - (NSString *) directionFromRoot:(FREdgePos*)ep;
 - (NSString *) directionToRoot:(FREdgePos*)ep;
 

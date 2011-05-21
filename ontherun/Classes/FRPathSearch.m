@@ -80,7 +80,8 @@
 	if ([previous objectForKey:start]) {
 		node = start;
 	} else { //start is not in path. assume that end is.
-		node = end;
+		NSLog(@"danger, start not in previous");
+        node = end;
 	}
 	
 	int i=200; //limit the potentially infinite loop.
@@ -372,6 +373,27 @@
 	if ([self rootIsFacing:ep]) return @"infront of";
 	return @"behind";
     
+}
+- (NSString *) nextRoad:(FREdgePos *)ep{
+    //assuming that the ep is traveling toward the root, what is the next road he should go on?
+    
+    
+    NSString * start_road = [map roadNameFromEdgePos:ep];
+	if ([start_road isEqualToString:[map roadNameFromEdgePos:root]]){
+		return start_road;
+	}
+	
+	NSString * current_road = nil;
+	FREdgePos * prev = nil;
+	
+	do {//potential infinite loop
+		prev = ep;
+		ep = [self moveCloserToRoot:ep];
+		current_road = [map roadNameFromEdgePos:ep];
+	} while ([start_road isEqualToString:current_road]);
+    
+    
+    return current_road;
 }
 - (NSString *) directionToRoot:(FREdgePos *)ep{
 	//turn by turn directions
