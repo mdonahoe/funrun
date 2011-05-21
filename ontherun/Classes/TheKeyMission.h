@@ -18,7 +18,6 @@
     FRPoint * safehouse;
     int main_state;
     int sub_state;
-    FRPathSearch * destination;
     float xdist;
     float dude_speed;
     AVAudioPlayer * soundfx;

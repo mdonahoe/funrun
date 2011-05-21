@@ -397,7 +397,6 @@
 - (void) dealloc {
     [_music release];
     [soundfx release];
-    [destination release];
     [pointA release];
     [pointB release];
     [pointC release];

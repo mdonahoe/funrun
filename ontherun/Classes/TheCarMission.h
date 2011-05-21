@@ -34,7 +34,6 @@
     int car_time_left;
     int car_times_spoken;
     BOOL direct;
-    FRPathSearch * destination;
     FRPathSearch * cop_goal;
 }
 

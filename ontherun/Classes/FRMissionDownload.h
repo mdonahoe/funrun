@@ -58,7 +58,6 @@
     NSDate * hideout_date;
     NSDate * start_date;
     FRPoint * cop;
-    FRPathSearch * destination;
     FRPoint * safehouse;
     BOOL cop_spotted;
     NSDate * progress_date;

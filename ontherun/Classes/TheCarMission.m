@@ -11,16 +11,18 @@
 /*
  
  notes:
- 1. how far am i from the destination
+X1. how far am i from the destination
 X2. where is the destination
 X3. alarm starts too early.
- 4. no glass breaking sound effects
 X5. alarm is LOUD, ulysses is quiet.
 X6. the cops come really quickly. i need a chance to escape.
 X7. directions on where to go to avoid the cop?
 X8. if you manage to completely avoid the cop, the game fails.
- 9. where is the cop?
- 10. there is some infinite loop bug in the directionsToRoot code.
+X10. there is some infinite loop bug in the directionsToRoot code.
+
+ 9. where is the cop? (how far away, etc)
+ 4. no glass breaking sound effects
+ - the alarm gets louder sometimes.
  
  A. if the gps isnt accurate, it fails completely.
  B. Toqbot slow over 3G
@@ -444,5 +446,17 @@ X8. if you manage to completely avoid the cop, the game fails.
     _music.numberOfLoops = -1;
     [_music prepareToPlay];
     [_music play];
+}
+- (void) dealloc {
+    [_music release];
+    [ulysses release];
+    [alarm release];
+    [cop release];
+    [safehouse release];
+    [siren release];
+    [car release];
+    [unsafe_spot release];
+    [cop_goal release];
+    [super dealloc];
 }
 @end

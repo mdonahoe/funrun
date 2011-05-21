@@ -500,8 +500,6 @@
     [safehouse release];
     [cop release];
     
-    [destination release];
-    
     [super dealloc];
 }
 @end
