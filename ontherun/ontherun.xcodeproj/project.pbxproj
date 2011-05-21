@@ -117,6 +117,8 @@
 		C9449ADF135E35BD008F8623 /* chase_elevated.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = C9449ADD135E35B8008F8623 /* chase_elevated.mp3 */; };
 		C9449AE0135E35BD008F8623 /* chase_normal.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = C9449ADE135E35B9008F8623 /* chase_normal.mp3 */; };
 		C9557AAC130AEAA2004A6F54 /* FREdgePos.m in Sources */ = {isa = PBXBuildFile; fileRef = C9557AAB130AEAA2004A6F54 /* FREdgePos.m */; };
+		C9569BFA138833A200FD66E8 /* FRTroubleshoot.m in Sources */ = {isa = PBXBuildFile; fileRef = C9569BF8138833A100FD66E8 /* FRTroubleshoot.m */; };
+		C9569BFB138833A200FD66E8 /* FRTroubleshoot.xib in Resources */ = {isa = PBXBuildFile; fileRef = C9569BF9138833A100FD66E8 /* FRTroubleshoot.xib */; };
 		C9624CC3133AD63300F6594F /* FRSummaryViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C9624CC1133AD63300F6594F /* FRSummaryViewController.m */; };
 		C9624CC4133AD63300F6594F /* FRSummaryViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = C9624CC2133AD63300F6594F /* FRSummaryViewController.xib */; };
 		C9624CD9133BB9F200F6594F /* FRBriefingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C9624CD7133BB9F200F6594F /* FRBriefingViewController.m */; };
@@ -300,6 +302,9 @@
 		C9449ADE135E35B9008F8623 /* chase_normal.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = chase_normal.mp3; sourceTree = "<group>"; };
 		C9557AAA130AEAA2004A6F54 /* FREdgePos.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FREdgePos.h; sourceTree = "<group>"; };
 		C9557AAB130AEAA2004A6F54 /* FREdgePos.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FREdgePos.m; sourceTree = "<group>"; };
+		C9569BF7138833A100FD66E8 /* FRTroubleshoot.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRTroubleshoot.h; sourceTree = "<group>"; };
+		C9569BF8138833A100FD66E8 /* FRTroubleshoot.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRTroubleshoot.m; sourceTree = "<group>"; };
+		C9569BF9138833A100FD66E8 /* FRTroubleshoot.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FRTroubleshoot.xib; sourceTree = "<group>"; };
 		C9624CC0133AD63300F6594F /* FRSummaryViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSummaryViewController.h; sourceTree = "<group>"; };
 		C9624CC1133AD63300F6594F /* FRSummaryViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSummaryViewController.m; sourceTree = "<group>"; };
 		C9624CC2133AD63300F6594F /* FRSummaryViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = FRSummaryViewController.xib; sourceTree = "<group>"; };
@@ -680,6 +685,9 @@
 				9BD50324130070320092D86A /* FRMapViewController.m */,
 				C9624D50133BFA4F00F6594F /* LocationPicker.h */,
 				C9624D51133BFA4F00F6594F /* LocationPicker.m */,
+				C9569BF7138833A100FD66E8 /* FRTroubleshoot.h */,
+				C9569BF8138833A100FD66E8 /* FRTroubleshoot.m */,
+				C9569BF9138833A100FD66E8 /* FRTroubleshoot.xib */,
 			);
 			name = ViewControllers;
 			sourceTree = "<group>";
@@ -835,6 +843,7 @@
 				9BA7893E1385C6AF006C8759 /* 1000.aiff in Resources */,
 				9BA789411385C823006C8759 /* getting_close.aiff in Resources */,
 				9BA789421385C823006C8759 /* halfway.aiff in Resources */,
+				C9569BFB138833A200FD66E8 /* FRTroubleshoot.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -879,6 +888,7 @@
 				C99EBE1A137AE09E0079A70E /* TheCarMission.m in Sources */,
 				C9E3F22A137DE6010077E168 /* TheKeyMission.m in Sources */,
 				9BA789341385B89C006C8759 /* FRProgress.m in Sources */,
+				C9569BFA138833A200FD66E8 /* FRTroubleshoot.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

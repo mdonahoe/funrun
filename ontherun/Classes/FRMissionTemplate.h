@@ -23,6 +23,7 @@
 @interface FRMissionTemplate : NSObject <LocationPickerDelegate>{
 	NSString * previously_said;
 	FRPathSearch * latestsearch;
+    FRPathSearch * destination;
 	FRMap * themap;
 	FRPoint * player;
     FRPoint * endPoint;
@@ -33,6 +34,7 @@
 	NSMutableArray * toBeSpoken;
 	NSMutableArray * points;
 	NSString * current_road;
+    NSString * next_road;
 	UIViewController * viewControl;
     AVAudioPlayer * backgroundMusicPlayer;
 }
@@ -47,4 +49,5 @@
 - (void) speakNow:(NSString *)text;
 - (void) newPlayerLocation:(CLLocation *)location;
 - (void) playSong:(NSString*)name;
+- (void) updateDirections;
 @end

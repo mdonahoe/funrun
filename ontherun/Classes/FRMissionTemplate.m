@@ -10,6 +10,8 @@
 #import "FRBriefingViewController.h"
 #import "JSON.h"
 #import "ASIHTTPRequest.h"
+#import "FRTroubleshoot.h"
+
 
 @implementation FRMissionTemplate
 @synthesize points,viewControl;
@@ -85,13 +87,19 @@
 	[voicebot setRate:1.3];
 	[voicebot setPitch:0.25];
 	
-	FRBriefingViewController * brief = 
+	/*FRBriefingViewController * brief = 
 	[[[FRBriefingViewController alloc] initWithNibName:@"FRBriefingViewController"
 												bundle:nil] autorelease];
 	[brief setText:@"nothing to see here"];
 	brief.mission = self;
-	[vc.navigationController pushViewController:brief animated:YES];
+	
+    [vc.navigationController pushViewController:brief animated:YES];
 	self.viewControl = brief;
+     */
+    
+    FRTroubleshoot * trouble = [[[FRTroubleshoot alloc] initWithNibName:@"FRTroubleshoot" bundle:nil] autorelease];
+    [vc.navigationController pushViewController:trouble animated:YES];
+    self.viewControl = trouble;
 	return self;
 }
 
@@ -140,6 +148,7 @@
 	for (FRPoint * pt in points){
 		[pt setCoordinate:[themap coordinateFromEdgePosition:pt.pos]];
 	}
+    [self updateDirections];
 	[self performSelector:@selector(ticktock) withObject:nil afterDelay:1.0];
 };
 - (void) newPlayerLocation:(CLLocation *)location {
@@ -160,38 +169,46 @@
         
         double min_score = 100000000000000000000000000.0; //giant number
         FREdgePos * best = nil;
-        //NSAutoreleasePool * pool = [[NSAutoreleasePool alloc] init];
         
         NSArray * ten_closest = [themap closest:10 edgesToPoint:location];
-        //[ten_closest retain];
-        //[pool drain];
-        NSLog(@"ten = %i, %@",[ten_closest count],ten_closest);
+        
+        float a,b,c,d;
+        a = ((FRTroubleshoot*)viewControl).e_slider.value;
+        b = ((FRTroubleshoot*)viewControl).t_slider.value;
+        c = ((FRTroubleshoot*)viewControl).r_slider.value;
+        d = ((FRTroubleshoot*)viewControl).f_slider.value;
+        NSLog(@"a=%f,b=%f,c=%f,d=%f",a,b,c,d);
+        
         for (NSArray * edge in ten_closest){
-            //[pool drain];
+            
+            
+            //edge error penalty
             float E = [themap distanceFromEdge:edge toPoint:location];
+            
+            //total distance moved penalty
             FREdgePos * ep = [themap edgePosFromPoint:location usingEdge:edge];
+            ep = [latestsearch move:ep awayFromRootWithDelta:0.0]; //face away.
             float T = [latestsearch distanceFromRoot:ep];
+            
+            //road switch penalty
             NSString * road = [themap roadNameFromEdgePos:ep];
-            float R = [road isEqualToString:current_road]?0.0f:1.0f;
+            float R = ([road isEqualToString:current_road]||[road isEqualToString:next_road])?0.0f:1.0f;
+            
+            //turn around penalty
+            float F = [latestsearch rootIsFacing:ep]?0.0f:1.0f;
             
             //ideally these would be manually controlled.
-            double score = 2.0*E+1.0*T+30.0*R;
+            double score = a*E+b*T+c*R+d*F;
             
             NSLog(@"score = %f, %@",score,road);
             if (score < min_score){
                 min_score = score;
-                //[ep retain];
-                //[best release];
                 best = ep;
             }
             
             //calculate the ep, and the travel distance
         }
         NSLog(@"best score = %f, %@",min_score,[themap roadNameFromEdgePos:best]);
-        //[ten_closest release];
-        //[pool release];
-        
-        
         
         float new_dist = [latestsearch distanceFromRoot:best];
 #define SPEED_ALPHA 0.5
@@ -236,6 +253,17 @@
     [backgroundMusicPlayer prepareToPlay];
     [backgroundMusicPlayer play];
 }
+- (void) updateDirections {
+    //goal road needs to update everytime.
+    //how do we know if we can speak?
+    //voicebot and soundfx
+    if (destination==nil) return;
+    
+    NSString * road = [destination nextRoad:player.pos];
+    [road retain];
+    [next_road release];
+    next_road = road;
+}
 - (void) dealloc {
 	[player release];
 	[points release];
@@ -244,6 +272,8 @@
 	[toBeSpoken release];
 	[latestsearch release];
     [current_road release];
+    [destination release];
+    [next_road release];
     [previously_said release];
 	[backgroundMusicPlayer release];
     [last_location_received_date release];
