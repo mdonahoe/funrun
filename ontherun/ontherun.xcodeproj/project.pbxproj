@@ -435,6 +435,52 @@
 			isa = PBXGroup;
 			children = (
 				9BA788E713845C3A006C8759 /* aiff */,
+				9B418ED1138741DE00A8272A /* mp3s */,
+				9B418ED0138741B800A8272A /* nibs */,
+				9B684BD51341066800F27C12 /* button_green.png */,
+				8D1107310486CEB800E47090 /* ontherun-Info.plist */,
+			);
+			name = Resources;
+			sourceTree = "<group>";
+		};
+		29B97323FDCFA39411CA2CEA /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				C906C27312D4EA4000C14388 /* UIKit.framework */,
+				C906C27412D4EA4000C14388 /* Foundation.framework */,
+				C906C27512D4EA4000C14388 /* CoreGraphics.framework */,
+				C906C27612D4EA4000C14388 /* CFNetwork.framework */,
+				C906C27712D4EA4000C14388 /* CoreLocation.framework */,
+				C906C27812D4EA4000C14388 /* MobileCoreServices.framework */,
+				C906C27912D4EA4000C14388 /* SystemConfiguration.framework */,
+				C906C27A12D4EA4000C14388 /* libz.1.2.3.dylib */,
+				C906C27C12D4EA4000C14388 /* AudioToolbox.framework */,
+				9BD50342130075340092D86A /* MapKit.framework */,
+				9BD504AD1300B2330092D86A /* VoiceServices.framework */,
+				9BC137421304A340006492A0 /* AVFoundation.framework */,
+				C9ABFF4F13087EEF0031160A /* MediaPlayer.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		9B418ED0138741B800A8272A /* nibs */ = {
+			isa = PBXGroup;
+			children = (
+				C9624D52133BFA4F00F6594F /* LocationPicker.xib */,
+				C9624CC2133AD63300F6594F /* FRSummaryViewController.xib */,
+				C9624CD8133BB9F200F6594F /* FRBriefingViewController.xib */,
+				9BD50336130075020092D86A /* FRMapViewController.xib */,
+				28F335F01007B36200424DE2 /* RootViewController.xib */,
+				9BBD3295132E81360082A0C7 /* StartView.xib */,
+				28AD735F0D9D9599002E5188 /* MainWindow.xib */,
+			);
+			name = nibs;
+			sourceTree = "<group>";
+		};
+		9B418ED1138741DE00A8272A /* mp3s */ = {
+			isa = PBXGroup;
+			children = (
+				C93EEA5C134AD9D800AFE90C /* guitar.mp3 */,
 				C99EBE1B137AE34F0079A70E /* A01_car_nearby.mp3 */,
 				C99EBE1C137AE34F0079A70E /* A02_back_soon.mp3 */,
 				C99EBE1D137AE34F0079A70E /* A03_good_time.mp3 */,
@@ -486,38 +532,8 @@
 				C9449AC1135D4C4B008F8623 /* 12holdit.mp3 */,
 				C9449AC2135D4C4B008F8623 /* 12stoppolice.mp3 */,
 				C93EEA5B134AD9D800AFE90C /* drum.mp3 */,
-				C93EEA5C134AD9D800AFE90C /* guitar.mp3 */,
-				C9624D52133BFA4F00F6594F /* LocationPicker.xib */,
-				9B684BD51341066800F27C12 /* button_green.png */,
-				C9624CC2133AD63300F6594F /* FRSummaryViewController.xib */,
-				C9624CD8133BB9F200F6594F /* FRBriefingViewController.xib */,
-				9BD50336130075020092D86A /* FRMapViewController.xib */,
-				28F335F01007B36200424DE2 /* RootViewController.xib */,
-				9BBD3295132E81360082A0C7 /* StartView.xib */,
-				28AD735F0D9D9599002E5188 /* MainWindow.xib */,
-				8D1107310486CEB800E47090 /* ontherun-Info.plist */,
 			);
-			name = Resources;
-			sourceTree = "<group>";
-		};
-		29B97323FDCFA39411CA2CEA /* Frameworks */ = {
-			isa = PBXGroup;
-			children = (
-				C906C27312D4EA4000C14388 /* UIKit.framework */,
-				C906C27412D4EA4000C14388 /* Foundation.framework */,
-				C906C27512D4EA4000C14388 /* CoreGraphics.framework */,
-				C906C27612D4EA4000C14388 /* CFNetwork.framework */,
-				C906C27712D4EA4000C14388 /* CoreLocation.framework */,
-				C906C27812D4EA4000C14388 /* MobileCoreServices.framework */,
-				C906C27912D4EA4000C14388 /* SystemConfiguration.framework */,
-				C906C27A12D4EA4000C14388 /* libz.1.2.3.dylib */,
-				C906C27C12D4EA4000C14388 /* AudioToolbox.framework */,
-				9BD50342130075340092D86A /* MapKit.framework */,
-				9BD504AD1300B2330092D86A /* VoiceServices.framework */,
-				9BC137421304A340006492A0 /* AVFoundation.framework */,
-				C9ABFF4F13087EEF0031160A /* MediaPlayer.framework */,
-			);
-			name = Frameworks;
+			name = mp3s;
 			sourceTree = "<group>";
 		};
 		9B51D5BA1305F53400978183 /* Points */ = {
