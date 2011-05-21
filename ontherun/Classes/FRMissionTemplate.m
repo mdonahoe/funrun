@@ -153,11 +153,66 @@
 	
 	NSDate * current_date = [[NSDate alloc] init];
 	NSLog(@"newPlayerLocation: %@",location);
-	//convert to map coordinates
-	FREdgePos * ep = [themap edgePosFromPoint:location];
 	
-	//speak the current road, if it changed
-	NSString * roadname = [themap roadNameFromEdgePos:ep];
+	
+	if (latestsearch) {
+
+        
+        double min_score = 100000000000000000000000000.0; //giant number
+        FREdgePos * best = nil;
+        //NSAutoreleasePool * pool = [[NSAutoreleasePool alloc] init];
+        
+        NSArray * ten_closest = [themap closest:10 edgesToPoint:location];
+        //[ten_closest retain];
+        //[pool drain];
+        NSLog(@"ten = %i, %@",[ten_closest count],ten_closest);
+        for (NSArray * edge in ten_closest){
+            //[pool drain];
+            float E = [themap distanceFromEdge:edge toPoint:location];
+            FREdgePos * ep = [themap edgePosFromPoint:location usingEdge:edge];
+            float T = [latestsearch distanceFromRoot:ep];
+            NSString * road = [themap roadNameFromEdgePos:ep];
+            float R = [road isEqualToString:current_road]?0.0f:1.0f;
+            
+            //ideally these would be manually controlled.
+            double score = 2.0*E+1.0*T+30.0*R;
+            
+            NSLog(@"score = %f, %@",score,road);
+            if (score < min_score){
+                min_score = score;
+                //[ep retain];
+                //[best release];
+                best = ep;
+            }
+            
+            //calculate the ep, and the travel distance
+        }
+        NSLog(@"best score = %f, %@",min_score,[themap roadNameFromEdgePos:best]);
+        //[ten_closest release];
+        //[pool release];
+        
+        
+        
+        float new_dist = [latestsearch distanceFromRoot:best];
+#define SPEED_ALPHA 0.5
+        average_player_speed = SPEED_ALPHA*(new_dist / [current_date timeIntervalSinceDate:last_location_received_date]) + (1.0-SPEED_ALPHA)*(average_player_speed);
+        if (arc4random()%30==0) [self speakIfEmpty:[NSString stringWithFormat:@"%i meters per second",(int)average_player_speed]];
+		player.pos = [latestsearch move:best awayFromRootWithDelta:0];
+        //[best release];
+	} else {
+		player.pos = [themap edgePosFromPoint:location];
+        
+	}
+	
+    [last_location_received_date release];
+    last_location_received_date = current_date;
+	
+    [latestsearch release];
+	latestsearch = [themap createPathSearchAt:player.pos withMaxDistance:[NSNumber numberWithFloat:player_max_distance/1.8]];
+    
+    
+    //speak the current road, if it changed
+	NSString * roadname = [themap roadNameFromEdgePos:player.pos];
 	if ([roadname isEqualToString:current_road]==NO && roadname){
 		[roadname retain];
 		[current_road release];
@@ -165,56 +220,8 @@
 		[self speak:current_road];
 	}
 	
-	if (latestsearch) {
-        float new_dist = [latestsearch distanceFromRoot:ep];
-#define SPEED_ALPHA 0.5
-        average_player_speed = SPEED_ALPHA*(new_dist / [current_date timeIntervalSinceDate:last_location_received_date]) + (1.0-SPEED_ALPHA)*(average_player_speed);
-        if (arc4random()%30==0) [self speakIfEmpty:[NSString stringWithFormat:@"%i meters per second",(int)average_player_speed]];
-		player.pos = [latestsearch move:ep awayFromRootWithDelta:0];
-	} else {
-		player.pos = ep;
-	}
-	[last_location_received_date release];
-    last_location_received_date = current_date;
-	
-    [latestsearch release];
-	latestsearch = [themap createPathSearchAt:player.pos withMaxDistance:[NSNumber numberWithFloat:player_max_distance/1.8]]; //this number needs to be adjustable i think.
 }
 
-/*
-- (void) playsounds {
-	 
-	//Be able to play random sound effects.
-	//Initially used to prevent deep sleep
-	 
-	//Code from this blog:
-	//http://blog.marcopeluso.com/2009/08/23/how-to-prevent-iphone-from-deep-sleeping/
-	 
-	 
-	// Activate audio session
-	AudioSessionSetActive(true);
-	// Set up audio session, to prevent iPhone from deep sleeping, while playing sounds
-	UInt32 sessionCategory = kAudioSessionCategory_MediaPlayback;
-	AudioSessionSetProperty (
-							 kAudioSessionProperty_AudioCategory,
-							 sizeof (sessionCategory),
-							 &sessionCategory
-							 );
-	
-	// Set up sound file
-	NSString *soundFilePath = [[NSBundle mainBundle] pathForResource:@"lion1"
-															  ofType:@"wav"];
-	NSURL *fileURL = [[NSURL alloc] initFileURLWithPath:soundFilePath];
-	NSError *audioerror = nil;
-	// Set up audio player with sound file
-	audioPlayer = [[AVAudioPlayer alloc] initWithContentsOfURL:fileURL error:&audioerror];
-	[audioPlayer prepareToPlay];
-	
-	// You may want to set this to 0.0 even if your sound file is silent.
-	[audioPlayer setVolume:1.0];
-	
-}
-*/
 - (void) abort {
 	[NSObject cancelPreviousPerformRequestsWithTarget:self];
 	[toBeSpoken removeAllObjects];
