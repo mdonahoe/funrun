@@ -32,7 +32,7 @@
 	[voicebot setDelegate:self];
 	toBeSpoken = [[NSMutableArray alloc] init];
 	previously_said = nil;
-	
+	last_played_sound = nil;
 	//communication with server
 	
 	
@@ -245,13 +245,17 @@
 	[self speak:@"Mission Aborted"];
 }
 - (void) playSong:(NSString *)name {
-    [backgroundMusicPlayer release];
+    [backgroundMusic release];
+    if (name==nil) return;
+    
     NSString * path = [[NSBundle mainBundle] pathForResource:name ofType:@"mp3"];
     NSURL * url = [NSURL fileURLWithPath:path];
     NSError * error;
-    backgroundMusicPlayer = [[AVAudioPlayer alloc] initWithContentsOfURL:url error:&error];
-    [backgroundMusicPlayer prepareToPlay];
-    [backgroundMusicPlayer play];
+    backgroundMusic = [[AVAudioPlayer alloc] initWithContentsOfURL:url error:&error];
+    [backgroundMusic prepareToPlay];
+    backgroundMusic.numberOfLoops = -1;
+    backgroundMusic.volume = 0.5;
+    [backgroundMusic play];
 }
 - (void) updateDirections {
     //goal road needs to update everytime.
@@ -264,19 +268,48 @@
     [next_road release];
     next_road = road;
 }
+- (void) soundfile:(NSString*)filename{
+    [soundfx release];
+    NSError *error;
+    NSString * s = [[NSBundle mainBundle] pathForResource:filename ofType:@"mp3"];
+    NSURL * x = [NSURL fileURLWithPath:s];
+    soundfx = [[AVAudioPlayer alloc] initWithContentsOfURL:x error:&error];
+    soundfx.volume = 1.0;
+    [soundfx prepareToPlay];
+    [soundfx play];
+}
+- (BOOL) playSoundFile:(NSString*)filename {
+    //dont play if something else is playing
+    if (![self readyToSpeak]) return NO;
+    
+    //dont play the same sound twice.
+    if ([last_played_sound isEqualToString:filename]) return NO;
+    [filename retain];
+    [last_played_sound release];
+    last_played_sound = filename;
+    
+    [self soundfile:filename];
+    return YES;
+}
+- (BOOL) readyToSpeak {
+    //no sound fx or voice playing
+    return !(soundfx.playing || [voicebot isSpeaking]);
+}
+
 - (void) dealloc {
 	[player release];
 	[points release];
 	[themap release];
     [voicebot release];
-	[toBeSpoken release];
-	[latestsearch release];
-    [current_road release];
+	[next_road release];
+    [toBeSpoken release];
     [destination release];
-    [next_road release];
+    [latestsearch release];
+    [current_road release];
     [previously_said release];
-	[backgroundMusicPlayer release];
-    [last_location_received_date release];
+    [backgroundMusic release];
+    [last_played_sound release];
+	[last_location_received_date release];
 	self.viewControl = nil;
     [super dealloc];
 	NSLog(@"mission is dead");

@@ -330,7 +330,8 @@
             
             if (dist_dude_to_safehouse<50 && dude_speed>0){
                 dude_speed =0;
-                NSLog(@"he stopped. weird.");
+                NSLog(@"You lost him.");
+                [self soundfile:@"B24"];
                 sub_state++;
                 [self playSong:@"chase_elevated"];
             }
@@ -363,11 +364,6 @@
 
 
 #pragma mark -
-
-- (BOOL) readyToSpeak {
-    return (!soundfx.playing && ![voicebot isSpeaking]);
-}
-
 - (void) soundfile:(NSString*)filename{
     [soundfx release];
     NSError *error;
@@ -378,25 +374,7 @@
     [soundfx prepareToPlay];
     [soundfx play];
 }
-- (BOOL) playSoundFile:(NSString*)filename {
-    if (![self readyToSpeak]) return NO;
-    [self soundfile:filename];
-    return YES;
-}
-- (void) playSong:(NSString *)filename{
-    [_music release];
-    NSError *error;
-    NSString * s = [[NSBundle mainBundle] pathForResource:filename ofType:@"mp3"];
-    NSURL * x = [NSURL fileURLWithPath:s];
-    _music = [[AVAudioPlayer alloc] initWithContentsOfURL:x error:&error];
-    _music.volume = 0.5;
-    _music.numberOfLoops = -1;
-    [_music prepareToPlay];
-    [_music play];
-}
 - (void) dealloc {
-    [_music release];
-    [soundfx release];
     [pointA release];
     [pointB release];
     [pointC release];

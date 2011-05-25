@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "FRMissionTemplate.h"
 
-@interface TheCarMission : FRMissionTemplate {
+@interface TheCarMission : FRMissionTemplate <FRSoundFilePlayer>{
     //states
     int car_state;
     int alarm_state;
@@ -18,8 +18,6 @@
     int current_state;
     
     //audio
-    AVAudioPlayer * ulysses;
-    AVAudioPlayer * _music;
     AVAudioPlayer * siren;
     AVAudioPlayer * alarm;
     
@@ -28,8 +26,6 @@
     FRPoint * cop;
     FRPoint * safehouse;
     FREdgePos * unsafe_spot; //hack for finding distance to path.
-    
-    NSString * last_played_sound;
     
     int car_time_left;
     int car_times_spoken;
@@ -41,13 +37,10 @@
 - (void) the_alarm;
 - (void) the_cop;
 - (void) the_safehouse;
-- (void) ulyssesSpeak:(NSString *)filename;
 - (void) stopSiren;
 - (void) startSiren;
 - (void) stopAlarm;
 - (void) startAlarm;
-- (void) playSong:(NSString *)name;
-- (BOOL) readyToSpeak;
 - (void) speaktime:(int)t;
 
 @end

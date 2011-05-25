@@ -151,8 +151,7 @@ X10. there is some infinite loop bug in the directionsToRoot code.
             break;
         default:
             [self stopSiren];
-            [_music release];
-            _music = nil;
+            [self playSong:nil];
             NSLog(@"current_state invalid, stopping ticktock");
             return;
     }
@@ -174,7 +173,7 @@ X10. there is some infinite loop bug in the directionsToRoot code.
     if (![self readyToSpeak]) return;
     switch (car_state) {
         case 13:
-            [self ulyssesSpeak:@"A01_car_nearby"];
+            [self playSoundFile:@"A01_car_nearby"];
             car_state--;
             break;
         case 12:
@@ -182,7 +181,7 @@ X10. there is some infinite loop bug in the directionsToRoot code.
             car_state--;
             break;
         case 11:
-            [self ulyssesSpeak:@"A02_back_soon"];
+            [self playSoundFile:@"A02_back_soon"];
             car_state--;
             car_state = timer;
             direct = YES;
@@ -195,7 +194,7 @@ X10. there is some infinite loop bug in the directionsToRoot code.
                     [self speaktime:timer];
                 } else {
                     current_state=4;
-                    [self ulyssesSpeak:@"A17_too_late"];
+                    [self playSoundFile:@"A17_too_late"];
                 }
             }
             break;
@@ -215,12 +214,12 @@ X10. there is some infinite loop bug in the directionsToRoot code.
     if (![self readyToSpeak]) return;
     switch (alarm_state){
         case 0:
-            [self ulyssesSpeak:@"A18_elaborate_plan"];
+            [self playSoundFile:@"A18_elaborate_plan"];
             alarm_state++;
             break;
         case 1:
             [self startAlarm];
-            [self ulyssesSpeak:@"A19_get_out_of_there"];
+            [self playSoundFile:@"A19_get_out_of_there"];
             alarm_state++;
             direct = YES;
             break;
@@ -263,7 +262,7 @@ X10. there is some infinite loop bug in the directionsToRoot code.
     if (![self readyToSpeak]) return;
     switch (cop_state){
         case 0:
-            [self ulyssesSpeak:@"A20_watch_out_police"];
+            [self playSoundFile:@"A20_watch_out_police"];
             siren.volume = 0.01;
             [self startSiren];
             cop_state++;
@@ -274,7 +273,7 @@ X10. there is some infinite loop bug in the directionsToRoot code.
             break;
             
         case 2:
-            [self ulyssesSpeak:@"A21_cop_ahead"];
+            [self playSoundFile:@"A21_cop_ahead"];
             [self startSiren];
             cop_state++;
             
@@ -325,12 +324,12 @@ X10. there is some infinite loop bug in the directionsToRoot code.
             
             if (onpath && dist_cop_to_player < 30){
                 //cop see you.
-                [self ulyssesSpeak:@"12stoppolice-2"];
+                [self playSoundFile:@"12stoppolice-2"];
                 current_state = 4;
             } else if (dist_cop_to_player > 50 && dist_cop_to_car < dist_player_to_car) {
                 //you are clear
                 [self stopSiren];
-                [self ulyssesSpeak:@"A22_coast_clear"];
+                [self playSoundFile:@"A22_coast_clear"];
                 current_state++;
                 [destination release];
                 destination = [themap createPathSearchAt:safehouse.pos withMaxDistance:[NSNumber numberWithFloat:player_max_distance]];
@@ -355,70 +354,48 @@ X10. there is some infinite loop bug in the directionsToRoot code.
 - (void) the_safehouse {
     float dist = [destination distanceFromRoot:player.pos];
     if (dist < 30) {
-        [self ulyssesSpeak:@"A23_successful_mission"];
+        if ([self playSoundFile:@"A23_successful_mission"]) current_state=5;
         //what should actually happen when the mission ends successfully?
-        current_state=5;
+        //current_state=5;
     }
 }
 
 #pragma mark -
-
-- (BOOL) readyToSpeak {
-    return (!ulysses.playing && ![voicebot isSpeaking]);
-}
 - (void) speaktime:(int)t{
     switch(t){
         case 9:
-            [self ulyssesSpeak:@"A07_ten_minutes"];
+            [self playSoundFile:@"A07_ten_minutes"];
             break;
         case 8:
-            [self ulyssesSpeak:@"A08_nine_minutes"];
+            [self playSoundFile:@"A08_nine_minutes"];
             break;
         case 7:
-            [self ulyssesSpeak:@"A09_eight_minutes"];
+            [self playSoundFile:@"A09_eight_minutes"];
             break;
         case 6:
-            [self ulyssesSpeak:@"A10_seven_minutes"];
+            [self playSoundFile:@"A10_seven_minutes"];
             break;
         case 5:
-            [self ulyssesSpeak:@"A11_six_minutes"];
+            [self playSoundFile:@"A11_six_minutes"];
             break;
         case 4:
-            [self ulyssesSpeak:@"A12_five_minutes"];
+            [self playSoundFile:@"A12_five_minutes"];
             break;
         case 3:
-            [self ulyssesSpeak:@"A13_four_minutes"];
+            [self playSoundFile:@"A13_four_minutes"];
             break;
         case 2:
-            [self ulyssesSpeak:@"A14_three_minutes"];
+            [self playSoundFile:@"A14_three_minutes"];
             break;
         case 1:
-            [self ulyssesSpeak:@"A15_two_minutes"];
+            [self playSoundFile:@"A15_two_minutes"];
             break;
         case 0:
-            [self ulyssesSpeak:@"A16_one_minute"];
+            [self playSoundFile:@"A16_one_minute"];
             break;
         default:
             break;
     }
-}
-- (void) ulyssesSpeak:(NSString *)filename{
-    //short circuit
-    //return;
-    if ([last_played_sound isEqualToString:filename]) return; //dont play the same thing twice in a row
-    
-    [filename retain];
-    [last_played_sound release];
-    last_played_sound = filename;
-    
-    [ulysses release];
-    NSError *error;
-    NSString * s = [[NSBundle mainBundle] pathForResource:filename ofType:@"mp3"];
-    NSURL * x = [NSURL fileURLWithPath:s];
-    ulysses = [[AVAudioPlayer alloc] initWithContentsOfURL:x error:&error];
-    ulysses.volume = 1.0;
-    [ulysses prepareToPlay];
-    [ulysses play];
 }
 - (void) startSiren {
     siren.volume = 0.1;
@@ -436,20 +413,7 @@ X10. there is some infinite loop bug in the directionsToRoot code.
 - (void) stopAlarm {
     [alarm pause];
 }
-- (void) playSong:(NSString *)filename{
-    [_music release];
-    NSError *error;
-    NSString * s = [[NSBundle mainBundle] pathForResource:filename ofType:@"mp3"];
-    NSURL * x = [NSURL fileURLWithPath:s];
-    _music = [[AVAudioPlayer alloc] initWithContentsOfURL:x error:&error];
-    _music.volume = 0.5;
-    _music.numberOfLoops = -1;
-    [_music prepareToPlay];
-    [_music play];
-}
 - (void) dealloc {
-    [_music release];
-    [ulysses release];
     [alarm release];
     [cop release];
     [safehouse release];

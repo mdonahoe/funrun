@@ -12,7 +12,7 @@
 #import "FRPathSearch.h"
 #import "VSSpeechSynthesizer.h"
 #import "FRPoint.h"
-#import "LocationPicker.h"
+#import "FRProgress.h"
 
 
 
@@ -20,9 +20,12 @@
 
 
 
-@interface FRMissionTemplate : NSObject <LocationPickerDelegate>{
+@interface FRMissionTemplate : NSObject <FRSoundFilePlayer>{
 	NSString * previously_said;
-	FRPathSearch * latestsearch;
+    NSString * last_played_sound;
+	NSString * current_road;
+    NSString * next_road;
+    FRPathSearch * latestsearch;
     FRPathSearch * destination;
 	FRMap * themap;
 	FRPoint * player;
@@ -33,14 +36,13 @@
 	VSSpeechSynthesizer * voicebot;
 	NSMutableArray * toBeSpoken;
 	NSMutableArray * points;
-	NSString * current_road;
-    NSString * next_road;
 	UIViewController * viewControl;
-    AVAudioPlayer * backgroundMusicPlayer;
+    AVAudioPlayer * backgroundMusic;
+    AVAudioPlayer * soundfx;
 }
 @property(nonatomic,retain) NSMutableArray * points;
 @property(nonatomic,assign) UIViewController * viewControl;
-//- (id) initWithMap:(FRMap *)m andPlayer:(FRPoint*)p;
+
 - (id) initWithLocation:(CLLocation*)l distance:(float)dist destination:(CLLocation*)dest viewControl:(UIViewController*)vc;
 - (void) abort;
 - (void) ticktock;
@@ -49,5 +51,9 @@
 - (void) speakNow:(NSString *)text;
 - (void) newPlayerLocation:(CLLocation *)location;
 - (void) playSong:(NSString*)name;
+- (BOOL) playSoundFile:(NSString *)filename;
+- (void) soundfile:(NSString*)filename;
+- (BOOL) readyToSpeak;
 - (void) updateDirections;
+
 @end
