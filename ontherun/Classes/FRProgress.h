@@ -10,6 +10,7 @@
 
 @protocol FRSoundFilePlayer <NSObject>
 
+//plays the given soundfile and returns YES. Returns NO, if refused
 - (BOOL)playSoundFile:(NSString*)filename;
 
 @end
