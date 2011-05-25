@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "FRMissionTemplate.h"
 
-@interface TheCarMission : FRMissionTemplate <FRSoundFilePlayer>{
+@interface TheCarMission : FRMissionTemplate {
     //states
     int car_state;
     int alarm_state;
@@ -31,6 +31,7 @@
     int car_times_spoken;
     BOOL direct;
     FRPathSearch * cop_goal;
+    FRProgress * prog;
 }
 
 - (void) the_car;

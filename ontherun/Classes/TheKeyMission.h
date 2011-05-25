@@ -8,9 +8,8 @@
 
 #import <Foundation/Foundation.h>
 #import "FRMissionTemplate.h"
-#import "FRProgress.h"
 
-@interface TheKeyMission : FRMissionTemplate <FRSoundFilePlayer>{
+@interface TheKeyMission : FRMissionTemplate {
     FRPoint * pointA;
     FRPoint * pointB;
     FRPoint * pointC;
@@ -20,6 +19,7 @@
     int sub_state;
     float xdist;
     float dude_speed;
+    int chase_ticks;
     FRProgress * prog;
 }
 - (void) the_first;

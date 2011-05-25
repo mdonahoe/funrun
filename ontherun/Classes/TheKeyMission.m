@@ -144,10 +144,7 @@
             dist = [destination distanceFromRoot:player.pos];
             [prog update:dist];
             NSLog(@"dist = %f",dist);
-            if (dist < 30) {
-                [self soundfile:@"B06"];
-                sub_state++;
-            }
+            if ((dist < 30) && [self playSoundFile:@"B06"]) sub_state++;
             break;
         case 3:
             [self soundfile:@"B10"];
@@ -229,10 +226,11 @@
             sub_state=0;
             [destination release];
             destination = [themap createPathSearchAt:safehouse.pos withMaxDistance:[NSNumber numberWithFloat:player_max_distance]];
-            dude.pos = [destination move:player.pos awayFromRootWithDelta:30.0];
+            dude.pos = player.pos;
             dude_speed = 4.0;
             xdist = 30.0;
             main_state++;
+            chase_ticks=0;
             [prog release];
             prog=nil;
             break;
@@ -244,21 +242,34 @@
 - (void) the_chase {
     float dist;
     float dist_dude_to_safehouse;
-    if (![self readyToSpeak]) return;
     FREdgePos * newpos;
     NSString * textualchange;
     switch (sub_state){
         case 0:
-            [self soundfile:@"E01"];
-            [self playSong:@"chase_scary"];
-            sub_state++;
+            if ([self playSoundFile:@"E01"]) {
+                [self playSong:@"chase_scary"];
+                sub_state++;
+            }
             break;
         case 1:
             NSLog(@"oh shiiit, get out of there!");
-            [self soundfile:@"B13"];
-            sub_state++;
+            if ([self playSoundFile:@"B13"]) sub_state++;
             break;
         case 2:
+            dist = [latestsearch distanceFromRoot:dude.pos];
+            if (dist > 30) sub_state++;
+            
+            if (![self readyToSpeak]) return;
+            
+            if (chase_ticks++ > 10){
+                [self speak:@"YOU LOSE"];
+                main_state=5;
+            } else if (chase_ticks>5){
+                [self speak:@"run run run"];
+            }
+            break;
+        case 3:
+            
             newpos = [latestsearch move:dude.pos towardRootWithDelta:dude_speed];
             dist = [latestsearch distanceFromRoot:dude.pos];
             /*
@@ -288,7 +299,7 @@
             
             dude.pos = newpos;
             
-            
+            if (![self readyToSpeak]) return;
             
             if (dist < 10){
                 
@@ -297,7 +308,7 @@
                 main_state=5;
                 return;
             } else if (dist < 20){
-                [self soundfile:@"E03"];
+                [self soundfile:@"E03"]; //"you cant outrun me"
             }
             
             
@@ -329,7 +340,7 @@
             } 
             
             if (dist_dude_to_safehouse<50 && dude_speed>0){
-                dude_speed =0;
+                dude_speed = 0;
                 NSLog(@"You lost him.");
                 [self soundfile:@"B24"];
                 sub_state++;
@@ -339,14 +350,14 @@
              
             
             break;
-        case 3:
+        case 4:
             NSLog(@"keep going to the safehouse");
             [self soundfile:@"B27"];
             prog = [[FRProgress alloc] initWithStart:[destination distanceFromRoot:player.pos] delegate:self];
             
             sub_state++;
             break;
-        case 4:
+        case 5:
             dist = [destination distanceFromRoot:player.pos];
             NSLog(@"dist = %f",dist);
             [prog update:dist];

@@ -77,6 +77,10 @@ X10. there is some infinite loop bug in the directionsToRoot code.
     destination = [themap createPathSearchAt:car.pos withMaxDistance:[NSNumber numberWithFloat:player_max_distance]];
     
     
+    //setup the progress meter
+    prog = [[FRProgress alloc] initWithStart:[destination distanceFromRoot:player.pos] delegate:self];
+    
+    
     //The cop starts at the player's location, but doesnt interact until later.
     cop = [[FRPoint alloc] initWithName:@"cop"];
     cop.pos = player.pos;
@@ -196,6 +200,8 @@ X10. there is some infinite loop bug in the directionsToRoot code.
                     current_state=4;
                     [self playSoundFile:@"A17_too_late"];
                 }
+            } else {
+                [prog update:dist];
             }
             break;
     }
@@ -203,8 +209,10 @@ X10. there is some infinite loop bug in the directionsToRoot code.
     if (dist < 30){
         //you made it
         current_state++;
-        cop_goal = destination;//[destination release];
+        cop_goal = destination;
         destination = [themap createPathSearchAt:safehouse.pos withMaxDistance:[NSNumber numberWithFloat:player_max_distance]];
+        [prog release];
+        prog = nil;
         direct = NO;
     }
     
@@ -421,6 +429,7 @@ X10. there is some infinite loop bug in the directionsToRoot code.
     [car release];
     [unsafe_spot release];
     [cop_goal release];
+    [prog release];
     [super dealloc];
 }
 @end

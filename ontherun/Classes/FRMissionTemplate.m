@@ -177,7 +177,7 @@
         b = ((FRTroubleshoot*)viewControl).t_slider.value;
         c = ((FRTroubleshoot*)viewControl).r_slider.value;
         d = ((FRTroubleshoot*)viewControl).f_slider.value;
-        NSLog(@"a=%f,b=%f,c=%f,d=%f",a,b,c,d);
+        //NSLog(@"a=%f,b=%f,c=%f,d=%f",a,b,c,d);
         
         for (NSArray * edge in ten_closest){
             
@@ -200,7 +200,7 @@
             //ideally these would be manually controlled.
             double score = a*E+b*T+c*R+d*F;
             
-            NSLog(@"score = %f, %@",score,road);
+            //NSLog(@"score = %f, %@",score,road);
             if (score < min_score){
                 min_score = score;
                 best = ep;
@@ -208,7 +208,7 @@
             
             //calculate the ep, and the travel distance
         }
-        NSLog(@"best score = %f, %@",min_score,[themap roadNameFromEdgePos:best]);
+        //NSLog(@"best score = %f, %@",min_score,[themap roadNameFromEdgePos:best]);
         
         float new_dist = [latestsearch distanceFromRoot:best];
 #define SPEED_ALPHA 0.5
@@ -300,6 +300,7 @@
 	[player release];
 	[points release];
 	[themap release];
+    [soundfx release];
     [voicebot release];
 	[next_road release];
     [toBeSpoken release];
