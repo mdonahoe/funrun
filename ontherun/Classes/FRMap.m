@@ -22,7 +22,7 @@
 			NSDictionary * node = [_nodes objectForKey:node_id];
 			float lat = [[node objectForKey:@"lat"] floatValue];
 			float lon = [[node objectForKey:@"lon"] floatValue];
-			CLLocation * p = [[CLLocation alloc] initWithLatitude:lat longitude:lon];
+			CLLocation * p = [[[CLLocation alloc] initWithLatitude:lat longitude:lon] autorelease];
 			[nodes setObject:p forKey:[f numberFromString:node_id]];
 		}
 		
@@ -36,8 +36,8 @@
 					[edges addObject:[[NSArray alloc] initWithObjects:previous,node,nil]];
 					
 					//create the inner dictionaries, if they dont exist yet.
-					if ([graph objectForKey:previous]==nil) [graph setObject:[[NSMutableDictionary alloc] initWithCapacity:3] forKey:previous];
-					if ([graph objectForKey:node]==nil) [graph setObject:[[NSMutableDictionary alloc] initWithCapacity:3] forKey:node];
+					if ([graph objectForKey:previous]==nil) [graph setObject:[[[NSMutableDictionary alloc] initWithCapacity:3] autorelease] forKey:previous];
+					if ([graph objectForKey:node]==nil) [graph setObject:[[[NSMutableDictionary alloc] initWithCapacity:3] autorelease] forKey:node];
 					
 					//calculate the distance between nodes
 					float length = [(CLLocation *)[nodes objectForKey:previous] distanceFromLocation:(CLLocation *)[nodes objectForKey:node]];
@@ -261,7 +261,7 @@
 - (NSNumber *) randomNeighbor:(NSNumber *)node {
 	int i=0;
 	NSDictionary * neighbors = [graph objectForKey:node];
-	NSNumber * rnode;
+	NSNumber * rnode=nil;
 	for (NSNumber * neighbor in neighbors){
 		if (arc4random()%(++i)==0) rnode = neighbor;
 	}
@@ -415,7 +415,7 @@
 		prev = goal;
 		goal = newgoal;
 	}
-	NSString * text;
+	NSString * text=nil;
 	switch ([neighbors count]) {
 		case 0:
 			text = @"lost";

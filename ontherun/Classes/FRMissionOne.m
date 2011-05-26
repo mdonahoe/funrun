@@ -157,7 +157,7 @@
 	
 	FREdgePos * newpos;
 	float dist;
-	NSTimeInterval timeleft;
+	NSTimeInterval timeleft=0;
 	if (rendezvous_time) timeleft = [rendezvous_time timeIntervalSinceNow];
 	
 	

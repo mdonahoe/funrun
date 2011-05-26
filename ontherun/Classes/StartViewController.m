@@ -87,8 +87,14 @@
 	//destination = nil;
 }
 
-- (void) viewDidAppear:(BOOL)animated {
-    if (mission) [mission release];
+- (void) viewWillAppear:(BOOL)animated {
+    
+    if (mission) {
+        [NSObject cancelPreviousPerformRequestsWithTarget:mission];
+        NSLog(@"mission about to be released, retains = %i",[mission retainCount]);
+        [mission release];
+        mission = nil;
+    }
 }
 
 
@@ -116,7 +122,11 @@
 - (IBAction)startMission:(id)sender{
 	//load the custom class using the class name in missionData
     
-    if (mission) [mission release];
+    if (mission) {
+        [NSObject cancelPreviousPerformRequestsWithTarget:mission];
+        [mission release];
+        mission = nil;
+    }
     mission = [[NSClassFromString([missionData objectForKey:@"class"]) alloc] initWithLocation:self.latest_point
                                                                                       distance:distanceSlider.value
                                                                                    destination:destination

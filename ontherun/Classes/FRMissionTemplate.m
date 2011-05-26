@@ -295,9 +295,17 @@
     //no sound fx or voice playing
     return !(soundfx.playing || [voicebot isSpeaking]);
 }
-
+- (id) retain
+{
+    // Break here to see who is retaining me.
+    NSLog(@"about to retain. current count is =%i",[self retainCount]);
+    return [super retain];
+}
 - (void) dealloc {
-	[player release];
+    //stop the ticktocks
+    [NSObject cancelPreviousPerformRequestsWithTarget:self];
+	
+    [player release];
 	[points release];
 	[themap release];
     [soundfx release];

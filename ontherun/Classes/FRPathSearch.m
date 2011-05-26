@@ -384,10 +384,8 @@
 	}
 	
 	NSString * current_road = nil;
-	FREdgePos * prev = nil;
 	
 	do {//potential infinite loop
-		prev = ep;
 		ep = [self moveCloserToRoot:ep];
 		current_road = [map roadNameFromEdgePos:ep];
 	} while ([start_road isEqualToString:current_road]);
