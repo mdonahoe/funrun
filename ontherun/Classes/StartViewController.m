@@ -32,6 +32,16 @@
     return self;
 }
 */
+
+- (id) initWithMissionData:(NSDictionary *)obj {
+    self = [super initWithNibName:@"StartView" bundle:nil];
+    if (!self) return nil;
+    
+    [obj retain];
+    missionData = obj;
+    
+    return self;
+}
 - (IBAction) statechange:(id)sender {
 	//when the view gets unloaded and reloaded, gps.on defaults to YES. might want to save it seperately.
 	if (gps.on){
@@ -77,6 +87,10 @@
 	//destination = nil;
 }
 
+- (void) viewDidAppear:(BOOL)animated {
+    if (mission) [mission release];
+}
+
 
 /*
 // Override to allow orientations other than the default portrait orientation.
@@ -99,17 +113,14 @@
     // e.g. self.myOutlet = nil;
 	NSLog(@"first view unloaded");
 }
-- (IBAction)loadMissionTwo:(id)sender{
-	//have different nibs for different missions?
-	//or download from the interwebs?
-	if (mission) [mission release];
-	mission = [[TheKeyMission alloc] initWithLocation:self.latest_point distance:distanceSlider.value destination:destination viewControl:self];
-}
-- (IBAction)loadMissionOne:(id)sender{
-	//have different nibs for different missions?
-	//or download from the interwebs?
-	if (mission) [mission release];
-    mission = [[TheCarMission alloc] initWithLocation:self.latest_point distance:distanceSlider.value destination:destination viewControl:self];
+- (IBAction)startMission:(id)sender{
+	//load the custom class using the class name in missionData
+    
+    if (mission) [mission release];
+    mission = [[NSClassFromString([missionData objectForKey:@"class"]) alloc] initWithLocation:self.latest_point
+                                                                                      distance:distanceSlider.value
+                                                                                   destination:destination
+                                                                                   viewControl:self];
 }
 - (IBAction) pickDestination:(id)sender{
     FRPoint * extraction_point = [[[FRPoint alloc] initWithName:@"extraction point"] autorelease];

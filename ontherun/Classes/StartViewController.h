@@ -22,6 +22,7 @@
     UILabel * distanceLabel;
     UISlider * distanceSlider;
     CLLocation * destination;
+    NSDictionary * missionData;
 	
 }
 @property(nonatomic,retain) IBOutlet UILabel * missionLabel;
@@ -30,9 +31,9 @@
 @property(nonatomic,retain) IBOutlet UISlider * distanceSlider;
 @property(nonatomic,retain) CLLocation * latest_point;
 
+- (id) initWithMissionData:(NSDictionary *)obj;
 - (IBAction)pickDestination:(id)sender;
-- (IBAction)loadMissionOne:(id)sender;
-- (IBAction)loadMissionTwo:(id)sender;
+- (IBAction)startMission:(id)sender;
 - (void) updatePosition:(id)obj;
 - (void) startStandardUpdates;
 - (IBAction) statechange:(id)sender;
