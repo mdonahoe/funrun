@@ -92,6 +92,7 @@
     if (mission) {
         [NSObject cancelPreviousPerformRequestsWithTarget:mission];
         NSLog(@"mission about to be released, retains = %i",[mission retainCount]);
+        [mission saveMissionStats:@"canceled"];
         [mission release];
         mission = nil;
     }
@@ -187,5 +188,6 @@
 	[locationManager release];
 	[mission release];
 	[super dealloc];
+    NSLog(@"start view dead");
 }
 @end

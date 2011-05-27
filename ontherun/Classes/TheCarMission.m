@@ -40,6 +40,7 @@ X10. there is some infinite loop bug in the directionsToRoot code.
     alarm_state = 0;
     cop_state = 0;
     safehouse_state = 0;
+    mission_name = @"The Car";
     
     [self playSong:@"chase_normal"];
     
@@ -198,6 +199,7 @@ X10. there is some infinite loop bug in the directionsToRoot code.
                     [self speaktime:timer];
                 } else {
                     current_state=4;
+                    [self saveMissionStats:@"Did not get to the car in time"];
                     [self playSoundFile:@"A17_too_late"];
                 }
             } else {
@@ -334,6 +336,8 @@ X10. there is some infinite loop bug in the directionsToRoot code.
                 //cop see you.
                 [self playSoundFile:@"12stoppolice-2"];
                 current_state = 4;
+                [self saveMissionStats:@"spotted by police"];
+                
             } else if (dist_cop_to_player > 50 && dist_cop_to_car < dist_player_to_car) {
                 //you are clear
                 [self stopSiren];
@@ -362,9 +366,11 @@ X10. there is some infinite loop bug in the directionsToRoot code.
 - (void) the_safehouse {
     float dist = [destination distanceFromRoot:player.pos];
     if (dist < 30) {
-        if ([self playSoundFile:@"A23_successful_mission"]) current_state=5;
-        //what should actually happen when the mission ends successfully?
-        //current_state=5;
+        if ([self playSoundFile:@"A23_successful_mission"]) {
+            [self saveMissionStats:@"success"];
+            current_state=5;
+        }
+            //what should actually happen when the mission ends successfully?
     }
 }
 

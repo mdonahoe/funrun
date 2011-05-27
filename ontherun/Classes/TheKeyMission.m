@@ -43,6 +43,7 @@
     self = [super initWithLocation:l distance:dist destination:dest viewControl:vc];
     if (!self) return nil;
     
+    mission_name = @"The Key";
     
     pointA = [[FRPoint alloc] initWithName:@"first"];
     pointB = [[FRPoint alloc] initWithName:@"second"];
@@ -263,6 +264,8 @@
             
             if (chase_ticks++ > 10){
                 [self speak:@"YOU LOSE"];
+                [self saveMissionStats:@"Caught by the guard"];
+                
                 main_state=5;
             } else if (chase_ticks>5){
                 [self speak:@"run run run"];
@@ -305,6 +308,8 @@
                 
                 NSLog(@"I GOT YOU FUCKER!");
                 [self soundfile:@"E06"];
+                [self saveMissionStats:@"The guard caught up to you"];
+                
                 main_state=5;
                 return;
             } else if (dist < 20){
@@ -365,6 +370,8 @@
                 [self soundfile:@"B28"];
                 [self playSong:@"chase_normal"];
                 NSLog(@"you made it. ima look at the data");
+                [self saveMissionStats:@"success"];
+                
                 main_state++;
                 sub_state=0;
             }

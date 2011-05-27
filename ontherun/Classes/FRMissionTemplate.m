@@ -12,19 +12,20 @@
 #import "ASIHTTPRequest.h"
 #import "FRTroubleshoot.h"
 
-
 @implementation FRMissionTemplate
 @synthesize points,viewControl;
 
 - (id) initWithLocation:(CLLocation*)l distance:(float)dist destination:dest viewControl:(UIViewController*)vc {
 	self = [super init];
 	if (!self) return nil;
-	
+	saved = NO;
     player_max_distance = dist*1000; //convert to meters
     last_location_received_date = nil;
     average_player_speed = 0.0;
     
-
+    total_player_distance = 0.0;
+    missionStart = [[NSDate alloc] init];
+    mission_name = @"The Template";
     
     //Voice Communication
 	//link to /Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.2.sdk/System/Library/PrivateFrameworks/VoiceServices.framework
@@ -213,6 +214,7 @@
         float new_dist = [latestsearch distanceFromRoot:best];
 #define SPEED_ALPHA 0.5
         average_player_speed = SPEED_ALPHA*(new_dist / [current_date timeIntervalSinceDate:last_location_received_date]) + (1.0-SPEED_ALPHA)*(average_player_speed);
+        total_player_distance+=new_dist;
         if (arc4random()%30==0) [self speakIfEmpty:[NSString stringWithFormat:@"%i meters per second",(int)average_player_speed]];
 		player.pos = [latestsearch move:best awayFromRootWithDelta:0];
         //[best release];
@@ -246,8 +248,10 @@
 }
 - (void) playSong:(NSString *)name {
     [backgroundMusic release];
-    if (name==nil) return;
-    
+    if (name==nil) {
+        backgroundMusic=nil;
+        return;
+    }
     NSString * path = [[NSBundle mainBundle] pathForResource:name ofType:@"mp3"];
     NSURL * url = [NSURL fileURLWithPath:path];
     NSError * error;
@@ -272,6 +276,9 @@
     [soundfx release];
     NSError *error;
     NSString * s = [[NSBundle mainBundle] pathForResource:filename ofType:@"mp3"];
+    if (s==nil) {
+        s = [[NSBundle mainBundle] pathForResource:filename ofType:@"aiff"];
+    }
     NSURL * x = [NSURL fileURLWithPath:s];
     soundfx = [[AVAudioPlayer alloc] initWithContentsOfURL:x error:&error];
     soundfx.volume = 1.0;
@@ -295,16 +302,38 @@
     //no sound fx or voice playing
     return !(soundfx.playing || [voicebot isSpeaking]);
 }
-- (id) retain
-{
-    // Break here to see who is retaining me.
-    NSLog(@"about to retain. current count is =%i",[self retainCount]);
-    return [super retain];
+- (void) saveMissionStats:(NSString*) status{
+    if (saved) { 
+        NSLog(@"mission already saved");
+        return;
+    }
+    NSMutableDictionary * data = [NSMutableDictionary dictionary];
+    [data setObject:mission_name forKey:@"mission_name"];
+    [data setObject:status forKey:@"status"];
+    
+    //might want to save top speed, but average_player_speed isnt it
+    //[data setObject:[NSNumber numberWithFloat:average_player_speed] forKey:@"average_speed"];
+    
+    [data setObject:[NSNumber numberWithFloat:total_player_distance] forKey:@"distance"];
+    float mission_time = -[missionStart timeIntervalSinceNow];
+    [data setObject:[NSNumber numberWithFloat:mission_time] forKey:@"elapsed_time"];
+    [data setObject:[NSNumber numberWithDouble:[missionStart timeIntervalSinceReferenceDate]] forKey:@"start_time"];
+    
+    
+    //save the log, upload it later.
+    NSUserDefaults * defaults = [NSUserDefaults standardUserDefaults];
+    NSMutableArray * logs = [NSMutableArray arrayWithArray:[defaults arrayForKey:@"unsaved_logs"]];
+    [logs addObject:data];
+    [defaults setObject:[NSArray arrayWithArray:logs]  forKey:@"unsaved_logs"];
+    [defaults synchronize];
+    saved = YES;
+    
 }
 - (void) dealloc {
     //stop the ticktocks
     [NSObject cancelPreviousPerformRequestsWithTarget:self];
-	
+	[self saveMissionStats:@"dealloc'ing"];
+    
     [player release];
 	[points release];
 	[themap release];
@@ -313,6 +342,7 @@
 	[next_road release];
     [toBeSpoken release];
     [destination release];
+    [missionStart release];
     [latestsearch release];
     [current_road release];
     [previously_said release];

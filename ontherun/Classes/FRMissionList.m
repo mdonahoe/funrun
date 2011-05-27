@@ -8,6 +8,9 @@
 
 #import "FRMissionList.h"
 #import "StartViewController.h"
+#import "ASIFormDataRequest.h"
+#import "JSON.h"
+
 @implementation FRMissionList
 
 
@@ -93,8 +96,56 @@
     NSLog(@"mission list appeared");
     [m2 loadObjectForKey:userkey toDelegate:self usingSelector:@selector(userData:)];
     
+    [self uploadLogs];
+    
+    
 }
-
+- (void) uploadLogs {
+    NSUserDefaults * defaults = [NSUserDefaults standardUserDefaults];
+    NSArray * logs = [defaults arrayForKey:@"unsaved_logs"];
+    
+    if (logs==nil || [logs count]<1) return;
+    
+    NSDictionary * first = [logs objectAtIndex:0];
+    NSString * key = [NSString stringWithFormat:@"%@_logs",userkey];
+    NSLog(@"key =%@",key);
+    //[m2 sendObject:first forKey:[NSString stringWithFormat:@"%@_logs",userkey]];
+    //extract and prepare the data
+	
+    SBJsonWriter *jsonWriter = [[SBJsonWriter alloc] init];    
+    NSString *json = [jsonWriter stringWithObject:first];
+    [jsonWriter release];
+    if (!json){
+        NSLog(@"jsonize failed. deleting log %@",first);
+        [self savedALog:nil];
+        return;
+    }
+	//create the POST request
+	NSURL * url = [NSURL URLWithString:@"http://toqbot.com/db/"];
+	
+	//there can be many outrequests at once.
+	ASIFormDataRequest * outrequest = [ASIFormDataRequest requestWithURL:url];
+	[outrequest setPostValue:json forKey:key];
+	
+	//set the correct callback and send to server
+	[outrequest setDidFinishSelector:@selector(savedALog:)];
+	[outrequest setDidFailSelector:@selector(saveFailed:)];
+	[outrequest setDelegate:self];
+	[outrequest startAsynchronous];
+    
+    
+}
+- (void) saveFailed:(id)request{
+    [self uploadLogs];
+}
+- (void) savedALog:(id) request{
+    NSUserDefaults * defaults = [NSUserDefaults standardUserDefaults];
+    NSMutableArray * logs = [NSMutableArray arrayWithArray:[defaults arrayForKey:@"unsaved_logs"]];
+    [logs removeObjectAtIndex:0];
+    [defaults setObject:[NSArray arrayWithArray:logs] forKey:@"unsaved_logs"];
+    [defaults synchronize];
+    [self uploadLogs];
+}
 - (void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];

@@ -17,4 +17,7 @@
 }
 - (NSDictionary*)objFromIndexPath:(NSIndexPath*)indexPath;
 - (id)initWithUsername:(NSString *)username;
+- (void) uploadLogs;
+- (void) saveFailed:(id)request;
+- (void) savedALog:(id) request;
 @end

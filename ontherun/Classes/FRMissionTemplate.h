@@ -25,6 +25,7 @@
     NSString * last_played_sound;
 	NSString * current_road;
     NSString * next_road;
+    NSString * mission_name;
     FRPathSearch * latestsearch;
     FRPathSearch * destination;
 	FRMap * themap;
@@ -33,7 +34,11 @@
     NSDate * last_location_received_date;
     float average_player_speed;
     float player_max_distance;
-	VSSpeechSynthesizer * voicebot;
+    BOOL saved;
+    float total_player_distance;
+    NSDate * missionStart;
+    
+    VSSpeechSynthesizer * voicebot;
 	NSMutableArray * toBeSpoken;
 	NSMutableArray * points;
 	UIViewController * viewControl;
@@ -55,5 +60,5 @@
 - (void) soundfile:(NSString*)filename;
 - (BOOL) readyToSpeak;
 - (void) updateDirections;
-
+- (void) saveMissionStats:(NSString*)status;
 @end
