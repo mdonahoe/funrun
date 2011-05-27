@@ -18,6 +18,7 @@
     if (self) {
         // Custom initialization
     }
+    
     return self;
 }
 
@@ -41,6 +42,8 @@
 {
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    namefield.text = [defaults objectForKey:@"username"];
 }
 
 - (void)viewDidUnload
@@ -61,6 +64,11 @@
     
     NSString * username = namefield.text;
     NSLog(@"username = %@",username);
+    
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    [defaults setObject:username forKey:@"username"];
+    [defaults synchronize];
+    
     FRMissionList * ml = [[FRMissionList alloc] initWithUsername:username];
     [self.navigationController pushViewController:ml animated:YES];
     [ml release];
