@@ -39,7 +39,7 @@
     
     [obj retain];
     missionData = obj;
-    
+    latest_point = nil;
     return self;
 }
 - (IBAction) statechange:(id)sender {
@@ -121,7 +121,10 @@
 }
 - (IBAction)startMission:(id)sender{
 	//load the custom class using the class name in missionData
+    if (latest_point==nil) return;
     
+    NSLog(@" latest point = %@",latest_point);
+        
     if (mission) {
         [NSObject cancelPreviousPerformRequestsWithTarget:mission];
         [mission release];
@@ -166,11 +169,11 @@
 	 didUpdateToLocation:(CLLocation *)newLocation
 			fromLocation:(CLLocation *)oldLocation
 {
-	NSLog(@"recieved timestamp: %f",[newLocation.timestamp timeIntervalSinceNow]);
 	if (newLocation.horizontalAccuracy>100.0 || [newLocation.timestamp timeIntervalSinceNow] < -30.0) return;
 	if (newLocation.coordinate.latitude==oldLocation.coordinate.latitude && newLocation.coordinate.longitude==oldLocation.coordinate.longitude){
 		return;
 	}
+	NSLog(@"recieved timestamp: %f",[newLocation.timestamp timeIntervalSinceNow]);
 	
 	self.latest_point = newLocation;
 	if (mission) [mission newPlayerLocation:self.latest_point];
