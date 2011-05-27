@@ -158,6 +158,7 @@
 		C99EBE4A137AE3520079A70E /* A23_successful_mission.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = C99EBE32137AE3510079A70E /* A23_successful_mission.mp3 */; };
 		C9ABFF5013087EEF0031160A /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C9ABFF4F13087EEF0031160A /* MediaPlayer.framework */; };
 		C9C5378812E39A7A005C0BF0 /* FRMap.m in Sources */ = {isa = PBXBuildFile; fileRef = C9C5378712E39A7A005C0BF0 /* FRMap.m */; };
+		C9D28C88139004190077B60F /* lock.png in Resources */ = {isa = PBXBuildFile; fileRef = C9D28C87139004190077B60F /* lock.png */; };
 		C9E3F22A137DE6010077E168 /* TheKeyMission.m in Sources */ = {isa = PBXBuildFile; fileRef = C9E3F229137DE6010077E168 /* TheKeyMission.m */; };
 		C9E494C212F8D7390006AB7B /* FRPathSearch.m in Sources */ = {isa = PBXBuildFile; fileRef = C9E494C112F8D7390006AB7B /* FRPathSearch.m */; };
 		C9FC234912F9CCC700892CF6 /* toqbot.m in Sources */ = {isa = PBXBuildFile; fileRef = C9FC234812F9CCC700892CF6 /* toqbot.m */; };
@@ -357,6 +358,7 @@
 		C9ABFF4F13087EEF0031160A /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = System/Library/Frameworks/MediaPlayer.framework; sourceTree = SDKROOT; };
 		C9C5378612E39A7A005C0BF0 /* FRMap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRMap.h; sourceTree = "<group>"; };
 		C9C5378712E39A7A005C0BF0 /* FRMap.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRMap.m; sourceTree = "<group>"; };
+		C9D28C87139004190077B60F /* lock.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = lock.png; sourceTree = "<group>"; };
 		C9E3F228137DE6010077E168 /* TheKeyMission.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TheKeyMission.h; sourceTree = "<group>"; };
 		C9E3F229137DE6010077E168 /* TheKeyMission.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TheKeyMission.m; sourceTree = "<group>"; };
 		C9E494C012F8D7390006AB7B /* FRPathSearch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRPathSearch.h; sourceTree = "<group>"; };
@@ -449,6 +451,7 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				C9D28C87139004190077B60F /* lock.png */,
 				9BA788E713845C3A006C8759 /* aiff */,
 				9B418ED1138741DE00A8272A /* mp3s */,
 				9B418ED0138741B800A8272A /* nibs */,
@@ -862,6 +865,7 @@
 				C9569BFB138833A200FD66E8 /* FRTroubleshoot.xib in Resources */,
 				9B2AE23C138EAD3F00D22D85 /* FRNameController.xib in Resources */,
 				9B2AE241138EAE4D00D22D85 /* FRMissionList.xib in Resources */,
+				C9D28C88139004190077B60F /* lock.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

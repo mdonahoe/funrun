@@ -161,7 +161,13 @@
     
     name = [obj objectForKey:@"name"];
     if ([obj objectForKey:@"locked"]){
-        name = [NSString stringWithFormat:@"%@ (locked)",name];
+        //name = [NSString stringWithFormat:@"%@ (locked)",name];
+        //UIFont *myFont = [UIFont fontWithName:@"Helvetica-BoldOblique" size:[UIFont systemFontSize]];
+        //cell.textLabel.font = myFont;
+        cell.textLabel.textColor = [UIColor grayColor];
+        cell.imageView.image = [UIImage imageNamed:@"lock.png"];
+    } else {
+        cell.imageView.image = nil;
     }
     cell.textLabel.text = name;
     
