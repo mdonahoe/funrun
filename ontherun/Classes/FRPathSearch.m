@@ -92,7 +92,7 @@
 		node = [previous objectForKey:node];
 	}
 	
-	[NSException raise:@"Traverse failed." format:@"node: %@, tries: %i", node,i];
+	//[NSException raise:@"Traverse failed." format:@"node: %@, tries: %i", node,i];
 	
 	return NO;
 }
@@ -184,7 +184,25 @@
 	
 	return MIN(dstart+position,dend+length-position);
 }
-
+- (float) straightDistanceFromRoot:(FREdgePos*)ep{
+    CLLocationCoordinate2D a = [map coordinateFromEdgePosition:root];
+    CLLocationCoordinate2D b = [map coordinateFromEdgePosition:ep];
+    
+    CLLocation * c = [[[CLLocation alloc] initWithLatitude:a.latitude longitude:a.longitude] autorelease];
+    
+    CLLocation * d = [[[CLLocation alloc] initWithLatitude:b.latitude longitude:b.longitude] autorelease];
+    
+    
+    
+    
+    
+    return [c distanceFromLocation:d];
+}
+- (float) rootDistanceToLatLng:(CLLocation *)ll{
+    CLLocationCoordinate2D a = [map coordinateFromEdgePosition:root];
+    CLLocation * c = [[[CLLocation alloc] initWithLatitude:a.latitude longitude:a.longitude] autorelease];
+    return [ll distanceFromLocation:c];
+}
 - (FREdgePos *) moveCloserToRoot:(FREdgePos *)ep{
     FREdgePos * x;
 	
@@ -355,7 +373,7 @@
         //get the description for this change
         NSString * desc = [map descriptionFromEdgePos:prev toEdgePos:ep];
         if (desc) {
-            [directions addObject:[NSString stringWithFormat:@"turn %@",desc]];
+            [directions addObject:[NSString stringWithFormat:@"go %@",desc]];
         }
         start_road = current_road;
     }
