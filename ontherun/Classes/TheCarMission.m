@@ -7,7 +7,6 @@
 //
 
 #import "TheCarMission.h"
-
 /*
  
  notes:
@@ -117,6 +116,16 @@ X10. there is some infinite loop bug in the directionsToRoot code.
     
     
     car_time_left = 300; //default to 5 minutes, but this should be depending on difficulty.
+    
+    
+    for (FRPoint * pt in points){
+        [pt setCoordinate:[themap coordinateFromEdgePosition:pt.pos]];
+    }
+    
+    [self.viewControl.mapView addAnnotations:points];
+    
+    
+    
     //start working.
     [self ticktock];
 
@@ -170,6 +179,8 @@ X10. there is some infinite loop bug in the directionsToRoot code.
 - (void) the_car {
     // start with the introduction.
     
+    BOOL bingo = ([destination rootDistanceToLatLng:last_location] < 30 && [current_road isEqualToString:[themap roadNameFromEdgePos:car.pos]]);
+    if (bingo) [self speakIfEmpty:@"bingo!"];
     
     float dist = [destination distanceFromRoot:player.pos];
     float progress = dist / player_max_distance / 2.0;
@@ -208,10 +219,10 @@ X10. there is some infinite loop bug in the directionsToRoot code.
             break;
     }
     
-    if (dist < 30){
+    if (dist < 30 || bingo){
         //you made it
         current_state++;
-        cop_goal = destination;
+        [destination release];
         destination = [themap createPathSearchAt:safehouse.pos withMaxDistance:[NSNumber numberWithFloat:player_max_distance]];
         [prog release];
         prog = nil;
@@ -235,9 +246,9 @@ X10. there is some infinite loop bug in the directionsToRoot code.
             break;
         case 2:
             // adjust the sound of the alarm with the distance
-            // once the distance exceeds 200m, kill, cue the cop.
-            alarm.volume = (150.0 - alarmdist) / 100.0;
-            if (alarmdist > 200) {
+            // once the distance exceeds 100m, kill, cue the cop.
+            alarm.volume = (100.0 - alarmdist) / 100.0;
+            if (alarmdist > 100) {
                 [self stopAlarm];
                 current_state++;
             }
@@ -258,10 +269,9 @@ X10. there is some infinite loop bug in the directionsToRoot code.
      */
     
     
-    float dist_cop_to_player;
-    float dist_cop_to_car;
-    float dist_player_to_car;
-    float dist_player_to_spot;
+    //if (cop_state>2){
+        
+    //}
     
     BOOL onpath = [cop_goal edgepos:player.pos isOnPathFromRootTo:cop.pos];
     if (onpath) {
@@ -269,97 +279,118 @@ X10. there is some infinite loop bug in the directionsToRoot code.
         unsafe_spot = player.pos;
         [unsafe_spot retain];
     }
-    if (![self readyToSpeak]) return;
+    NSString * speakstring = nil;
+    
+    float dist_cop_to_car = [cop_goal distanceFromRoot:cop.pos];
+    
+    
+    
+    float dist_cop_to_player = [latestsearch distanceFromRoot:cop.pos];
+    float dist_player_to_car = [cop_goal distanceFromRoot:player.pos];
+    float dist_player_to_spot = [destination distanceFromRoot:player.pos];
+    
+    
     switch (cop_state){
         case 0:
-            [self playSoundFile:@"A20_watch_out_police"];
-            siren.volume = 0.01;
-            [self startSiren];
-            cop_state++;
+            if ([self playSoundFile:@"A20_watch_out_police"]){
+                cop_state++;
+            }
             break;
+            
         case 1:
-            //if (dist < 150) cop_state++;
-            cop_state++;
-            break;
+            if ([self playSoundFile:@"6copahead"]){
+                [self startSiren];
+                siren.volume = 0.01;
+                cop_state++;
             
+            
+                //the cop is now going to move toward your current location (as of right now)
+                if ([latestsearch containsPoint:cop.pos]){
+                    cop_goal=latestsearch;
+                    [latestsearch retain];
+                } else {
+                    [self speak:@"COP OUTSIDE SEARCH AREA"];
+                    current_state = 4;
+                }
+                prog=[[FRProgress alloc] initWithStart:dist_cop_to_player delegate:self];
+                direct = NO; //stop giving directions
+                [destination release];
+                destination=nil;
+                cop_speed = 10.0;
+            }
+            break;
         case 2:
-            [self playSoundFile:@"A21_cop_ahead"];
-            [self startSiren];
-            cop_state++;
-            
-            
-            //find a good place to hide from the cop
-            FREdgePos * goal = [destination forkPoint:player.pos];
-            
-            //start the cop at the same node, but facing the safehouse
-            NSNumber * next = [destination closerNode:[goal endObj]];
-            FREdgePos * coppos = [[[FREdgePos alloc] init] autorelease];
-            coppos.end = [goal end];
-            coppos.start = [next intValue];
-            coppos.position = [themap maxPosition:coppos];
-            
-            //move inward, away from the street to ensure that the player is in the right place
-            NSLog(@"goal = %@",[themap roadNameFromEdgePos:goal]);
-            goal = [themap move:goal forwardRandomly:40.0];
-            NSLog(@"new goal = %@",[themap roadNameFromEdgePos:goal]);
-            CLLocationCoordinate2D x = [themap coordinateFromEdgePosition:goal];
-            NSLog(@"lat = %f, lon=%f",x.latitude,x.longitude);
-            //move the cop so that he arrives at the correct time.
-            float dist_to_safepoint = [latestsearch distanceFromRoot:goal];
-            cop.pos = [destination move:coppos towardRootWithDelta:dist_to_safepoint]; //assumes that the cop moves at the same speed as you do. wrong, but ok fornow.
-            NSLog(@"cop = %@",[themap roadNameFromEdgePos:cop.pos]);
-            //change destination to direct player away from cop.
-            [destination release];
-            destination = [themap createPathSearchAt:goal withMaxDistance:[NSNumber numberWithFloat:player_max_distance]];
-            NSArray * directions = [destination directionsToRoot:player.pos];
-            NSLog(@"directions = %@",directions);
-            [self speak:[NSString stringWithFormat:@"your destination is %@",[themap roadNameFromEdgePos:goal]]];
-            
+            if ([self readyToSpeak]){
+                cop_state++;
+                [self speak:[NSString stringWithFormat:@"Police activity on %@",[themap roadNameFromEdgePos:cop.pos]]];
+            }
             break;
+            
         default:
-            cop.pos = [cop_goal move:cop.pos towardRootWithDelta:2.0]; //moving at 2m/s
-            dist_cop_to_player = [latestsearch distanceFromRoot:cop.pos];
-            dist_cop_to_car = [cop_goal distanceFromRoot:cop.pos];
-            dist_player_to_car = [cop_goal distanceFromRoot:player.pos];
-            dist_player_to_spot = [destination distanceFromRoot:player.pos];
+
+            
+            
             NSLog(@"d1 = %f,d2 = %f, d3 = %f",dist_cop_to_player,dist_cop_to_car,dist_player_to_car);
+            NSLog(@"You are onpath? %i",onpath);
             NSLog(@"cop is on %@",[themap roadNameFromEdgePos:cop.pos]);
             siren.volume = MAX(0.01,(100-dist_cop_to_player)/100.0);
-            //if the cop is closer to the car than the player is, then the player is off the track
-            //if the cop gets too close, you lose.
             
-            //how does the player know where to go?
-            //other than that the cop is in front of you, they dont know where.
-            //
             
-            if (onpath && dist_cop_to_player < 30){
+            
+            
+            
+            
+            if (onpath && dist_cop_to_player < 20 && [self playSoundFile:@"12stoppolice-2"]){
                 //cop see you.
-                [self playSoundFile:@"12stoppolice-2"];
                 current_state = 4;
                 [self saveMissionStats:@"spotted by police"];
                 
-            } else if (dist_cop_to_player > 50 && dist_cop_to_car < dist_player_to_car) {
+            } else if (!onpath && dist_cop_to_player > 100 && dist_cop_to_car < dist_player_to_car && [self playSoundFile:@"A22_coast_clear"]) {
                 //you are clear
                 [self stopSiren];
-                [self playSoundFile:@"A22_coast_clear"];
                 current_state++;
-                [destination release];
+                //[destination release];
                 destination = [themap createPathSearchAt:safehouse.pos withMaxDistance:[NSNumber numberWithFloat:player_max_distance]];
                 direct = YES;
                 
-            } else if (cop_state==3 && dist_cop_to_player < 60 && onpath) {
+            } else if (cop_state==3 && dist_cop_to_player < 100 && onpath && [self readyToSpeak]) {
                 
                 [self speak:@"You are gonna get caught. get off this road"];
-                cop_state=4;
+                cop_state = 4;
+                cop_speed = 2.0;
                 //the cop is going to see you any second now. get off his path.
             
-            } else if (cop_state==3 && !onpath){
+            } else if (cop_state==3 && !onpath && [self readyToSpeak]){
                 if ([latestsearch distanceFromRoot:unsafe_spot]>40){
                     cop_state = 5;
                     [self speak:@"You should be safe here"];
                     direct = NO;
                 }
+            } else {
+                
             }
+            
+            if (dist_cop_to_car > 25){
+                FREdgePos * newpos = [cop_goal move:cop.pos towardRootWithDelta:(onpath?cop_speed:20.0)];
+                
+                
+                if (![[themap roadNameFromEdgePos:newpos] isEqualToString:[themap roadNameFromEdgePos:cop.pos]]){
+                    
+                    [self speak:[NSString stringWithFormat:@"He just turned onto %@",[themap roadNameFromEdgePos:newpos]]];
+                    
+                    
+                } else {
+                    NSString * textualchange = [themap descriptionFromEdgePos:cop.pos toEdgePos:newpos];
+                    if (textualchange) {
+                        [self speak:[NSString stringWithFormat:@"He just went %@",textualchange]];
+                    }
+                }
+                
+                cop.pos = newpos;
+            }
+            
+            
+            [prog update:dist_cop_to_player];
             break;
     }
 }

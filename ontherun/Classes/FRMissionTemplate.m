@@ -10,12 +10,13 @@
 #import "FRBriefingViewController.h"
 #import "JSON.h"
 #import "ASIHTTPRequest.h"
-#import "FRTroubleshoot.h"
+//#import "FRTroubleshoot.h"
+//#import "FRMapViewController.h"
 
 @implementation FRMissionTemplate
 @synthesize points,viewControl;
 
-- (id) initWithLocation:(CLLocation*)l distance:(float)dist destination:dest viewControl:(UIViewController*)vc {
+- (id) initWithLocation:(CLLocation*)l distance:(float)dist destination:(CLLocation*)dest viewControl:(UIViewController*)vc {
 	self = [super init];
 	if (!self) return nil;
 	saved = NO;
@@ -36,18 +37,12 @@
 	last_played_sound = nil;
 	//communication with server
 	
-	
-    endPoint = [[FRPoint alloc] initWithName:@"end point"];
-    if (dest==nil) {
-        endPoint.pos = player.pos;
-    } else {
-        endPoint.pos = [themap edgePosFromPoint:dest];
-    }	
 	//init the pool
 	NSAutoreleasePool * thepool = [[NSAutoreleasePool alloc] init];
 	
 	//load the map
-    NSString * mapurl = [NSString stringWithFormat:@"http://toqbot.com/map/download?lat=%f&lng=%f&dist=%f",l.coordinate.latitude,l.coordinate.longitude,player_max_distance];
+    NSString * mapurl = [NSString stringWithFormat:@"http://toqbot.com/map/download?lat1=%f&lng1=%f&dist=%f&lat2=%f&lng2=%f",l.coordinate.latitude,l.coordinate.longitude,player_max_distance,dest.coordinate.latitude,dest.coordinate.longitude];
+    NSLog(@"url=%@",mapurl);
     NSURL *url = [NSURL URLWithString:mapurl];
     ASIHTTPRequest *request = [ASIHTTPRequest requestWithURL:url];
     [request startSynchronous];
@@ -65,7 +60,8 @@
     NSDictionary * mapdata = [mapstring JSONValue];
 	
     themap = [[FRMap alloc] initWithNodes:[mapdata objectForKey:@"nodes"] andRoads:[mapdata objectForKey:@"roads"]];
-	
+	player_max_distance = [[mapdata objectForKey:@"distance"] floatValue];
+    
 	[thepool release];
 	
 	player = [[FRPoint alloc] initWithDict:[NSDictionary dictionaryWithObject:@"player" forKey:@"name"] onMap:themap];
@@ -74,6 +70,7 @@
 	[player setCoordinate:[themap coordinateFromEdgePosition:player.pos]];
 	
     
+    NSLog(@"player max dist = %f",player_max_distance);
     endPoint = [[FRPoint alloc] initWithName:@"end point"];
     if (dest==nil) {
         endPoint.pos = player.pos;
@@ -96,11 +93,19 @@
 	
     [vc.navigationController pushViewController:brief animated:YES];
 	self.viewControl = brief;
-     */
+     
     
     FRTroubleshoot * trouble = [[[FRTroubleshoot alloc] initWithNibName:@"FRTroubleshoot" bundle:nil] autorelease];
     [vc.navigationController pushViewController:trouble animated:YES];
     self.viewControl = trouble;
+     */
+    
+    FRMapViewController * mv = [[[FRMapViewController alloc] initWithNibName:@"FRMapViewController" bundle:nil] autorelease];
+    [vc.navigationController pushViewController:mv animated:YES];
+    self.viewControl = mv;
+    
+    
+    
 	return self;
 }
 
@@ -174,10 +179,18 @@
         NSArray * ten_closest = [themap closest:10 edgesToPoint:location];
         
         float a,b,c,d;
-        a = ((FRTroubleshoot*)viewControl).e_slider.value;
-        b = ((FRTroubleshoot*)viewControl).t_slider.value;
-        c = ((FRTroubleshoot*)viewControl).r_slider.value;
-        d = ((FRTroubleshoot*)viewControl).f_slider.value;
+        /*
+         a = ((FRTroubleshoot*)viewControl).e_slider.value;
+         b = ((FRTroubleshoot*)viewControl).t_slider.value;
+         c = ((FRTroubleshoot*)viewControl).r_slider.value;
+         d = ((FRTroubleshoot*)viewControl).f_slider.value;
+         */
+        
+        a = 3.5;
+        b = 1.0;
+        c = 30.0;
+        d = 50.0;
+        
         //NSLog(@"a=%f,b=%f,c=%f,d=%f",a,b,c,d);
         
         for (NSArray * edge in ten_closest){
@@ -193,13 +206,19 @@
             
             //road switch penalty
             NSString * road = [themap roadNameFromEdgePos:ep];
-            float R = ([road isEqualToString:current_road]||[road isEqualToString:next_road])?0.0f:1.0f;
+            float R = c;
+            if ([road isEqualToString:current_road]){
+                R = 0.0;
+            } else if ([road isEqualToString:next_road]){
+                R = 0.0;
+            }
+            
             
             //turn around penalty
             float F = [latestsearch rootIsFacing:ep]?0.0f:1.0f;
             
             //ideally these would be manually controlled.
-            double score = a*E+b*T+c*R+d*F;
+            double score = a*E+b*T+R+d*F;
             
             //NSLog(@"score = %f, %@",score,road);
             if (score < min_score){
@@ -238,7 +257,11 @@
 		current_road = roadname;
 		[self speak:current_road];
 	}
-	
+    
+    
+    [location retain];
+	[last_location release];
+    last_location = location;
 }
 
 - (void) abort {
@@ -265,7 +288,11 @@
     //goal road needs to update everytime.
     //how do we know if we can speak?
     //voicebot and soundfx
-    if (destination==nil) return;
+    if (destination==nil) {
+        [next_road release];
+        next_road = nil;
+        return;
+    }
     
     NSString * road = [destination nextRoad:player.pos];
     [road retain];
@@ -341,6 +368,7 @@
     [voicebot release];
 	[next_road release];
     [toBeSpoken release];
+    [last_location release];
     [destination release];
     [missionStart release];
     [latestsearch release];

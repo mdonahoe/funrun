@@ -91,6 +91,9 @@
     //have this done on the server, since i dont feel like programming constraints in objC
     
     
+    //add dude to map
+    [dude setCoordinate:[themap coordinateFromEdgePosition:dude.pos]];
+    [points addObject:dude];
     
     [self ticktock];
     return self;
@@ -233,7 +236,8 @@
             main_state++;
             chase_ticks=0;
             [prog release];
-            prog=nil;
+            prog = [[FRProgress alloc] initWithStart:[destination distanceFromRoot:player.pos] delegate:self];
+            
             break;
             
         default:
@@ -243,6 +247,7 @@
 - (void) the_chase {
     float dist;
     float dist_dude_to_safehouse;
+    float dist_player_to_safehouse;
     FREdgePos * newpos;
     NSString * textualchange;
     switch (sub_state){
@@ -313,6 +318,7 @@
                 main_state=5;
                 return;
             } else if (dist < 20){
+                dude_speed = 2.0;
                 [self soundfile:@"E03"]; //"you cant outrun me"
             }
             
@@ -327,6 +333,7 @@
                  NSLog(@"you are losing him");
                 [self soundfile:@"B23"];
                  xdist = dist;
+                dude_speed = 4.0;
             }
             
             if (dist > 150){
@@ -351,14 +358,18 @@
                 sub_state++;
                 [self playSong:@"chase_elevated"];
             }
-             
-             
+            
+            
+            dist_player_to_safehouse = [destination distanceFromRoot:player.pos];
+            [prog update:dist_player_to_safehouse];
+            if (dist_player_to_safehouse < 30){
+                sub_state=5;
+            }
             
             break;
         case 4:
             NSLog(@"keep going to the safehouse");
             [self soundfile:@"B27"];
-            prog = [[FRProgress alloc] initWithStart:[destination distanceFromRoot:player.pos] delegate:self];
             
             sub_state++;
             break;

@@ -13,7 +13,7 @@
 #import "VSSpeechSynthesizer.h"
 #import "FRPoint.h"
 #import "FRProgress.h"
-
+#import "FRMapViewController.h"
 
 
 #import <AVFoundation/AVFoundation.h>
@@ -41,12 +41,13 @@
     VSSpeechSynthesizer * voicebot;
 	NSMutableArray * toBeSpoken;
 	NSMutableArray * points;
-	UIViewController * viewControl;
+	FRMapViewController * viewControl;
     AVAudioPlayer * backgroundMusic;
     AVAudioPlayer * soundfx;
+    CLLocation * last_location;
 }
 @property(nonatomic,retain) NSMutableArray * points;
-@property(nonatomic,assign) UIViewController * viewControl;
+@property(nonatomic,assign) FRMapViewController * viewControl;
 
 - (id) initWithLocation:(CLLocation*)l distance:(float)dist destination:(CLLocation*)dest viewControl:(UIViewController*)vc;
 - (void) abort;

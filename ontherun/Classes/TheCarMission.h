@@ -17,6 +17,8 @@
     int safehouse_state;
     int current_state;
     
+    
+    float cop_speed;
     //audio
     AVAudioPlayer * siren;
     AVAudioPlayer * alarm;
