@@ -218,6 +218,7 @@
         cell.textLabel.textColor = [UIColor grayColor];
         cell.imageView.image = [UIImage imageNamed:@"lock.png"];
     } else {
+        cell.textLabel.textColor = [UIColor blackColor];
         cell.imageView.image = nil;
     }
     cell.textLabel.text = name;
