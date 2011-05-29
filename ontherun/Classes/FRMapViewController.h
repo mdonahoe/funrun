@@ -8,7 +8,6 @@
 
 #import <UIKit/UIKit.h>
 #import <MapKit/MapKit.h>
-#import "FRMissionTemplate.h"
 
 @interface FRMapViewController : UIViewController <MKMapViewDelegate>{
 	MKMapView * mapView;

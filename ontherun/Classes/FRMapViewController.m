@@ -59,21 +59,13 @@
     // e.g. self.myOutlet = nil;
 }
 
-- (void) readyForMission:(FRMissionTemplate *)mission {
-	[self.mapView addAnnotations:mission.points];
-	timer.text = @"READY";
-	//self.navigationItem.rightBarButtonItem = [[[UIBarButtonItem alloc] initWithTitle:@"start"
-	//																		   style:UIBarButtonItemStyleDone
-	//																		  target:mission
-	//																		  action:@selector(startup)] autorelease];
-}
-
 - (void)dealloc {
 	self.mapView = nil;
 	self.timer = nil;
 	[super dealloc];
 }
 //currently unused
+/*
 -(void)zoomToFitMapAnnotations {
 	if([mapView.annotations count] < 2)
 	return;
@@ -86,7 +78,7 @@
 	bottomRightCoord.latitude = 90;
 	bottomRightCoord.longitude = -180;
 
-	for(FRPoint * annotation in mapView.annotations) {
+	for(MKAnnotationView * annotation in mapView.annotations) {
 		topLeftCoord.longitude = fmin(topLeftCoord.longitude, annotation.coordinate.longitude);
 		topLeftCoord.latitude = fmax(topLeftCoord.latitude, annotation.coordinate.latitude);
 
@@ -103,4 +95,5 @@
 	region = [mapView regionThatFits:region];
 	[mapView setRegion:region animated:YES];
 }
+ */
 @end
