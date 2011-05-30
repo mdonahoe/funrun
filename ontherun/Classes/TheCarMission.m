@@ -83,7 +83,7 @@ X10. there is some infinite loop bug in the directionsToRoot code.
     
     //The cop starts at the player's location, but doesnt interact until later.
     cop = [[FRPoint alloc] initWithName:@"cop"];
-    cop.pos = player.pos;
+    cop.pos = safehouse.pos;
     
     //add to the points list for display.
     [points addObject:cop];
