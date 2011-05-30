@@ -241,8 +241,7 @@
 #define SPEED_ALPHA 0.5
         average_player_speed = SPEED_ALPHA*(new_dist / [current_date timeIntervalSinceDate:last_location_received_date]) + (1.0-SPEED_ALPHA)*(average_player_speed);
         total_player_distance+=new_dist;
-        if (arc4random()%30==0) [self speakIfEmpty:[NSString stringWithFormat:@"%i meters per second",(int)average_player_speed]];
-		player.pos = [latestsearch move:best awayFromRootWithDelta:0];
+        player.pos = [latestsearch move:best awayFromRootWithDelta:0];
         //[best release];
 	} else {
 		player.pos = [themap edgePosFromPoint:location];
