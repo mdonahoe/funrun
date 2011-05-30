@@ -41,6 +41,7 @@
 	NSAutoreleasePool * thepool = [[NSAutoreleasePool alloc] init];
 	
 	//load the map
+    if (dest==nil) dest=l;
     NSString * mapurl = [NSString stringWithFormat:@"http://toqbot.com/map/download?lat1=%f&lng1=%f&dist=%f&lat2=%f&lng2=%f",l.coordinate.latitude,l.coordinate.longitude,player_max_distance,dest.coordinate.latitude,dest.coordinate.longitude];
     NSLog(@"url=%@",mapurl);
     NSURL *url = [NSURL URLWithString:mapurl];

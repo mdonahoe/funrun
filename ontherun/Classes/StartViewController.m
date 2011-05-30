@@ -19,20 +19,6 @@
 @implementation StartViewController
 @synthesize gps,missionLabel,latest_point,distanceLabel,distanceSlider;
 
-/*
- // The designated initializer.  Override if you create the controller programmatically and want to perform customization that is not appropriate for viewDidLoad.
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
-    if ((self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil])) {
-        // Custom initialization
-		//use toqbot for gps position updates
-		m2 = [[toqbot alloc] init];
-		[self startStandardUpdates];
-		NSLog(@"created!");
-	}
-    return self;
-}
-*/
-
 - (id) initWithMissionData:(NSDictionary *)obj {
     self = [super initWithNibName:@"StartView" bundle:nil];
     if (!self) return nil;
@@ -40,6 +26,7 @@
     [obj retain];
     missionData = obj;
     latest_point = nil;
+    destination = nil;
     return self;
 }
 - (IBAction) statechange:(id)sender {
