@@ -122,7 +122,7 @@ X10. there is some infinite loop bug in the directionsToRoot code.
         [pt setCoordinate:[themap coordinateFromEdgePosition:pt.pos]];
     }
     
-    [self.viewControl.mapView addAnnotations:points];
+    //[self.viewControl.mapView addAnnotations:points];
     
     
     
@@ -219,8 +219,9 @@ X10. there is some infinite loop bug in the directionsToRoot code.
             break;
     }
     
-    if (dist < 30 || bingo){
+    if (dist < 30 || bingo || magic){
         //you made it
+        magic = NO;
         current_state++;
         [destination release];
         destination = [themap createPathSearchAt:safehouse.pos withMaxDistance:[NSNumber numberWithFloat:player_max_distance]];
@@ -247,12 +248,22 @@ X10. there is some infinite loop bug in the directionsToRoot code.
         case 2:
             // adjust the sound of the alarm with the distance
             // once the distance exceeds 100m, kill, cue the cop.
-            alarm.volume = (100.0 - alarmdist) / 100.0;
+            alarm.volume = MAX(0.01,(100.0 - alarmdist) / 100.0);
+            if (alarmdist > 50 && [self playSoundFile:@"A20_watch_out_police"]) {
+                [self startSiren];
+                siren.volume = 0.01;
+                
+                alarm_state++;
+            }
+            break;
+        case 3:
+            alarm.volume = MAX(0.01,(100.0 - alarmdist) / 100.0);
             if (alarmdist > 100) {
                 [self stopAlarm];
                 current_state++;
             }
             break;
+            
         default:
             break;
     }
@@ -291,16 +302,9 @@ X10. there is some infinite loop bug in the directionsToRoot code.
     
     
     switch (cop_state){
-        case 0:
-            if ([self playSoundFile:@"A20_watch_out_police"]){
-                cop_state++;
-            }
-            break;
             
-        case 1:
+        case 0:
             if ([self playSoundFile:@"6copahead"]){
-                [self startSiren];
-                siren.volume = 0.01;
                 cop_state++;
             
             
@@ -319,7 +323,7 @@ X10. there is some infinite loop bug in the directionsToRoot code.
                 cop_speed = 10.0;
             }
             break;
-        case 2:
+        case 1:
             if ([self readyToSpeak]){
                 cop_state++;
                 [self speak:[NSString stringWithFormat:@"Police activity on %@",[themap roadNameFromEdgePos:cop.pos]]];
@@ -340,7 +344,7 @@ X10. there is some infinite loop bug in the directionsToRoot code.
             
             
             
-            if (onpath && dist_cop_to_player < 20 && [self playSoundFile:@"12stoppolice-2"]){
+            if (!magic && onpath && dist_cop_to_player < 10 && [self playSoundFile:@"12stoppolice-2"]){
                 //cop see you.
                 current_state = 4;
                 [self saveMissionStats:@"spotted by police"];
@@ -348,19 +352,20 @@ X10. there is some infinite loop bug in the directionsToRoot code.
             } else if (!onpath && dist_cop_to_player > 100 && dist_cop_to_car < dist_player_to_car && [self playSoundFile:@"A22_coast_clear"]) {
                 //you are clear
                 [self stopSiren];
+                magic = NO;
                 current_state++;
                 //[destination release];
                 destination = [themap createPathSearchAt:safehouse.pos withMaxDistance:[NSNumber numberWithFloat:player_max_distance]];
                 direct = YES;
                 
-            } else if (cop_state==3 && dist_cop_to_player < 100 && onpath && [self readyToSpeak]) {
+            } else if (cop_state==2 && dist_cop_to_player < 100 && onpath && [self readyToSpeak]) {
                 
                 [self speak:@"You are gonna get caught. get off this road"];
                 cop_state = 4;
                 cop_speed = 2.0;
                 //the cop is going to see you any second now. get off his path.
             
-            } else if (cop_state==3 && !onpath && [self readyToSpeak]){
+            } else if (cop_state==2 && !onpath && [self readyToSpeak]){
                 if ([latestsearch distanceFromRoot:unsafe_spot]>40){
                     cop_state = 5;
                     [self speak:@"You should be safe here"];
@@ -396,10 +401,13 @@ X10. there is some infinite loop bug in the directionsToRoot code.
 }
 - (void) the_safehouse {
     float dist = [destination distanceFromRoot:player.pos];
-    if (dist < 30) {
+    BOOL bingo = ([destination rootDistanceToLatLng:last_location] < 30 && [current_road isEqualToString:[themap roadNameFromEdgePos:car.pos]]);
+    
+    if (magic || dist < 30 || bingo) {
         if ([self playSoundFile:@"A23_successful_mission"]) {
             [self saveMissionStats:@"success"];
             current_state=5;
+            magic = YES;
         }
             //what should actually happen when the mission ends successfully?
     }

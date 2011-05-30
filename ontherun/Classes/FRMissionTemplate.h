@@ -14,13 +14,13 @@
 #import "FRPoint.h"
 #import "FRProgress.h"
 #import "FRMapViewController.h"
-
+#import "FRInGame.h"
 
 #import <AVFoundation/AVFoundation.h>
 
 
 
-@interface FRMissionTemplate : NSObject <FRSoundFilePlayer>{
+@interface FRMissionTemplate : NSObject <FRSoundFilePlayer,MagicButton>{
 	NSString * previously_said;
     NSString * last_played_sound;
 	NSString * current_road;
@@ -41,17 +41,19 @@
     VSSpeechSynthesizer * voicebot;
 	NSMutableArray * toBeSpoken;
 	NSMutableArray * points;
-	FRMapViewController * viewControl;
+	FRInGame * viewControl;
     AVAudioPlayer * backgroundMusic;
     AVAudioPlayer * soundfx;
     CLLocation * last_location;
+    BOOL magic;
 }
 @property(nonatomic,retain) NSMutableArray * points;
-@property(nonatomic,assign) FRMapViewController * viewControl;
+@property(nonatomic,assign) FRInGame * viewControl;
 
 - (id) initWithLocation:(CLLocation*)l distance:(float)dist destination:(CLLocation*)dest viewControl:(UIViewController*)vc;
 - (void) abort;
 - (void) ticktock;
+- (void) magicbutton;
 - (void) speak:(NSString *)text;
 - (void) speakIfEmpty:(NSString *)text;
 - (void) speakNow:(NSString *)text;

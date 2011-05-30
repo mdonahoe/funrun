@@ -63,6 +63,8 @@
 		9BA7893E1385C6AF006C8759 /* 1000.aiff in Resources */ = {isa = PBXBuildFile; fileRef = 9BA789391385C6AF006C8759 /* 1000.aiff */; };
 		9BA789411385C823006C8759 /* getting_close.aiff in Resources */ = {isa = PBXBuildFile; fileRef = 9BA7893F1385C822006C8759 /* getting_close.aiff */; };
 		9BA789421385C823006C8759 /* halfway.aiff in Resources */ = {isa = PBXBuildFile; fileRef = 9BA789401385C822006C8759 /* halfway.aiff */; };
+		9BBA1FAC139427A50080A652 /* FRInGame.m in Sources */ = {isa = PBXBuildFile; fileRef = 9BBA1FAA139427A50080A652 /* FRInGame.m */; };
+		9BBA1FAD139427A50080A652 /* FRInGame.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9BBA1FAB139427A50080A652 /* FRInGame.xib */; };
 		9BBD3296132E81360082A0C7 /* StartView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9BBD3295132E81360082A0C7 /* StartView.xib */; };
 		9BBD329A132E81CC0082A0C7 /* StartViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9BBD3299132E81CC0082A0C7 /* StartViewController.m */; };
 		9BC137431304A340006492A0 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9BC137421304A340006492A0 /* AVFoundation.framework */; };
@@ -233,6 +235,9 @@
 		9BA789391385C6AF006C8759 /* 1000.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; name = 1000.aiff; path = aiff/1000.aiff; sourceTree = "<group>"; };
 		9BA7893F1385C822006C8759 /* getting_close.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; name = getting_close.aiff; path = aiff/getting_close.aiff; sourceTree = "<group>"; };
 		9BA789401385C822006C8759 /* halfway.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; name = halfway.aiff; path = aiff/halfway.aiff; sourceTree = "<group>"; };
+		9BBA1FA9139427A50080A652 /* FRInGame.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRInGame.h; sourceTree = "<group>"; };
+		9BBA1FAA139427A50080A652 /* FRInGame.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRInGame.m; sourceTree = "<group>"; };
+		9BBA1FAB139427A50080A652 /* FRInGame.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FRInGame.xib; sourceTree = "<group>"; };
 		9BBD3295132E81360082A0C7 /* StartView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = StartView.xib; sourceTree = "<group>"; };
 		9BBD3298132E81CC0082A0C7 /* StartViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StartViewController.h; sourceTree = "<group>"; };
 		9BBD3299132E81CC0082A0C7 /* StartViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StartViewController.m; sourceTree = "<group>"; };
@@ -707,6 +712,9 @@
 				9B2AE23D138EAE4D00D22D85 /* FRMissionList.h */,
 				9B2AE23E138EAE4D00D22D85 /* FRMissionList.m */,
 				9B2AE23F138EAE4D00D22D85 /* FRMissionList.xib */,
+				9BBA1FA9139427A50080A652 /* FRInGame.h */,
+				9BBA1FAA139427A50080A652 /* FRInGame.m */,
+				9BBA1FAB139427A50080A652 /* FRInGame.xib */,
 			);
 			name = ViewControllers;
 			sourceTree = "<group>";
@@ -866,6 +874,7 @@
 				9B2AE23C138EAD3F00D22D85 /* FRNameController.xib in Resources */,
 				9B2AE241138EAE4D00D22D85 /* FRMissionList.xib in Resources */,
 				C9D28C88139004190077B60F /* lock.png in Resources */,
+				9BBA1FAD139427A50080A652 /* FRInGame.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -913,6 +922,7 @@
 				C9569BFA138833A200FD66E8 /* FRTroubleshoot.m in Sources */,
 				9B2AE23B138EAD3F00D22D85 /* FRNameController.m in Sources */,
 				9B2AE240138EAE4D00D22D85 /* FRMissionList.m in Sources */,
+				9BBA1FAC139427A50080A652 /* FRInGame.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -73,7 +73,7 @@
     //add dude to map
     [dude setCoordinate:[themap coordinateFromEdgePosition:dude.pos]];
     [points addObject:dude];
-    [self.viewControl.mapView addAnnotations:points];
+    //[self.viewControl.mapView addAnnotations:points];
     
     
     [self ticktock];
@@ -112,6 +112,8 @@
 #pragma mark -
 - (void) the_first {
     float dist;
+    BOOL bingo = ([destination rootDistanceToLatLng:last_location] < 30 && [current_road isEqualToString:[themap roadNameFromEdgePos:pointA.pos]]);
+    
     if (![self readyToSpeak]) return;
     switch (sub_state){
         case 0:
@@ -129,9 +131,10 @@
             dist = [destination distanceFromRoot:player.pos];
             [prog update:dist];
             NSLog(@"dist = %f",dist);
-            if ((dist < 30) && [self playSoundFile:@"B06"]) sub_state++;
+            if ((magic || (dist < 30) || bingo) && [self playSoundFile:@"B06"]) sub_state++;
             break;
         case 3:
+            magic = NO;
             [self soundfile:@"B10"];
             sub_state=0;
             [destination release];
@@ -146,6 +149,8 @@
 }
 - (void) the_second {
     float dist;
+    BOOL bingo = ([destination rootDistanceToLatLng:last_location] < 30 && [current_road isEqualToString:[themap roadNameFromEdgePos:pointB.pos]]);
+    
     if (![self readyToSpeak]) return;
     
     switch (sub_state){
@@ -160,9 +165,10 @@
             NSLog(@"dist = %f",dist);
             [prog update:dist];
             
-            if (dist < 30) {
+            if (magic || dist < 30 || bingo) {
                 NSLog(@"this is it. Cant you unlock it? Click. Crap, move on");
                 [self soundfile:@"B07"];
+                magic = NO;
                 sub_state=0;
                 [destination release];
                 destination = [themap createPathSearchAt:pointC.pos withMaxDistance:[NSNumber numberWithFloat:player_max_distance]];
@@ -178,6 +184,8 @@
 }
 - (void) the_third {
     float dist;
+    BOOL bingo = ([destination rootDistanceToLatLng:last_location] < 30 && [current_road isEqualToString:[themap roadNameFromEdgePos:pointC.pos]]);
+    
     if (![self readyToSpeak]) return;
     
     switch (sub_state){
@@ -197,7 +205,8 @@
             
             [prog update:dist];
             
-            if (dist < 30) {
+            if (magic || dist < 30 || bingo) {
+                magic = NO;
                 NSLog(@"here we are. give it a shot. cha-cha. Interesting...");
                 [self soundfile:@"B08"];
                 [self playSong:@"chase_elevated"];
@@ -231,6 +240,10 @@
     float dist_player_to_safehouse;
     FREdgePos * newpos;
     NSString * textualchange;
+    
+    BOOL bingo = ([destination rootDistanceToLatLng:last_location] < 30 && [current_road isEqualToString:[themap roadNameFromEdgePos:safehouse.pos]]);
+    
+    
     switch (sub_state){
         case 0:
             if ([self playSoundFile:@"E01"]) {
@@ -290,7 +303,7 @@
             
             if (![self readyToSpeak]) return;
             
-            if (dist < 10){
+            if (dist < 4){
                 
                 NSLog(@"I GOT YOU FUCKER!");
                 [self soundfile:@"E06"];
@@ -299,7 +312,7 @@
                 main_state=5;
                 return;
             } else if (dist < 20){
-                dude_speed = 2.0;
+                dude_speed = dist / 10;
                 [self soundfile:@"E03"]; //"you cant outrun me"
             }
             
@@ -343,7 +356,7 @@
             
             dist_player_to_safehouse = [destination distanceFromRoot:player.pos];
             [prog update:dist_player_to_safehouse];
-            if (dist_player_to_safehouse < 30){
+            if (magic || dist_player_to_safehouse < 30 || bingo){
                 sub_state=5;
             }
             
@@ -358,7 +371,10 @@
             dist = [destination distanceFromRoot:player.pos];
             NSLog(@"dist = %f",dist);
             [prog update:dist];
-            if (dist < 30){
+            BOOL bingo = ([destination rootDistanceToLatLng:last_location] < 30 && [current_road isEqualToString:[themap roadNameFromEdgePos:safehouse.pos]]);
+            
+            if (magic || dist < 30 || bingo){
+                magic = NO;
                 [self soundfile:@"B28"];
                 [self playSong:@"chase_normal"];
                 NSLog(@"you made it. ima look at the data");

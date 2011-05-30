@@ -10,8 +10,7 @@
 #import "FRBriefingViewController.h"
 #import "JSON.h"
 #import "ASIHTTPRequest.h"
-//#import "FRTroubleshoot.h"
-//#import "FRMapViewController.h"
+
 
 @implementation FRMissionTemplate
 @synthesize points,viewControl;
@@ -20,6 +19,7 @@
 	self = [super init];
 	if (!self) return nil;
 	saved = NO;
+    magic = NO;
     player_max_distance = dist*1000; //convert to meters
     last_location_received_date = nil;
     average_player_speed = 0.0;
@@ -101,10 +101,16 @@
     self.viewControl = trouble;
      */
     
+    
+    /*
     FRMapViewController * mv = [[[FRMapViewController alloc] initWithNibName:@"FRMapViewController" bundle:nil] autorelease];
     [vc.navigationController pushViewController:mv animated:YES];
     self.viewControl = mv;
+    */
     
+    FRInGame * ig = [[[FRInGame alloc] initWithNibName:@"FRInGame" bundle:nil]autorelease];
+    ig.delegate = self;
+    [vc.navigationController pushViewController:ig animated:YES];
     
     
 	return self;
@@ -356,6 +362,9 @@
     [defaults synchronize];
     saved = YES;
     
+}
+- (void) magicbutton {
+    magic = YES;
 }
 - (void) dealloc {
     //stop the ticktocks
