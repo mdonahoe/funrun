@@ -17,24 +17,6 @@
  outrun that person
  go home.
  
- 1. how many places? more places means more pathsearchs to place the points
- 2. the final chase needs to be of a certain length
- 3. the chase needs to be interesting
- 4. James Bond!
- 5. 
- 
- 
- 
- A B and C
- 
- B needs to be dist/2 from start
- C needs to be dist/2 from A
- A and B are dist/4
- C and B are dist/4
- A and start are dist/4
- 
- 
- 
  */
 
 @implementation TheKeyMission
@@ -86,14 +68,13 @@
     prog = [[FRProgress alloc] initWithStart:[destination distanceFromRoot:player.pos] delegate:self];
     
     //position these points such that the total distance is correct
-    //th final run should be the longest part. that chase sequence needs to last awhile.
-    
-    //have this done on the server, since i dont feel like programming constraints in objC
-    
+    //the final run should be the longest part. that chase sequence needs to last awhile.
     
     //add dude to map
     [dude setCoordinate:[themap coordinateFromEdgePosition:dude.pos]];
     [points addObject:dude];
+    [self.viewControl.mapView addAnnotations:points];
+    
     
     [self ticktock];
     return self;
