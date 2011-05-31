@@ -315,8 +315,9 @@
     
     //failed
     if (i>=50){
-        [NSException raise:@"Unable to fork" format:@"start of %i. %@", ep.start, ep];
-		return nil;
+        //[NSException raise:@"Unable to fork" format:@"start of %i. %@", ep.start, ep];
+		NSLog(@"unable to fork");
+        return nil;
     }
     
     //get a node on the side street

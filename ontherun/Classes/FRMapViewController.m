@@ -32,9 +32,9 @@
 	[self gotoLocation];
 }
 - (MKAnnotationView *)mapView:(MKMapView *)theMapView viewForAnnotation:(id <MKAnnotation>)annotation{
-	static NSString* pinIdentifier = @"I love pins!";
+	static NSString * pinIdentifier = @"I love pins!";
 	NSLog(@"annotation view");
-	MKPinAnnotationView* pinView = (MKPinAnnotationView *) [mapView dequeueReusableAnnotationViewWithIdentifier:pinIdentifier];
+	MKPinAnnotationView * pinView = (MKPinAnnotationView *) [mapView dequeueReusableAnnotationViewWithIdentifier:pinIdentifier];
 	
 	if (!pinView){
 		MKPinAnnotationView * myPinView = [[[MKPinAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:pinIdentifier] autorelease];
@@ -64,36 +64,4 @@
 	self.timer = nil;
 	[super dealloc];
 }
-//currently unused
-/*
--(void)zoomToFitMapAnnotations {
-	if([mapView.annotations count] < 2)
-	return;
-
-	CLLocationCoordinate2D topLeftCoord;
-	topLeftCoord.latitude = -90;
-	topLeftCoord.longitude = 180;
-
-	CLLocationCoordinate2D bottomRightCoord;
-	bottomRightCoord.latitude = 90;
-	bottomRightCoord.longitude = -180;
-
-	for(MKAnnotationView * annotation in mapView.annotations) {
-		topLeftCoord.longitude = fmin(topLeftCoord.longitude, annotation.coordinate.longitude);
-		topLeftCoord.latitude = fmax(topLeftCoord.latitude, annotation.coordinate.latitude);
-
-		bottomRightCoord.longitude = fmax(bottomRightCoord.longitude, annotation.coordinate.longitude);
-		bottomRightCoord.latitude = fmin(bottomRightCoord.latitude, annotation.coordinate.latitude);
-	}
-
-	MKCoordinateRegion region;
-	region.center.latitude = topLeftCoord.latitude - (topLeftCoord.latitude - bottomRightCoord.latitude) * 0.5;
-	region.center.longitude = topLeftCoord.longitude + (bottomRightCoord.longitude - topLeftCoord.longitude) * 0.5;
-	region.span.latitudeDelta = fabs(topLeftCoord.latitude - bottomRightCoord.latitude) * 1.1; // Add a little extra space on the sides
-	region.span.longitudeDelta = fabs(bottomRightCoord.longitude - topLeftCoord.longitude) * 1.1; // Add a little extra space on the sides
-
-	region = [mapView regionThatFits:region];
-	[mapView setRegion:region animated:YES];
-}
- */
 @end

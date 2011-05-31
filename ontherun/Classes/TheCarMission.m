@@ -40,7 +40,7 @@ X10. there is some infinite loop bug in the directionsToRoot code.
     cop_state = 0;
     safehouse_state = 0;
     mission_name = @"The Car";
-    
+    cop_speed = -1.0; //negative speed means the cop is inactive. used for state
     [self playSong:@"chase_normal"];
     
     //create the safehouse
@@ -84,6 +84,7 @@ X10. there is some infinite loop bug in the directionsToRoot code.
     //The cop starts at the player's location, but doesnt interact until later.
     cop = [[FRPoint alloc] initWithName:@"cop"];
     cop.pos = safehouse.pos;
+    cop_goal = nil;
     
     //add to the points list for display.
     [points addObject:cop];
@@ -290,46 +291,104 @@ X10. there is some infinite loop bug in the directionsToRoot code.
         unsafe_spot = player.pos;
         [unsafe_spot retain];
     }
-    NSString * speakstring = nil;
-    
+
     float dist_cop_to_car = [cop_goal distanceFromRoot:cop.pos];
-    
-    
-    
     float dist_cop_to_player = [latestsearch distanceFromRoot:cop.pos];
     float dist_player_to_car = [cop_goal distanceFromRoot:player.pos];
     float dist_player_to_spot = [destination distanceFromRoot:player.pos];
     
     
+    if (cop_state==0){
+        //detect distance to goal. used when we never place the cop.
+        if (dist_player_to_spot < 50){
+            current_state++;
+            return;
+        }
+    }
+    
+    
     switch (cop_state){
             
-        case 0:
-            if ([self playSoundFile:@"6copahead"]){
-                cop_state++;
+        case 0: {
+            //attempt to create a safe spot and cop.
             
             
-                //the cop is now going to move toward your current location (as of right now)
-                if ([latestsearch containsPoint:cop.pos]){
-                    cop_goal=latestsearch;
-                    [latestsearch retain];
-                } else {
-                    [self speak:@"COP OUTSIDE SEARCH AREA"];
-                    current_state = 4;
-                }
-                prog=[[FRProgress alloc] initWithStart:dist_cop_to_player delegate:self];
-                direct = NO; //stop giving directions
-                [destination release];
-                destination=nil;
-                cop_speed = 10.0;
+            if (![self readyToSpeak]) return;
+            FREdgePos * goal = [destination forkPoint:player.pos];
+            //goal.end = fork node
+            
+            
+            
+            if (goal==nil) return;
+            
+            //start the cop at the same node, but facing the safehouse
+            NSNumber * next = [destination closerNode:[goal endObj]];
+            FREdgePos * coppos = [[[FREdgePos alloc] init] autorelease];
+            coppos.end = [goal end];
+            coppos.start = [next intValue];
+            coppos.position = [themap maxPosition:coppos];
+            
+            //move inward, away from the street to ensure that the player is in the right place
+            goal = [themap move:goal forwardRandomly:10.0];
+            CLLocationCoordinate2D x = [themap coordinateFromEdgePosition:goal];
+            NSLog(@"lat = %f, lon=%f",x.latitude,x.longitude);
+            
+            //what is the distance to the goal?
+            
+            float dist = [latestsearch distanceFromRoot:goal];
+            if (dist > 200) {
+                NSLog(@"fork point too far away");
+                return;
             }
+            
+            
+            float cop_dist = [latestsearch distanceFromRoot:coppos];
+            int i=0;
+            while (cop_dist < 1000 && i++<10){
+                coppos = [destination move:coppos towardRootWithDelta:dist*10-cop_dist];
+                cop_dist = [latestsearch distanceFromRoot:coppos];
+            }
+            i=0;
+            if (cop_dist < 1000 && i++<10){
+                coppos = [latestsearch move:coppos awayFromRootWithDelta:100.0];
+                cop_dist = [latestsearch distanceFromRoot:coppos];
+            }
+            NSLog(@"dist = %f, cop_dist = %f",dist,cop_dist);
+            
+            cop_speed = MIN(10.0,cop_dist / (dist / 2.0) * .75);
+            cop.pos = coppos;
+            
+            if ([latestsearch containsPoint:cop.pos]){
+                cop_goal=latestsearch;
+                [latestsearch retain];
+            } else {
+                NSLog(@"cop outside search area");
+                [self speak:@"COP OUTSIDE SEARCH AREA"];
+                current_state = 4;
+                return;
+            }
+            
+            
+            [destination release];
+            destination = [themap createPathSearchAt:goal withMaxDistance:[NSNumber numberWithFloat:400.0]];
+            
+            [self soundfile:@"6copahead"];
+            cop_state++;
             break;
+        }
         case 1:
             if ([self readyToSpeak]){
                 cop_state++;
+                
                 [self speak:[NSString stringWithFormat:@"Police activity on %@",[themap roadNameFromEdgePos:cop.pos]]];
             }
             break;
             
+        case 2:
+            if ([self readyToSpeak]){
+                cop_state++;
+                [self speak:[NSString stringWithFormat:@"your destination is %@. %@",[themap roadNameFromEdgePos:destination.root],[themap descriptionOfEdgePos:destination.root]]];
+            }
         default:
 
             
@@ -337,8 +396,9 @@ X10. there is some infinite loop bug in the directionsToRoot code.
             NSLog(@"d1 = %f,d2 = %f, d3 = %f",dist_cop_to_player,dist_cop_to_car,dist_player_to_car);
             NSLog(@"You are onpath? %i",onpath);
             NSLog(@"cop is on %@",[themap roadNameFromEdgePos:cop.pos]);
-            siren.volume = MAX(0.01,(100-dist_cop_to_player)/100.0);
             
+            siren.volume = MIN(0.60,10.0/dist_cop_to_player);
+            NSLog(@"siren volume = %f, copdist = %f",MIN(0.60,10.0/dist_cop_to_player),dist_cop_to_player);
             
             
             
@@ -358,14 +418,14 @@ X10. there is some infinite loop bug in the directionsToRoot code.
                 destination = [themap createPathSearchAt:safehouse.pos withMaxDistance:[NSNumber numberWithFloat:player_max_distance]];
                 direct = YES;
                 
-            } else if (cop_state==2 && dist_cop_to_player < 100 && onpath && [self readyToSpeak]) {
+            } else if (cop_state==3 && dist_cop_to_player < 100 && onpath && [self readyToSpeak]) {
                 
                 [self speak:@"You are gonna get caught. get off this road"];
                 cop_state = 4;
                 cop_speed = 2.0;
                 //the cop is going to see you any second now. get off his path.
             
-            } else if (cop_state==2 && !onpath && [self readyToSpeak]){
+            } else if (cop_state==3 && !onpath && [self readyToSpeak]){
                 if ([latestsearch distanceFromRoot:unsafe_spot]>40){
                     cop_state = 5;
                     [self speak:@"You should be safe here"];
@@ -395,7 +455,6 @@ X10. there is some infinite loop bug in the directionsToRoot code.
             }
             
             
-            [prog update:dist_cop_to_player];
             break;
     }
 }

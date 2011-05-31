@@ -252,7 +252,7 @@
     last_location_received_date = current_date;
 	
     [latestsearch release];
-	latestsearch = [themap createPathSearchAt:player.pos withMaxDistance:[NSNumber numberWithFloat:player_max_distance/1.8]];
+	latestsearch = [themap createPathSearchAt:player.pos withMaxDistance:[NSNumber numberWithFloat:MAX(2000.0,player_max_distance/1.8)]];
     
     
     //speak the current road, if it changed

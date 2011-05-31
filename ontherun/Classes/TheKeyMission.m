@@ -123,7 +123,7 @@
             sub_state++;
             break;
         case 1:
-            [self speak:[NSString stringWithFormat:@"your destination is %@",[themap roadNameFromEdgePos:pointA.pos]]];
+            [self speak:[NSString stringWithFormat:@"your destination is %@. %@",[themap roadNameFromEdgePos:pointA.pos],[themap descriptionOfEdgePos:pointA.pos]]];
             
             sub_state++;
             break;
@@ -155,8 +155,7 @@
     
     switch (sub_state){
         case 0:
-            NSLog(@"your destination is %@",[themap roadNameFromEdgePos:pointB.pos]);
-            [self speak:[NSString stringWithFormat:@"your destination is %@",[themap roadNameFromEdgePos:pointB.pos]]]; 
+            [self speak:[NSString stringWithFormat:@"your destination is %@. %@",[themap roadNameFromEdgePos:pointB.pos],[themap descriptionOfEdgePos:pointB.pos]]];
             
             sub_state++;
             break;
@@ -195,8 +194,8 @@
             sub_state++;
             break;
         case 1:
-            NSLog(@"your destination is %@",[themap roadNameFromEdgePos:pointC.pos]);
-            [self speak:[NSString stringWithFormat:@"your destination is %@",[themap roadNameFromEdgePos:pointC.pos]]]; 
+            [self speak:[NSString stringWithFormat:@"your destination is %@. %@",[themap roadNameFromEdgePos:pointC.pos],[themap descriptionOfEdgePos:pointC.pos]]];
+            
             sub_state++;
             break;
         case 2:
