@@ -172,7 +172,7 @@ X10. there is some infinite loop bug in the directionsToRoot code.
             return;
     }
     if (direct && [self readyToSpeak]) [self speakIfEmpty:direction];
-    
+    if (prog && destination) [prog update:[destination distanceFromRoot:player.pos]];
     [super ticktock];
     
 }
@@ -182,7 +182,6 @@ X10. there is some infinite loop bug in the directionsToRoot code.
     // start with the introduction.
     
     BOOL bingo = ([destination rootDistanceToLatLng:last_location] < 30 && [current_road isEqualToString:[themap roadNameFromEdgePos:car.pos]]);
-    if (bingo) [self speakIfEmpty:@"bingo!"];
     
     float dist = [destination distanceFromRoot:player.pos];
     float progress = dist / player_max_distance / 2.0;
@@ -191,7 +190,7 @@ X10. there is some infinite loop bug in the directionsToRoot code.
     if (![self readyToSpeak]) return;
     switch (car_state) {
         case 13:
-            [self playSoundFile:@"A01_car_nearby"];
+            [self playSoundFile:@"TheCar - alright the car is parked nearby"];
             car_state--;
             break;
         case 12:
@@ -199,7 +198,7 @@ X10. there is some infinite loop bug in the directionsToRoot code.
             car_state--;
             break;
         case 11:
-            [self playSoundFile:@"A02_back_soon"];
+            [self playSoundFile:@"TheCar - you dont have much time back soon"];
             car_state--;
             car_state = timer;
             direct = YES;
@@ -213,10 +212,8 @@ X10. there is some infinite loop bug in the directionsToRoot code.
                 } else {
                     current_state=4;
                     [self saveMissionStats:@"Did not get to the car in time"];
-                    [self playSoundFile:@"A17_too_late"];
+                    [self playSoundFile:@"TheCar - driver is back forget it"];
                 }
-            } else {
-                [prog update:dist];
             }
             break;
     }
@@ -228,7 +225,7 @@ X10. there is some infinite loop bug in the directionsToRoot code.
         [destination release];
         destination = [themap createPathSearchAt:safehouse.pos withMaxDistance:[NSNumber numberWithFloat:player_max_distance]];
         [prog release];
-        prog = nil;
+        prog = [[FRProgress alloc] initWithStart:[destination distanceFromRoot:player.pos] delegate:self];
         direct = NO;
     }
     
@@ -238,28 +235,33 @@ X10. there is some infinite loop bug in the directionsToRoot code.
     if (![self readyToSpeak]) return;
     switch (alarm_state){
         case 0:
-            [self playSoundFile:@"A18_elaborate_plan"];
+            [self playSoundFile:@"TheCar - thats the car we have to improvise"];
             alarm_state++;
             break;
         case 1:
             [self startAlarm];
-            [self playSoundFile:@"A19_get_out_of_there"];
+            [self playSoundFile:@"TheCar - great now youve got 30 seconds to get the hell out of there"];
             alarm_state++;
             direct = YES;
             break;
         case 2:
+            [self speak:[NSString stringWithFormat:@"your destination is %@. %@",[themap roadNameFromEdgePos:destination.root],[themap descriptionOfEdgePos:destination.root]]];
+            alarm_state++;
+            direct = YES;
+            break;
+        case 3:
             // adjust the sound of the alarm with the distance
             // once the distance exceeds 100m, kill, cue the cop.
-            alarm.volume = MAX(0.01,(100.0 - alarmdist) / 100.0);
-            if (alarmdist > 50 && [self playSoundFile:@"A20_watch_out_police"]) {
+            alarm.volume = MIN(.06,10.0/alarmdist);
+            if (alarmdist > 50 && [self playSoundFile:@"TheCar - the police will be checking out that alarm"]) {
                 [self startSiren];
                 siren.volume = 0.01;
                 
                 alarm_state++;
             }
             break;
-        case 3:
-            alarm.volume = MAX(0.01,(100.0 - alarmdist) / 100.0);
+        case 4:
+            alarm.volume = MIN(.06,10.0/alarmdist);
             if (alarmdist > 100) {
                 [self stopAlarm];
                 current_state++;
@@ -386,8 +388,9 @@ X10. there is some infinite loop bug in the directionsToRoot code.
             
             [destination release];
             destination = [themap createPathSearchAt:goal withMaxDistance:[NSNumber numberWithFloat:400.0]];
-            
-            [self soundfile:@"6copahead"];
+            [prog release];
+            prog = [[FRProgress alloc] initWithStart:dist delegate:self];
+            [self soundfile:@"TheCar - ive detected a police car you need to get off its course"];
             cop_state++;
             break;
         }
@@ -424,18 +427,20 @@ X10. there is some infinite loop bug in the directionsToRoot code.
                 current_state = 4;
                 [self saveMissionStats:@"spotted by police"];
                 
-            } else if (!onpath && dist_cop_to_player > 100 && dist_cop_to_car < dist_player_to_car && [self playSoundFile:@"A22_coast_clear"]) {
+            } else if (!onpath && dist_cop_to_player > 100 && dist_cop_to_car < dist_player_to_car && [self playSoundFile:@"TheCar - that does it - the coast is clear"]) {
                 //you are clear
                 [self stopSiren];
                 magic = NO;
                 current_state++;
                 //[destination release];
                 destination = [themap createPathSearchAt:safehouse.pos withMaxDistance:[NSNumber numberWithFloat:player_max_distance]];
+                [prog release];
+                prog = [[FRProgress alloc] initWithStart:[destination distanceFromRoot:player.pos] delegate:self];
                 direct = YES;
                 
             } else if (cop_state==3 && dist_cop_to_player < 100 && onpath && [self readyToSpeak]) {
                 
-                [self speak:@"You are gonna get caught. get off this road"];
+                [self soundfile:@"TheCar - hes coming - get off this road"];
                 cop_state = 4;
                 cop_speed = 2.0;
                 //the cop is going to see you any second now. get off his path.
@@ -443,7 +448,7 @@ X10. there is some infinite loop bug in the directionsToRoot code.
             } else if (cop_state==3 && !onpath && [self readyToSpeak]){
                 if ([latestsearch distanceFromRoot:unsafe_spot]>40){
                     cop_state = 5;
-                    [self speak:@"You should be safe here"];
+                    [self soundfile:@"TheCar - ok you should be safe here for now"];
                     direct = NO;
                 }
             } else {
@@ -468,17 +473,18 @@ X10. there is some infinite loop bug in the directionsToRoot code.
                 
                 cop.pos = newpos;
             }
-            
-            
             break;
     }
 }
 - (void) the_safehouse {
     float dist = [destination distanceFromRoot:player.pos];
     BOOL bingo = ([destination rootDistanceToLatLng:last_location] < 30 && [current_road isEqualToString:[themap roadNameFromEdgePos:car.pos]]);
-    
+    if (safehouse_state==0 && [self readyToSpeak]){
+        [self speak:[NSString stringWithFormat:@"your destination is %@. %@",[themap roadNameFromEdgePos:destination.root],[themap descriptionOfEdgePos:destination.root]]];
+        safehouse_state++;
+    }
     if (magic || dist < 30 || bingo) {
-        if ([self playSoundFile:@"A23_successful_mission"]) {
+        if ([self playSoundFile:@"TheCar - successful mission"]) {
             [self saveMissionStats:@"success"];
             current_state=5;
             magic = YES;
@@ -491,34 +497,34 @@ X10. there is some infinite loop bug in the directionsToRoot code.
 - (void) speaktime:(int)t{
     switch(t){
         case 9:
-            [self playSoundFile:@"A07_ten_minutes"];
+            [self playSoundFile:@"10 minutes"];
             break;
         case 8:
-            [self playSoundFile:@"A08_nine_minutes"];
+            [self playSoundFile:@"9 minutes"];
             break;
         case 7:
-            [self playSoundFile:@"A09_eight_minutes"];
+            [self playSoundFile:@"8 minutes"];
             break;
         case 6:
-            [self playSoundFile:@"A10_seven_minutes"];
+            [self playSoundFile:@"7 minutes"];
             break;
         case 5:
-            [self playSoundFile:@"A11_six_minutes"];
+            [self playSoundFile:@"6 minutes"];
             break;
         case 4:
-            [self playSoundFile:@"A12_five_minutes"];
+            [self playSoundFile:@"5 minutes"];
             break;
         case 3:
-            [self playSoundFile:@"A13_four_minutes"];
+            [self playSoundFile:@"4 minutes"];
             break;
         case 2:
-            [self playSoundFile:@"A14_three_minutes"];
+            [self playSoundFile:@"3 minutes"];
             break;
         case 1:
-            [self playSoundFile:@"A15_two_minutes"];
+            [self playSoundFile:@"2 minutes"];
             break;
         case 0:
-            [self playSoundFile:@"A16_one_minute"];
+            [self playSoundFile:@"1 minute"];
             break;
         default:
             break;

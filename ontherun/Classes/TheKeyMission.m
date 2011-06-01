@@ -119,7 +119,7 @@
     switch (sub_state){
         case 0:
             //intro
-            [self soundfile:@"B01"];
+            [self soundfile:@"TheKey - from what i can tell - the first house is nearby"];
             [self playSong:@"chase_normal"];
             sub_state++;
             break;
@@ -129,14 +129,22 @@
             sub_state++;
             break;
         case 2:
-            dist = [destination distanceFromRoot:player.pos];
-            [prog update:dist];
-            NSLog(@"dist = %f",dist);
-            if ((magic || (dist < 30) || bingo) && [self playSoundFile:@"B06"]) sub_state++;
+            if ([self playSoundFile:@"TheKey - i sent a location to your gps - remember to bring that key"]) sub_state++;
             break;
         case 3:
+            dist = [destination distanceFromRoot:player.pos];
+            [prog update:dist];
+            if ((magic || (dist < 30) || bingo) && [self playSoundFile:@"TheKey - ok this is the first location - try the key"]) sub_state++;
+            break;
+        case 4:
+            if ([self playSoundFile:@"TheKey - did that work"]) sub_state++;
+            break;
+        case 5:
+            if ([self playSoundFile:@"TheKey - alright this place is no good"]) sub_state++;
+            break;
+        case 6:
             magic = NO;
-            [self soundfile:@"B10"];
+            [self soundfile:@"TheKey - hmm - ok lets try the another place"];
             sub_state=0;
             [destination release];
             destination = [themap createPathSearchAt:pointB.pos withMaxDistance:[NSNumber numberWithFloat:player_max_distance]];
@@ -162,12 +170,10 @@
             break;
         case 1:
             dist = [destination distanceFromRoot:player.pos];
-            NSLog(@"dist = %f",dist);
             [prog update:dist];
             
             if (magic || dist < 30 || bingo) {
-                NSLog(@"this is it. Cant you unlock it? Click. Crap, move on");
-                [self soundfile:@"B07"];
+                [self soundfile:@"TheKey - there should be a storage unit i think - no keep moving2"];
                 magic = NO;
                 sub_state=0;
                 [destination release];
@@ -190,25 +196,22 @@
     
     switch (sub_state){
         case 0:
-            NSLog(@"Alright there are two more.");
-            [self soundfile:@"B11"];
+            [self speak:[NSString stringWithFormat:@"your destination is %@. %@",[themap roadNameFromEdgePos:pointC.pos],[themap descriptionOfEdgePos:pointC.pos]]];
             sub_state++;
             break;
         case 1:
-            [self speak:[NSString stringWithFormat:@"your destination is %@. %@",[themap roadNameFromEdgePos:pointC.pos],[themap descriptionOfEdgePos:pointC.pos]]];
+            [self soundfile:@"TheKey - i always get east and west confused - keep moving"];
             
             sub_state++;
             break;
         case 2:
             dist = [destination distanceFromRoot:player.pos];
-            NSLog(@"dist = %f",dist);
             
             [prog update:dist];
             
             if (magic || dist < 30 || bingo) {
                 magic = NO;
-                NSLog(@"here we are. give it a shot. cha-cha. Interesting...");
-                [self soundfile:@"B08"];
+                [self soundfile:@"TheKey - ok this is it - try the key"];
                 [self playSong:@"chase_elevated"];
                 sub_state++;
             } else if (dist < 100){
@@ -216,7 +219,7 @@
             }
             break;
         case 3:
-            [self soundfile:@"B12"];
+            [self soundfile:@"TheKey - huh thats interesting - do you see anything inside"];
             sub_state=0;
             [destination release];
             destination = [themap createPathSearchAt:safehouse.pos withMaxDistance:[NSNumber numberWithFloat:player_max_distance]];
@@ -246,14 +249,16 @@
     
     switch (sub_state){
         case 0:
-            if ([self playSoundFile:@"E01"]) {
+            if ([self playSoundFile:@"TheKey - oh shit - picking up guard radio - get to the safehouse"]) {
+                //instead of playing immediately, play music after hes done speaking?
                 [self playSong:@"chase_scary"];
                 sub_state++;
             }
             break;
         case 1:
-            NSLog(@"oh shiiit, get out of there!");
-            if ([self playSoundFile:@"B13"]) sub_state++;
+            if (chase_ticks++>5 && [self playSoundFile:@"BadGuy - hey you - get outta there"]){
+                sub_state++;
+            }
             break;
         case 2:
             dist = [latestsearch distanceFromRoot:dude.pos];
@@ -262,12 +267,12 @@
             if (![self readyToSpeak]) return;
             
             if (chase_ticks++ > 10){
-                [self speak:@"YOU LOSE"];
+                [self soundfile:@"BadGuy - i gotcha"];
                 [self saveMissionStats:@"Caught by the guard"];
                 
                 main_state=5;
             } else if (chase_ticks>5){
-                [self speak:@"run run run"];
+                [self soundfile:@"TheKey - go"];
             }
             break;
         case 3:
@@ -305,34 +310,30 @@
             
             if (dist < 4){
                 
-                NSLog(@"I GOT YOU FUCKER!");
-                [self soundfile:@"E06"];
+                [self soundfile:@"BadGuy - gotcha"];
                 [self saveMissionStats:@"The guard caught up to you"];
                 
                 main_state=5;
                 return;
             } else if (dist < 20){
-                dude_speed = dist / 10;
-                [self soundfile:@"E03"]; //"you cant outrun me"
+                dude_speed = 0.1;
+                [self soundfile:@"BadGuy - youre mine now"]; 
             }
             
             
             
             //gaining/losing him. might want to randomize the sound files
             if (dist < .75 * xdist){
-                 NSLog(@"he is gaining on you.");
-                [self soundfile:@"B16"]; 
+                [self soundfile:@"TheKey - hes gaining on you"]; 
                 xdist = dist;
             } else if (xdist < .75 * dist){
-                 NSLog(@"you are losing him");
-                [self soundfile:@"B23"];
+                [self soundfile:@"TheKey - youre losing him"];
                  xdist = dist;
                 dude_speed = 4.0;
             }
             
             if (dist > 150){
-                NSLog(@"you lost him");
-                [self soundfile:@"B24"];
+                [self soundfile:@"TheKey - great - you lost him"];
                 [self playSong:@"chase_elevated"];
                 sub_state++;
             }
@@ -341,14 +342,12 @@
             dist_dude_to_safehouse = [destination distanceFromRoot:dude.pos];
             if (dist_dude_to_safehouse<100 && dude_speed>1.1){
                 dude_speed=1.0;
-                [self soundfile:@"B19"];
-                NSLog(@"he is slowing down");
+                [self soundfile:@"TheKey - hes slowing down but this aint over"];
             } 
             
             if (dist_dude_to_safehouse<50 && dude_speed>0){
                 dude_speed = 0;
-                NSLog(@"You lost him.");
-                [self soundfile:@"B24"];
+                [self soundfile:@"TheKey - great - you lost him"];
                 sub_state++;
                 [self playSong:@"chase_elevated"];
             }
@@ -362,22 +361,19 @@
             
             break;
         case 4:
-            NSLog(@"keep going to the safehouse");
-            [self soundfile:@"B27"];
+            [self soundfile:@"TheKey - now get back to the safehouse"];
             
             sub_state++;
             break;
         case 5:
             dist = [destination distanceFromRoot:player.pos];
-            NSLog(@"dist = %f",dist);
             [prog update:dist];
             BOOL bingo = ([destination rootDistanceToLatLng:last_location] < 30 && [current_road isEqualToString:[themap roadNameFromEdgePos:safehouse.pos]]);
             
             if (magic || dist < 30 || bingo){
                 magic = NO;
-                [self soundfile:@"B28"];
+                [self soundfile:@"TheKey - did go as planned - talk to you soon"];
                 [self playSong:@"chase_normal"];
-                NSLog(@"you made it. ima look at the data");
                 [self saveMissionStats:@"success"];
                 
                 main_state++;
@@ -390,16 +386,6 @@
 
 
 #pragma mark -
-- (void) soundfile:(NSString*)filename{
-    [soundfx release];
-    NSError *error;
-    NSString * s = [[NSBundle mainBundle] pathForResource:filename ofType:@"aiff"];
-    NSURL * x = [NSURL fileURLWithPath:s];
-    soundfx = [[AVAudioPlayer alloc] initWithContentsOfURL:x error:&error];
-    soundfx.volume = 1.0;
-    [soundfx prepareToPlay];
-    [soundfx play];
-}
 - (void) dealloc {
     [pointA release];
     [pointB release];

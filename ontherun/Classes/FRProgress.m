@@ -37,11 +37,14 @@
     switch (percentage){
         case 0:
             //just starting
-            if (x / start < .5 && [delegate playSoundFile:@"halfway"]) percentage++;
+            if (x > 100 && x / start < .5 && [delegate playSoundFile:@"ok youre halfway there"]) percentage++;
             break;
         case 1:
             //over halfway
-            if (x / start < .2 && [delegate playSoundFile:@"getting_close"]) percentage++;
+            if (x / start < .2 && [delegate playSoundFile:@"youre getting close"]) percentage++;
+            break;
+        case 2:
+            if (x / start < .1 && [delegate playSoundFile:@"youre almost there"]) percentage++;
             break;
         default:
             break;
@@ -50,19 +53,19 @@
     
     switch (absolute){
         case 0:
-            if (x<1000 && [delegate playSoundFile:@"1000"]) absolute++;
+            if (x<1000 && [delegate playSoundFile:@"1000 meters"]) absolute++;
             break;
         case 1:
-            if (x<500 && [delegate playSoundFile:@"500"]) absolute++;
+            if (x<500 && [delegate playSoundFile:@"500 meters"]) absolute++;
             break;
         case 2:
-            if (x<200 && [delegate playSoundFile:@"200"]) absolute++;
+            if (x<200 && [delegate playSoundFile:@"200 meters"]) absolute++;
             break;
         case 3:
-            if (x<100 && [delegate playSoundFile:@"100"]) absolute++;
+            if (x<100 && [delegate playSoundFile:@"100 meters"]) absolute++;
             break;
         case 4:
-            if (x<50 && [delegate playSoundFile:@"50"]) absolute++;
+            if (x<50 && [delegate playSoundFile:@"50 meters"]) absolute++;
             break;
         default:
             break;
