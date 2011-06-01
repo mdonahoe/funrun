@@ -64,7 +64,8 @@ X10. there is some infinite loop bug in the directionsToRoot code.
     //such that it is equally placed from start and end points.
     float dist2 = 0.0;
     float dist1 = 0.0;
-    while (dist1+dist2 < player_max_distance*.95 || dist2 > player_max_distance/1.8){
+    int i=0;
+    while ((dist1+dist2 < player_max_distance*.95 || dist2 > player_max_distance/1.8) && i++<100){
         car.pos = [latestsearch move:player.pos awayFromRootWithDelta:player_max_distance/1.9];
         dist1 = [latestsearch distanceFromRoot:car.pos];
         dist2 = [endmap distanceFromRoot:car.pos];
@@ -347,7 +348,7 @@ X10. there is some infinite loop bug in the directionsToRoot code.
             coppos.position = [themap maxPosition:coppos];
             
             //move inward, away from the street to ensure that the player is in the right place
-            goal = [themap move:goal forwardRandomly:10.0];
+            goal = [latestsearch move:goal awayFromRootWithDelta:10.0];
             CLLocationCoordinate2D x = [themap coordinateFromEdgePosition:goal];
             NSLog(@"lat = %f, lon=%f",x.latitude,x.longitude);
             

@@ -42,7 +42,8 @@
     float dist2 = 0.0;
     float dist1 = 0.0;
     FREdgePos * start = [themap flipEdgePos:player.pos];
-    while (dist1+dist2 < player_max_distance*.95 || dist2 > player_max_distance/1.8){
+    int i=0;
+    while ((dist1+dist2 < player_max_distance*.95 || dist2 > player_max_distance/1.8) && i++<100){
         start = [themap flipEdgePos:start];
         pointC.pos = [latestsearch move:start awayFromRootWithDelta:player_max_distance/1.9];
         dist1 = [latestsearch distanceFromRoot:pointC.pos];
