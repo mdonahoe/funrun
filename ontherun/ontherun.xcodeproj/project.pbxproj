@@ -185,6 +185,7 @@
 		9BBA21021395F5E00080A652 /* youre closing in.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 9BBA20601395F5E00080A652 /* youre closing in.mp3 */; };
 		9BBA21031395F5E00080A652 /* youre getting close.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 9BBA20611395F5E00080A652 /* youre getting close.mp3 */; };
 		9BBA21041395F5E00080A652 /* youre halfway there.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 9BBA20621395F5E00080A652 /* youre halfway there.mp3 */; };
+		9BBA210D13963F320080A652 /* FRRandomSound.m in Sources */ = {isa = PBXBuildFile; fileRef = 9BBA210C13963F2A0080A652 /* FRRandomSound.m */; };
 		9BBD3296132E81360082A0C7 /* StartView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9BBD3295132E81360082A0C7 /* StartView.xib */; };
 		9BBD329A132E81CC0082A0C7 /* StartViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9BBD3299132E81CC0082A0C7 /* StartViewController.m */; };
 		9BC137431304A340006492A0 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9BC137421304A340006492A0 /* AVFoundation.framework */; };
@@ -454,6 +455,8 @@
 		9BBA20601395F5E00080A652 /* youre closing in.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = "youre closing in.mp3"; sourceTree = "<group>"; };
 		9BBA20611395F5E00080A652 /* youre getting close.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = "youre getting close.mp3"; sourceTree = "<group>"; };
 		9BBA20621395F5E00080A652 /* youre halfway there.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = "youre halfway there.mp3"; sourceTree = "<group>"; };
+		9BBA210B13963F270080A652 /* FRRandomSound.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRRandomSound.h; sourceTree = "<group>"; };
+		9BBA210C13963F2A0080A652 /* FRRandomSound.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRRandomSound.m; sourceTree = "<group>"; };
 		9BBD3295132E81360082A0C7 /* StartView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = StartView.xib; sourceTree = "<group>"; };
 		9BBD3298132E81CC0082A0C7 /* StartViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StartViewController.h; sourceTree = "<group>"; };
 		9BBD3299132E81CC0082A0C7 /* StartViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StartViewController.m; sourceTree = "<group>"; };
@@ -591,6 +594,8 @@
 		080E96DDFE201D6D7F000001 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				9BBA210B13963F270080A652 /* FRRandomSound.h */,
+				9BBA210C13963F2A0080A652 /* FRRandomSound.m */,
 				9B1AA58313328DAF00850465 /* VSSpeechSynthesizer.h */,
 				C904845013393F1A00213A82 /* Missions */,
 				C906C13E12D4EA2F00C14388 /* json */,
@@ -1307,6 +1312,7 @@
 				9B2AE23B138EAD3F00D22D85 /* FRNameController.m in Sources */,
 				9B2AE240138EAE4D00D22D85 /* FRMissionList.m in Sources */,
 				9BBA1FAC139427A50080A652 /* FRInGame.m in Sources */,
+				9BBA210D13963F320080A652 /* FRRandomSound.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

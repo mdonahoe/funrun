@@ -78,6 +78,55 @@
     [dude setCoordinate:[themap coordinateFromEdgePosition:dude.pos]];
     [points addObject:dude];
     //[self.viewControl.mapView addAnnotations:points];
+    badguy_taunts = [[FRRandomSound alloc] initWithArray:[NSArray arrayWithObjects:
+                                                          @"BadGuy - I see you back there", 
+                                                          @"BadGuy - get back here",
+                                                          @"BadGuy - i see you",
+                                                          @"BadGuy - i see you2",
+                                                          @"BadGuy - im faster than you",
+                                                          @"BadGuy - im gonna get you",
+                                                          @"BadGuy - im gonna get you2",
+                                                          @"BadGuy - im so close",
+                                                          @"BadGuy - stand still",
+                                                          @"BadGuy - stop running",
+                                                          @"BadGuy - where do you think youre going",
+                                                          @"BadGuy - where do you think youre going2",
+                                                          @"BadGuy - you cant hide from me",
+                                                          @"BadGuy - you cant outrun me",
+                                                          @"BadGuy - you cant outrun me2",
+                                                          @"BadGuy - youre mine now",
+                                                          @"BadGuy - youre mine",
+                                                          nil] delegate:self];
+    
+    
+    gaining_you = [[FRRandomSound alloc] initWithArray:[NSArray arrayWithObjects:
+                                                        @"TheKey - you realize he is not going to stop right - you have to outrun him",
+                                                        @"TheKey - step up the pace - he is gaining on you",
+                                                        @"TheKey - hes getting close2",
+                                                        @"TheKey - hes getting close",
+                                                        @"TheKey - hes gaining on you",
+                                                        @"TheKey - hes closing in on you",
+                                                        nil] delegate:self];
+    
+    losing_him = [[FRRandomSound alloc] initWithArray:[NSArray arrayWithObjects:
+                                                       @"TheKey - youre losing him",
+                                                       @"TheKey - keep going - hes still behind you",
+                                                       @"TheKey - hes still there",
+                                                       @"TheKey - hes still behind you", nil] delegate:self];
+    
+    
+    capture_warning = [[FRRandomSound  alloc] initWithArray:[NSArray arrayWithObjects:@"TheKey - dont stop now you are gonna get us both caught",
+                                                             @"TheKey - you have to keep moving - he is right behind you",
+                                                             @"TheKey - you have to speed up",
+                                                             @"TheKey - go faster",
+                                                             @"TheKey - dont stop",
+                                                             @"TheKey - he is right behind you",
+                                                             @"TheKey - gotta go faster than this",
+                                                             nil] delegate:self];
+    [gaining_you shuffle];
+    [badguy_taunts shuffle];
+    [losing_him shuffle];
+    [capture_warning shuffle];
     
     
     [self ticktock];
@@ -260,8 +309,9 @@
             }
             break;
         case 1:
-            if (chase_ticks++>5 && [self playSoundFile:@"BadGuy - hey you - get outta there"]){
+            if (chase_ticks++>10 && [self playSoundFile:@"BadGuy - hey you - get outta there"]){
                 sub_state++;
+                chase_ticks=0;
             }
             break;
         case 2:
@@ -270,13 +320,20 @@
             
             if (![self readyToSpeak]) return;
             
-            if (chase_ticks++ > 10){
+            if (chase_ticks++ > 20){
                 [self soundfile:@"BadGuy - i gotcha"];
                 [self saveMissionStats:@"Caught by the guard"];
                 
                 main_state=5;
-            } else if (chase_ticks>5){
+            } else if (chase_ticks==5){
                 [self soundfile:@"TheKey - go"];
+            } else if (chase_ticks==8){
+                [self soundfile:@"TheKey - RUN"];
+            } else if (chase_ticks==12){
+                [self soundfile:@"TheKey - you have to GET out of there"];
+            } else {
+                NSLog(@"yeyeaaa!");
+                [badguy_taunts played];
             }
             break;
         case 3:
@@ -309,7 +366,6 @@
             }
             
             dude.pos = newpos;
-            
             if (![self readyToSpeak]) return;
             
             if (dist < 4){
@@ -319,21 +375,23 @@
                 
                 main_state=5;
                 return;
-            } else if (dist < 20){
-                dude_speed = 0.1;
-                [self soundfile:@"BadGuy - youre mine now"]; 
+            } else if (dist < 30){
+                if (dude_speed > 0) dude_speed = 1.0;
+                if (arc4random()%2) [capture_warning played];
+                else [badguy_taunts played];
             }
             
             
             
             //gaining/losing him. might want to randomize the sound files
             if (dist < .75 * xdist){
-                [self soundfile:@"TheKey - hes gaining on you"]; 
+                [gaining_you played];
                 xdist = dist;
             } else if (xdist < .75 * dist){
-                [self soundfile:@"TheKey - youre losing him"];
-                 xdist = dist;
-                dude_speed = 4.0;
+                //[self soundfile:@"TheKey - youre losing him"];
+                [losing_him played];
+                xdist = dist;
+                if (dude_speed > 0) dude_speed = 4.0;
             }
             
             if (dist > 150){
@@ -345,7 +403,7 @@
             
             dist_dude_to_safehouse = [destination distanceFromRoot:dude.pos];
             if (dist_dude_to_safehouse<100 && dude_speed>1.1){
-                dude_speed=1.0;
+                dude_speed=0;
                 [self soundfile:@"TheKey - hes slowing down but this aint over"];
             } 
             
@@ -396,6 +454,10 @@
     [safehouse release];
     [dude release];
     [prog release];
+    [badguy_taunts release];
+    [capture_warning release];
+    [gaining_you release];
+    [losing_him release];
     [super dealloc];
 }
 @end

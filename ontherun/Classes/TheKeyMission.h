@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import "FRMissionTemplate.h"
+#import "FRRandomSound.h"
 
 @interface TheKeyMission : FRMissionTemplate {
     FRPoint * pointA;
@@ -21,6 +22,11 @@
     float dude_speed;
     int chase_ticks;
     FRProgress * prog;
+    
+    FRRandomSound * badguy_taunts;
+    FRRandomSound * losing_him;
+    FRRandomSound * gaining_you;
+    FRRandomSound * capture_warning;
 }
 - (void) the_first;
 - (void) the_second;
