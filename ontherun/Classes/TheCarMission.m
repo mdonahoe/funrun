@@ -314,12 +314,30 @@ X10. there is some infinite loop bug in the directionsToRoot code.
             
             
             if (![self readyToSpeak]) return;
-            FREdgePos * goal = [destination forkPoint:player.pos];
+            FREdgePos * goal = player.pos;
+            float dist = 0.0;
+            int i=0;
+            while (goal!=nil && dist < 50 && i++<10){
+                goal = [destination move:goal towardRootWithDelta:30.0];
+                goal = [destination forkPoint:goal];
+                dist = [latestsearch distanceFromRoot:goal];
+            }
             //goal.end = fork node
             
             
             
-            if (goal==nil) return;
+            if (goal==nil) {
+                NSLog(@"no fork point available");
+                return;
+            }
+            if (dist > 200) {
+                NSLog(@"fork point too far away");
+                return;
+            }
+            if (dist < 50) {
+                NSLog(@"fork point too close");
+                return;
+            }
             
             //start the cop at the same node, but facing the safehouse
             NSNumber * next = [destination closerNode:[goal endObj]];
@@ -335,15 +353,11 @@ X10. there is some infinite loop bug in the directionsToRoot code.
             
             //what is the distance to the goal?
             
-            float dist = [latestsearch distanceFromRoot:goal];
-            if (dist > 200) {
-                NSLog(@"fork point too far away");
-                return;
-            }
+            
             
             
             float cop_dist = [latestsearch distanceFromRoot:coppos];
-            int i=0;
+            i=0;
             while (cop_dist < 1000 && i++<10){
                 coppos = [destination move:coppos towardRootWithDelta:dist*10-cop_dist];
                 cop_dist = [latestsearch distanceFromRoot:coppos];
