@@ -7,7 +7,7 @@
 //
 
 #import "FRBriefingViewController.h"
-#import "LocationPicker.h"
+#import "StartViewController.h"
 
 #define FONT_SIZE 15.0
 #define CELL_CONTENT_WIDTH 300.0
@@ -18,9 +18,18 @@
 #define kSection_Destination 1
 
 @implementation FRBriefingViewController
-@synthesize desttext,mission;
+@synthesize desttext;
 #pragma mark -
 #pragma mark View lifecycle
+
+- (id) initWithMissionData:(NSDictionary*)md {
+    self = [self initWithNibName:@"FRBriefingViewController" bundle:nil];
+    if (!self) return nil;
+    [md retain];
+    missionData = md;
+    [self setText:[missionData objectForKey:@"description"]];
+    return self;
+}
 
 //maybe do init instead
 - (void)viewDidLoad {
@@ -33,14 +42,18 @@
 	
 	
 	//destination
-	if (nil==destination) destination = [[UITableViewCell alloc] initWithFrame:CGRectZero];
-	destination.textLabel.text = desttext;
-	destination.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+	//if (nil==destination) destination = [[UITableViewCell alloc] initWithFrame:CGRectZero];
+	//destination.textLabel.text = desttext;
+	//destination.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
 	
 	
 	//footerView
 	//the button could disappear. though we want it to anyway after the mission has been started.
-	if (nil==footerView) footerView  = [[UIView alloc] init];
+	if (nil==footerView) {
+        NSLog(@"nil footer");
+        footerView  = [[UIView alloc] init];
+        [self makeButton];
+    }
 	
 	
 }
@@ -50,7 +63,7 @@
 
 // Customize the number of sections in the table view.
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    return 2;
+    return 1;
 }
 
 
@@ -75,9 +88,7 @@
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
 	switch (section) {
 		case kSection_Objective:
-			return @"Objective";
-		case kSection_Destination:
-			return @"Destination";
+			return [NSString stringWithFormat:@"%@ Mission",[missionData objectForKey:@"name"]];
 		default:
 			break;
 	}
@@ -87,7 +98,7 @@
 	return nil;
 	
 }
-- (void) initializedMission:(FRMissionTemplate *)m {
+- (void) makeButton {
 	//we would like to show a glossy green button, so get the image first
 	UIImage *image = [[UIImage imageNamed:@"button_green.png"]
 					  stretchableImageWithLeftCapWidth:8 topCapHeight:8];
@@ -105,28 +116,27 @@
 	[button setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
 	
 	//set action of the button
-	[button addTarget:mission action:@selector(startup)
+	[button addTarget:self action:@selector(startup)
 	 forControlEvents:UIControlEventTouchUpInside];
 	
 	//add the button to the view
 	[footerView addSubview:button];
 }
+- (void) startup {
+    NSLog(@"pressed");
+    StartViewController * sv = [[[StartViewController alloc] initWithMissionData:missionData] autorelease];
+    [self.navigationController pushViewController:sv animated:YES];
+}
 // specify the height of your footer section
 - (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section {
     //differ between your sections or if you
     //have only on section return a static value
-    if (section==kSection_Destination)return 50;
-	return 0;
+    return 50;
 }
 
 // custom view for footer. will be adjusted to default or specified footer height
 // Notice: this will work only for one section within the table view
 - (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section {
-	if (section!=kSection_Destination) return nil;
-    if(footerView == nil) {
-        //allocate the view if it doesn't exist yet
-        
-    }
 	
     //return the view for the footer
     return footerView;
@@ -148,13 +158,7 @@
 #pragma mark MissionInteraction
 - (void) setDest:(NSString *)name {
 	self.desttext = name;
-	destination.textLabel.text = desttext;
-}
-
-
-- (void) showMap {
-	//start the mission i guess.
-	
+	if (destination) destination.textLabel.text = desttext;
 }
 - (void) setText:(NSString *)text{
 	[text retain];
@@ -180,17 +184,13 @@
 #pragma mark -
 #pragma mark Table view delegate
 - (NSIndexPath *)tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-	if (indexPath.section==0) return nil;
-	return indexPath;
+	return nil;
 }
-
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     
 	//create the location picker view thing
 	//when it returns, send a pickedLocation: to the missionView
-	
-	if (indexPath.section!=kSection_Destination) return;
-	[mission pickPoint];
+	return;
 }
 
 
@@ -221,6 +221,7 @@
 	[objective release];
 	[footerView release];
 	[missionText release];
+    [missionData release];
     [super dealloc];
 }
 

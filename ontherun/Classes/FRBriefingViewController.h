@@ -7,7 +7,6 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "FRMissionTemplate.h"
 // http://developer.apple.com/library/ios/#documentation/uikit/reference/UITableViewDelegate_Protocol/Reference/Reference.html
 
 //
@@ -17,10 +16,13 @@
 	UITableViewCell * footerView;
 	NSString * missionText;
 	NSString * desttext;
-	FRMissionTemplate * mission;
+    NSDictionary * missionData;
 }
 @property(nonatomic,retain) NSString * desttext;
-@property(nonatomic,assign) FRMissionTemplate * mission; //retain?
+
+- (id) initWithMissionData:(NSDictionary*)md;
 - (void) setDest:(NSString *)name;
 - (void) setText:(NSString *)text;
+- (void) makeButton;
+- (void) startup;
 @end

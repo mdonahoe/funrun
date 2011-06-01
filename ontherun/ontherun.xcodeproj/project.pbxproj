@@ -274,10 +274,10 @@
 		9B1AA58313328DAF00850465 /* VSSpeechSynthesizer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSSpeechSynthesizer.h; sourceTree = "<group>"; };
 		9B2AE238138EAD3F00D22D85 /* FRNameController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRNameController.h; sourceTree = "<group>"; };
 		9B2AE239138EAD3F00D22D85 /* FRNameController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRNameController.m; sourceTree = "<group>"; };
-		9B2AE23A138EAD3F00D22D85 /* FRNameController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FRNameController.xib; sourceTree = "<group>"; };
+		9B2AE23A138EAD3F00D22D85 /* FRNameController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = FRNameController.xib; path = Classes/FRNameController.xib; sourceTree = "<group>"; };
 		9B2AE23D138EAE4D00D22D85 /* FRMissionList.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRMissionList.h; sourceTree = "<group>"; };
 		9B2AE23E138EAE4D00D22D85 /* FRMissionList.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRMissionList.m; sourceTree = "<group>"; };
-		9B2AE23F138EAE4D00D22D85 /* FRMissionList.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FRMissionList.xib; sourceTree = "<group>"; };
+		9B2AE23F138EAE4D00D22D85 /* FRMissionList.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = FRMissionList.xib; path = Classes/FRMissionList.xib; sourceTree = "<group>"; };
 		9B51D5BB1305F53400978183 /* FRPoint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRPoint.h; sourceTree = "<group>"; };
 		9B51D5BC1305F53400978183 /* FRPoint.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRPoint.m; sourceTree = "<group>"; };
 		9B684BD51341066800F27C12 /* button_green.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = button_green.png; sourceTree = "<group>"; };
@@ -292,7 +292,7 @@
 		9BA789331385B89B006C8759 /* FRProgress.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRProgress.m; sourceTree = "<group>"; };
 		9BBA1FA9139427A50080A652 /* FRInGame.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRInGame.h; sourceTree = "<group>"; };
 		9BBA1FAA139427A50080A652 /* FRInGame.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRInGame.m; sourceTree = "<group>"; };
-		9BBA1FAB139427A50080A652 /* FRInGame.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FRInGame.xib; sourceTree = "<group>"; };
+		9BBA1FAB139427A50080A652 /* FRInGame.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = FRInGame.xib; path = Classes/FRInGame.xib; sourceTree = "<group>"; };
 		9BBA1FC11395F5E00080A652 /* 1 minute.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = "1 minute.mp3"; sourceTree = "<group>"; };
 		9BBA1FC21395F5E00080A652 /* 10 minutes.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = "10 minutes.mp3"; sourceTree = "<group>"; };
 		9BBA1FC31395F5E00080A652 /* 100 meters.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = "100 meters.mp3"; sourceTree = "<group>"; };
@@ -681,6 +681,9 @@
 		9B418ED0138741B800A8272A /* nibs */ = {
 			isa = PBXGroup;
 			children = (
+				9B2AE23A138EAD3F00D22D85 /* FRNameController.xib */,
+				9B2AE23F138EAE4D00D22D85 /* FRMissionList.xib */,
+				9BBA1FAB139427A50080A652 /* FRInGame.xib */,
 				C9624D52133BFA4F00F6594F /* LocationPicker.xib */,
 				C9624CC2133AD63300F6594F /* FRSummaryViewController.xib */,
 				C9624CD8133BB9F200F6594F /* FRBriefingViewController.xib */,
@@ -996,13 +999,10 @@
 				C9569BF9138833A100FD66E8 /* FRTroubleshoot.xib */,
 				9B2AE238138EAD3F00D22D85 /* FRNameController.h */,
 				9B2AE239138EAD3F00D22D85 /* FRNameController.m */,
-				9B2AE23A138EAD3F00D22D85 /* FRNameController.xib */,
 				9B2AE23D138EAE4D00D22D85 /* FRMissionList.h */,
 				9B2AE23E138EAE4D00D22D85 /* FRMissionList.m */,
-				9B2AE23F138EAE4D00D22D85 /* FRMissionList.xib */,
 				9BBA1FA9139427A50080A652 /* FRInGame.h */,
 				9BBA1FAA139427A50080A652 /* FRInGame.m */,
-				9BBA1FAB139427A50080A652 /* FRInGame.xib */,
 			);
 			name = ViewControllers;
 			sourceTree = "<group>";

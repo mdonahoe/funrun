@@ -8,6 +8,7 @@
 
 #import "FRMissionList.h"
 #import "StartViewController.h"
+#import "FRBriefingViewController.h"
 #import "ASIFormDataRequest.h"
 #import "JSON.h"
 
@@ -288,9 +289,10 @@
     if (indexPath.section==0){
         //mission: load the starview
         
-        StartViewController * sv = [[[StartViewController alloc] initWithMissionData:obj] autorelease];
-        [self.navigationController pushViewController:sv animated:YES];
-                                 
+        //StartViewController * sv = [[[StartViewController alloc] initWithMissionData:obj] autorelease];
+        //[self.navigationController pushViewController:sv animated:YES];
+        FRBriefingViewController * bv = [[[FRBriefingViewController alloc] initWithMissionData:obj] autorelease];
+        [self.navigationController pushViewController:bv animated:YES];
         
     } else {
         //evidence: load the url
