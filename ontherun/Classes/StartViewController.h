@@ -19,6 +19,9 @@
 	CLLocationManager * locationManager;
 	toqbot * m2;
 	CLLocation * latest_point;
+    UIButton *DestinationButton;
+    UIButton *StartButton;
+    UILabel *centerLabel;
     UILabel * distanceLabel;
     UISlider * distanceSlider;
     CLLocation * destination;
@@ -30,6 +33,9 @@
 @property(nonatomic,retain) IBOutlet UILabel * distanceLabel;
 @property(nonatomic,retain) IBOutlet UISlider * distanceSlider;
 @property(nonatomic,retain) CLLocation * latest_point;
+@property (nonatomic, retain) IBOutlet UIButton *DestinationButton;
+@property (nonatomic, retain) IBOutlet UIButton *StartButton;
+@property (nonatomic, retain) IBOutlet UILabel *centerLabel;
 
 - (id) initWithMissionData:(NSDictionary *)obj;
 - (IBAction)pickDestination:(id)sender;
@@ -38,5 +44,5 @@
 - (void) startStandardUpdates;
 - (IBAction) statechange:(id)sender;
 - (IBAction) sliderchange:(id)sender;
-
+- (void) updateLocation:(CLLocation *)location;
 @end

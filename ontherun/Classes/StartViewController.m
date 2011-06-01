@@ -17,6 +17,9 @@
 #import "LocationPicker.h"
 
 @implementation StartViewController
+@synthesize DestinationButton;
+@synthesize StartButton;
+@synthesize centerLabel;
 @synthesize gps,missionLabel,latest_point,distanceLabel,distanceSlider;
 
 - (id) initWithMissionData:(NSDictionary *)obj {
@@ -102,6 +105,9 @@
 }
 
 - (void)viewDidUnload {
+    [self setDestinationButton:nil];
+    [self setStartButton:nil];
+    [self setCenterLabel:nil];
     [super viewDidUnload];
     // Release any retained subviews of the main view.
     // e.g. self.myOutlet = nil;
@@ -135,8 +141,9 @@
 	float lat = [[obj objectForKey:@"lat"] floatValue];
 	float lon = [[obj objectForKey:@"lon"] floatValue];
 	
-	self.latest_point = [[[CLLocation alloc] initWithLatitude:lat longitude:lon] autorelease];
-	if (mission) [mission newPlayerLocation:self.latest_point];
+	
+    CLLocation * newLocation = [[[CLLocation alloc] initWithLatitude:lat longitude:lon] autorelease];
+    [self updateLocation:newLocation];
 }
 - (void) startStandardUpdates{
     // Create the location manager if this object does not
@@ -163,9 +170,18 @@
 	}
 	NSLog(@"recieved timestamp: %f",[newLocation.timestamp timeIntervalSinceNow]);
 	
-	self.latest_point = newLocation;
-	if (mission) [mission newPlayerLocation:self.latest_point];
+    
+    [self updateLocation:newLocation];
 	
+}
+- (void) updateLocation:(CLLocation *)location {
+    if (self.latest_point==nil){
+        self.centerLabel.text = @"";
+        self.DestinationButton.hidden=NO;
+        self.StartButton.hidden=NO;
+    }
+    self.latest_point = location;
+    if (mission) [mission newPlayerLocation:self.latest_point];
 }
 - (void)dealloc {
 	[missionLabel release];
@@ -174,6 +190,9 @@
 	[m2 release];
 	[locationManager release];
 	[mission release];
+    [DestinationButton release];
+    [StartButton release];
+    [centerLabel release];
 	[super dealloc];
     NSLog(@"start view dead");
 }
