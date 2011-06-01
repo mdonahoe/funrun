@@ -378,7 +378,8 @@
         }
         start_road = current_road;
     }
-    [directions addObject:[NSString stringWithFormat:@"continue on %@ to your destination",start_road]];
+    //continue on X toward Y
+    [directions addObject:[NSString stringWithFormat:@"continue on %@. %@",start_road,[map descriptionOfEdgePos:ep]]];
     return [NSArray arrayWithArray:directions];
 }
 - (NSNumber *) closerNode:(NSNumber*)node{

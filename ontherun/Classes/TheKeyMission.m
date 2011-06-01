@@ -55,7 +55,10 @@
     float rundist = [latestsearch distanceFromRoot:pointC.pos];
     
     pointA.pos = [latestsearch move:pointC.pos towardRootWithDelta:2*rundist/3.0];
+    pointA.pos = [latestsearch move:pointA.pos awayFromRootWithDelta:0.0]; //face away
+    
     pointB.pos = [latestsearch move:pointC.pos towardRootWithDelta:1*rundist/3.0];
+    pointB.pos = [latestsearch move:pointB.pos awayFromRootWithDelta:0.0]; //face away
     
     
     destination = [themap createPathSearchAt:pointA.pos withMaxDistance:[NSNumber numberWithFloat:player_max_distance]];
@@ -96,6 +99,7 @@
             break;
         default:
             NSLog(@"its over!");
+            [self playSong:nil];
             return;
             break;
     }
@@ -104,7 +108,7 @@
         NSArray * directions = [destination directionsToRoot:player.pos];
         NSString * direction = [directions objectAtIndex:0];
         if ([direction isEqualToString:@"turn around"]){
-            direction = [NSString stringWithFormat:@"turn around and %@",[directions objectAtIndex:1]];
+            direction = [NSString stringWithFormat:@"%@",[directions objectAtIndex:1]];
         }
         [self speakIfEmpty:direction];
     }
@@ -373,7 +377,6 @@
             if (magic || dist < 30 || bingo){
                 magic = NO;
                 [self soundfile:@"TheKey - did go as planned - talk to you soon"];
-                [self playSong:@"chase_normal"];
                 [self saveMissionStats:@"success"];
                 
                 main_state++;

@@ -141,7 +141,7 @@ X10. there is some infinite loop bug in the directionsToRoot code.
     NSArray * directions = [destination directionsToRoot:player.pos];
     NSString * direction = [directions objectAtIndex:0];
     if ([direction isEqualToString:@"turn around"]){
-        direction = [NSString stringWithFormat:@"turn around and %@",[directions objectAtIndex:1]];
+        direction = [NSString stringWithFormat:@"%@",[directions objectAtIndex:1]];
     }
     
     
