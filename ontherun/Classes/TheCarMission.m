@@ -137,7 +137,6 @@ X10. there is some infinite loop bug in the directionsToRoot code.
     //display something. or restart the mission. idk.
 }
 - (void) ticktock {
-    NSLog(@"tick tock");
     NSArray * directions = [destination directionsToRoot:player.pos];
     NSString * direction = [directions objectAtIndex:0];
     if ([direction isEqualToString:@"turn around"]){

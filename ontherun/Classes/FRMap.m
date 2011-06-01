@@ -405,17 +405,17 @@
 	NSNumber * prev = [ep endObj];
 	NSString * currentroad = [self roadNameFromEdgePos:ep];
 	NSDictionary * neighbors;
-    NSLog(@"start = %@",ep);
+    //NSLog(@"start = %@",ep);
 	while (1){
 		//move forward down the line until we hit an intersection or a dead end
 		neighbors = [graph objectForKey:goal];
 		if ([neighbors count]!=2) break;
-		NSLog(@"neighbors = %@",[neighbors allKeys]);
+		//NSLog(@"neighbors = %@",[neighbors allKeys]);
         NSNumber * newgoal = [[neighbors allKeys] objectAtIndex:0];
-		NSLog(@"advancing to %i",[newgoal intValue]);
+		//NSLog(@"advancing to %i",[newgoal intValue]);
         if ([newgoal intValue]==[prev intValue]){
             newgoal = [[neighbors allKeys] objectAtIndex:1];
-            NSLog(@"neighbor is prev, switching %i",[newgoal intValue]);
+            //NSLog(@"neighbor is prev, switching %i",[newgoal intValue]);
         }
 			
 		prev = goal;
