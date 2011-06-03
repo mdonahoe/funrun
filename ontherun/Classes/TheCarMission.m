@@ -117,9 +117,9 @@ X10. there is some infinite loop bug in the directionsToRoot code.
     [alarm prepareToPlay];
     
     
-    car_time_left = 300; //default to 5 minutes, but this should be depending on difficulty.
+    car_time_left = MAX(300,(int)(dist1/2.5)); //min is 5 minutes
     
-    
+    NSLog(@"time to car = %i",car_time_left);
     for (FRPoint * pt in points){
         [pt setCoordinate:[themap coordinateFromEdgePosition:pt.pos]];
     }
@@ -351,7 +351,7 @@ X10. there is some infinite loop bug in the directionsToRoot code.
             //move inward, away from the street to ensure that the player is in the right place
             goal = [latestsearch move:goal awayFromRootWithDelta:10.0];
             CLLocationCoordinate2D x = [themap coordinateFromEdgePosition:goal];
-            NSLog(@"lat = %f, lon=%f",x.latitude,x.longitude);
+            NSLog(@"goal = lat = %f, lon=%f",x.latitude,x.longitude);
             
             //what is the distance to the goal?
             
@@ -410,12 +410,8 @@ X10. there is some infinite loop bug in the directionsToRoot code.
 
             
             
-            NSLog(@"d1 = %f,d2 = %f, d3 = %f",dist_cop_to_player,dist_cop_to_car,dist_player_to_car);
-            NSLog(@"You are onpath? %i",onpath);
             NSLog(@"cop is on %@",[themap roadNameFromEdgePos:cop.pos]);
-            
             siren.volume = MIN(0.60,10.0/dist_cop_to_player);
-            NSLog(@"siren volume = %f, copdist = %f",MIN(0.60,10.0/dist_cop_to_player),dist_cop_to_player);
             
             
             

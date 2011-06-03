@@ -263,7 +263,10 @@
 		current_road = roadname;
 		[self speak:current_road];
 	}
-    
+    NSLog(@"new player.pos = %@",player.pos);
+    CLLocationCoordinate2D coord = [themap coordinateFromEdgePosition:player.pos];
+    CLLocation * snapped = [[[CLLocation alloc] initWithLatitude:coord.latitude longitude:coord.longitude] autorelease];
+    NSLog(@"snapped location %@",snapped);
     
     [location retain];
 	[last_location release];
@@ -337,7 +340,6 @@
 }
 - (void) saveMissionStats:(NSString*) status{
     if (saved) { 
-        NSLog(@"mission already saved");
         return;
     }
     NSMutableDictionary * data = [NSMutableDictionary dictionary];

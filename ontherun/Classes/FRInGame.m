@@ -55,6 +55,7 @@
 }
 
 - (IBAction)magicbutton:(id)sender {
+    NSLog(@"pressed magic button");
     if (delegate){
         [delegate magicbutton];
     }

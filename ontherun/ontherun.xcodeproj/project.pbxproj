@@ -1333,6 +1333,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = ontherun_Prefix.pch;
 				INFOPLIST_FILE = "ontherun-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 4.1;
 				PRODUCT_NAME = ontherun;
 			};
 			name = Debug;
@@ -1349,6 +1350,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = ontherun_Prefix.pch;
 				INFOPLIST_FILE = "ontherun-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 4.1;
 				PRODUCT_NAME = ontherun;
 				VALIDATE_PRODUCT = YES;
 			};

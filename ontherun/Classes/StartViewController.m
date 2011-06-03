@@ -47,7 +47,7 @@
 
 - (IBAction) sliderchange:(id)sender {
 	//update the label according to the slider
-    distanceLabel.text = [NSString stringWithFormat:@"%f km",(int)(distanceSlider.value*10)/10.0];
+    distanceLabel.text = [NSString stringWithFormat:@"%.1f km",(int)(distanceSlider.value*10)/10.0];
 }
 - (void) pickedLocation:(CLLocationCoordinate2D)location{
     [destination release];

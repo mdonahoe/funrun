@@ -94,7 +94,6 @@
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
-    NSLog(@"mission list appeared");
     [m2 loadObjectForKey:userkey toDelegate:self usingSelector:@selector(userData:)];
     
     [self uploadLogs];
@@ -109,7 +108,7 @@
     
     NSDictionary * first = [logs objectAtIndex:0];
     NSString * key = [NSString stringWithFormat:@"%@_logs",userkey];
-    NSLog(@"key =%@",key);
+    NSLog(@"logging to key = %@",key);
     //[m2 sendObject:first forKey:[NSString stringWithFormat:@"%@_logs",userkey]];
     //extract and prepare the data
 	
@@ -150,8 +149,6 @@
 - (void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
-    NSLog(@"mission list will disappear");
-    
     [m2 cancel];
 }
 
@@ -227,45 +224,6 @@
     return cell;
 }
 
-/*
-// Override to support conditional editing of the table view.
-- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    // Return NO if you do not want the specified item to be editable.
-    return YES;
-}
-*/
-
-/*
-// Override to support editing the table view.
-- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    if (editingStyle == UITableViewCellEditingStyleDelete) {
-        // Delete the row from the data source
-        [tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
-    }   
-    else if (editingStyle == UITableViewCellEditingStyleInsert) {
-        // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-    }   
-}
-*/
-
-/*
-// Override to support rearranging the table view.
-- (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath
-{
-}
-*/
-
-/*
-// Override to support conditional rearranging of the table view.
-- (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    // Return NO if you do not want the item to be re-orderable.
-    return YES;
-}
-*/
-
 #pragma mark - Table view delegate
 - (NSIndexPath *)tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 	NSDictionary * obj = [self objFromIndexPath:indexPath];    
@@ -291,11 +249,13 @@
         
         //StartViewController * sv = [[[StartViewController alloc] initWithMissionData:obj] autorelease];
         //[self.navigationController pushViewController:sv animated:YES];
+        NSLog(@"starting %@",[obj objectForKey:@"class"]);
         FRBriefingViewController * bv = [[[FRBriefingViewController alloc] initWithMissionData:obj] autorelease];
         [self.navigationController pushViewController:bv animated:YES];
         
     } else {
         //evidence: load the url
+        NSLog(@"looking at evidence: %@",[obj objectForKey:@"name"]);
         NSURL * url = [NSURL URLWithString:[obj objectForKey:@"url"]];
         UIViewController *webViewController = [[[UIViewController alloc] init] autorelease];
         UIWebView *uiWebView = [[[UIWebView alloc] initWithFrame: CGRectMake(0,0,320,480)] autorelease];
