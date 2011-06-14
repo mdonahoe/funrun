@@ -46,6 +46,8 @@
     AVAudioPlayer * soundfx;
     CLLocation * last_location;
     BOOL magic;
+    BOOL direct;
+    FREdgePos * best;
 }
 @property(nonatomic,retain) NSMutableArray * points;
 @property(nonatomic,assign) FRInGame * viewControl;
@@ -64,4 +66,5 @@
 - (BOOL) readyToSpeak;
 - (void) updateDirections;
 - (void) saveMissionStats:(NSString*)status;
+- (void) speakDirections;
 @end

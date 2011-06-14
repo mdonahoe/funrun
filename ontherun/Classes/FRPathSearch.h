@@ -42,8 +42,9 @@
 - (NSArray *) directionsToRoot:(FREdgePos *)ep;
 
 - (NSNumber *)closerNode:(NSNumber*)node;
+
 - (NSString *) nextRoad:(FREdgePos *)ep;
 - (NSString *) directionFromRoot:(FREdgePos*)ep;
 - (NSString *) directionToRoot:(FREdgePos*)ep;
-
+- (NSString *) whereShouldIGo:(FREdgePos*)ep;
 @end

@@ -20,6 +20,7 @@
 	if (!self) return nil;
 	saved = NO;
     magic = NO;
+    direct = YES;
     player_max_distance = dist*1000; //convert to meters
     last_location_received_date = nil;
     average_player_speed = 0.0;
@@ -27,7 +28,7 @@
     total_player_distance = 0.0;
     missionStart = [[NSDate alloc] init];
     mission_name = @"The Template";
-    
+    best = nil;
     //Voice Communication
 	//link to /Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.2.sdk/System/Library/PrivateFrameworks/VoiceServices.framework
 	voicebot = [[NSClassFromString(@"VSSpeechSynthesizer") alloc] init];
@@ -307,6 +308,62 @@
     [road retain];
     [next_road release];
     next_road = road;
+}
+- (void) speakDirections {
+    //speak the current direction, but dont repeat yourself. (timer?)
+    //detect if you are going the wrong way
+    float dist_current = [destination distanceFromRoot:player.pos];
+    float dist_best = [destination distanceFromRoot:best];
+    //NSString * preface = @"";
+    if (best==nil || dist_current < dist_best){
+        //NSLog(@"better than best. dc = %f, db = %f",dist_current,dist_best);
+        
+    } else {
+        /*
+         Our current point is further from the destination
+         than our previous best point.
+         
+         Therefore, we might be going backward
+         
+         Cases:
+         P1 - gps error makes it look like we went slightly backward
+         S1 - ignore it
+         T1 - check the difference between dist_best and dist_current, or between player.pos and best
+         
+         P2. we chose a different route, but we will get there eventually
+         S2. (ignore)
+         T2. Does nextRoad differ?
+         
+         
+         
+         3. we are definitely going the wrong way
+         (say so)
+    
+         
+         
+         */
+        
+        NSString * best_next_road = [destination nextRoad:best];
+        
+        if (dist_current - dist_best > 20 && [next_road isEqualToString:best_next_road] && ![destination isFacingRoot:player.pos]){
+            //we need to turn around
+            //preface = @"Turn around and";
+            
+            //worse.
+            
+            [self soundfile:@"hold up - i think you are moving the wrong way"];
+            previously_said = nil;
+        }
+    }
+    
+    NSString * direction = [destination whereShouldIGo:player.pos];
+    
+    if (direct && direction!=nil && [self readyToSpeak] && ![previously_said isEqualToString:direction]){
+        [self speakNow:direction];
+        [player.pos retain];
+        [best release];
+        best = player.pos;
+    }
 }
 - (void) soundfile:(NSString*)filename{
     [soundfx release];

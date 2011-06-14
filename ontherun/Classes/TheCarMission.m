@@ -137,12 +137,8 @@ X10. there is some infinite loop bug in the directionsToRoot code.
     //display something. or restart the mission. idk.
 }
 - (void) ticktock {
-    NSArray * directions = [destination directionsToRoot:player.pos];
-    NSString * direction = [directions objectAtIndex:0];
-    if ([direction isEqualToString:@"turn around"]){
-        direction = [NSString stringWithFormat:@"%@",[directions objectAtIndex:1]];
-    }
-    
+    NSString * direction = [destination whereShouldIGo:player.pos];
+    NSLog(@"direction = %@",direction);
     
     switch (current_state){
         case 0:
@@ -170,7 +166,8 @@ X10. there is some infinite loop bug in the directionsToRoot code.
             NSLog(@"current_state invalid, stopping ticktock");
             return;
     }
-    if (direct && [self readyToSpeak]) [self speakIfEmpty:direction];
+    //if (direct && [self readyToSpeak]) [self speakIfEmpty:direction];
+    [self speakDirections];
     if (prog && destination) [prog update:[destination distanceFromRoot:player.pos]];
     [super ticktock];
     

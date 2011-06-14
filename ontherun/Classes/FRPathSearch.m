@@ -223,6 +223,7 @@
 		//move to a closer edge
 		x.end = x.start;
 		x.start = [next intValue];
+        x.position = [map edgeLengthFromStart:[x startObj] toFinish:[x endObj]];
     }
     
 	return x;
@@ -446,7 +447,33 @@
 	
 	return [NSString stringWithFormat:@"turn %@",[map descriptionFromEdgePos:prev toEdgePos:ep]];
 }
-
+- (NSString *) whereShouldIGo:(FREdgePos*)ep {
+    //find something interesting to say.
+    //travel toward the root until it says what to do.
+    
+    if (![self containsPoint:ep]) return @"gps error";
+    
+	
+	if (![self isFacingRoot:ep]) {
+	    ep = [map flipEdgePos:ep];
+	}
+    
+    float d = 0;
+    int i=0;
+    FREdgePos * prev = ep;
+    NSString * todo = nil;
+    
+    //might need to make sure prev is on the current road. dont want to give directions ahead of time.
+    while ((d<1 || todo==nil) && i++ < 100){
+        ep = [self moveCloserToRoot:ep];
+        d+=prev.position; 
+        //we moved all the way to zero.
+        todo = [map descriptionFromEdgePos:prev toEdgePos:ep];
+        prev = ep;
+    }
+    if (todo!=nil) return [NSString stringWithFormat:@"go %@",todo];
+    return nil;
+}
 - (void) dealloc {
 	[previous release];
 	[distance release];
