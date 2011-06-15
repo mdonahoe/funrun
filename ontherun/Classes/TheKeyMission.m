@@ -152,15 +152,7 @@
             return;
             break;
     }
-    if ([self readyToSpeak]){
-        
-        NSArray * directions = [destination directionsToRoot:player.pos];
-        NSString * direction = [directions objectAtIndex:0];
-        if ([direction isEqualToString:@"turn around"]){
-            direction = [NSString stringWithFormat:@"%@",[directions objectAtIndex:1]];
-        }
-        [self speakIfEmpty:direction];
-    }
+    [self speakDirections];
     [super ticktock];
 }
 #pragma mark -

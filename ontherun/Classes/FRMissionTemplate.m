@@ -130,6 +130,7 @@
 	[text retain];
 	[previously_said release];
 	previously_said = text;
+    NSLog(@"navspeak: %@",text);
 }
 - (void) speakIfEmpty:(NSString *) text {
 	if (![voicebot isSpeaking] && [toBeSpoken count]==0 && [text isEqualToString:previously_said]==NO)
@@ -345,7 +346,7 @@
         
         NSString * best_next_road = [destination nextRoad:best];
         
-        if (dist_current - dist_best > 20 && [next_road isEqualToString:best_next_road] && ![destination isFacingRoot:player.pos]){
+        if ([self readyToSpeak] && dist_current - dist_best > 20 && [next_road isEqualToString:best_next_road] && ![destination isFacingRoot:player.pos]){
             //we need to turn around
             //preface = @"Turn around and";
             
@@ -353,6 +354,9 @@
             
             [self soundfile:@"hold up - i think you are moving the wrong way"];
             previously_said = nil;
+            [player.pos retain];
+            [best release];
+            best = player.pos;
         }
     }
     
@@ -372,6 +376,7 @@
     if (s==nil) {
         s = [[NSBundle mainBundle] pathForResource:filename ofType:@"aiff"];
     }
+    NSLog(@"soundfile %@",filename);
     NSURL * x = [NSURL fileURLWithPath:s];
     soundfx = [[AVAudioPlayer alloc] initWithContentsOfURL:x error:&error];
     soundfx.volume = 1.0;
@@ -428,7 +433,7 @@
     //stop the ticktocks
     [NSObject cancelPreviousPerformRequestsWithTarget:self];
 	[self saveMissionStats:@"dealloc'ing"];
-    
+    [best release];
     [player release];
 	[points release];
 	[themap release];
