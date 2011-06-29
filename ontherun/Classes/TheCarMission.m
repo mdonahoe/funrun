@@ -62,6 +62,7 @@ X10. there is some infinite loop bug in the directionsToRoot code.
     
     //randomly move the car until it is properly placed in the map
     //such that it is equally placed from start and end points.
+    /*
     float dist2 = 0.0;
     float dist1 = 0.0;
     int i=0;
@@ -71,6 +72,9 @@ X10. there is some infinite loop bug in the directionsToRoot code.
         dist2 = [endmap distanceFromRoot:car.pos];
         NSLog(@"car.pos = %@, dist1 = %f, dist2 = %f",car.pos,dist1,dist2);
     }
+    
+    */
+    car.pos = [latestsearch edgePosHalfwayBetweenRootAndOther:endmap withDistance:player_max_distance];
     [endmap release];
     
     
@@ -116,7 +120,7 @@ X10. there is some infinite loop bug in the directionsToRoot code.
     alarm.numberOfLoops=-1;
     [alarm prepareToPlay];
     
-    
+    float dist1 = [latestsearch distanceFromRoot:car.pos];
     car_time_left = MAX(300,(int)(dist1/2.5)); //min is 5 minutes
     
     NSLog(@"time to car = %i",car_time_left);
@@ -196,7 +200,7 @@ X10. there is some infinite loop bug in the directionsToRoot code.
         case 11:
             [self playSoundFile:@"TheCar - you dont have much time back soon"];
             car_state--;
-            car_state = timer;
+            car_state = MIN(timer,10);
             direct = YES;
             break;
         default:

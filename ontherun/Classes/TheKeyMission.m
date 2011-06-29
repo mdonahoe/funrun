@@ -39,6 +39,7 @@
     
     //randomly move the last point until it is properly placed in the map
     //such that it is equally placed from start and end points.
+    /*
     float dist2 = 0.0;
     float dist1 = 0.0;
     FREdgePos * start = [themap flipEdgePos:player.pos];
@@ -49,7 +50,8 @@
         dist1 = [latestsearch distanceFromRoot:pointC.pos];
         dist2 = [endmap distanceFromRoot:pointC.pos];
         NSLog(@"pos = %@, dist1 = %f, dist2 = %f",pointC.pos,dist1,dist2);
-    }
+    }*/
+    pointC.pos = [latestsearch edgePosHalfwayBetweenRootAndOther:endmap withDistance:player_max_distance];
     [endmap release];
     
     float rundist = [latestsearch distanceFromRoot:pointC.pos];
