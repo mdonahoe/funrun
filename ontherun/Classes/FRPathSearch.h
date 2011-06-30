@@ -30,8 +30,9 @@
 - (FREdgePos *) move:(FREdgePos*)ep towardRootWithDelta:(float)dx;
 - (FREdgePos *) move:(FREdgePos*)ep awayFromRootWithDelta:(float)dx;
 - (FREdgePos *) forkPoint:(FREdgePos*)ep;
+- (FREdgePos *) edgePosFromWithDistance:(float)d;
 - (FREdgePos *) edgePosThatIsDistance:(float)d fromRootAndOther:(FRPathSearch*)p;
-
+- (FREdgePos *) edgePosHalfwayBetweenRootAndOther:(FRPathSearch*)other withDistance:(float)d;
 - (FRMap *)getMap;
 
 - (float) straightDistanceFromRoot:(FREdgePos*)ep;

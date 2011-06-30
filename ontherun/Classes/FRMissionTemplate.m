@@ -346,7 +346,7 @@
         
         NSString * best_next_road = [destination nextRoad:best];
         
-        if ([self readyToSpeak] && dist_current - dist_best > 20 && [next_road isEqualToString:best_next_road] && ![destination isFacingRoot:player.pos]){
+        if ([self readyToSpeak] && dist_current - dist_best > 75 && [next_road isEqualToString:best_next_road] && ![destination isFacingRoot:player.pos]){
             //we need to turn around
             //preface = @"Turn around and";
             

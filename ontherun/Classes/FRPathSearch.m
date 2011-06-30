@@ -278,6 +278,28 @@
     
     return [map move:ep forwardRandomly:dx];
 }
+- (FREdgePos *) edgePosWithDistance:(float)d{
+    
+    
+    NSNumber * closest_node = nil;
+	float smallest_difference = 1000000000.0;
+	float dist;
+	float diff;
+	for (NSNumber * node in distance){
+		dist = [[distance objectForKey:node] floatValue];
+		diff = ABS(dist - d);
+		if (diff < smallest_difference){
+			smallest_difference = diff;
+			closest_node = node;
+		}
+	}
+    
+    FREdgePos * ep = [[[FREdgePos alloc] init] autorelease];
+    ep.start = [closest_node intValue];
+    ep.end = [[previous objectForKey:closest_node] intValue];
+    ep.position = 1.0;
+    return ep;
+}
 - (FREdgePos *) edgePosThatIsDistance:(float)d fromRootAndOther:(FRPathSearch*)p {
 	//useful for finding points that are a certain distance from two nodes.
 	//possible to fail like crazy if the max_dists of the pathsearches arent long enough
@@ -300,6 +322,46 @@
 	ep.start = [closest_node intValue];
 	ep.end = [[previous objectForKey:closest_node] intValue];
 	ep.position = 1.0; //1m from the point. hackity hack.
+	return ep;
+}
+- (FREdgePos *) edgePosHalfwayBetweenRootAndOther:(FRPathSearch*)other withDistance:(float)d{
+    //first, randomize the order of the nodes selected.
+    NSMutableArray * allnodes = [NSMutableArray arrayWithArray:[distance allKeys]];
+    int N = [allnodes count];
+    
+    NSLog(@"allnodes count %i",[allnodes count]);
+    
+    
+    
+    NSNumber * closest_node = nil;
+	float smallest_score = 1000000000.0;
+    int j=0;
+    while (N>0){
+        j++;
+        //grab a random node
+        int rando = arc4random()%N--;
+        NSNumber * node = [allnodes objectAtIndex:rando];
+        [allnodes removeObjectAtIndex:rando];
+        
+        //check the distance
+        float dist1 = [self nodeDistance:node];
+        float dist2 = [other nodeDistance:node];
+        float score = ABS(dist1 - d/2.0)+ABS(dist2 - d/2.0)+ABS(dist1+dist2-d);
+		if (score < smallest_score){
+			smallest_score = score;
+			closest_node = node;
+		}
+        
+        
+        //if within tolerance, break out
+        if (score < 100) break;
+	}
+	NSLog(@"smallest_score = %f, j= %i",smallest_score,j);
+    FREdgePos * ep = [[[FREdgePos alloc] init] autorelease];
+	ep.start = [closest_node intValue];
+	ep.end = [[previous objectForKey:closest_node] intValue];
+	ep.position = 1.0;
+    //ep should now be facing away from self.
 	return ep;
 }
 - (FREdgePos *) forkPoint:(FREdgePos*)ep{
