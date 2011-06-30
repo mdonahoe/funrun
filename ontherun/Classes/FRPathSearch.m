@@ -458,15 +458,15 @@
 	    ep = [map flipEdgePos:ep];
 	}
     
-    float d = 0;
+    //float d = 0;
     int i=0;
     FREdgePos * prev = ep;
     NSString * todo = nil;
-    
+    NSString * start_road = [map roadNameFromEdgePos:prev];
     //might need to make sure prev is on the current road. dont want to give directions ahead of time.
-    while ((d<1 || todo==nil) && i++ < 100){
+    while (todo==nil && i++ < 100 && [start_road isEqualToString:[map roadNameFromEdgePos:prev]]){
         ep = [self moveCloserToRoot:ep];
-        d+=prev.position; 
+        //d+=prev.position; 
         //we moved all the way to zero.
         todo = [map descriptionFromEdgePos:prev toEdgePos:ep];
         prev = ep;
