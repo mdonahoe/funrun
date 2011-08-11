@@ -512,11 +512,12 @@
 - (NSString *) whereShouldIGo:(FREdgePos*)ep {
     //find something interesting to say.
     //travel toward the root until it says what to do.
-    
+    NSString * turn = @"";
     if (![self containsPoint:ep]) return @"gps error";
     
 	
 	if (![self isFacingRoot:ep]) {
+        turn = @"turn around and";
 	    ep = [map flipEdgePos:ep];
 	}
     
@@ -533,7 +534,7 @@
         todo = [map descriptionFromEdgePos:prev toEdgePos:ep];
         prev = ep;
     }
-    if (todo!=nil) return [NSString stringWithFormat:@"go %@",todo];
+    if (todo!=nil) return [NSString stringWithFormat:@"%@ go %@",turn,todo];
     return nil;
 }
 - (void) dealloc {
