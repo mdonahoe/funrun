@@ -7,7 +7,6 @@
 //
 
 #import "ontherunAppDelegate.h"
-#import "StartViewController.h"
 
 
 @implementation ontherunAppDelegate
@@ -30,7 +29,7 @@
     // Override point for customization after application launch.
     
 	//log to file
-#if 1
+#if 0
     NSArray * paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
     NSString * documentsDirectory = [paths objectAtIndex:0];
     NSString * logPath = [documentsDirectory stringByAppendingPathComponent:@"console.log"];
