@@ -27,4 +27,11 @@
     return ([nodeA isEqualToNumber:[self startObj]] && [nodeB isEqualToNumber:[self endObj]]) ||
     ([nodeA isEqualToNumber:[self endObj]] && [nodeB isEqualToNumber:[self startObj]]);
 }
+- (FREdgePos *) copy{
+    FREdgePos * ep = [[[FREdgePos alloc] init] autorelease];
+    ep.start = start;
+    ep.end = end;
+    ep.position = position;
+    return ep;
+}
 @end

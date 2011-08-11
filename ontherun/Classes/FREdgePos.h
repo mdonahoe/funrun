@@ -52,4 +52,5 @@
 - (NSNumber *) endObj;
 - (BOOL) onSameEdgeAs:(FREdgePos *)other;
 - (BOOL) onEdgeFromA:(NSNumber*)nodeA toB:(NSNumber *)nodeB;
+- (FREdgePos *) copy;
 @end
