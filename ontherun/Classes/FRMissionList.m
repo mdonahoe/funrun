@@ -7,25 +7,10 @@
 //
 
 #import "FRMissionList.h"
-#import "StartViewController.h"
-#import "FRBriefingViewController.h"
-#import "ASIFormDataRequest.h"
 #import "JSON.h"
+#import "FRMapViewController.h"
 
 @implementation FRMissionList
-
-
-- (id)initWithUsername:(NSString *)username {
-    self = [super initWithStyle:UITableViewStyleGrouped];
-    if (!self) return nil;
-    
-    m2 = [[toqbot alloc] init];
-    
-    userkey = [[NSString alloc] initWithFormat:@"ontherun_%@",username];
-    
-    
-    return self;
-}
 
 - (void) userData:(id)obj{
     //no one on /b/
@@ -47,12 +32,12 @@
     
 }
 
-
+- (BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation{
+    return YES;
+}
 
 - (void)dealloc
 {
-    [m2 cancel];
-    [m2 release];
     [missions release];
     [evidence release];
     [super dealloc];
@@ -71,104 +56,22 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-
-    // Uncomment the following line to preserve selection between presentations.
-    // self.clearsSelectionOnViewWillAppear = NO;
- 
-    // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-    // self.navigationItem.rightBarButtonItem = self.editButtonItem;
-}
-
-- (void)viewDidUnload
-{
-    [super viewDidUnload];
-    // Release any retained subviews of the main view.
-    // e.g. self.myOutlet = nil;
-}
-
-- (void)viewWillAppear:(BOOL)animated
-{
-    [super viewWillAppear:animated];
-}
-
-- (void)viewDidAppear:(BOOL)animated
-{
-    [super viewDidAppear:animated];
-    [m2 loadObjectForKey:userkey toDelegate:self usingSelector:@selector(userData:)];
+    NSString * path = [[NSBundle mainBundle] pathForResource:@"missionconfig" ofType:@"json"];
+    NSURL * url = [NSURL fileURLWithPath:path];
+    NSError * error;
+    NSString * config = [NSString stringWithContentsOfURL:url encoding:NSUTF8StringEncoding error:&error];
+    NSLog(@"config = %@",[config substringToIndex:100]);
     
-    [self uploadLogs];
-    
-    
+    //dict of nodes and roads
+    NSDictionary * obj = [config JSONValue];
+    [self userData:obj];
 }
-- (void) uploadLogs {
-    NSUserDefaults * defaults = [NSUserDefaults standardUserDefaults];
-    NSArray * logs = [defaults arrayForKey:@"unsaved_logs"];
-    
-    if (logs==nil || [logs count]<1) return;
-    
-    NSDictionary * first = [logs objectAtIndex:0];
-    NSString * key = [NSString stringWithFormat:@"%@_logs",userkey];
-    NSLog(@"logging to key = %@",key);
-    //[m2 sendObject:first forKey:[NSString stringWithFormat:@"%@_logs",userkey]];
-    //extract and prepare the data
-	
-    SBJsonWriter *jsonWriter = [[SBJsonWriter alloc] init];    
-    NSString *json = [jsonWriter stringWithObject:first];
-    [jsonWriter release];
-    if (!json){
-        NSLog(@"jsonize failed. deleting log %@",first);
-        [self savedALog:nil];
-        return;
-    }
-	//create the POST request
-	NSURL * url = [NSURL URLWithString:@"http://toqbot.com/db/"];
-	
-	//there can be many outrequests at once.
-	ASIFormDataRequest * outrequest = [ASIFormDataRequest requestWithURL:url];
-	[outrequest setPostValue:json forKey:key];
-	
-	//set the correct callback and send to server
-	[outrequest setDidFinishSelector:@selector(savedALog:)];
-	[outrequest setDidFailSelector:@selector(saveFailed:)];
-	[outrequest setDelegate:self];
-	[outrequest startAsynchronous];
-    
-    
-}
-- (void) saveFailed:(id)request{
-    [self uploadLogs];
-}
-- (void) savedALog:(id) request{
-    NSUserDefaults * defaults = [NSUserDefaults standardUserDefaults];
-    NSMutableArray * logs = [NSMutableArray arrayWithArray:[defaults arrayForKey:@"unsaved_logs"]];
-    [logs removeObjectAtIndex:0];
-    [defaults setObject:[NSArray arrayWithArray:logs] forKey:@"unsaved_logs"];
-    [defaults synchronize];
-    [self uploadLogs];
-}
-- (void)viewWillDisappear:(BOOL)animated
-{
-    [super viewWillDisappear:animated];
-    [m2 cancel];
-}
-
-- (void)viewDidDisappear:(BOOL)animated
-{
-    [super viewDidDisappear:animated];
-}
-
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
-{
-    // Return YES for supported orientations
-    return (interfaceOrientation == UIInterfaceOrientationPortrait);
-}
-
 #pragma mark - Table view data source
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
     // Return the number of sections.
-    return 2;
+    return 1;
 }
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
     int unlocked=0;
@@ -210,9 +113,6 @@
     
     name = [obj objectForKey:@"name"];
     if ([obj objectForKey:@"locked"]){
-        //name = [NSString stringWithFormat:@"%@ (locked)",name];
-        //UIFont *myFont = [UIFont fontWithName:@"Helvetica-BoldOblique" size:[UIFont systemFontSize]];
-        //cell.textLabel.font = myFont;
         cell.textLabel.textColor = [UIColor grayColor];
         cell.imageView.image = [UIImage imageNamed:@"lock.png"];
     } else {
@@ -246,23 +146,13 @@
     NSDictionary * obj = [self objFromIndexPath:indexPath];    
     if (indexPath.section==0){
         //mission: load the starview
-        
         //StartViewController * sv = [[[StartViewController alloc] initWithMissionData:obj] autorelease];
         //[self.navigationController pushViewController:sv animated:YES];
-        NSLog(@"starting %@",[obj objectForKey:@"class"]);
-        FRBriefingViewController * bv = [[[FRBriefingViewController alloc] initWithMissionData:obj] autorelease];
-        [self.navigationController pushViewController:bv animated:YES];
         
-    } else {
-        //evidence: load the url
-        NSLog(@"looking at evidence: %@",[obj objectForKey:@"name"]);
-        NSURL * url = [NSURL URLWithString:[obj objectForKey:@"url"]];
-        UIViewController *webViewController = [[[UIViewController alloc] init] autorelease];
-        UIWebView *uiWebView = [[[UIWebView alloc] initWithFrame: CGRectMake(0,0,320,480)] autorelease];
-        [uiWebView loadRequest:[NSURLRequest requestWithURL:url]];
-        uiWebView.scalesPageToFit=YES;
-        webViewController.view = uiWebView;
-        [self.navigationController pushViewController: webViewController animated:YES];
+        FRMapViewController * mv = [[[FRMapViewController alloc] initWithMission:[obj objectForKey:@"class"]] autorelease];
+        [self.navigationController pushViewController:mv animated:YES];
+        
+        NSLog(@"starting %@",[obj objectForKey:@"class"]);
     }
 }
 
