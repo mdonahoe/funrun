@@ -1,0 +1,50 @@
+{
+    "missions": [
+        {
+            "name": "The Car",
+            "class": "TheCarMission",
+            "description": "I tracked down the car belonging to that license plate number you found. The owner is an ex-Marine named Arlo Johnson. Apparently he is a registered voter here. Anyway, thanks to the city's obsession with parking tickets, I can track down the car's location whenever it gets scanned by a meter maid.\n\n I think if you search the car you might find some useful information. \n\nOnce I give you the car's current location, you aren't going to have much time to get there before the driver gets back, so be sure to hurry."
+        },
+        {
+            "name": "The Key",
+            "class": "TheKeyMission",
+            "description": "You got quite a haul from that car. Court documents, business cards, blueprints, but most important is that key! I've done some research and I think that key can unlock some secrets.\n\nYou ready for some breaking and entering? I have some locations I want you to visit."
+        },
+        {
+            "name": "The Download",
+            "locked": "true"
+        }
+    ],
+    "evidence": [
+        {
+            "name": "license plate",
+            "url": "http://toqbot.com/otr_evidence/plate.jpg"
+        },
+        {
+            "name": "car window",
+            "url": "http://toqbot.com/otr_evidence/car-alarm-broken-window.jpg"
+        },
+        {
+            "name": "account statement",
+            "url": "http://toqbot.com/otr_evidence/account_statement.pdf"
+        },
+        {
+            "name": "addresses",
+            "url": "http://toqbot.com/otr_evidence/addresses.pdf"
+        },
+        {
+            "name": "key",
+            "url": "http://toqbot.com/otr_evidence/key.jpg"
+        },
+        {
+            "name": "blueprint",
+            "url": "http://toqbot.com/otr_evidence/blueprint.gif",
+            "locked": "true"
+        },
+        {
+            "name": "building",
+            "url": "http://toqbot.com/otr_evidence/building.jpg",
+            "locked": "true"
+        }
+    ]
+}

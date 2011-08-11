@@ -14,13 +14,12 @@
 #import "FRPoint.h"
 #import "FRProgress.h"
 #import "FRMapViewController.h"
-#import "FRInGame.h"
 
 #import <AVFoundation/AVFoundation.h>
 
 
 
-@interface FRMissionTemplate : NSObject <FRSoundFilePlayer,MagicButton>{
+@interface FRMissionTemplate : NSObject <FRSoundFilePlayer>{
 	NSString * previously_said;
     NSString * last_played_sound;
 	NSString * current_road;
@@ -41,8 +40,7 @@
     VSSpeechSynthesizer * voicebot;
 	NSMutableArray * toBeSpoken;
 	NSMutableArray * points;
-	FRInGame * viewControl;
-    AVAudioPlayer * backgroundMusic;
+	AVAudioPlayer * backgroundMusic;
     AVAudioPlayer * soundfx;
     CLLocation * last_location;
     BOOL magic;
@@ -50,7 +48,6 @@
     FREdgePos * best;
 }
 @property(nonatomic,retain) NSMutableArray * points;
-@property(nonatomic,assign) FRInGame * viewControl;
 
 - (id) initWithLocation:(CLLocation*)l distance:(float)dist destination:(CLLocation*)dest viewControl:(UIViewController*)vc;
 - (void) abort;

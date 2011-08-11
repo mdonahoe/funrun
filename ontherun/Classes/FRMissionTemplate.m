@@ -7,13 +7,12 @@
 //
 
 #import "FRMissionTemplate.h"
-#import "FRBriefingViewController.h"
 #import "JSON.h"
 #import "ASIHTTPRequest.h"
 
 
 @implementation FRMissionTemplate
-@synthesize points,viewControl;
+@synthesize points;
 
 - (id) initWithLocation:(CLLocation*)l distance:(float)dist destination:(CLLocation*)dest viewControl:(UIViewController*)vc {
 	self = [super init];
@@ -42,22 +41,12 @@
 	NSAutoreleasePool * thepool = [[NSAutoreleasePool alloc] init];
 	
 	//load the map
-    if (dest==nil) dest=l;
-    NSString * mapurl = [NSString stringWithFormat:@"http://toqbot.com/map/download?lat1=%f&lng1=%f&dist=%f&lat2=%f&lng2=%f",l.coordinate.latitude,l.coordinate.longitude,player_max_distance,dest.coordinate.latitude,dest.coordinate.longitude];
-    NSLog(@"url=%@",mapurl);
-    NSURL *url = [NSURL URLWithString:mapurl];
-    ASIHTTPRequest *request = [ASIHTTPRequest requestWithURL:url];
-    [request startSynchronous];
-    NSError *error = [request error];
+    NSString * path = [[NSBundle mainBundle] pathForResource:@"mapdata_2500" ofType:@"json"];
+    NSURL * url = [NSURL fileURLWithPath:path];
+    NSError * error;
+    NSString * mapstring = [NSString stringWithContentsOfURL:url encoding:NSUTF8StringEncoding error:&error];
+    NSLog(@"map = %@",[mapstring substringToIndex:100]);
     
-    NSString * mapstring;
-    if (!error) {
-        mapstring = [request responseString];
-    } else {
-        NSLog(@"there was a download error %@",error);
-        [self dealloc];
-        return nil;
-    }
     //dict of nodes and roads
     NSDictionary * mapdata = [mapstring JSONValue];
 	
@@ -71,6 +60,8 @@
 	player.pos = [themap edgePosFromPoint:l];
 	[player setCoordinate:[themap coordinateFromEdgePosition:player.pos]];
 	
+    player.subtitle = @"Tap to move";
+    player.pinColor = @"purple";
     
     NSLog(@"player max dist = %f",player_max_distance);
     endPoint = [[FRPoint alloc] initWithName:@"end point"];
@@ -86,33 +77,6 @@
 
 	[voicebot setRate:1.3];
 	[voicebot setPitch:0.25];
-	
-	/*FRBriefingViewController * brief = 
-	[[[FRBriefingViewController alloc] initWithNibName:@"FRBriefingViewController"
-												bundle:nil] autorelease];
-	[brief setText:@"nothing to see here"];
-	brief.mission = self;
-	
-    [vc.navigationController pushViewController:brief animated:YES];
-	self.viewControl = brief;
-     
-    
-    FRTroubleshoot * trouble = [[[FRTroubleshoot alloc] initWithNibName:@"FRTroubleshoot" bundle:nil] autorelease];
-    [vc.navigationController pushViewController:trouble animated:YES];
-    self.viewControl = trouble;
-     */
-    
-    
-    /*
-    FRMapViewController * mv = [[[FRMapViewController alloc] initWithNibName:@"FRMapViewController" bundle:nil] autorelease];
-    [vc.navigationController pushViewController:mv animated:YES];
-    self.viewControl = mv;
-    */
-    
-    FRInGame * ig = [[[FRInGame alloc] initWithNibName:@"FRInGame" bundle:nil]autorelease];
-    ig.delegate = self;
-    [vc.navigationController pushViewController:ig animated:YES];
-    
     
 	return self;
 }
@@ -160,9 +124,14 @@
 	 */
 	
 	//update map positions
+    int i=0;
 	for (FRPoint * pt in points){
-		[pt setCoordinate:[themap coordinateFromEdgePosition:pt.pos]];
-	}
+        
+        CLLocationCoordinate2D coord = [themap coordinateFromEdgePosition:pt.pos];
+        //coord.latitude+=i*.0001;
+		[pt setCoordinate:coord];
+        i++;
+    }
     [self updateDirections];
 	[self performSelector:@selector(ticktock) withObject:nil afterDelay:1.0];
 };
@@ -450,8 +419,7 @@
     [backgroundMusic release];
     [last_played_sound release];
 	[last_location_received_date release];
-	self.viewControl = nil;
-    [super dealloc];
+	[super dealloc];
 	NSLog(@"mission is dead");
 }
 @end
