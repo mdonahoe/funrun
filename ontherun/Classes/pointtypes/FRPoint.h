@@ -57,6 +57,7 @@
 
 @interface FRPoint : NSObject <MKAnnotation>{
 	NSString * title;
+    NSString * pinColor;
 	FREdgePos * pos;
 	NSDictionary * dictme;
 	NSString * subtitle;
@@ -68,6 +69,7 @@
 @property(nonatomic, retain) FREdgePos * pos;
 @property(readonly) NSDictionary * dictme;
 @property(nonatomic,retain) NSString * title;
+@property(nonatomic,retain) NSString * pinColor;
 @property(nonatomic,retain) NSString * subtitle;
 - (CLLocationCoordinate2D)coordinate;
 - (void) setCoordinate:(CLLocationCoordinate2D)newCoordinate;

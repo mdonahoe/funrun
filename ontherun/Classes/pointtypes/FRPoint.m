@@ -10,7 +10,7 @@
 #define ARC4RANDOM_MAX      0x100000000
 
 @implementation FRPoint
-@synthesize title,pos,dictme,subtitle;
+@synthesize title,pos,dictme,subtitle,pinColor;
 
 - (id) initWithDict:(NSDictionary*)dict onMap:(FRMap*)map {
 	self = [super init];
@@ -20,9 +20,9 @@
 		self.title = [dict objectForKey:@"name"];
 		dictme = dict;
 		[dictme retain];
-		self.subtitle = @"FRPoint";
+		self.subtitle = @"";
 		mystate = kPointNew;
-		
+		self.pinColor = @"green";
 		NSArray * latlon = [dictme objectForKey:@"pos"];
 		if (latlon) {
 			CLLocation * p = [[CLLocation alloc] initWithLatitude:[[latlon objectAtIndex:0] floatValue]
@@ -46,7 +46,8 @@
 	self = [super init];
 	if (!self) return nil;
 	self.title = name;
-	self.subtitle = @"named";
+    self.pinColor = @"green";
+	self.subtitle = @"";
 	return self;
 }
 
