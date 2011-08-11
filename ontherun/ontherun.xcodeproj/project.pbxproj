@@ -10,20 +10,15 @@
 		1D3623260D0F684500981E51 /* ontherunAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D3623250D0F684500981E51 /* ontherunAppDelegate.m */; };
 		1D60589B0D05DD56006BFB54 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.m */; };
 		28AD73600D9D9599002E5188 /* MainWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 28AD735F0D9D9599002E5188 /* MainWindow.xib */; };
-		28F335F11007B36200424DE2 /* RootViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 28F335F01007B36200424DE2 /* RootViewController.xib */; };
-		9B2AE23B138EAD3F00D22D85 /* FRNameController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9B2AE239138EAD3F00D22D85 /* FRNameController.m */; };
-		9B2AE23C138EAD3F00D22D85 /* FRNameController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9B2AE23A138EAD3F00D22D85 /* FRNameController.xib */; };
 		9B2AE240138EAE4D00D22D85 /* FRMissionList.m in Sources */ = {isa = PBXBuildFile; fileRef = 9B2AE23E138EAE4D00D22D85 /* FRMissionList.m */; };
 		9B2AE241138EAE4D00D22D85 /* FRMissionList.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9B2AE23F138EAE4D00D22D85 /* FRMissionList.xib */; };
 		9B51D5C11305F53400978183 /* FRPoint.m in Sources */ = {isa = PBXBuildFile; fileRef = 9B51D5BC1305F53400978183 /* FRPoint.m */; };
 		9B684BD61341066800F27C12 /* button_green.png in Resources */ = {isa = PBXBuildFile; fileRef = 9B684BD51341066800F27C12 /* button_green.png */; };
 		9B6A24631368996A00A7228C /* chase_scary.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 9B6A24621368996A00A7228C /* chase_scary.mp3 */; };
-		9B836778133403A300EC486F /* FRMissionChase.m in Sources */ = {isa = PBXBuildFile; fileRef = 9B836777133403A300EC486F /* FRMissionChase.m */; };
-		9B84A0D31309C80300BE94CF /* FRFileLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 9B84A0D21309C80300BE94CF /* FRFileLoader.m */; };
-		9B9505BB135CD55A0070B7E7 /* FRMissionDownload.m in Sources */ = {isa = PBXBuildFile; fileRef = 9B9505BA135CD55A0070B7E7 /* FRMissionDownload.m */; };
+		9B94CBB813F332B9008AE518 /* missionconfig.json in Resources */ = {isa = PBXBuildFile; fileRef = 9B94CBB713F332B8008AE518 /* missionconfig.json */; };
+		9B94CBBC13F46B58008AE518 /* mapdata_2500.json in Resources */ = {isa = PBXBuildFile; fileRef = 9B94CBBB13F46B58008AE518 /* mapdata_2500.json */; };
+		9B94CBBE13F4858D008AE518 /* runner-icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 9B94CBBD13F4858D008AE518 /* runner-icon.png */; };
 		9BA789341385B89C006C8759 /* FRProgress.m in Sources */ = {isa = PBXBuildFile; fileRef = 9BA789331385B89B006C8759 /* FRProgress.m */; };
-		9BBA1FAC139427A50080A652 /* FRInGame.m in Sources */ = {isa = PBXBuildFile; fileRef = 9BBA1FAA139427A50080A652 /* FRInGame.m */; };
-		9BBA1FAD139427A50080A652 /* FRInGame.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9BBA1FAB139427A50080A652 /* FRInGame.xib */; };
 		9BBA20631395F5E00080A652 /* 1 minute.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 9BBA1FC11395F5E00080A652 /* 1 minute.mp3 */; };
 		9BBA20641395F5E00080A652 /* 10 minutes.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 9BBA1FC21395F5E00080A652 /* 10 minutes.mp3 */; };
 		9BBA20651395F5E00080A652 /* 100 meters.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 9BBA1FC31395F5E00080A652 /* 100 meters.mp3 */; };
@@ -186,8 +181,7 @@
 		9BBA21031395F5E00080A652 /* youre getting close.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 9BBA20611395F5E00080A652 /* youre getting close.mp3 */; };
 		9BBA21041395F5E00080A652 /* youre halfway there.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 9BBA20621395F5E00080A652 /* youre halfway there.mp3 */; };
 		9BBA210D13963F320080A652 /* FRRandomSound.m in Sources */ = {isa = PBXBuildFile; fileRef = 9BBA210C13963F2A0080A652 /* FRRandomSound.m */; };
-		9BBD3296132E81360082A0C7 /* StartView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9BBD3295132E81360082A0C7 /* StartView.xib */; };
-		9BBD329A132E81CC0082A0C7 /* StartViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9BBD3299132E81CC0082A0C7 /* StartViewController.m */; };
+		9BBC664713F31EE00075624F /* MainWindow-iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9BBC664613F31EDF0075624F /* MainWindow-iPad.xib */; };
 		9BC137431304A340006492A0 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9BC137421304A340006492A0 /* AVFoundation.framework */; };
 		9BD50325130070320092D86A /* FRMapViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9BD50324130070320092D86A /* FRMapViewController.m */; };
 		9BD50337130075020092D86A /* FRMapViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9BD50336130075020092D86A /* FRMapViewController.xib */; };
@@ -215,7 +209,6 @@
 		C906C28312D4EA4000C14388 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C906C27912D4EA4000C14388 /* SystemConfiguration.framework */; };
 		C906C28412D4EA4000C14388 /* libz.1.2.3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = C906C27A12D4EA4000C14388 /* libz.1.2.3.dylib */; };
 		C906C28612D4EA4000C14388 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C906C27C12D4EA4000C14388 /* AudioToolbox.framework */; };
-		C92B0F391338237F0060CE50 /* FRMissionTwo.m in Sources */ = {isa = PBXBuildFile; fileRef = C92B0F381338237F0060CE50 /* FRMissionTwo.m */; };
 		C93EEA5D134AD9D800AFE90C /* drum.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = C93EEA5B134AD9D800AFE90C /* drum.mp3 */; };
 		C93EEA5E134AD9D800AFE90C /* guitar.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = C93EEA5C134AD9D800AFE90C /* guitar.mp3 */; };
 		C9449AC3135D4C4B008F8623 /* 16thedata.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = C9449AAF135D4C4B008F8623 /* 16thedata.mp3 */; };
@@ -244,23 +237,13 @@
 		C9449ADF135E35BD008F8623 /* chase_elevated.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = C9449ADD135E35B8008F8623 /* chase_elevated.mp3 */; };
 		C9449AE0135E35BD008F8623 /* chase_normal.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = C9449ADE135E35B9008F8623 /* chase_normal.mp3 */; };
 		C9557AAC130AEAA2004A6F54 /* FREdgePos.m in Sources */ = {isa = PBXBuildFile; fileRef = C9557AAB130AEAA2004A6F54 /* FREdgePos.m */; };
-		C9569BFA138833A200FD66E8 /* FRTroubleshoot.m in Sources */ = {isa = PBXBuildFile; fileRef = C9569BF8138833A100FD66E8 /* FRTroubleshoot.m */; };
-		C9569BFB138833A200FD66E8 /* FRTroubleshoot.xib in Resources */ = {isa = PBXBuildFile; fileRef = C9569BF9138833A100FD66E8 /* FRTroubleshoot.xib */; };
-		C9624CC3133AD63300F6594F /* FRSummaryViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C9624CC1133AD63300F6594F /* FRSummaryViewController.m */; };
-		C9624CC4133AD63300F6594F /* FRSummaryViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = C9624CC2133AD63300F6594F /* FRSummaryViewController.xib */; };
-		C9624CD9133BB9F200F6594F /* FRBriefingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C9624CD7133BB9F200F6594F /* FRBriefingViewController.m */; };
-		C9624CDA133BB9F200F6594F /* FRBriefingViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = C9624CD8133BB9F200F6594F /* FRBriefingViewController.xib */; };
-		C9624D53133BFA4F00F6594F /* LocationPicker.m in Sources */ = {isa = PBXBuildFile; fileRef = C9624D51133BFA4F00F6594F /* LocationPicker.m */; };
-		C9624D54133BFA4F00F6594F /* LocationPicker.xib in Resources */ = {isa = PBXBuildFile; fileRef = C9624D52133BFA4F00F6594F /* LocationPicker.xib */; };
 		C97CA187132EF0E600E71AC4 /* FRMissionTemplate.m in Sources */ = {isa = PBXBuildFile; fileRef = C97CA186132EF0E600E71AC4 /* FRMissionTemplate.m */; };
-		C97CA18C132EF60700E71AC4 /* FRMissionOne.m in Sources */ = {isa = PBXBuildFile; fileRef = C97CA18B132EF60700E71AC4 /* FRMissionOne.m */; };
 		C99EBE1A137AE09E0079A70E /* TheCarMission.m in Sources */ = {isa = PBXBuildFile; fileRef = C99EBE19137AE09E0079A70E /* TheCarMission.m */; };
 		C9ABFF5013087EEF0031160A /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C9ABFF4F13087EEF0031160A /* MediaPlayer.framework */; };
 		C9C5378812E39A7A005C0BF0 /* FRMap.m in Sources */ = {isa = PBXBuildFile; fileRef = C9C5378712E39A7A005C0BF0 /* FRMap.m */; };
 		C9D28C88139004190077B60F /* lock.png in Resources */ = {isa = PBXBuildFile; fileRef = C9D28C87139004190077B60F /* lock.png */; };
 		C9E3F22A137DE6010077E168 /* TheKeyMission.m in Sources */ = {isa = PBXBuildFile; fileRef = C9E3F229137DE6010077E168 /* TheKeyMission.m */; };
 		C9E494C212F8D7390006AB7B /* FRPathSearch.m in Sources */ = {isa = PBXBuildFile; fileRef = C9E494C112F8D7390006AB7B /* FRPathSearch.m */; };
-		C9FC234912F9CCC700892CF6 /* toqbot.m in Sources */ = {isa = PBXBuildFile; fileRef = C9FC234812F9CCC700892CF6 /* toqbot.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -269,13 +252,9 @@
 		1D6058910D05DD3D006BFB54 /* ontherun.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ontherun.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		28A0AAE50D9B0CCF005BE974 /* ontherun_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ontherun_Prefix.pch; sourceTree = "<group>"; };
 		28AD735F0D9D9599002E5188 /* MainWindow.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MainWindow.xib; sourceTree = "<group>"; };
-		28F335F01007B36200424DE2 /* RootViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = RootViewController.xib; sourceTree = "<group>"; };
 		29B97316FDCFA39411CA2CEA /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		8D1107310486CEB800E47090 /* ontherun-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "ontherun-Info.plist"; plistStructureDefinitionIdentifier = "com.apple.xcode.plist.structure-definition.iphone.info-plist"; sourceTree = "<group>"; };
 		9B1AA58313328DAF00850465 /* VSSpeechSynthesizer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSSpeechSynthesizer.h; sourceTree = "<group>"; };
-		9B2AE238138EAD3F00D22D85 /* FRNameController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRNameController.h; sourceTree = "<group>"; };
-		9B2AE239138EAD3F00D22D85 /* FRNameController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRNameController.m; sourceTree = "<group>"; };
-		9B2AE23A138EAD3F00D22D85 /* FRNameController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = FRNameController.xib; path = Classes/FRNameController.xib; sourceTree = "<group>"; };
 		9B2AE23D138EAE4D00D22D85 /* FRMissionList.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRMissionList.h; sourceTree = "<group>"; };
 		9B2AE23E138EAE4D00D22D85 /* FRMissionList.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRMissionList.m; sourceTree = "<group>"; };
 		9B2AE23F138EAE4D00D22D85 /* FRMissionList.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = FRMissionList.xib; path = Classes/FRMissionList.xib; sourceTree = "<group>"; };
@@ -283,17 +262,11 @@
 		9B51D5BC1305F53400978183 /* FRPoint.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRPoint.m; sourceTree = "<group>"; };
 		9B684BD51341066800F27C12 /* button_green.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = button_green.png; sourceTree = "<group>"; };
 		9B6A24621368996A00A7228C /* chase_scary.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = chase_scary.mp3; sourceTree = "<group>"; };
-		9B836776133403A300EC486F /* FRMissionChase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRMissionChase.h; sourceTree = "<group>"; };
-		9B836777133403A300EC486F /* FRMissionChase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRMissionChase.m; sourceTree = "<group>"; };
-		9B84A0D11309C80300BE94CF /* FRFileLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRFileLoader.h; sourceTree = "<group>"; };
-		9B84A0D21309C80300BE94CF /* FRFileLoader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRFileLoader.m; sourceTree = "<group>"; };
-		9B9505B9135CD55A0070B7E7 /* FRMissionDownload.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRMissionDownload.h; sourceTree = "<group>"; };
-		9B9505BA135CD55A0070B7E7 /* FRMissionDownload.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRMissionDownload.m; sourceTree = "<group>"; };
+		9B94CBB713F332B8008AE518 /* missionconfig.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = missionconfig.json; sourceTree = "<group>"; };
+		9B94CBBB13F46B58008AE518 /* mapdata_2500.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = mapdata_2500.json; sourceTree = "<group>"; };
+		9B94CBBD13F4858D008AE518 /* runner-icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "runner-icon.png"; sourceTree = "<group>"; };
 		9BA789321385B89B006C8759 /* FRProgress.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRProgress.h; sourceTree = "<group>"; };
 		9BA789331385B89B006C8759 /* FRProgress.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRProgress.m; sourceTree = "<group>"; };
-		9BBA1FA9139427A50080A652 /* FRInGame.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRInGame.h; sourceTree = "<group>"; };
-		9BBA1FAA139427A50080A652 /* FRInGame.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRInGame.m; sourceTree = "<group>"; };
-		9BBA1FAB139427A50080A652 /* FRInGame.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = FRInGame.xib; path = Classes/FRInGame.xib; sourceTree = "<group>"; };
 		9BBA1FC11395F5E00080A652 /* 1 minute.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = "1 minute.mp3"; sourceTree = "<group>"; };
 		9BBA1FC21395F5E00080A652 /* 10 minutes.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = "10 minutes.mp3"; sourceTree = "<group>"; };
 		9BBA1FC31395F5E00080A652 /* 100 meters.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = "100 meters.mp3"; sourceTree = "<group>"; };
@@ -457,9 +430,7 @@
 		9BBA20621395F5E00080A652 /* youre halfway there.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = "youre halfway there.mp3"; sourceTree = "<group>"; };
 		9BBA210B13963F270080A652 /* FRRandomSound.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRRandomSound.h; sourceTree = "<group>"; };
 		9BBA210C13963F2A0080A652 /* FRRandomSound.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRRandomSound.m; sourceTree = "<group>"; };
-		9BBD3295132E81360082A0C7 /* StartView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = StartView.xib; sourceTree = "<group>"; };
-		9BBD3298132E81CC0082A0C7 /* StartViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StartViewController.h; sourceTree = "<group>"; };
-		9BBD3299132E81CC0082A0C7 /* StartViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StartViewController.m; sourceTree = "<group>"; };
+		9BBC664613F31EDF0075624F /* MainWindow-iPad.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = "MainWindow-iPad.xib"; path = "iPad/MainWindow-iPad.xib"; sourceTree = "<group>"; };
 		9BC137421304A340006492A0 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		9BD50323130070320092D86A /* FRMapViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRMapViewController.h; sourceTree = "<group>"; };
 		9BD50324130070320092D86A /* FRMapViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRMapViewController.m; sourceTree = "<group>"; };
@@ -506,8 +477,6 @@
 		C906C27912D4EA4000C14388 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		C906C27A12D4EA4000C14388 /* libz.1.2.3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.1.2.3.dylib; path = usr/lib/libz.1.2.3.dylib; sourceTree = SDKROOT; };
 		C906C27C12D4EA4000C14388 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
-		C92B0F371338237F0060CE50 /* FRMissionTwo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRMissionTwo.h; sourceTree = "<group>"; };
-		C92B0F381338237F0060CE50 /* FRMissionTwo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRMissionTwo.m; sourceTree = "<group>"; };
 		C93EEA5B134AD9D800AFE90C /* drum.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = drum.mp3; sourceTree = "<group>"; };
 		C93EEA5C134AD9D800AFE90C /* guitar.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = guitar.mp3; sourceTree = "<group>"; };
 		C9449AAF135D4C4B008F8623 /* 16thedata.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = 16thedata.mp3; sourceTree = "<group>"; };
@@ -537,22 +506,8 @@
 		C9449ADE135E35B9008F8623 /* chase_normal.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = chase_normal.mp3; sourceTree = "<group>"; };
 		C9557AAA130AEAA2004A6F54 /* FREdgePos.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FREdgePos.h; sourceTree = "<group>"; };
 		C9557AAB130AEAA2004A6F54 /* FREdgePos.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FREdgePos.m; sourceTree = "<group>"; };
-		C9569BF7138833A100FD66E8 /* FRTroubleshoot.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRTroubleshoot.h; sourceTree = "<group>"; };
-		C9569BF8138833A100FD66E8 /* FRTroubleshoot.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRTroubleshoot.m; sourceTree = "<group>"; };
-		C9569BF9138833A100FD66E8 /* FRTroubleshoot.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FRTroubleshoot.xib; sourceTree = "<group>"; };
-		C9624CC0133AD63300F6594F /* FRSummaryViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSummaryViewController.h; sourceTree = "<group>"; };
-		C9624CC1133AD63300F6594F /* FRSummaryViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSummaryViewController.m; sourceTree = "<group>"; };
-		C9624CC2133AD63300F6594F /* FRSummaryViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = FRSummaryViewController.xib; sourceTree = "<group>"; };
-		C9624CD6133BB9F200F6594F /* FRBriefingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRBriefingViewController.h; sourceTree = "<group>"; };
-		C9624CD7133BB9F200F6594F /* FRBriefingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRBriefingViewController.m; sourceTree = "<group>"; };
-		C9624CD8133BB9F200F6594F /* FRBriefingViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = FRBriefingViewController.xib; sourceTree = "<group>"; };
-		C9624D50133BFA4F00F6594F /* LocationPicker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocationPicker.h; sourceTree = "<group>"; };
-		C9624D51133BFA4F00F6594F /* LocationPicker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LocationPicker.m; sourceTree = "<group>"; };
-		C9624D52133BFA4F00F6594F /* LocationPicker.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = LocationPicker.xib; path = Classes/LocationPicker.xib; sourceTree = "<group>"; };
 		C97CA185132EF0E600E71AC4 /* FRMissionTemplate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRMissionTemplate.h; sourceTree = "<group>"; };
 		C97CA186132EF0E600E71AC4 /* FRMissionTemplate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRMissionTemplate.m; sourceTree = "<group>"; };
-		C97CA18A132EF60700E71AC4 /* FRMissionOne.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRMissionOne.h; sourceTree = "<group>"; };
-		C97CA18B132EF60700E71AC4 /* FRMissionOne.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRMissionOne.m; sourceTree = "<group>"; };
 		C99EBE18137AE09E0079A70E /* TheCarMission.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TheCarMission.h; sourceTree = "<group>"; };
 		C99EBE19137AE09E0079A70E /* TheCarMission.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TheCarMission.m; sourceTree = "<group>"; };
 		C9ABFF4F13087EEF0031160A /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = System/Library/Frameworks/MediaPlayer.framework; sourceTree = SDKROOT; };
@@ -563,8 +518,6 @@
 		C9E3F229137DE6010077E168 /* TheKeyMission.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TheKeyMission.m; sourceTree = "<group>"; };
 		C9E494C012F8D7390006AB7B /* FRPathSearch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRPathSearch.h; sourceTree = "<group>"; };
 		C9E494C112F8D7390006AB7B /* FRPathSearch.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRPathSearch.m; sourceTree = "<group>"; };
-		C9FC234712F9CCC700892CF6 /* toqbot.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = toqbot.h; sourceTree = "<group>"; };
-		C9FC234812F9CCC700892CF6 /* toqbot.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = toqbot.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -603,16 +556,12 @@
 				9B51D5BA1305F53400978183 /* Points */,
 				C906C14A12D4EA2F00C14388 /* request */,
 				C9624CDB133BBDFD00F6594F /* ViewControllers */,
-				C9FC234712F9CCC700892CF6 /* toqbot.h */,
-				C9FC234812F9CCC700892CF6 /* toqbot.m */,
 				1D3623240D0F684500981E51 /* ontherunAppDelegate.h */,
 				1D3623250D0F684500981E51 /* ontherunAppDelegate.m */,
 				C9C5378612E39A7A005C0BF0 /* FRMap.h */,
 				C9C5378712E39A7A005C0BF0 /* FRMap.m */,
 				C9E494C012F8D7390006AB7B /* FRPathSearch.h */,
 				C9E494C112F8D7390006AB7B /* FRPathSearch.m */,
-				9B84A0D11309C80300BE94CF /* FRFileLoader.h */,
-				9B84A0D21309C80300BE94CF /* FRFileLoader.m */,
 				C9557AAA130AEAA2004A6F54 /* FREdgePos.h */,
 				C9557AAB130AEAA2004A6F54 /* FREdgePos.m */,
 				9BA789321385B89B006C8759 /* FRProgress.h */,
@@ -632,9 +581,11 @@
 		29B97314FDCFA39411CA2CEA /* CustomTemplate */ = {
 			isa = PBXGroup;
 			children = (
+				9B94CBBD13F4858D008AE518 /* runner-icon.png */,
 				080E96DDFE201D6D7F000001 /* Classes */,
 				29B97315FDCFA39411CA2CEA /* Other Sources */,
 				29B97317FDCFA39411CA2CEA /* Resources */,
+				9BBC664513F31EDA0075624F /* iPad */,
 				29B97323FDCFA39411CA2CEA /* Frameworks */,
 				19C28FACFE9D520D11CA2CBB /* Products */,
 			);
@@ -653,6 +604,8 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				9B94CBBB13F46B58008AE518 /* mapdata_2500.json */,
+				9B94CBB713F332B8008AE518 /* missionconfig.json */,
 				9BBA1FC01395F5E00080A652 /* mp3 */,
 				C9D28C87139004190077B60F /* lock.png */,
 				9B418ED1138741DE00A8272A /* mp3s */,
@@ -686,15 +639,8 @@
 		9B418ED0138741B800A8272A /* nibs */ = {
 			isa = PBXGroup;
 			children = (
-				9B2AE23A138EAD3F00D22D85 /* FRNameController.xib */,
 				9B2AE23F138EAE4D00D22D85 /* FRMissionList.xib */,
-				9BBA1FAB139427A50080A652 /* FRInGame.xib */,
-				C9624D52133BFA4F00F6594F /* LocationPicker.xib */,
-				C9624CC2133AD63300F6594F /* FRSummaryViewController.xib */,
-				C9624CD8133BB9F200F6594F /* FRBriefingViewController.xib */,
 				9BD50336130075020092D86A /* FRMapViewController.xib */,
-				28F335F01007B36200424DE2 /* RootViewController.xib */,
-				9BBD3295132E81360082A0C7 /* StartView.xib */,
 				28AD735F0D9D9599002E5188 /* MainWindow.xib */,
 			);
 			name = nibs;
@@ -913,19 +859,19 @@
 			path = mp3;
 			sourceTree = "<group>";
 		};
+		9BBC664513F31EDA0075624F /* iPad */ = {
+			isa = PBXGroup;
+			children = (
+				9BBC664613F31EDF0075624F /* MainWindow-iPad.xib */,
+			);
+			name = iPad;
+			sourceTree = "<group>";
+		};
 		C904845013393F1A00213A82 /* Missions */ = {
 			isa = PBXGroup;
 			children = (
 				C97CA185132EF0E600E71AC4 /* FRMissionTemplate.h */,
 				C97CA186132EF0E600E71AC4 /* FRMissionTemplate.m */,
-				C97CA18A132EF60700E71AC4 /* FRMissionOne.h */,
-				C97CA18B132EF60700E71AC4 /* FRMissionOne.m */,
-				9B836776133403A300EC486F /* FRMissionChase.h */,
-				9B836777133403A300EC486F /* FRMissionChase.m */,
-				C92B0F371338237F0060CE50 /* FRMissionTwo.h */,
-				C92B0F381338237F0060CE50 /* FRMissionTwo.m */,
-				9B9505B9135CD55A0070B7E7 /* FRMissionDownload.h */,
-				9B9505BA135CD55A0070B7E7 /* FRMissionDownload.m */,
 				C99EBE18137AE09E0079A70E /* TheCarMission.h */,
 				C99EBE19137AE09E0079A70E /* TheCarMission.m */,
 				C9E3F228137DE6010077E168 /* TheKeyMission.h */,
@@ -989,25 +935,10 @@
 		C9624CDB133BBDFD00F6594F /* ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
-				C9624CC0133AD63300F6594F /* FRSummaryViewController.h */,
-				C9624CC1133AD63300F6594F /* FRSummaryViewController.m */,
-				9BBD3298132E81CC0082A0C7 /* StartViewController.h */,
-				9BBD3299132E81CC0082A0C7 /* StartViewController.m */,
-				C9624CD6133BB9F200F6594F /* FRBriefingViewController.h */,
-				C9624CD7133BB9F200F6594F /* FRBriefingViewController.m */,
 				9BD50323130070320092D86A /* FRMapViewController.h */,
 				9BD50324130070320092D86A /* FRMapViewController.m */,
-				C9624D50133BFA4F00F6594F /* LocationPicker.h */,
-				C9624D51133BFA4F00F6594F /* LocationPicker.m */,
-				C9569BF7138833A100FD66E8 /* FRTroubleshoot.h */,
-				C9569BF8138833A100FD66E8 /* FRTroubleshoot.m */,
-				C9569BF9138833A100FD66E8 /* FRTroubleshoot.xib */,
-				9B2AE238138EAD3F00D22D85 /* FRNameController.h */,
-				9B2AE239138EAD3F00D22D85 /* FRNameController.m */,
 				9B2AE23D138EAE4D00D22D85 /* FRMissionList.h */,
 				9B2AE23E138EAE4D00D22D85 /* FRMissionList.m */,
-				9BBA1FA9139427A50080A652 /* FRInGame.h */,
-				9BBA1FAA139427A50080A652 /* FRInGame.m */,
 			);
 			name = ViewControllers;
 			sourceTree = "<group>";
@@ -1063,12 +994,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				28AD73600D9D9599002E5188 /* MainWindow.xib in Resources */,
-				28F335F11007B36200424DE2 /* RootViewController.xib in Resources */,
 				9BD50337130075020092D86A /* FRMapViewController.xib in Resources */,
-				9BBD3296132E81360082A0C7 /* StartView.xib in Resources */,
-				C9624CC4133AD63300F6594F /* FRSummaryViewController.xib in Resources */,
-				C9624CDA133BB9F200F6594F /* FRBriefingViewController.xib in Resources */,
-				C9624D54133BFA4F00F6594F /* LocationPicker.xib in Resources */,
 				9B684BD61341066800F27C12 /* button_green.png in Resources */,
 				C93EEA5D134AD9D800AFE90C /* drum.mp3 in Resources */,
 				C93EEA5E134AD9D800AFE90C /* guitar.mp3 in Resources */,
@@ -1098,11 +1024,8 @@
 				C9449ADF135E35BD008F8623 /* chase_elevated.mp3 in Resources */,
 				C9449AE0135E35BD008F8623 /* chase_normal.mp3 in Resources */,
 				9B6A24631368996A00A7228C /* chase_scary.mp3 in Resources */,
-				C9569BFB138833A200FD66E8 /* FRTroubleshoot.xib in Resources */,
-				9B2AE23C138EAD3F00D22D85 /* FRNameController.xib in Resources */,
 				9B2AE241138EAE4D00D22D85 /* FRMissionList.xib in Resources */,
 				C9D28C88139004190077B60F /* lock.png in Resources */,
-				9BBA1FAD139427A50080A652 /* FRInGame.xib in Resources */,
 				9BBA20631395F5E00080A652 /* 1 minute.mp3 in Resources */,
 				9BBA20641395F5E00080A652 /* 10 minutes.mp3 in Resources */,
 				9BBA20651395F5E00080A652 /* 100 meters.mp3 in Resources */,
@@ -1264,6 +1187,10 @@
 				9BBA21021395F5E00080A652 /* youre closing in.mp3 in Resources */,
 				9BBA21031395F5E00080A652 /* youre getting close.mp3 in Resources */,
 				9BBA21041395F5E00080A652 /* youre halfway there.mp3 in Resources */,
+				9BBC664713F31EE00075624F /* MainWindow-iPad.xib in Resources */,
+				9B94CBB813F332B9008AE518 /* missionconfig.json in Resources */,
+				9B94CBBC13F46B58008AE518 /* mapdata_2500.json in Resources */,
+				9B94CBBE13F4858D008AE518 /* runner-icon.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1291,27 +1218,14 @@
 				C906C16912D4EA2F00C14388 /* Reachability.m in Sources */,
 				C9C5378812E39A7A005C0BF0 /* FRMap.m in Sources */,
 				C9E494C212F8D7390006AB7B /* FRPathSearch.m in Sources */,
-				C9FC234912F9CCC700892CF6 /* toqbot.m in Sources */,
 				9BD50325130070320092D86A /* FRMapViewController.m in Sources */,
 				9B51D5C11305F53400978183 /* FRPoint.m in Sources */,
-				9B84A0D31309C80300BE94CF /* FRFileLoader.m in Sources */,
 				C9557AAC130AEAA2004A6F54 /* FREdgePos.m in Sources */,
-				9BBD329A132E81CC0082A0C7 /* StartViewController.m in Sources */,
 				C97CA187132EF0E600E71AC4 /* FRMissionTemplate.m in Sources */,
-				C97CA18C132EF60700E71AC4 /* FRMissionOne.m in Sources */,
-				9B836778133403A300EC486F /* FRMissionChase.m in Sources */,
-				C92B0F391338237F0060CE50 /* FRMissionTwo.m in Sources */,
-				C9624CC3133AD63300F6594F /* FRSummaryViewController.m in Sources */,
-				C9624CD9133BB9F200F6594F /* FRBriefingViewController.m in Sources */,
-				C9624D53133BFA4F00F6594F /* LocationPicker.m in Sources */,
-				9B9505BB135CD55A0070B7E7 /* FRMissionDownload.m in Sources */,
 				C99EBE1A137AE09E0079A70E /* TheCarMission.m in Sources */,
 				C9E3F22A137DE6010077E168 /* TheKeyMission.m in Sources */,
 				9BA789341385B89C006C8759 /* FRProgress.m in Sources */,
-				C9569BFA138833A200FD66E8 /* FRTroubleshoot.m in Sources */,
-				9B2AE23B138EAD3F00D22D85 /* FRNameController.m in Sources */,
 				9B2AE240138EAE4D00D22D85 /* FRMissionList.m in Sources */,
-				9BBA1FAC139427A50080A652 /* FRInGame.m in Sources */,
 				9BBA210D13963F320080A652 /* FRRandomSound.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1333,8 +1247,9 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = ontherun_Prefix.pch;
 				INFOPLIST_FILE = "ontherun-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 4.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
 				PRODUCT_NAME = ontherun;
+				TARGETED_DEVICE_FAMILY = 2;
 			};
 			name = Debug;
 		};
@@ -1350,8 +1265,9 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = ontherun_Prefix.pch;
 				INFOPLIST_FILE = "ontherun-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 4.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
 				PRODUCT_NAME = ontherun;
+				TARGETED_DEVICE_FAMILY = 2;
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;
