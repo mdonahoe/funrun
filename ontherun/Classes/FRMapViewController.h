@@ -8,17 +8,17 @@
 
 #import <UIKit/UIKit.h>
 #import <MapKit/MapKit.h>
+#import "FRMissionTemplate.h"
+
+@class FRMissionTemplate;
 
 @interface FRMapViewController : UIViewController <MKMapViewDelegate>{
-	MKMapView * mapView;
-	UILabel * timer;
+	FRMissionTemplate * mission;
+    NSString * missionclassname;
+    CLLocation * latest_point;
 }
-@property (nonatomic, retain) IBOutlet MKMapView *mapView;
-@property (nonatomic, retain) IBOutlet UILabel * timer;
-- (void) gotoLocation;
+@property (nonatomic, retain) CLLocation * latest_point;
 
-/* todo
- new colors for the pins, depending on class type (destination, bad guy etc)
- */
-
+- (id) initWithMission:(NSString *)missionclass;
+- (void) didTapMap:(UIGestureRecognizer *) sender;
 @end

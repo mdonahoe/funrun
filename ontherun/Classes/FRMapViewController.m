@@ -7,40 +7,102 @@
 //
 
 #import "FRMapViewController.h"
-
+#import "FRPoint.h"
+#import "TheCarMission.h"
+#import "TheKeyMission.h"
 
 @implementation FRMapViewController
-@synthesize mapView,timer;
+@synthesize latest_point;
 
+- (BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer *)gestureRecognizer{
+    return YES;
+}
+- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch{
+    return YES;
+}
+
+- (id) initWithMission:(NSString *)missionclass{
+    self = [super initWithNibName:@"FRMapViewController" bundle:nil];
+    if (!self) return nil;
+    //42.367062, -71.09813
+    self.latest_point = [[[CLLocation alloc] initWithLatitude:42.367062 longitude:-71.09813] autorelease];
+    
+    missionclassname = missionclass;
+    
+    [self gotoLocation];
+    
+    return self;
+}
+- (void) didTapMap:(UIGestureRecognizer *) sender {
+    //they double tapped. Find the location
+    NSLog(@"tapped");
+    CGPoint loc = [sender locationInView:self.view];
+    CLLocationCoordinate2D ll = [(MKMapView*)self.view convertPoint:loc toCoordinateFromView:self.view];
+    self.latest_point = [[[CLLocation alloc] initWithLatitude:ll.latitude longitude:ll.longitude] autorelease];
+    if (mission) [mission newPlayerLocation:self.latest_point];
+    
+    
+}
+- (void)viewDidDisappear:(BOOL)animated {
+    NSLog(@"disappear");
+    [NSObject cancelPreviousPerformRequestsWithTarget:mission];
+    [mission release];
+    mission = nil;
+}
 - (void)gotoLocation
 {
     // start off by default in San Francisco
     MKCoordinateRegion newRegion;
-    newRegion.center.latitude = 42.367179;
-    newRegion.center.longitude = -71.097939;
+    newRegion.center.latitude = self.latest_point.coordinate.latitude;
+    newRegion.center.longitude = self.latest_point.coordinate.longitude;
     newRegion.span.latitudeDelta = 0.05;
     newRegion.span.longitudeDelta = 0.05;
 	
-    [self.mapView setRegion:newRegion animated:YES];
+    [(MKMapView*)self.view setRegion:newRegion animated:YES];
 }
 
 // Implement viewDidLoad to do additional setup after loading the view, typically from a nib.
 - (void)viewDidLoad {
 	NSLog(@"map loaded");
 	[super viewDidLoad];
-	self.mapView.mapType = MKMapTypeStandard;
+	((MKMapView*)self.view).mapType = MKMapTypeStandard;
 	[self gotoLocation];
+    
+    
+    UITapGestureRecognizer* tapRec = [[UITapGestureRecognizer alloc] 
+                                      initWithTarget:self action:@selector(didTapMap:)];
+    
+    
+    [(MKMapView*)self.view addGestureRecognizer:tapRec];
+    [tapRec release];
+    
+    
+    mission = [[NSClassFromString(missionclassname) alloc] initWithLocation:self.latest_point
+                                                                         distance:1000
+                                                                      destination:nil
+                                                                      viewControl:self];
+    
+    
+    [(MKMapView*)self.view addAnnotations:mission.points];
+}
+- (BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation{
+    return YES;
 }
 - (MKAnnotationView *)mapView:(MKMapView *)theMapView viewForAnnotation:(id <MKAnnotation>)annotation{
-	static NSString * pinIdentifier = @"I love pins!";
-	NSLog(@"annotation view");
-	MKPinAnnotationView * pinView = (MKPinAnnotationView *) [mapView dequeueReusableAnnotationViewWithIdentifier:pinIdentifier];
+	NSString * pinIdentifier = ((FRPoint *) annotation).pinColor;
+	
+    
+    MKPinAnnotationView * pinView = (MKPinAnnotationView *) [theMapView dequeueReusableAnnotationViewWithIdentifier:pinIdentifier];
 	
 	if (!pinView){
 		MKPinAnnotationView * myPinView = [[[MKPinAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:pinIdentifier] autorelease];
 		myPinView.animatesDrop = YES;
 		myPinView.canShowCallout = YES;
-		myPinView.pinColor = MKPinAnnotationColorGreen;
+		
+        if ([pinIdentifier isEqualToString:@"green"]) myPinView.pinColor = MKPinAnnotationColorGreen;
+        if ([pinIdentifier isEqualToString:@"purple"]) myPinView.pinColor = MKPinAnnotationColorPurple;
+        
+        
 		return myPinView;
 	}
 	
@@ -60,8 +122,8 @@
 }
 
 - (void)dealloc {
-	self.mapView = nil;
-	self.timer = nil;
+	self.latest_point = nil;
+    [mission release];
 	[super dealloc];
 }
 @end
