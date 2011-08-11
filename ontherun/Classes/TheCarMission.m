@@ -45,8 +45,9 @@ X10. there is some infinite loop bug in the directionsToRoot code.
     
     //create the safehouse
     safehouse = [[FRPoint alloc] initWithName:@"safehouse"];
-    safehouse.pos = endPoint.pos;
-    
+    safehouse.pos = [endPoint.pos copy];
+    safehouse.pos.position = MIN(safehouse.pos.position+10,[themap maxPosition:safehouse.pos]);
+    player.subtitle = @"Tap to move";
     
     //pathsearch from the endpoint. used for positioning the car
     FRPathSearch * endmap = [themap createPathSearchAt:endPoint.pos withMaxDistance:nil];
@@ -75,6 +76,7 @@ X10. there is some infinite loop bug in the directionsToRoot code.
     
     */
     car.pos = [latestsearch edgePosHalfwayBetweenRootAndOther:endmap withDistance:player_max_distance];
+    car.subtitle = @"Plate number 2H4-BGQ";
     [endmap release];
     
     
@@ -88,7 +90,8 @@ X10. there is some infinite loop bug in the directionsToRoot code.
     
     //The cop starts at the player's location, but doesnt interact until later.
     cop = [[FRPoint alloc] initWithName:@"cop"];
-    cop.pos = safehouse.pos;
+    cop.pos = [endPoint.pos copy];
+    cop.pinColor = @"red";
     cop_goal = nil;
     
     //add to the points list for display.

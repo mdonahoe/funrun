@@ -67,18 +67,25 @@
     
     safehouse = [[FRPoint alloc] initWithName:@"safehouse"];
     safehouse.pos = endPoint.pos;
+    safehouse.pos.position = MIN(safehouse.pos.position+10,[themap maxPosition:safehouse.pos]);
+    
     
     dude = [[FRPoint alloc] initWithName:@"dude"];
     dude.pos = pointC.pos;
+    dude.pinColor = @"red";
+    
     
     prog = [[FRProgress alloc] initWithStart:[destination distanceFromRoot:player.pos] delegate:self];
     
     //position these points such that the total distance is correct
     //the final run should be the longest part. that chase sequence needs to last awhile.
     
-    //add dude to map
-    [dude setCoordinate:[themap coordinateFromEdgePosition:dude.pos]];
-    [points addObject:dude];
+    //add objs to map
+    NSArray * objs = [NSArray arrayWithObjects:dude,safehouse,pointA,pointB,pointC,safehouse, nil];
+    for (FRPoint * pt in objs) [pt setCoordinate:[themap coordinateFromEdgePosition:pt.pos]];
+    [points addObjectsFromArray:objs];
+    
+    
     //[self.viewControl.mapView addAnnotations:points];
     badguy_taunts = [[FRRandomSound alloc] initWithArray:[NSArray arrayWithObjects:
                                                           @"BadGuy - I see you back there", 
@@ -271,6 +278,7 @@
             [destination release];
             destination = [themap createPathSearchAt:safehouse.pos withMaxDistance:[NSNumber numberWithFloat:player_max_distance]];
             dude.pos = player.pos;
+            dude.pos.position = MIN(dude.pos.position+10,[themap maxPosition:dude.pos]);
             dude_speed = 4.0;
             xdist = 30.0;
             main_state++;
